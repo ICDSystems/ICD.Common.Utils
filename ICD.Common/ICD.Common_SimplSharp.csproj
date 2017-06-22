@@ -1,0 +1,167 @@
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CB4055C6-D59E-479E-9C56-2C92335A7D9A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ICD.Common</RootNamespace>
+    <AssemblyName>ICD.Common</AssemblyName>
+    <ProjectTypeGuids>{0B4745B0-194B-4BB6-8E21-E9057CA92500};{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PlatformFamilyName>WindowsCE</PlatformFamilyName>
+    <PlatformID>E2BECB1F-8C8C-41ba-B736-9BE7D946A398</PlatformID>
+    <OSVersion>5.0</OSVersion>
+    <DeployDirSuffix>SmartDeviceProject1</DeployDirSuffix>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NativePlatformName>Windows CE</NativePlatformName>
+    <FormFactorID>
+    </FormFactorID>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AllowedReferenceRelatedFileExtensions>.allowedReferenceRelatedFileExtensions</AllowedReferenceRelatedFileExtensions>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SIMPLSHARP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <GenerateSerializationAssemblies>off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowedReferenceRelatedFileExtensions>.allowedReferenceRelatedFileExtensions</AllowedReferenceRelatedFileExtensions>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <GenerateSerializationAssemblies>off</GenerateSerializationAssemblies>
+    <DefineConstants>SIMPLSHARP</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="SimplSharpCustomAttributesInterface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpCustomAttributesInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="SimplSharpHelperInterface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpHelperInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="SimplSharpNewtonsoft, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpNewtonsoft.dll</HintPath>
+    </Reference>
+    <Reference Include="SimplSharpReflectionInterface, Version=1.0.5583.25238, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpReflectionInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\AbstractIcdAttribute.cs" />
+    <Compile Include="Attributes\KrangPluginAttribute.cs" />
+    <Compile Include="Attributes\Properties\SettingsProperty.cs" />
+    <Compile Include="Attributes\Rpc\RpcAttribute.cs" />
+    <Compile Include="EventArguments\BoolEventArgs.cs" />
+    <Compile Include="EventArguments\CharEventArgs.cs" />
+    <Compile Include="EventArguments\DateTimeEventArgs.cs" />
+    <Compile Include="EventArguments\FloatEventArgs.cs" />
+    <Compile Include="EventArguments\GenericEventArgs.cs" />
+    <Compile Include="EventArguments\IntEventArgs.cs" />
+    <Compile Include="EventArguments\StringEventArgs.cs" />
+    <Compile Include="EventArguments\TcpReceiveEventArgs.cs" />
+    <Compile Include="EventArguments\UShortEventArgs.cs" />
+    <Compile Include="EventArguments\XmlRecursionEventArgs.cs" />
+    <None Include="ObfuscationSettings.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Logging\ILoggerService.cs" />
+    <Compile Include="Services\Logging\LogItem.cs" />
+    <Compile Include="Services\Logging\LogItemEventArgs.cs" />
+    <Compile Include="Services\Logging\SeverityEventArgs.cs" />
+    <Compile Include="Utils\AttributeUtils.cs" />
+    <Compile Include="Services\ServiceNotFoundException.cs" />
+    <Compile Include="Services\ServiceProvider.cs" />
+    <Compile Include="Utils\Collections\IcdHashSet.cs" />
+    <Compile Include="Utils\Collections\ScrollQueue.cs" />
+    <Compile Include="Utils\CrestronUtils.cs" />
+    <Compile Include="Utils\Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Utils\Extensions\TypeExtensions.cs" />
+    <Compile Include="Utils\IcdConsole.cs" />
+    <Compile Include="Utils\IcdEnvironment.cs" />
+    <Compile Include="Utils\IcdEnvironment.SimplSharp.cs" />
+    <Compile Include="Utils\IcdEnvironment.Standard.cs" />
+    <Compile Include="Utils\IcdZip.cs" />
+    <Compile Include="Utils\IO\IcdDirectory.cs" />
+    <Compile Include="Utils\EnumUtils.cs" />
+    <Compile Include="Utils\Extensions\CollectionExtensions.cs" />
+    <Compile Include="Utils\Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Utils\Extensions\EnumExtensions.cs" />
+    <Compile Include="Utils\Extensions\EventHandlerExtensions.cs" />
+    <Compile Include="Utils\Extensions\JsonExtensions.cs" />
+    <Compile Include="Utils\Extensions\QueueExtensions.cs" />
+    <Compile Include="Utils\Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Utils\Extensions\StringBuilderExtensions.cs" />
+    <Compile Include="Utils\Extensions\StringExtensions.cs" />
+    <Compile Include="Utils\Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="Utils\IcdErrorLog.cs" />
+    <Compile Include="Utils\IO\IcdEncodingStringWriter.cs" />
+    <Compile Include="Utils\IO\IcdFile.cs" />
+    <Compile Include="Utils\IO\IcdFileStream.cs" />
+    <Compile Include="Utils\IO\IcdMemoryStream.cs" />
+    <Compile Include="Utils\IO\IcdPath.cs" />
+    <Compile Include="Utils\IO\IcdStream.cs" />
+    <Compile Include="Utils\IO\IcdStreamReader.cs" />
+    <Compile Include="Utils\IO\IcdStringReader.cs" />
+    <Compile Include="Utils\IO\IcdStringWriter.cs" />
+    <Compile Include="Utils\IO\IcdTextReader.cs" />
+    <Compile Include="Utils\IO\IcdTextWriter.cs" />
+    <Compile Include="Utils\IStateDisposable.cs" />
+    <Compile Include="Utils\Json\AbstractGenericJsonConverter.cs" />
+    <Compile Include="Utils\Json\JsonItemWrapper.cs" />
+    <Compile Include="Utils\Json\JsonUtils.cs" />
+    <Compile Include="Utils\MathUtils.cs" />
+    <Compile Include="Utils\PathUtils.cs" />
+    <Compile Include="Utils\PrettyPrint.cs" />
+    <Compile Include="Utils\ProgramUtils.cs" />
+    <Compile Include="Utils\ReflectionUtils.cs" />
+    <Compile Include="Utils\SafeCriticalSection.cs" />
+    <Compile Include="Utils\SafeCriticalSection.SimplSharp.cs" />
+    <Compile Include="Utils\SafeCriticalSection.Standard.cs" />
+    <Compile Include="Utils\SafeMutex.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Utils\TableBuilder.cs" />
+    <Compile Include="Utils\Timers\IcdStopwatch.cs" />
+    <Compile Include="Utils\Timers\IcdTimer.cs" />
+    <Compile Include="Utils\Timers\Repeater.cs" />
+    <Compile Include="Utils\Timers\SafeTimer.cs" />
+    <Compile Include="Utils\TryUtils.cs" />
+    <Compile Include="Utils\Xml\IcdXmlConvert.cs" />
+    <Compile Include="Utils\Xml\IcdXmlDocument.cs" />
+    <Compile Include="Utils\Xml\IcdXmlException.cs" />
+    <Compile Include="Utils\Xml\IcdXmlReader.cs" />
+    <Compile Include="Utils\Xml\IcdXmlTextWriter.cs" />
+    <Compile Include="Utils\Xml\IcdXmlTextWriter.SimplSharp.cs" />
+    <Compile Include="Utils\Xml\IcdXmlAttribute.cs" />
+    <Compile Include="Utils\Xml\XmlReaderExtensions.cs" />
+    <Compile Include="Utils\Xml\XmlUtils.cs" />
+    <None Include="Properties\ControlSystem.cfg" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if /I "$(ConfigurationName)" == "Release" Eazfuscator.NET.exe "$(TargetPath)" --msbuild-project-path "$(ProjectPath)" --msbuild-project-configuration "$(ConfigurationName)" --msbuild-project-platform "$(PlatformName)" --msbuild-solution-path "$(SolutionPath)" -n --newline-flush -v 5.2 --configuration-file="$(ProjectDir)ObfuscationSettings.cs"
+rem S# Pro preparation will execute after these operations</PostBuildEvent>
+  </PropertyGroup>
+</Project>
