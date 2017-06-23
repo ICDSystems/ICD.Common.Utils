@@ -3,6 +3,17 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>ICD.Common.Utils</AssemblyName>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Chris Cameron, Jeff Thompson</Authors>
+    <Company>Integrated Commercial Design</Company>
+    <PackageId>ICD.Common.Utils</PackageId>
+    <Product>ICD.Common.Utils</Product>
+    <Copyright>2017 Integrated Commercial Design</Copyright>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://cs-gogs.icdpf.net/Common/Utils</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
