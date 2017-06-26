@@ -1,0 +1,47 @@
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+
+# ======================= #
+# Visual Studio generated #
+# ======================= #
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+.vs/
+
+# ============= #
+# Build results #
+# ============= #
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# ============ #
+# Test results #
+# ============ #
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# ======================= # 
+# Simpl# Plugin Generated # 
+# ======================= # 
+*.projectinfo 
+SimplSharpLogs*/
