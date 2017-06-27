@@ -190,6 +190,18 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Creates an instance of the given type, calling the default constructor.
+		/// </summary>
+		/// <returns></returns>
+		public static object CreateInstance(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return Activator.CreateInstance(type);
+		}
+
+		/// <summary>
 		/// Gets the custom attributes added to the given assembly.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
