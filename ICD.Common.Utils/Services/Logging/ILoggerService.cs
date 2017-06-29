@@ -60,6 +60,9 @@ namespace ICD.Common.Services.Logging
 		[PublicAPI]
 		public static void AddEntry(this ILoggerService extends, eSeverity severity, string message)
 		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
 			LogItem item = new LogItem(severity, message);
 			extends.AddEntry(item);
 		}
@@ -74,12 +77,21 @@ namespace ICD.Common.Services.Logging
 		[PublicAPI]
 		public static void AddEntry(this ILoggerService extends, eSeverity severity, string message, params object[] args)
 		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
 			extends.AddEntry(severity, string.Format(message, args));
 		}
 
 		[PublicAPI]
 		public static void AddEntry(this ILoggerService extends, eSeverity severity, Exception e, string message)
 		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (e == null)
+				throw new ArgumentNullException("e");
+
 			extends.AddEntry(severity, string.Format("{0}: {1}{2}{3}{2}{4}", e.GetType().Name, message,
 			                                         IcdEnvironment.NewLine, e.Message, e.StackTrace));
 		}
@@ -88,6 +100,12 @@ namespace ICD.Common.Services.Logging
 		public static void AddEntry(this ILoggerService extends, eSeverity severity, Exception e, string message,
 		                            params object[] args)
 		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (e == null)
+				throw new ArgumentNullException("e");
+
 			extends.AddEntry(severity, e, string.Format(message, args));
 		}
 	}
