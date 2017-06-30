@@ -43,5 +43,5 @@ bld/
 # ======================= # 
 # Simpl# Plugin Generated # 
 # ======================= # 
-*.projectinfo 
+*.projectinfo
 SimplSharpLogs*/
