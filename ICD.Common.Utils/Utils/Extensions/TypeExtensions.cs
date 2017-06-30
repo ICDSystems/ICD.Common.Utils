@@ -1,4 +1,9 @@
 ﻿using System;
+#if SIMPLSHARP
+using Crestron.SimplSharp.Reflection;
+#else
+using System.Reflection;
+#endif
 
 namespace ICD.Common.Utils.Extensions
 {
