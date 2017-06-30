@@ -186,7 +186,7 @@ namespace ICD.Common.Utils
 		public static T CreateInstance<T>()
 			where T : new()
 		{
-			return Activator.CreateInstance<T>();
+			return (T)CreateInstance(typeof(T));
 		}
 
 		/// <summary>
@@ -198,7 +198,14 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			return Activator.CreateInstance(type);
+			try
+			{
+				return Activator.CreateInstance(type);
+			}
+			catch (TargetInvocationException e)
+			{
+				throw e.GetBaseException();
+			}
 		}
 
 		/// <summary>
