@@ -96,11 +96,19 @@ namespace ICD.Common.Utils
 #endif
 		}
 
-		public static void AddNewConsoleCommand(Action<string> callback, string command, string help, eAccessLevel accessLevel)
+		public static bool AddNewConsoleCommand(Action<string> callback, string command, string help, eAccessLevel accessLevel)
 		{
 #if SIMPLSHARP
+			// Avoid crashing Simpl applications
+			if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharp)
+				return false;
+
+			if (CrestronConsole.ConsoleRegistered)
+				return false;
+
 			CrestronConsole.AddNewConsoleCommand(str => callback(str), command, help, (ConsoleAccessLevelEnum)(int)accessLevel);
 #endif
+			return true;
 		}
 	}
 }
