@@ -9,6 +9,14 @@ namespace ICD.Common.Utils.IO
 {
 	public static class IcdPath
 	{
+		public static string GetFileName(string path)
+		{
+			if (path == null)
+				throw new ArgumentNullException("path");
+
+			return Path.GetFileName(path);
+		}
+
 		public static string GetFileNameWithoutExtension(string path)
 		{
 			if (path == null)
