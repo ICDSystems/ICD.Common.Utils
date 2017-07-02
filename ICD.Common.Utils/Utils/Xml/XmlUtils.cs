@@ -592,8 +592,8 @@ namespace ICD.Common.Utils.Xml
 		public static T? TryReadChildElementContentAsEnum<T>(string xml, string childElement, bool ignoreCase)
 			where T : struct
 		{
-			T? output;
-			return !TryReadChildElementContentAsEnum(xml, childElement, ignoreCase, out output) ? null : output;
+			T output;
+			return TryReadChildElementContentAsEnum(xml, childElement, ignoreCase, out output) ? output : (T?)null;
 		}
 
 		/// <summary>
