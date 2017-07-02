@@ -21,7 +21,7 @@ namespace ICD.Common.Utils
 		/// Returns true if the given type is an enum.
 		/// </summary>
 		/// <returns></returns>
-		private static bool IsEnum(Type type)
+		public static bool IsEnum(Type type)
 		{
 			return type == typeof(Enum) || type
 #if !SIMPLSHARP
@@ -35,7 +35,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		private static bool IsEnum<T>()
+		public static bool IsEnum<T>()
 		{
 			return IsEnum(typeof(T));
 		}
