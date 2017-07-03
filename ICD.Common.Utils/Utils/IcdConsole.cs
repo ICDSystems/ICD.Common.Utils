@@ -100,7 +100,7 @@ namespace ICD.Common.Utils
 		{
 #if SIMPLSHARP
 			// Avoid crashing Simpl applications
-			if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharp)
+			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpPro)
 				return false;
 
 			if (CrestronConsole.ConsoleRegistered)
