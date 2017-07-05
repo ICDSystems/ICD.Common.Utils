@@ -37,7 +37,7 @@ namespace ICD.Common.Utils.Xml
 		public IcdXmlTextWriter(XmlTextWriter writer)
 		{
 			m_Writer = writer;
-			m_Writer.Formatting = Crestron.SimplSharp.CrestronXml.Formatting.Indented;
+			m_Writer.Formatting = Formatting.Indented;
 		}
 
 		#region Methods

@@ -1,4 +1,7 @@
 ﻿using System;
+#if SIMPLSHARP
+using Crestron.SimplSharp;
+#endif
 using ICD.Common.Properties;
 
 namespace ICD.Common.Utils
@@ -34,7 +37,7 @@ namespace ICD.Common.Utils
 			{
 #if SIMPLSHARP
 				message = FormatConsoleColor(message, CONSOLE_RED);
-				Crestron.SimplSharp.ErrorLog.Error(message);
+				ErrorLog.Error(message);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Red;
                 System.Console.Error.WriteLine(message);
@@ -62,7 +65,7 @@ namespace ICD.Common.Utils
 			{
 #if SIMPLSHARP
 				message = FormatConsoleColor(message, CONSOLE_YELLOW);
-				Crestron.SimplSharp.ErrorLog.Warn(message);
+				ErrorLog.Warn(message);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Yellow;
                 System.Console.Error.WriteLine(message);
@@ -90,7 +93,7 @@ namespace ICD.Common.Utils
 			{
 #if SIMPLSHARP
 				message = FormatConsoleColor(message, CONSOLE_BLUE);
-				Crestron.SimplSharp.ErrorLog.Notice(message);
+				ErrorLog.Notice(message);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Blue;
                 System.Console.Error.WriteLine(message);
@@ -118,7 +121,7 @@ namespace ICD.Common.Utils
 			{
 #if SIMPLSHARP
 				message = FormatConsoleColor(message, CONSOLE_GREEN);
-				Crestron.SimplSharp.ErrorLog.Ok(message);
+				ErrorLog.Ok(message);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Green;
                 System.Console.Error.WriteLine(message);
@@ -146,7 +149,7 @@ namespace ICD.Common.Utils
 			{
 #if SIMPLSHARP
 				message = FormatConsoleColor(message, CONSOLE_YELLOW_ON_RED_BACKGROUND);
-				Crestron.SimplSharp.ErrorLog.Exception(message, ex);
+				ErrorLog.Exception(message, ex);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Yellow;
                 System.Console.BackgroundColor = ConsoleColor.Red;
@@ -177,7 +180,7 @@ namespace ICD.Common.Utils
 			{
 #if SIMPLSHARP
 				message = FormatConsoleColor(message, CONSOLE_CYAN);
-				Crestron.SimplSharp.ErrorLog.Info(message);
+				ErrorLog.Info(message);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Cyan;
                 System.Console.Error.WriteLine(message);
