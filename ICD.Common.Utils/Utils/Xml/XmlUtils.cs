@@ -435,7 +435,7 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static T ReadChildElementContentAsEnum<T>(string xml, string childElement, bool ignoreCase)
 		{
-			if (!EnumUtils.IsEnum<T>())
+			if (!EnumUtils.IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			string child = GetChildElementAsString(xml, childElement);
@@ -595,7 +595,7 @@ namespace ICD.Common.Utils.Xml
 		public static T? TryReadChildElementContentAsEnum<T>(string xml, string childElement, bool ignoreCase)
 			where T : struct
 		{
-			if (!EnumUtils.IsEnum<T>())
+			if (!EnumUtils.IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			T output;
@@ -614,7 +614,7 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static bool TryReadChildElementContentAsEnum<T>(string xml, string childElement, bool ignoreCase, out T output)
 		{
-			if (!EnumUtils.IsEnum<T>())
+			if (!EnumUtils.IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			output = default(T);
@@ -709,7 +709,7 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static T ReadElementContentAsEnum<T>(string xml, bool ignoreCase)
 		{
-			if (!EnumUtils.IsEnum<T>())
+			if (!EnumUtils.IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			using (IcdXmlReader reader = new IcdXmlReader(xml))

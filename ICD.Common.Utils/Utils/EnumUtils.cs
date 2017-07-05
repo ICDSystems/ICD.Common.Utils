@@ -21,23 +21,34 @@ namespace ICD.Common.Utils
 		/// Returns true if the given type is an enum.
 		/// </summary>
 		/// <returns></returns>
-		public static bool IsEnum(Type type)
+		public static bool IsEnumType(Type type)
 		{
-			return type == typeof(Enum) || type
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return type.IsAssignableTo(typeof(Enum)) || type
 #if !SIMPLSHARP
-				                               .GetTypeInfo()
+				                                            .GetTypeInfo()
 #endif
-				                               .IsEnum;
+															.IsEnum;
 		}
 
 		/// <summary>
 		/// Returns true if the given type is an enum.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static bool IsEnum<T>()
+		public static bool IsEnumType<T>()
 		{
-			return IsEnum(typeof(T));
+			return IsEnumType(typeof(T));
+		}
+
+		/// <summary>
+		/// Returns true if the given value is an enum.
+		/// </summary>
+		/// <returns></returns>
+		public static bool IsEnum(object value)
+		{
+			return value != null && IsEnumType(value.GetType());
 		}
 
 		#region Values
@@ -49,7 +60,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static object GetUnderlyingValue<T>(T value)
 		{
-			if (!IsEnum(typeof(T)))
+			if (!IsEnumType(typeof(T)))
 				throw new InvalidOperationException(string.Format("{0} is not an enum", value.GetType().Name));
 
 #if SIMPLSHARP
@@ -96,7 +107,7 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			if (!IsEnum(type))
+			if (!IsEnumType(type))
 				throw new InvalidOperationException(string.Format("{0} is not an enum", type.Name));
 
 			return type
@@ -116,7 +127,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static T GetNoneValue<T>()
 		{
-			if (!IsEnum(typeof(T)))
+			if (!IsEnumType(typeof(T)))
 				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			return (T)(object)0;
@@ -129,7 +140,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static IEnumerable<T> GetValuesExceptNone<T>()
 		{
-			if (!IsEnum(typeof(T)))
+			if (!IsEnumType(typeof(T)))
 				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			return GetValuesExceptNone(typeof(T)).Cast<T>();
@@ -145,7 +156,7 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			if (!IsEnum(type))
+			if (!IsEnumType(type))
 				throw new InvalidOperationException(string.Format("{0} is not an enum", type.Name));
 
 			return GetValues(type).Where(v => (int)v != 0);
@@ -162,7 +173,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool IsFlagsEnum<T>()
 		{
-			if (!IsEnum<T>())
+			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			return IsFlagsEnum(typeof(T));
@@ -177,7 +188,7 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			if (!IsEnum(type))
+			if (!IsEnumType(type))
 				throw new InvalidOperationException(string.Format("{0} is not an enum", type.Name));
 
 			return type
@@ -195,9 +206,6 @@ namespace ICD.Common.Utils
   		/// <returns></returns>
 		public static T GetFlagsIntersection<T>(params T[] values)
   		{
-  			if (!IsEnum<T>())
-  				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
-  
 			if (values.Length == 0)
 				return GetNoneValue<T>();
 
@@ -216,8 +224,8 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static IEnumerable<T> GetFlags<T>(T value)
 		{
-			if (!IsEnum<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+			if (!IsEnum(value))
+				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			return GetValues<T>().Where(e => HasFlag(value, e));
 		}
@@ -230,8 +238,8 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static IEnumerable<T> GetFlagsExceptNone<T>(T value)
 		{
-			if (!IsEnum<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+			if (!IsEnum(value))
+				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			T none = GetNoneValue<T>();
 			return GetFlags(value).Except(none);
@@ -244,7 +252,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static T GetFlagsAllValue<T>()
 		{
-			if (!IsEnum<T>())
+			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			int output = GetValues<T>().Aggregate(0, (current, value) => current | (int)(object)value);
@@ -260,8 +268,11 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool HasFlag<T>(T value, T flag)
 		{
-			if (!IsEnum<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+			if (!IsEnum(value))
+				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
+
+			if (!IsEnum(flag))
+				throw new ArgumentException(string.Format("{0} is not an enum", flag == null ? "NULL" : flag.GetType().Name), "flag");
 
 			return ToEnum(value).HasFlag(ToEnum(flag));
 		}
@@ -275,8 +286,11 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool HasFlags<T>(T value, T flags)
 		{
-			if (!IsEnum<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+			if (!IsEnum(value))
+				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
+
+			if (!IsEnum(flags))
+				throw new ArgumentException(string.Format("{0} is not an enum", flags == null ? "NULL" : flags.GetType().Name), "flags");
 
 			return ToEnum(value).HasFlags(ToEnum(flags));
 		}
@@ -289,8 +303,8 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool HasSingleFlag<T>(T value)
 		{
-			if (!IsEnum<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+			if (!IsEnum(value))
+				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			return (int)(object)value != (int)(object)GetNoneValue<T>() && !HasMultipleFlags(value);
 		}
@@ -302,8 +316,8 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool HasMultipleFlags<T>(T value)
 		{
-			if (!IsEnum<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+			if (!IsEnum(value))
+				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			return HasMultipleFlags((int)(object)value);
 		}
@@ -331,7 +345,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static T Parse<T>(string data, bool ignoreCase)
 		{
-			if (!IsEnum<T>())
+			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			try
@@ -355,7 +369,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool TryParse<T>(string data, bool ignoreCase, out T result)
 		{
-			if (!IsEnum<T>())
+			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			result = default(T);
@@ -379,8 +393,8 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static Enum ToEnum<T>(T value)
 		{
-			if (!IsEnum<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+			if (!IsEnum(value))
+				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			return ToEnum((object)value);
 		}
