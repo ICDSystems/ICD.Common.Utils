@@ -225,6 +225,7 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetFlags<T>(T value)
 		{
 			if (!IsEnum(value))
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			return GetValues<T>().Where(e => HasFlag(value, e));
@@ -239,6 +240,7 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetFlagsExceptNone<T>(T value)
 		{
 			if (!IsEnum(value))
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			T none = GetNoneValue<T>();
@@ -269,9 +271,11 @@ namespace ICD.Common.Utils
 		public static bool HasFlag<T>(T value, T flag)
 		{
 			if (!IsEnum(value))
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			if (!IsEnum(flag))
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", flag == null ? "NULL" : flag.GetType().Name), "flag");
 
 			return ToEnum(value).HasFlag(ToEnum(flag));
@@ -287,9 +291,11 @@ namespace ICD.Common.Utils
 		public static bool HasFlags<T>(T value, T flags)
 		{
 			if (!IsEnum(value))
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			if (!IsEnum(flags))
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", flags == null ? "NULL" : flags.GetType().Name), "flags");
 
 			return ToEnum(value).HasFlags(ToEnum(flags));
@@ -304,6 +310,7 @@ namespace ICD.Common.Utils
 		public static bool HasSingleFlag<T>(T value)
 		{
 			if (!IsEnum(value))
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			return (int)(object)value != (int)(object)GetNoneValue<T>() && !HasMultipleFlags(value);
@@ -317,6 +324,7 @@ namespace ICD.Common.Utils
 		public static bool HasMultipleFlags<T>(T value)
 		{
 			if (!IsEnum(value))
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			return HasMultipleFlags((int)(object)value);
@@ -394,6 +402,7 @@ namespace ICD.Common.Utils
 		public static Enum ToEnum<T>(T value)
 		{
 			if (!IsEnum(value))
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			return ToEnum((object)value);
