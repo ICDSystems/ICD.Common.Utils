@@ -43,6 +43,9 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static string ToHexLiteral(string input)
 		{
+			if (input == null)
+				throw new ArgumentNullException("input");
+
 			string[] strings = input.Select(c => ToHexLiteral(c)).ToArray();
 			return string.Join("", strings);
 		}
@@ -50,12 +53,18 @@ namespace ICD.Common.Utils
 		/// <summary>
 		/// Converts a character in the string format "\\x00" to char.
 		/// </summary>
-		/// <param name="character"></param>
+		/// <param name="data"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static char FromHexLiteralCharacter(string character)
+		public static char FromHexLiteralCharacter(string data)
 		{
-			string hexValue = character.Substring(2);
+			if (data == null)
+				throw new ArgumentNullException("data");
+
+			if (data.Length != 4)
+				throw new ArgumentException("Expecting data in \x00 format of 4 characters", "data");
+
+			string hexValue = data.Substring(2);
 			return (char)Convert.ToByte(hexValue, 16);
 		}
 
@@ -67,6 +76,9 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static string FromHexLiteral(string data)
 		{
+			if (data == null)
+				throw new ArgumentNullException("data");
+
 			return string.Join("", data.Split(4).Select(s => FromHexLiteralCharacter(s).ToString()).ToArray());
 		}
 
@@ -96,6 +108,9 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static string ToMixedReadableHexLiteral(string input)
 		{
+			if (input == null)
+				throw new ArgumentNullException("input");
+
 			string[] strings = input.Select(c => ToMixedReadableHexLiteral(c)).ToArray();
 			return string.Join("", strings);
 		}
@@ -108,6 +123,9 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static string ToString(IEnumerable<byte> bytes)
 		{
+			if (bytes == null)
+				throw new ArgumentNullException("bytes");
+
 			byte[] cast = bytes as byte[] ?? bytes.ToArray();
 			return Encoding.UTF8.GetString(cast, 0, cast.Length);
 		}
@@ -121,6 +139,9 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static string ToString(IEnumerable<byte> bytes, int length)
 		{
+			if (bytes == null)
+				throw new ArgumentNullException("bytes");
+
 			byte[] cast = bytes as byte[] ?? bytes.ToArray();
 			return Encoding.UTF8.GetString(cast, 0, length);
 		}
@@ -221,6 +242,9 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static string NiceName(object obj)
 		{
+			if (obj == null)
+				throw new ArgumentNullException("obj");
+
 			return NiceName(obj.ToString());
 		}
 
@@ -251,6 +275,12 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static string SafeNumericFormat(string phoneFormat, string number)
 		{
+			if (phoneFormat == null)
+				throw new ArgumentNullException("phoneFormat");
+
+			if (number == null)
+				throw new ArgumentNullException("number");
+
 			phoneFormat = Reverse(phoneFormat);
 			number = Reverse(number);
 
@@ -288,6 +318,9 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static string Reverse(string input)
 		{
+			if (input == null)
+				throw new ArgumentNullException("input");
+
 			char[] charArray = input.ToCharArray();
 			Array.Reverse(charArray);
 			return new string(charArray);
