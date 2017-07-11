@@ -12,6 +12,7 @@ namespace ICD.Common.Attributes.Properties
 		public enum ePropertyType
 		{
 			[PublicAPI] Default,
+			[PublicAPI] Hidden,
 			[PublicAPI] PortId,
 			[PublicAPI] DeviceId,
 			[PublicAPI] Ipid,
