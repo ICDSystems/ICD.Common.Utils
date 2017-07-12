@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ICD.Common.EventArguments;
+using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronXml;
 #else
 using System.Xml;
 #endif
-using ICD.Common.EventArguments;
-using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Xml
 {

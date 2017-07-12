@@ -1,11 +1,11 @@
-﻿using ICD.Common.Properties;
+﻿using System;
+using System.Text;
+using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 #else
 using System.IO;
 #endif
-using System;
-using System.Text;
 
 namespace ICD.Common.Utils.IO
 {

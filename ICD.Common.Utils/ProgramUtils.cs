@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-#if SIMPLSHARP
-using Crestron.SimplSharp;
-#endif
 using ICD.Common.Properties;
 using ICD.Common.Services;
 using ICD.Common.Services.Logging;
 using ICD.Common.Utils.Extensions;
+#if SIMPLSHARP
+using Crestron.SimplSharp;
+#endif
 
 namespace ICD.Common.Utils
 {

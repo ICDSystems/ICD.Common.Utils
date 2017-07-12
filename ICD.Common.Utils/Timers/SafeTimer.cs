@@ -1,11 +1,11 @@
 ﻿using System;
+using ICD.Common.Services;
+using ICD.Common.Services.Logging;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
 #else
 using System.Threading;
 #endif
-using ICD.Common.Services;
-using ICD.Common.Services.Logging;
 
 namespace ICD.Common.Utils.Timers
 {

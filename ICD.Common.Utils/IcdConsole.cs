@@ -1,8 +1,8 @@
 ﻿using System;
+using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
 #endif
-using ICD.Common.Properties;
 
 namespace ICD.Common.Utils
 {
