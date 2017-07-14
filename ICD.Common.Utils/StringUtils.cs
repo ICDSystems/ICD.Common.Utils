@@ -116,6 +116,16 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Uses String.Format to properly handle null values.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static string ToString(object value)
+		{
+			return string.Format("{0}", value);
+		}
+
+		/// <summary>
 		/// Converts bytes to an ascii string.
 		/// </summary>
 		/// <param name="bytes"></param>
@@ -360,7 +370,7 @@ namespace ICD.Common.Utils
 			if (items == null)
 				throw new ArgumentNullException("items");
 
-			return string.Format("[{0}]", string.Join(", ", items.Select(i => i.ToString()).ToArray()));
+			return string.Format("[{0}]", string.Join(", ", items.Select(i => ToString(i)).ToArray()));
 		}
 
 		/// <summary>
@@ -377,7 +387,7 @@ namespace ICD.Common.Utils
 
 			string[] ranges = MathUtils.GetRanges(items)
 			                           .Select(r => r[0] == r[1]
-				                                        ? r[0].ToString()
+				                                        ? ToString(r[0])
 				                                        : string.Format("{0}-{1}", r[0], r[1]))
 			                           .ToArray();
 
