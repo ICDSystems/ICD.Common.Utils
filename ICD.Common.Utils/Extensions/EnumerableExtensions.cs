@@ -677,7 +677,7 @@ namespace ICD.Common.Utils.Extensions
 
 			foreach (T item in extends)
 			{
-				if (!first && comparer.Compare(last, item) != 0)
+				if (!first && comparer.Compare(last, item) == 0)
 					continue;
 
 				first = false;
