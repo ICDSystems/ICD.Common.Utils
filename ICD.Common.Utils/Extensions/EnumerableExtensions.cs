@@ -644,7 +644,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<T> Consolidate<T>(IEnumerable<T> extends)
+		public static IEnumerable<T> Consolidate<T>(this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -664,7 +664,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<T> Consolidate<T>(IEnumerable<T> extends, IComparer<T> comparer)
+		public static IEnumerable<T> Consolidate<T>(this IEnumerable<T> extends, IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
