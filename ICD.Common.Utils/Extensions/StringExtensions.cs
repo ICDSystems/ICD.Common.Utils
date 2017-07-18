@@ -122,8 +122,8 @@ namespace ICD.Common.Utils.Extensions
 			if (chunkSize <= 0)
 				throw new InvalidOperationException("chunkSize must be greater than 0");
 
-			return Enumerable.Range(0, extends.Length / chunkSize)
-			                 .Select(i => extends.Substring(i * chunkSize, chunkSize));
+			return Enumerable.Range(0, (int)Math.Ceiling(extends.Length / (double)chunkSize))
+							 .Select(i => extends.Substring(i * chunkSize, Math.Min(chunkSize, extends.Length - (i * chunkSize))));
 		}
 
 		/// <summary>
