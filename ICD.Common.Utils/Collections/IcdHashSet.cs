@@ -192,8 +192,19 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="items"></param>
 		public void AddRange(IEnumerable<T> items)
 		{
+			if (items == null)
+				throw new ArgumentNullException("items");
+
 			foreach (T item in items)
-				Add(item);
+			{
+				// ReSharper disable CompareNonConstrainedGenericWithNull
+				if (item == null)
+					// ReSharper restore CompareNonConstrainedGenericWithNull
+					throw new InvalidOperationException("item");
+
+				if (!m_Dict.ContainsKey(item))
+					m_Dict[item] = null;
+			}
 		}
 
 		/// <summary>
