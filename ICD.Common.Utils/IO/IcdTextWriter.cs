@@ -1,8 +1,10 @@
 ﻿using System;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
+using GC = Crestron.SimplSharp.CrestronEnvironment.GC;
 #else
 using System.IO;
+using GC = System.GC;
 #endif
 
 namespace ICD.Common.Utils.IO
@@ -12,6 +14,8 @@ namespace ICD.Common.Utils.IO
 		private readonly TextWriter m_TextWriter;
 
 		public TextWriter WrappedTextWriter { get { return m_TextWriter; } }
+
+		private bool disposed = false;
 
 		/// <summary>
 		/// Constructor.
@@ -27,12 +31,25 @@ namespace ICD.Common.Utils.IO
 
 		~IcdTextWriter()
 		{
-			Dispose();
+			Dispose(false);
 		}
 
 		public void Dispose()
 		{
-			m_TextWriter.Dispose();
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected void Dispose(bool disposing)
+		{
+			if (disposed)
+				return;
+
+			if (disposing)
+			{
+				m_TextWriter.Dispose();
+			}
+			disposed = true;
 		}
 	}
 }

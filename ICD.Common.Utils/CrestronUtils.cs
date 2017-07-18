@@ -239,6 +239,12 @@ namespace ICD.Common.Utils
 			}
 			return ramfree;
 		}
+
+		[PublicAPI]
+		public static string GetMilliseconds()
+		{
+			return IcdEnvironment.GetLocalTime().ToString("fff");
+		}
 	}
 }
 

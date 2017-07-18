@@ -137,7 +137,7 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("bytes");
 
 			byte[] cast = bytes as byte[] ?? bytes.ToArray();
-			return Encoding.UTF8.GetString(cast, 0, cast.Length);
+			return Encoding.GetEncoding(28591).GetString(cast, 0, cast.Length);
 		}
 
 		/// <summary>
@@ -153,7 +153,7 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("bytes");
 
 			byte[] cast = bytes as byte[] ?? bytes.ToArray();
-			return Encoding.UTF8.GetString(cast, 0, length);
+			return Encoding.GetEncoding(28591).GetString(cast, 0, length);
 		}
 
 		/// <summary>
@@ -164,7 +164,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static byte[] ToBytes(string input)
 		{
-			return Encoding.UTF8.GetBytes(input);
+			return Encoding.GetEncoding(28591).GetBytes(input);
 		}
 
 		/// <summary>
