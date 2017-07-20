@@ -69,7 +69,7 @@ namespace ICD.Common.Utils.Xml
 		public static IcdXmlAttribute GetAttribute(string xml, string name)
 		{
 			IcdXmlAttribute output;
-			if (GetAttributes(xml).TryFirstOrDefault(a => a.Name == name, out output))
+			if (GetAttributes(xml).TryFirst(a => a.Name == name, out output))
 				return output;
 
 			throw new KeyNotFoundException(string.Format("No attribute with name {0}", name));
