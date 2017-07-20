@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ICD.Common.EventArguments;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
 
 namespace ICD.Common.Utils.Xml
@@ -67,7 +68,11 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static IcdXmlAttribute GetAttribute(string xml, string name)
 		{
-			return GetAttributes(xml).First(a => a.Name == name);
+			IcdXmlAttribute output;
+			if (GetAttributes(xml).TryFirstOrDefault(a => a.Name == name, out output))
+				return output;
+
+			throw new KeyNotFoundException(string.Format("No attribute with name {0}", name));
 		}
 
 		/// <summary>
