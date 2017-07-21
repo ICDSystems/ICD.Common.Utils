@@ -135,6 +135,9 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static void Recurse(string xml, Action<XmlRecursionEventArgs> callback)
 		{
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
 			Recurse(xml, new Stack<string>(), callback);
 		}
 
@@ -146,6 +149,12 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="callback"></param>
 		private static void Recurse(string xml, Stack<string> path, Action<XmlRecursionEventArgs> callback)
 		{
+			if (path == null)
+				throw new ArgumentNullException("path");
+
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
 			IcdXmlReader childReader;
 
 			try

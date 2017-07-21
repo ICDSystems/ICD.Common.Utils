@@ -28,7 +28,7 @@ namespace ICD.Common.Utils.Xml
 			}
 			catch (XmlException e)
 			{
-				throw new IcdXmlException(e.Message, e, e.LineNumber, e.LinePosition);
+				throw new IcdXmlException(e);
 			}
 		}
 
