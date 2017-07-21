@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
@@ -34,7 +35,8 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void ConsoleCommandResponse(string message, params object[] args)
 		{
-			message = string.Format(message, args);
+			if(args != null && args.Any())
+				message = string.Format(message, args);
 
 #if SIMPLSHARP
 			try
