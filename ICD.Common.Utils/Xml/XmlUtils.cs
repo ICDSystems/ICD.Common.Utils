@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ICD.Common.EventArguments;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
 
 namespace ICD.Common.Utils.Xml
@@ -67,7 +68,11 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static IcdXmlAttribute GetAttribute(string xml, string name)
 		{
-			return GetAttributes(xml).First(a => a.Name == name);
+			IcdXmlAttribute output;
+			if (GetAttributes(xml).TryFirst(a => a.Name == name, out output))
+				return output;
+
+			throw new KeyNotFoundException(string.Format("No attribute with name {0}", name));
 		}
 
 		/// <summary>
@@ -130,6 +135,9 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static void Recurse(string xml, Action<XmlRecursionEventArgs> callback)
 		{
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
 			Recurse(xml, new Stack<string>(), callback);
 		}
 
@@ -141,6 +149,12 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="callback"></param>
 		private static void Recurse(string xml, Stack<string> path, Action<XmlRecursionEventArgs> callback)
 		{
+			if (path == null)
+				throw new ArgumentNullException("path");
+
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
 			IcdXmlReader childReader;
 
 			try

@@ -1,4 +1,9 @@
 ﻿using System;
+#if SIMPLSHARP
+using Crestron.SimplSharp;
+#else
+using System.Xml;
+#endif
 
 namespace ICD.Common.Utils.Xml
 {
@@ -19,6 +24,15 @@ namespace ICD.Common.Utils.Xml
 		{
 			m_LineNumber = lineNumber;
 			m_LinePosition = linePosition;
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="inner"></param>
+		public IcdXmlException(XmlException inner)
+			: this(inner.Message, inner, inner.LineNumber, inner.LinePosition)
+		{
 		}
 	}
 }
