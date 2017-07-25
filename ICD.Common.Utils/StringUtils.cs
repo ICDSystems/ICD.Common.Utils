@@ -516,5 +516,17 @@ namespace ICD.Common.Utils
 
 			return builder.ToString();
 		}
+
+		/// <summary>
+		/// Shim of value.ToString()
+		/// Returns null if input value is null.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		[PublicAPI, CanBeNull]
+		public static string Trim(string value)
+		{
+			return value == null ? null : value.ToUpper();
+		}
 	}
 }
