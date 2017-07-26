@@ -58,7 +58,7 @@ namespace ICD.Common.Utils.Extensions
 				return;
 			}
 
-			int index = extends.BinarySearch(item);
+			int index = extends.BinarySearch(item, comparer);
 			if (index < 0)
 				index = ~index;
 
