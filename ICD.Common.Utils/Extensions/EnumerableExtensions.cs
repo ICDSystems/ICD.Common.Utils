@@ -53,12 +53,12 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item">Outputs the first item in the sequence.</param>
 		/// <returns></returns>
-		public static bool TryFirstOrDefault<T>(this IEnumerable<T> extends, out T item)
+		public static bool TryFirst<T>(this IEnumerable<T> extends, out T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.TryFirstOrDefault(i => true, out item);
+			return extends.TryFirst(i => true, out item);
 		}
 
 		/// <summary>
@@ -69,7 +69,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="predicate"></param>
 		/// <param name="item">Outputs the first item in the sequence.</param>
 		/// <returns></returns>
-		public static bool TryFirstOrDefault<T>(this IEnumerable<T> extends, Func<T, bool> predicate, out T item)
+		public static bool TryFirst<T>(this IEnumerable<T> extends, Func<T, bool> predicate, out T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

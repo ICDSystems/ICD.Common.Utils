@@ -50,26 +50,54 @@ namespace ICD.Common.Utils.Xml
 
 		public bool MoveToNextAttribute()
 		{
-			return m_Reader.MoveToNextAttribute();
+			try
+			{
+				return m_Reader.MoveToNextAttribute();
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		public void MoveToElement()
 		{
-			m_Reader.MoveToElement();
+			try
+			{
+				m_Reader.MoveToElement();
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		public string GetAttribute(string name)
 		{
-			return m_Reader.GetAttribute(name);
+			try
+			{
+				return m_Reader.GetAttribute(name);
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		public string ReadString()
 		{
+			try
+			{
 #if SIMPLSHARP
-			return m_Reader.ReadString();
+				return m_Reader.ReadString();
 #else
-            return m_Reader.ReadElementContentAsString();
+				return m_Reader.ReadElementContentAsString();
 #endif
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		public bool Read()
@@ -80,47 +108,96 @@ namespace ICD.Common.Utils.Xml
 			}
 			catch (XmlException e)
 			{
-				throw new IcdXmlException(e.Message, e, e.LineNumber, e.LinePosition);
+				throw new IcdXmlException(e);
 			}
 		}
 
 		public void Dispose()
 		{
+			try
+			{
 #if SIMPLSHARP
-			m_Reader.Dispose(true);
+				m_Reader.Dispose(true);
 #else
-            m_Reader.Dispose();
+				m_Reader.Dispose();
 #endif
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		public void Skip()
 		{
-			m_Reader.Skip();
+			try
+			{
+				m_Reader.Skip();
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		public string ReadElementContentAsString()
 		{
-			return m_Reader.ReadElementContentAsString();
+			try
+			{
+				return m_Reader.ReadElementContentAsString();
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		public string ReadOuterXml()
 		{
-			return m_Reader.ReadOuterXml();
+			try
+			{
+				return m_Reader.ReadOuterXml();
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		public string ReadInnerXml()
 		{
-			return m_Reader.ReadInnerXml();
+			try
+			{
+				return m_Reader.ReadInnerXml();
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		public long ReadElementContentAsLong()
 		{
-			return m_Reader.ReadElementContentAsLong();
+			try
+			{
+				return m_Reader.ReadElementContentAsLong();
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		public float ReadElementContentAsFloat()
 		{
-			return m_Reader.ReadElementContentAsFloat();
+			try
+			{
+				return m_Reader.ReadElementContentAsFloat();
+			}
+			catch (XmlException e)
+			{
+				throw new IcdXmlException(e);
+			}
 		}
 
 		#endregion

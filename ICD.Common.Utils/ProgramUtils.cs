@@ -147,29 +147,29 @@ namespace ICD.Common.Utils
 		{
 			Dictionary<string, string> output = new Dictionary<string, string>();
 
-			try
+			string progInfo = string.Empty;
+			string command = string.Format("progcomments:{0}", ProgramNumber);
+
+			if (!IcdConsole.SendControlSystemCommand(command, ref progInfo))
 			{
-				string progInfo = string.Empty;
-				string command = string.Format("progcomments:{0}", ProgramNumber);
-
-				if (!IcdConsole.SendControlSystemCommand(command, ref progInfo))
-				{
-					ServiceProvider.TryGetService<ILoggerService>().AddEntry(eSeverity.Warning, "Failed to parse prog comments");
-					return output;
-				}
-
-				foreach (string line in progInfo.Split(new[] {"\n\r", "\r\n", "\n", "\r"}))
-				{
-					string[] pair = line.Split(':', 2).ToArray();
-					string key = pair[0].Trim();
-					string value = pair[1].Trim();
-					output[key] = value;
-				}
+				ServiceProvider.GetService<ILoggerService>().AddEntry(eSeverity.Warning, "Failed to parse prog comments");
+				return output;
 			}
-			catch (Exception e)
+
+			foreach (string line in progInfo.Split(new[] {"\n\r", "\r\n", "\n", "\r"}))
 			{
-				ServiceProvider.TryGetService<ILoggerService>()
-				               .AddEntry(eSeverity.Error, e, "Failed to parse prog comments - {0}", e.Message);
+				string[] pair = line.Split(':', 2).ToArray();
+
+				if (pair.Length < 2)
+				{
+					ServiceProvider.GetService<ILoggerService>()
+					               .AddEntry(eSeverity.Warning, "Failed to parse prog comments line - {0}", line);
+					continue;
+				}
+
+				string key = pair[0].Trim();
+				string value = pair[1].Trim();
+				output[key] = value;
 			}
 
 			return output;

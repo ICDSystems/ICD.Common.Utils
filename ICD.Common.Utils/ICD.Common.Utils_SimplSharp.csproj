@@ -71,7 +71,6 @@
   <ItemGroup>
     <Compile Include="Attributes\AbstractIcdAttribute.cs" />
     <Compile Include="Attributes\KrangPluginAttribute.cs" />
-    <Compile Include="Attributes\Properties\SettingsProperty.cs" />
     <Compile Include="Attributes\Rpc\RpcAttribute.cs" />
     <Compile Include="EventArguments\BoolEventArgs.cs" />
     <Compile Include="EventArguments\CharEventArgs.cs" />
@@ -85,6 +84,7 @@
     <Compile Include="EventArguments\XmlRecursionEventArgs.cs" />
     <None Include="ObfuscationSettings.cs" />
     <Compile Include="Extensions\ByteExtensions.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Logging\ILoggerService.cs" />
