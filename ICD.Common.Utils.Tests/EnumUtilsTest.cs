@@ -24,6 +24,19 @@ namespace ICD.Common.Utils.Tests_NetStandard
 			C = 4
 		}
 
+		
+		[Test]
+		public void GetValuesTest()
+		{
+			eTestEnum[] values = EnumUtils.GetValues<eTestEnum>().ToArray();
+
+			Assert.AreEqual(4, values.Length);
+			Assert.AreEqual(eTestEnum.None, values[0]);
+			Assert.AreEqual(eTestEnum.A, values[1]);
+			Assert.AreEqual(eTestEnum.B, values[2]);
+			Assert.AreEqual(eTestEnum.C, values[3]);
+		}
+		
 		[Test]
 		public void IsEnumTypeTest()
 		{
@@ -69,18 +82,6 @@ namespace ICD.Common.Utils.Tests_NetStandard
 		public void GetValuesGenericTest()
 		{
 			eTestEnum[] values = EnumUtils.GetValues<eTestEnum>().ToArray();
-
-			Assert.AreEqual(4, values.Length);
-			Assert.IsTrue(values.Contains(eTestEnum.None));
-			Assert.IsTrue(values.Contains(eTestEnum.A));
-			Assert.IsTrue(values.Contains(eTestEnum.B));
-			Assert.IsTrue(values.Contains(eTestEnum.C));
-		}
-
-		[Test]
-		public void GetValuesTest()
-		{
-			object[] values = EnumUtils.GetValues(typeof(eTestEnum)).ToArray();
 
 			Assert.AreEqual(4, values.Length);
 			Assert.IsTrue(values.Contains(eTestEnum.None));
