@@ -39,6 +39,7 @@
     <None Remove="ICD.Common.projectinfo" />
     <None Remove="ICD.Common_SimplSharp.suo" />
     <None Remove="ICD.SimplSharp.projectinfo" />
+    <None Remove="Properties\ControlSystem.cfg" />
   </ItemGroup>
 
   <ItemGroup>
