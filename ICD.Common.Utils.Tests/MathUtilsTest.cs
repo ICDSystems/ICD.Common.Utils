@@ -1,9 +1,11 @@
 ﻿using ICD.Common.Properties;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ICD.Common.Utils.Tests
 {
-	[TestFixture]
+	[TestFixture, UsedImplicitly]
 	public sealed class MathUtilsTest
 	{
 		[Test, UsedImplicitly]
@@ -33,5 +35,48 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(50, MathUtils.MapRange(0, 10, 0, 100, 5));
 			Assert.AreEqual(100, MathUtils.MapRange(0, 10, 0, 100, 10));
 		}
-	}
+
+        [UsedImplicitly]
+        [TestCase(-10000, 5)]
+        [TestCase(10000, 5)]
+        public void GetNumberOfDigitsTest(int number, int expected)
+        {
+            Assert.AreEqual(expected, MathUtils.GetNumberOfDigits(number));
+        }
+
+        [Test, UsedImplicitly]
+		public void GetRangesTest()
+        {
+            IEnumerable<int> values = new int[] { 1, 3, 5, 6, 7, 8, 9, 10, 12 };
+            int[][] ranges = MathUtils.GetRanges(values).ToArray();
+
+            Assert.AreEqual(4, ranges.Length);
+
+            Assert.AreEqual(1, ranges[0][0]);
+            Assert.AreEqual(1, ranges[0][1]);
+
+            Assert.AreEqual(3, ranges[1][0]);
+            Assert.AreEqual(3, ranges[1][1]);
+
+            Assert.AreEqual(5, ranges[2][0]);
+            Assert.AreEqual(10, ranges[2][1]);
+
+            Assert.AreEqual(12, ranges[3][0]);
+            Assert.AreEqual(12, ranges[3][1]);
+        }
+
+        [Test, UsedImplicitly]
+        public void RoundToNearestTest()
+        {
+            IEnumerable<int> values = new int[] { 0, 15, 30, 45 };
+            Assert.AreEqual(15, MathUtils.RoundToNearest(21, values));
+        }
+
+        [Test, UsedImplicitly]
+        public void GetNewIdTest()
+        {
+            IEnumerable<int> ids = Enumerable.Range(1, 10);
+            Assert.AreEqual(11, MathUtils.GetNewId(ids));
+        }
+    }
 }
