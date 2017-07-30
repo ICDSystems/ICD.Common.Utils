@@ -153,7 +153,7 @@ namespace ICD.Common.Utils
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Yellow;
                 System.Console.BackgroundColor = ConsoleColor.Red;
-               System.Console.Error.WriteLine("{0}: {1}", ex.GetType().Name, message);
+                System.Console.Error.WriteLine("{0}: {1}", ex.GetType().Name, message);
 			    System.Console.ResetColor();
                 System.Console.Error.WriteLine(ex.StackTrace);
 #endif

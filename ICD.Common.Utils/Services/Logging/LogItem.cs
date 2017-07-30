@@ -6,7 +6,7 @@ using ICD.Common.Utils;
 namespace ICD.Common.Services.Logging
 {
 	/// <summary>
-	///     Log Entry Item
+	/// Log Entry Item
 	/// </summary>
 	public struct LogItem
 	{
@@ -17,18 +17,18 @@ namespace ICD.Common.Services.Logging
 		#region Properties
 
 		/// <summary>
-		///     Accessor only for timestamp.
+		/// Accessor only for timestamp.
 		/// </summary>
 		[PublicAPI]
 		public DateTime Timestamp { get { return m_Timestamp; } }
 
 		/// <summary>
-		///     Get/Set for severity level.
+		/// Get/Set for severity level.
 		/// </summary>
 		public eSeverity Severity { get { return m_Severity; } }
 
 		/// <summary>
-		///     Get/Set for message string.
+		/// Get/Set for message string.
 		/// </summary>
 		public string Message { get { return m_Message; } }
 
@@ -37,7 +37,7 @@ namespace ICD.Common.Services.Logging
 		#region Constructors
 
 		/// <summary>
-		///     Creates a new LogItem object with the specified values.
+		/// Creates a new LogItem object with the specified values.
 		/// </summary>
 		/// <param name="severity">Severity Level, between 0 and 7</param>
 		/// <param name="message">Error message text</param>
@@ -53,7 +53,7 @@ namespace ICD.Common.Services.Logging
 		#region Methods
 
 		/// <summary>
-		///     Return the text format to send to Fusion
+		/// Return the text format to send to Fusion
 		/// </summary>
 		/// <returns>text format for fusion, including timestamp, severity, and message</returns>
 		[PublicAPI]
@@ -71,7 +71,7 @@ namespace ICD.Common.Services.Logging
 		}
 
 		/// <summary>
-		///     Implementing default equality.
+		/// Implementing default equality.
 		/// </summary>
 		/// <param name="a1"></param>
 		/// <param name="a2"></param>
@@ -82,7 +82,7 @@ namespace ICD.Common.Services.Logging
 		}
 
 		/// <summary>
-		///     Implementing default inequality.
+		/// Implementing default inequality.
 		/// </summary>
 		/// <param name="a1"></param>
 		/// <param name="a2"></param>
@@ -93,7 +93,7 @@ namespace ICD.Common.Services.Logging
 		}
 
 		/// <summary>
-		///     Returns true if this instance is equal to the given object.
+		/// Returns true if this instance is equal to the given object.
 		/// </summary>
 		/// <param name="other"></param>
 		/// <returns></returns>

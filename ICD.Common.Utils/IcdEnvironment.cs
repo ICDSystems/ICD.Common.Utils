@@ -5,7 +5,7 @@ namespace ICD.Common.Utils
 	public static partial class IcdEnvironment
 	{
 		/// <summary>
-		/// Enumeration to define the various runtime environments a SIMPL# module can run in.
+		/// Enumeration to define the various runtime environments a module can run in.
 		/// </summary>
 		public enum eRuntimeEnvironment
 		{

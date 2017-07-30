@@ -1,6 +1,5 @@
 ﻿#if SIMPLSHARP
 using Crestron.SimplSharp;
-
 #else
 using System;
 using System.IO.Compression;
