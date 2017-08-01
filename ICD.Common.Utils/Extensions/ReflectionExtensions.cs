@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Crestron.SimplSharp.Reflection;
 
 namespace ICD.Common.Utils.Extensions

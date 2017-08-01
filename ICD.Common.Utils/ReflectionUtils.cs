@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
+using ICD.Common.Utils.IO;
 #if SIMPLSHARP
+using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharp.Reflection;
 using Activator = Crestron.SimplSharp.Reflection.Activator;
 #else
@@ -234,11 +236,29 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static Assembly LoadAssemblyFromPath(string path)
 		{
-#if SIMPLSHARP
-			return Assembly.LoadFrom(path);
-#else
-			string fileNameWithOutExtension = Path.GetFileNameWithoutExtension(path);
+			if (path == null)
+				throw new ArgumentNullException("path");
 
+			if (string.IsNullOrEmpty(path))
+				throw new ArgumentException("Path is empty", "path");
+
+			string fileNameWithOutExtension = IcdPath.GetFileNameWithoutExtension(path);
+
+#if SIMPLSHARP
+
+			try
+			{
+				return Assembly.Load(new AssemblyName {Name = fileNameWithOutExtension});
+			}
+			catch (IOException)
+			{
+				return Assembly.LoadFrom(path);
+			}
+			catch (FileNotFoundException)
+			{
+				return Assembly.LoadFrom(path);
+			}
+#else
 			bool inCompileLibraries = DependencyContext.Default.CompileLibraries.Any(l => l.Name.Equals(fileNameWithOutExtension, StringComparison.OrdinalIgnoreCase));
 			bool inRuntimeLibraries = DependencyContext.Default.RuntimeLibraries.Any(l => l.Name.Equals(fileNameWithOutExtension, StringComparison.OrdinalIgnoreCase));
 
