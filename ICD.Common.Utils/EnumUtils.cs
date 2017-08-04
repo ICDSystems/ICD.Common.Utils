@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Collections;
 using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
@@ -335,7 +336,8 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		private static bool HasMultipleFlags(int value)
+		[PublicAPI]
+		public static bool HasMultipleFlags(int value)
 		{
 			return ((value & (value - 1)) != 0);
 		}
