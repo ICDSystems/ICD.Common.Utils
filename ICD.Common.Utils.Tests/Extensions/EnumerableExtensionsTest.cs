@@ -114,25 +114,51 @@ namespace ICD.Common.Utils.Tests_NetStandard.Extensions
         [Test]
         public void SelectMultiTest()
         {
-            Assert.Inconclusive();
+            int[] values = { 1, 2, 3 };
+            int[] result = values.SelectMulti(i => 1, i => 2).ToArray();
+
+            Assert.AreEqual(6, result.Length);
+            Assert.AreEqual(1, result[0]);
+            Assert.AreEqual(2, result[1]);
+            Assert.AreEqual(1, result[2]);
+            Assert.AreEqual(2, result[3]);
+            Assert.AreEqual(1, result[4]);
+            Assert.AreEqual(2, result[5]);
         }
 
         [Test]
         public void ExecuteTest()
         {
-            Assert.Inconclusive();
+            int[] values = { 1, 2, 3 };
+
+            int sum = 0;
+            IEnumerable<int> sequence = values.Select(v => { sum += v; return v; });
+
+            Assert.AreEqual(0, sum);
+            sequence.Execute();
+            Assert.AreEqual(6, sum);
         }
 
         [Test]
         public void ForEachTest()
         {
-            Assert.Inconclusive();
+            int[] values = { 1, 2, 3 };
+
+            int sum = 0;
+            values.ForEach(v => sum += v);
+
+            Assert.AreEqual(6, sum);
         }
 
         [Test]
         public void ForEachIndexTest()
         {
-            Assert.Inconclusive();
+            int[] values = { 1, 2, 3 };
+
+            int sum = 0;
+            values.ForEach((v, i) => sum += i);
+
+            Assert.AreEqual(3, sum);
         }
 
 #if SIMPLSHARP
