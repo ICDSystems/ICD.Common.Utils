@@ -7,7 +7,7 @@ namespace ICD.Common.Utils.Tests_NetStandard
 	[TestFixture]
     public sealed class EnumUtilsTest
     {
-		private enum eTestEnum
+		public enum eTestEnum
 		{
 			None = 0,
 			A = 1, 
@@ -16,7 +16,7 @@ namespace ICD.Common.Utils.Tests_NetStandard
 		}
 
 		[Flags]
-		private enum eTestFlagsEnum
+		public enum eTestFlagsEnum
 		{
 			None = 0,
 			A = 1,
@@ -208,11 +208,28 @@ namespace ICD.Common.Utils.Tests_NetStandard
 			Assert.IsTrue(EnumUtils.HasMultipleFlags(eTestFlagsEnum.A | eTestFlagsEnum.B));
 		}
 
-		#endregion
+        [TestCase(false, eTestFlagsEnum.None)]
+        [TestCase(true, eTestFlagsEnum.B)]
+        [TestCase(true, eTestFlagsEnum.B | eTestFlagsEnum.C)]
+        public void HasAnyFlagsTest(bool expected, eTestFlagsEnum value)
+        {
+            Assert.AreEqual(expected, value.HasAnyFlags());
+        }
 
-		#region Conversion
+        [TestCase(false, eTestFlagsEnum.None, eTestFlagsEnum.None)]
+        [TestCase(false, eTestFlagsEnum.None, eTestFlagsEnum.B)]
+        [TestCase(true, eTestFlagsEnum.B, eTestFlagsEnum.B)]
+        [TestCase(false, eTestFlagsEnum.None | eTestFlagsEnum.A, eTestFlagsEnum.B | eTestFlagsEnum.C)]
+        public void HasAnyFlagsValueTest(bool expected, eTestFlagsEnum value, eTestFlagsEnum other)
+        {
+            Assert.AreEqual(expected, value.HasAnyFlags(other));
+        }
 
-		[Test]
+        #endregion
+
+        #region Conversion
+
+        [Test]
 		public void ParseGenericTest()
 		{
 			Assert.AreEqual(eTestEnum.A, EnumUtils.Parse<eTestEnum>("A", false));

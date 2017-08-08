@@ -342,18 +342,41 @@ namespace ICD.Common.Utils
 			return ((value & (value - 1)) != 0);
 		}
 
-		#endregion
+        /// <summary>
+        /// Returns true if this enum contains any flags.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [PublicAPI]
+        public static bool HasAnyFlags<T>(this T extends)
+        {
+            return GetFlagsExceptNone(extends).Any();
+        }
 
-		#region Conversion
+        /// <summary>
+        /// Returns true if this enum contains any of the given flag values.
+        /// </summary>
+        /// <param name="extends"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [PublicAPI]
+        public static bool HasAnyFlags<T>(this T extends, T value)
+        {
+            return GetFlagsIntersection(extends, value).HasAnyFlags();
+        }
 
-		/// <summary>
-		/// Shorthand for parsing string to enum.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="data"></param>
-		/// <param name="ignoreCase"></param>
-		/// <returns></returns>
-		public static T Parse<T>(string data, bool ignoreCase)
+        #endregion
+
+        #region Conversion
+
+        /// <summary>
+        /// Shorthand for parsing string to enum.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        public static T Parse<T>(string data, bool ignoreCase)
 		{
 			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
