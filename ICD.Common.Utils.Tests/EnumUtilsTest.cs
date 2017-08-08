@@ -213,7 +213,7 @@ namespace ICD.Common.Utils.Tests_NetStandard
         [TestCase(true, eTestFlagsEnum.B | eTestFlagsEnum.C)]
         public void HasAnyFlagsTest(bool expected, eTestFlagsEnum value)
         {
-            Assert.AreEqual(expected, value.HasAnyFlags());
+            Assert.AreEqual(expected, EnumUtils.HasAnyFlags(value));
         }
 
         [TestCase(false, eTestFlagsEnum.None, eTestFlagsEnum.None)]
@@ -222,7 +222,7 @@ namespace ICD.Common.Utils.Tests_NetStandard
         [TestCase(false, eTestFlagsEnum.None | eTestFlagsEnum.A, eTestFlagsEnum.B | eTestFlagsEnum.C)]
         public void HasAnyFlagsValueTest(bool expected, eTestFlagsEnum value, eTestFlagsEnum other)
         {
-            Assert.AreEqual(expected, value.HasAnyFlags(other));
+            Assert.AreEqual(expected, EnumUtils.HasAnyFlags(value, other));
         }
 
         #endregion
