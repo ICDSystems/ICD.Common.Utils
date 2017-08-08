@@ -342,27 +342,28 @@ namespace ICD.Common.Utils
 			return ((value & (value - 1)) != 0);
 		}
 
-        /// <summary>
-        /// Returns true if this enum contains any flags.
-        /// </summary>
-        /// <param name=""></param>
-        /// <returns></returns>
-        [PublicAPI]
-        public static bool HasAnyFlags<T>(this T extends)
+		/// <summary>
+		/// Returns true if the enum contains any flags.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		[PublicAPI]
+        public static bool HasAnyFlags<T>(T value)
         {
-            return GetFlagsExceptNone(extends).Any();
+            return GetFlagsExceptNone(value).Any();
         }
 
         /// <summary>
-        /// Returns true if this enum contains any of the given flag values.
+        /// Returns true if the enum contains any of the given flag values.
         /// </summary>
-        /// <param name="extends"></param>
         /// <param name="value"></param>
+        /// <param name="other"></param>
         /// <returns></returns>
         [PublicAPI]
-        public static bool HasAnyFlags<T>(this T extends, T value)
+        public static bool HasAnyFlags<T>(T value, T other)
         {
-            return GetFlagsIntersection(extends, value).HasAnyFlags();
+	        T intersection = GetFlagsIntersection(value, other);
+	        return HasAnyFlags(intersection);
         }
 
         #endregion
