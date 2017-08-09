@@ -1,4 +1,5 @@
-﻿using ICD.Common.Utils.Extensions;
+﻿using ICD.Common.Utils.Collections;
+using ICD.Common.Utils.Extensions;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -172,7 +173,15 @@ namespace ICD.Common.Utils.Tests_NetStandard.Extensions
         [Test]
         public void PrependManyTest()
         {
-            Assert.Inconclusive();
+            int[] values = (new int[] { 4, 5, 6 }).PrependMany(1, 2, 3).ToArray();
+
+            Assert.AreEqual(6, values.Length);
+            Assert.AreEqual(1, values[0]);
+            Assert.AreEqual(2, values[1]);
+            Assert.AreEqual(3, values[2]);
+            Assert.AreEqual(4, values[3]);
+            Assert.AreEqual(5, values[4]);
+            Assert.AreEqual(6, values[5]);
         }
 
 #if SIMPLSHARP
@@ -186,61 +195,129 @@ namespace ICD.Common.Utils.Tests_NetStandard.Extensions
         [Test]
         public void AppendManyTest()
         {
-            Assert.Inconclusive();
+            int[] values = (new int[] { 1, 2, 3 }).AppendMany(4, 5, 6).ToArray();
+
+            Assert.AreEqual(6, values.Length);
+            Assert.AreEqual(1, values[0]);
+            Assert.AreEqual(2, values[1]);
+            Assert.AreEqual(3, values[2]);
+            Assert.AreEqual(4, values[3]);
+            Assert.AreEqual(5, values[4]);
+            Assert.AreEqual(6, values[5]);
         }
 
         [Test]
         public void OrderTest()
         {
-            Assert.Inconclusive();
+            int[] values = (new int[] { 2, 3, 1 }).Order().ToArray();
+
+            Assert.AreEqual(3, values.Length);
+            Assert.AreEqual(1, values[0]);
+            Assert.AreEqual(2, values[1]);
+            Assert.AreEqual(3, values[2]);
         }
 
         [Test]
         public void ExceptTest()
         {
-            Assert.Inconclusive();
+            int[] values = (new int[] { 1, 2, 3 }).Except(2).ToArray();
+
+            Assert.AreEqual(2, values.Length);
+            Assert.AreEqual(1, values[0]);
+            Assert.AreEqual(3, values[1]);
         }
 
         [Test]
         public void ToHashSetTest()
         {
-            Assert.Inconclusive();
+            IcdHashSet<int> values = (new int[] { 1, 2, 3 }).ToHashSet();
+
+            Assert.AreEqual(3, values.Count);
+            Assert.IsTrue(values.Contains(1));
+            Assert.IsTrue(values.Contains(2));
+            Assert.IsTrue(values.Contains(3));
         }
 
         [Test]
         public void ToDictionaryIntTest()
         {
-            Assert.Inconclusive();
+            Dictionary<int, int> values = (new int[] { 1, 2, 3 }).ToDictionary();
+
+            Assert.AreEqual(3, values.Count);
+            Assert.AreEqual(1, values[0]);
+            Assert.AreEqual(2, values[1]);
+            Assert.AreEqual(3, values[2]);
         }
 
         [Test]
         public void ToDictionaryUIntTest()
         {
-            Assert.Inconclusive();
+            Dictionary<uint, int> values = (new int[] { 1, 2, 3 }).ToDictionaryUInt();
+
+            Assert.AreEqual(3, values.Count);
+            Assert.AreEqual(1, values[0]);
+            Assert.AreEqual(2, values[1]);
+            Assert.AreEqual(3, values[2]);
         }
 
         [Test]
         public void ToDictionaryTest()
         {
-            Assert.Inconclusive();
+            KeyValuePair<int, string>[] items =
+            {
+                new KeyValuePair<int, string>(0, "A"),
+                new KeyValuePair<int, string>(1, "B"),
+                new KeyValuePair<int, string>(2, "C")
+            };
+
+            Dictionary<int, string> values = items.ToDictionary();
+
+            Assert.AreEqual(3, values.Count);
+            Assert.AreEqual("A", values[0]);
+            Assert.AreEqual("B", values[1]);
+            Assert.AreEqual("C", values[2]);
         }
 
         [Test]
         public void UnanimousTest()
         {
-            Assert.Inconclusive();
+            Assert.IsTrue((new bool[] { true, true, true}).Unanimous());
+            Assert.IsTrue((new bool[] { false, false, false }).Unanimous());
+            Assert.IsFalse((new bool[] { false, true, false }).Unanimous());
+            Assert.IsFalse((new bool[] { }).Unanimous());
         }
 
         [Test]
         public void UnanimousOtherTest()
         {
-            Assert.Inconclusive();
+            Assert.AreEqual("A", (new string[] { "A", "A", "A" }).Unanimous("B"));
+            Assert.AreEqual("C", (new string[] { "B", "A", "B" }).Unanimous("C"));
+            Assert.AreEqual("A", (new string[] { }).Unanimous("A"));
         }
 
         [Test]
         public void PartitionTest()
         {
-            Assert.Inconclusive();
+            int[][] items = (new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }).Partition(3)
+                .Select(p => p.ToArray())
+                .ToArray();
+
+            Assert.AreEqual(3, items.Length);
+
+            Assert.AreEqual(3, items[0].Length);
+            Assert.AreEqual(3, items[1].Length);
+            Assert.AreEqual(2, items[2].Length);
+
+            Assert.AreEqual(1, items[0][0]);
+            Assert.AreEqual(2, items[0][1]);
+            Assert.AreEqual(3, items[0][2]);
+
+            Assert.AreEqual(4, items[1][0]);
+            Assert.AreEqual(5, items[1][1]);
+            Assert.AreEqual(6, items[1][2]);
+
+            Assert.AreEqual(7, items[2][0]);
+            Assert.AreEqual(8, items[2][1]);
         }
 
         [Test]

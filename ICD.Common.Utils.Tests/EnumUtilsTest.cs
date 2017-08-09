@@ -23,7 +23,6 @@ namespace ICD.Common.Utils.Tests_NetStandard
 			B = 2,
 			C = 4
 		}
-
 		
 		[Test]
 		public void GetValuesTest()
