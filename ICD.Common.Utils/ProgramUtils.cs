@@ -158,6 +158,9 @@ namespace ICD.Common.Utils
 
 			foreach (string line in progInfo.Split(new[] {"\n\r", "\r\n", "\n", "\r"}))
 			{
+				if (string.IsNullOrEmpty(line))
+					continue;
+
 				string[] pair = line.Split(':', 2).ToArray();
 
 				if (pair.Length < 2)

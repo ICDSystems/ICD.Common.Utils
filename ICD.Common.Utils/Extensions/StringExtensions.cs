@@ -206,9 +206,10 @@ namespace ICD.Common.Utils.Extensions
 			return delimitersArray.Length == 0
 				       ? new[] {extends}
 				       : extends.Split(delimitersArray.First())
-				                .SelectMany(s => s.Split(delimitersArray.Skip(1)))
-				                .Where(s => !string.IsNullOrEmpty(s));
+				                .SelectMany(s => s.Split(delimitersArray.Skip(1)));
 		}
+
+
 
 		/// <summary>
 		/// Removes whitespace from the string.
