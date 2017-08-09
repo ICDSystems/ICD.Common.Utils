@@ -85,6 +85,9 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+			if (count < 1)
+				throw new ArgumentException("Value must be greater or equal to 1", "count");
+
 			if (count < 2)
 			{
 				yield return extends;
