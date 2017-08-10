@@ -1,7 +1,7 @@
 ﻿using ICD.Common.Utils.Extensions;
 using NUnit.Framework;
 
-namespace ICD.Common.Utils.Tests_NetStandard.Extensions
+namespace ICD.Common.Utils.Tests.Extensions
 {
     [TestFixture]
     public sealed class ByteExtensionsTest

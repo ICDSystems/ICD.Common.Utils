@@ -4,7 +4,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ICD.Common.Utils.Tests_NetStandard.Extensions
+namespace ICD.Common.Utils.Tests.Extensions
 {
 	[TestFixture]
     public sealed class EnumerableExtensionsTest

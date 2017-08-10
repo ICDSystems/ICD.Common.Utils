@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace ICD.Common.Utils.Tests_NetStandard
+namespace ICD.Common.Utils.Tests
 {
 	[TestFixture]
     public sealed class EnumUtilsTest

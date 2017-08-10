@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System;
 
-namespace ICD.Common.Utils.Tests_NetStandard.Extensions
+namespace ICD.Common.Utils.Tests.Extensions
 {
 	[TestFixture]
     public sealed class ListExtensionsTest

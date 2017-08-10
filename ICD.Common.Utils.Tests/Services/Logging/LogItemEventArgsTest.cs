@@ -1,7 +1,7 @@
 ﻿using ICD.Common.Services.Logging;
 using NUnit.Framework;
 
-namespace ICD.Common.Utils.Tests_NetStandard.Services.Logging
+namespace ICD.Common.Utils.Tests.Services.Logging
 {
     [TestFixture]
     public sealed class LogItemEventArgsTest

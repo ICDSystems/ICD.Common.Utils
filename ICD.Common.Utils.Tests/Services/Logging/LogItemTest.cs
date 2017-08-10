@@ -3,7 +3,7 @@ using ICD.Common.Services.Logging;
 using NUnit.Framework;
 using System;
 
-namespace ICD.Common.Utils.Tests_NetStandard.Services.Logging
+namespace ICD.Common.Utils.Tests.Services.Logging
 {
     [UsedImplicitly, TestFixture]
     public sealed class LogItemTest
