@@ -52,6 +52,20 @@ namespace ICD.Common.Utils
 			return value != null && IsEnumType(value.GetType());
 		}
 
+        /// <summary>
+        /// Returns true if the given value is defined as part of the given enum type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsDefined<T>(T value)
+        {
+            if (!IsEnumType(typeof(T)))
+                throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
+
+            return GetValues<T>().Any(v => v.Equals(value));
+        }
+
 		#region Values
 
 		/// <summary>
@@ -62,7 +76,7 @@ namespace ICD.Common.Utils
 		public static object GetUnderlyingValue<T>(T value)
 		{
 			if (!IsEnumType(typeof(T)))
-				throw new InvalidOperationException(string.Format("{0} is not an enum", value.GetType().Name));
+				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
 
 #if SIMPLSHARP
 			return Convert.ChangeType(value, ToEnum(value).GetTypeCode(), CultureInfo.InvariantCulture);
@@ -419,13 +433,71 @@ namespace ICD.Common.Utils
 			}
 		}
 
-		/// <summary>
-		/// Converts the given enum value to an Enum.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static Enum ToEnum<T>(T value)
+        /// <summary>
+        /// Shorthand for parsing string to enum.
+        /// Will fail if the resulting value is not defined as part of the enum.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        public static T ParseStrict<T>(string data, bool ignoreCase)
+        {
+            if (!IsEnumType<T>())
+                throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+
+            T output;
+
+            try
+            {
+                output = Parse<T>(data, ignoreCase);
+            }
+            catch (Exception e)
+            {
+                throw new FormatException(
+                    string.Format("Failed to parse {0} as {1}", StringUtils.ToRepresentation(data), typeof(T).Name), e);
+            }
+
+            if (!IsDefined(output))
+                throw new ArgumentOutOfRangeException(string.Format("{0} is not a valid {1}", output, typeof(T).Name));
+
+            return output;
+        }
+
+        /// <summary>
+        /// Shorthand for parsing a string to enum. Returns false if the parse failed.
+        /// Will fail if the resulting value is not defined as part of the enum.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public static bool TryParseStrict<T>(string data, bool ignoreCase, out T result)
+        {
+            if (!IsEnumType<T>())
+                throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+
+            result = default(T);
+
+            try
+            {
+                result = ParseStrict<T>(data, ignoreCase);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Converts the given enum value to an Enum.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Enum ToEnum<T>(T value)
 		{
 			if (!IsEnum(value))
 // ReSharper disable once CompareNonConstrainedGenericWithNull

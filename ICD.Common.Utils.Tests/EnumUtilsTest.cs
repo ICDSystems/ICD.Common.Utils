@@ -66,9 +66,16 @@ namespace ICD.Common.Utils.Tests
 			Assert.IsFalse(EnumUtils.IsEnum(""));
 		}
 
-		#region Values
+        [Test]
+        public void IsDefinedTest()
+        {
+            Assert.IsFalse(EnumUtils.IsDefined((eTestEnum)20));
+            Assert.IsTrue(EnumUtils.IsDefined((eTestEnum)2));
+        }
 
-		[Test]
+        #region Values
+
+        [Test]
 		public void GetUnderlyingValueTest()
 		{
 			Assert.AreEqual(0, EnumUtils.GetUnderlyingValue(eTestEnum.None));
@@ -250,7 +257,26 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(default(eTestEnum), output);
 		}
 
-		[Test]
+        [Test]
+        public void ParseStrictGenericTest()
+        {
+            Assert.AreEqual(eTestEnum.A, EnumUtils.ParseStrict<eTestEnum>("1", false));
+            Assert.Throws<ArgumentOutOfRangeException>(() => EnumUtils.ParseStrict<eTestEnum>("4", false));
+        }
+
+        [Test]
+        public void TryParseStrictGenericTest()
+        {
+            eTestEnum output;
+
+            Assert.AreEqual(true, EnumUtils.TryParseStrict("1", false, out output));
+            Assert.AreEqual(eTestEnum.A, output);
+
+            Assert.AreEqual(false, EnumUtils.TryParseStrict("4", false, out output));
+            Assert.AreEqual(eTestEnum.None, output);
+        }
+
+        [Test]
 		public void ToEnumGenericTest()
 		{
 			Assert.AreEqual(eTestEnum.A, EnumUtils.ToEnum(eTestEnum.A));
