@@ -3,6 +3,7 @@ using ICD.Common.Utils.Extensions;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace ICD.Common.Utils.Tests.Extensions
 {
@@ -323,13 +324,22 @@ namespace ICD.Common.Utils.Tests.Extensions
         [Test]
         public void MinByTest()
         {
-            Assert.Inconclusive();
+            Assert.AreEqual(1, (new int[] { 3, 6, 2, 7, 1 }).MinBy(i => i));
         }
 
         [Test]
         public void MinByComparerTest()
         {
-            Assert.Inconclusive();
+            IComparer<int> comparer = new NegativeComparer();
+            Assert.AreEqual(7, (new int[] { 3, 6, 2, 7, 1 }).MinBy(i => i, comparer));
+        }
+
+        private class NegativeComparer : IComparer<int>
+        {
+            public int Compare(int x, int y)
+            {
+                return Comparer<int>.Default.Compare(-x, -y);
+            }
         }
 
         [Test]

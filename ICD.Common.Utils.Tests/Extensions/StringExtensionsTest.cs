@@ -10,7 +10,9 @@ namespace ICD.Common.Utils.Tests.Extensions
         [Test]
         public void IndexOfTest()
         {
-            Assert.Inconclusive();
+            string first;
+            Assert.AreEqual(5, "test1test3test2".IndexOf(new string[] { "test2", "test3" }, out first));
+            Assert.AreEqual("test3", first);
         }
 
         [TestCase(true, "12345", '1')]
