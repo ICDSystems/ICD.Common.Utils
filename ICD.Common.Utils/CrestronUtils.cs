@@ -187,41 +187,6 @@ namespace ICD.Common.Utils
 			CrestronConsole.SendControlSystemCommand("reboot", ref consoleResult);
 		}
 
-		/// <summary>
-		/// Runs CrestronInvoke but catches any unhandled exceptions to prevent the program from terminating.
-		/// http://www.crestronlabs.com/showthread.php?12205-Exception-in-CrestronInvoke-thread-crashes-the-program
-		/// </summary>
-		/// <param name="callback"></param>
-		[PublicAPI]
-		public static object SafeInvoke(Action callback)
-		{
-			return SafeInvoke<object>(unused => callback(), null);
-		}
-
-		/// <summary>
-		/// Runs CrestronInvoke but catches any unhandled exceptions to prevent the program from terminating.
-		/// http://www.crestronlabs.com/showthread.php?12205-Exception-in-CrestronInvoke-thread-crashes-the-program
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="callback"></param>
-		/// <param name="param"></param>
-		[PublicAPI]
-		public static object SafeInvoke<T>(Action<T> callback, T param)
-		{
-			return CrestronInvoke.BeginInvoke(unused =>
-			                                  {
-				                                  try
-				                                  {
-					                                  callback(param);
-				                                  }
-				                                  catch (Exception e)
-				                                  {
-					                                  ServiceProvider.TryGetService<ILoggerService>()
-					                                                 .AddEntry(eSeverity.Error, e, e.Message);
-				                                  }
-			                                  }, null);
-		}
-
 		#endregion
 
 		/// <summary>

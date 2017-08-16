@@ -144,6 +144,7 @@
     <Compile Include="SafeMutex.cs" />
     <Compile Include="StringUtils.cs" />
     <Compile Include="TableBuilder.cs" />
+    <Compile Include="ThreadingUtils.cs" />
     <Compile Include="Timers\IcdStopwatch.cs" />
     <Compile Include="Timers\IcdTimer.cs" />
     <Compile Include="Timers\Repeater.cs" />
