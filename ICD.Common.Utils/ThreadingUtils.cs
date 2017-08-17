@@ -32,9 +32,9 @@ namespace ICD.Common.Utils
 		public static object SafeInvoke<T>(Action<T> callback, T param)
 		{
 #if SIMPLSHARP
-			return CrestronInvoke.BeginInvoke(unused => GetHandledCallback(callback, param), null);
+			return CrestronInvoke.BeginInvoke(unused => GetHandledCallback(callback, param)(), null);
 #else
-            return Task.Run(() => GetHandledCallback(callback, param));
+            return Task.Run(GetHandledCallback(callback, param));
 #endif
         }
 
