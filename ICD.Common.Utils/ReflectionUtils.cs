@@ -41,8 +41,15 @@ namespace ICD.Common.Utils
 			ConstructorInfo constructor = type.GetTypeInfo().GetConstructor(types);
 #endif
 
-			if (constructor != null)
-				return constructor.Invoke(values);
+			try
+			{
+				if (constructor != null)
+					return constructor.Invoke(values);
+			}
+			catch (TypeLoadException e)
+			{
+				throw new TypeLoadException(e.GetBaseException().Message);
+			}
 
 			string message = string.Format("Unable to find constructor for {0}", type.Name);
 			throw new InvalidOperationException(message);
