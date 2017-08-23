@@ -286,6 +286,32 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+			if (valueComparer == null)
+				throw new ArgumentNullException("valueComparer");
+
+			return extends.DictionaryEqual(other, valueComparer.Equals);
+		}
+
+		/// <summary>
+		/// Compares the keys and values of the dictionary to determine equality.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="other"></param>
+		/// <param name="valueComparer"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool DictionaryEqual<TKey, TValue>(this IDictionary<TKey, TValue> extends,
+														 IDictionary<TKey, TValue> other,
+														 Func<TValue, TValue, bool> valueComparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (valueComparer == null)
+				throw new ArgumentNullException("valueComparer");
+
 			if (extends == other)
 				return true;
 			if (other == null)
@@ -298,7 +324,7 @@ namespace ICD.Common.Utils.Extensions
 				TValue secondValue;
 				if (!other.TryGetValue(kvp.Key, out secondValue))
 					return false;
-				if (!valueComparer.Equals(kvp.Value, secondValue))
+				if (!valueComparer(kvp.Value, secondValue))
 					return false;
 			}
 			return true;

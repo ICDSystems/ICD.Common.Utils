@@ -121,13 +121,54 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Compares the two sequences for identical values.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="other"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		public static bool SequenceEqual<T>(this IEnumerable<T> extends, IEnumerable<T> other, Func<T, T, bool> comparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (extends == null)
+				throw new ArgumentNullException("other");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			using (IEnumerator<T> firstPos = extends.GetEnumerator())
+			{
+				using (IEnumerator<T> secondPos = other.GetEnumerator())
+				{
+					bool hasFirst = firstPos.MoveNext();
+					bool hasSecond = secondPos.MoveNext();
+
+					while (hasFirst && hasSecond)
+					{
+						if (!comparer(firstPos.Current, secondPos.Current))
+							return false;
+
+						hasFirst = firstPos.MoveNext();
+						hasSecond = secondPos.MoveNext();
+					}
+
+					return !hasFirst && !hasSecond;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Compares two sequences for identical values, ignoring order.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="other"></param>
 		/// <returns></returns>
-		public static bool ScrambledEquals<T>(this IEnumerable<T> extends, IEnumerable<T> other)
+		public static
+			bool ScrambledEquals<T>(this IEnumerable<T> extends, IEnumerable<T> other)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

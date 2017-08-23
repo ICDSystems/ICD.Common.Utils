@@ -81,6 +81,16 @@ namespace ICD.Common.Utils.Tests.Extensions
         }
 
         [Test]
+        public void SequenceEqualTest()
+        {
+            int[] a = new int[] { 1, 2, 3, 4};
+            int[] b = new int[] { 1, 4, 9, 16};
+
+            Assert.IsFalse(a.SequenceEqual(b, (x, y) => x == y));
+            Assert.IsTrue(a.SequenceEqual(b, (x, y) => x * x == y));
+        }
+
+        [Test]
         public void ScrambledEqualsTest()
         {
             IEnumerable<int> a = new int[] { 1, 2, 3, 4 };
