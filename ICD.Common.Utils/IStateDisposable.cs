@@ -1,4 +1,5 @@
 ﻿using System;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils
 {
@@ -10,6 +11,7 @@ namespace ICD.Common.Utils
 		/// <summary>
 		/// Returns true if this instance has been disposed.
 		/// </summary>
+		[PublicAPI]
 		bool IsDisposed { get; }
 	}
 }

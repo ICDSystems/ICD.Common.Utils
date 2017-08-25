@@ -15,7 +15,7 @@ namespace ICD.Common.Utils.IO
 
 		public TextWriter WrappedTextWriter { get { return m_TextWriter; } }
 
-		private bool disposed = false;
+		private bool m_Disposed;
 
 		/// <summary>
 		/// Constructor.
@@ -42,14 +42,14 @@ namespace ICD.Common.Utils.IO
 
 		protected void Dispose(bool disposing)
 		{
-			if (disposed)
+			if (m_Disposed)
 				return;
 
 			if (disposing)
 			{
 				m_TextWriter.Dispose();
 			}
-			disposed = true;
+			m_Disposed = true;
 		}
 	}
 }

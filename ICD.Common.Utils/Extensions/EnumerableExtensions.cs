@@ -657,7 +657,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.Where(e => e.HasValue).Select(e => e.Value);
+			return extends.OfType<T>();
 		}
 
 		/// <summary>
