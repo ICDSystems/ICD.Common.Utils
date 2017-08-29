@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICD.Common.EventArguments
+namespace ICD.Common.Utils.EventArguments
 {
 	public abstract class GenericEventArgs<T> : EventArgs
 	{

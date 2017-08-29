@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ICD.Common.Utils;
 
-namespace ICD.Common.EventArguments
+namespace ICD.Common.Utils.EventArguments
 {
 	public sealed class TcpReceiveEventArgs : EventArgs
 	{

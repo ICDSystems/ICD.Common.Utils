@@ -1,5 +1,5 @@
 ﻿using System;
-using ICD.Common.EventArguments;
+using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Timers

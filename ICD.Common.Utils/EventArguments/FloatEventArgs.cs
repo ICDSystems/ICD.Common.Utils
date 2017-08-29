@@ -1,4 +1,4 @@
-﻿namespace ICD.Common.EventArguments
+﻿namespace ICD.Common.Utils.EventArguments
 {
 	public sealed class FloatEventArgs : GenericEventArgs<float>
 	{

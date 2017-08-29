@@ -1,6 +1,6 @@
 ﻿using ICD.Common.Properties;
 
-namespace ICD.Common.EventArguments
+namespace ICD.Common.Utils.EventArguments
 {
 	[PublicAPI]
 	public sealed class UShortEventArgs : GenericEventArgs<ushort>

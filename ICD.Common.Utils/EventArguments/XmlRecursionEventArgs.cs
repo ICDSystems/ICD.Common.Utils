@@ -1,7 +1,7 @@
 ﻿using System;
 using ICD.Common.Properties;
 
-namespace ICD.Common.EventArguments
+namespace ICD.Common.Utils.EventArguments
 {
 	public sealed class XmlRecursionEventArgs : EventArgs
 	{
