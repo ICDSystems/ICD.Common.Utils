@@ -2,6 +2,7 @@
 using System.Text;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
+using Newtonsoft.Json;
 
 namespace ICD.Common.Utils.Json
 {
@@ -11,6 +12,17 @@ namespace ICD.Common.Utils.Json
 	[PublicAPI]
 	public static class JsonUtils
 	{
+		/// <summary>
+		/// Forces Newtonsoft to cache the given type for faster subsequent usage.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		public static void CacheType<T>()
+			where T : new()
+		{
+			string serialized = JsonConvert.SerializeObject(ReflectionUtils.CreateInstance<T>());
+			JsonConvert.DeserializeObject<T>(serialized);
+		}
+
 		/// <summary>
 		/// Pretty-prints the JSON document.
 		/// </summary>
