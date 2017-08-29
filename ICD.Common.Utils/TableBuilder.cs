@@ -14,6 +14,7 @@ namespace ICD.Common.Utils
 	{
 		private const char HORIZONTAL = '-';
 		private const char VERTICAL = '|';
+		private const char INTERSECT = '+';
 
 		private readonly List<string[]> m_Rows;
 		private readonly SafeCriticalSection m_RowsSection;
@@ -180,12 +181,22 @@ namespace ICD.Common.Utils
 			builder.AppendLine();
 		}
 
-		private static void AppendSeparator(StringBuilder sb, ICollection<int> columnWidths)
+		private static void AppendSeparator(StringBuilder sb, IList<int> columnWidths)
 		{
-			int length = columnWidths.Sum() + (columnWidths.Count - 1) * 2;
-			string line = new string(HORIZONTAL, length);
+			for (int index = 0; index < columnWidths.Count; index++)
+			{
+				int length = columnWidths[index];
 
-			sb.AppendLine(line);
+				// Subsequent columns have padding
+				if (index > 0)
+					length++;
+
+				sb.Append(new string(HORIZONTAL, length));
+				if (index < columnWidths.Count - 1)
+					sb.Append(INTERSECT);
+			}
+
+			sb.AppendLine();
 		}
 
 		#endregion
