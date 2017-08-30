@@ -868,7 +868,7 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="childElement"></param>
 		/// <param name="keyElement"></param>
 		/// <param name="valueElement"></param>
-		public static void WriteDictToXml<TKey, TValue>(IcdXmlTextWriter writer, IDictionary<TKey, TValue> dict,
+		public static void WriteDictToXml<TKey, TValue>(IcdXmlTextWriter writer, IEnumerable<KeyValuePair<TKey, TValue>> dict,
 		                                                string rootElement, string childElement, string keyElement,
 		                                                string valueElement)
 		{
@@ -895,7 +895,7 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="childElement"></param>
 		/// <param name="writeKey"></param>
 		/// <param name="writeValue"></param>
-		public static void WriteDictToXml<TKey, TValue>(IcdXmlTextWriter writer, IDictionary<TKey, TValue> dict,
+		public static void WriteDictToXml<TKey, TValue>(IcdXmlTextWriter writer, IEnumerable<KeyValuePair<TKey, TValue>> dict,
 		                                                string rootElement, string childElement, Action<TKey> writeKey,
 		                                                Action<TValue> writeValue)
 		{
