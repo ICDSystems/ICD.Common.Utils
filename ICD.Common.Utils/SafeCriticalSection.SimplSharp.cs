@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using System;
+#if SIMPLSHARP
 using Crestron.SimplSharp;
 
 namespace ICD.Common.Utils
@@ -10,14 +11,24 @@ namespace ICD.Common.Utils
 	/// </summary>
 	public sealed partial class SafeCriticalSection
 	{
+#if DEBUG
+		private const int TIMEOUT = 5 * 60 * 1000;
+
+		private readonly CMutex m_CriticalSection;
+#else
 		private readonly CCriticalSection m_CriticalSection;
+#endif
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		public SafeCriticalSection()
 		{
+#if DEBUG
+			m_CriticalSection = new CMutex();
+#else
 			m_CriticalSection = new CCriticalSection();
+#endif
 		}
 
 		#region Methods
@@ -27,10 +38,21 @@ namespace ICD.Common.Utils
 		/// </summary>
 		public void Enter()
 		{
-			if (m_CriticalSection == null || m_CriticalSection.Disposed)
+			if (m_CriticalSection == null)
 				return;
 
-			m_CriticalSection.Enter();
+			try
+			{
+#if DEBUG
+				if (!m_CriticalSection.WaitForMutex(TIMEOUT))
+					throw new InvalidProgramException("Deadlock detected in program");
+#else
+				m_CriticalSection.Enter();
+#endif
+			}
+			catch (ObjectDisposedException)
+			{
+			}
 		}
 
 		/// <summary>
@@ -38,10 +60,20 @@ namespace ICD.Common.Utils
 		/// </summary>
 		public void Leave()
 		{
-			if (m_CriticalSection == null || m_CriticalSection.Disposed)
+			if (m_CriticalSection == null)
 				return;
 
-			m_CriticalSection.Leave();
+			try
+			{
+#if DEBUG
+				m_CriticalSection.ReleaseMutex();
+#else
+				m_CriticalSection.Leave();
+#endif
+			}
+			catch (ObjectDisposedException)
+			{
+			}
 		}
 
 		/// <summary>
@@ -52,10 +84,21 @@ namespace ICD.Common.Utils
 		/// </returns>
 		public bool TryEnter()
 		{
-			if (m_CriticalSection == null || m_CriticalSection.Disposed)
+			if (m_CriticalSection == null)
 				return false;
 
-			return m_CriticalSection.TryEnter();
+			try
+			{
+#if DEBUG
+				return m_CriticalSection.WaitForMutex(0);
+#else
+				return m_CriticalSection.TryEnter();
+#endif
+			}
+			catch (ObjectDisposedException)
+			{
+				return false;
+			}
 		}
 
 		#endregion
