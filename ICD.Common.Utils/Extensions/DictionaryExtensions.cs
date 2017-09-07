@@ -131,15 +131,30 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			try
-			{
-				return extends.GetKeys(value).First();
-			}
-			catch (InvalidOperationException)
-			{
-				string message = string.Format("Unable to find Key with Value matching {0}", value);
-				throw new KeyNotFoundException(message);
-			}
+			TKey output;
+			if (extends.TryGetKey(value, out output))
+				return output;
+
+			string message = string.Format("Unable to find Key with Value matching {0}", value);
+			throw new KeyNotFoundException(message);
+		}
+
+		/// <summary>
+		/// Attempts to get the first key with the given value.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="value"></param>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryGetKey<TKey, TValue>(this IDictionary<TKey, TValue> extends, TValue value, out TKey key)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.GetKeys(value).TryElementAt(0, out key);
 		}
 
 		/// <summary>
