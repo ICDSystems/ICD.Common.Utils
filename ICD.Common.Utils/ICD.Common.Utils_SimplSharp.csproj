@@ -87,6 +87,7 @@
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReprBuilder.cs" />
     <Compile Include="Services\Logging\ILoggerService.cs" />
     <Compile Include="Services\Logging\LogItem.cs" />
     <Compile Include="Services\Logging\LogItemEventArgs.cs" />
