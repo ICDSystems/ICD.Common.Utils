@@ -52,19 +52,31 @@ namespace ICD.Common.Utils
 			return value != null && IsEnumType(value.GetType());
 		}
 
-        /// <summary>
-        /// Returns true if the given value is defined as part of the given enum type.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static bool IsDefined<T>(T value)
-        {
-            if (!IsEnumType(typeof(T)))
-                throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
+		/// <summary>
+		/// Returns true if the given value is defined as part of the given enum type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static bool IsDefined<T>(T value)
+		{
+			if (!IsEnumType(typeof(T)))
+				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
 
-            return GetValues<T>().Any(v => v.Equals(value));
-        }
+			if (!IsFlagsEnum<T>())
+				return GetValues<T>().Any(v => v.Equals(value));
+
+			int valueInt = (int)GetUnderlyingValue(value);
+
+			// Check if all of the flag values are defined
+			foreach (T flag in GetFlags(value))
+			{
+				int flagInt = (int)GetUnderlyingValue(flag);
+				valueInt = valueInt - flagInt;
+			}
+
+			return valueInt == 0;
+		}
 
 		#region Values
 
@@ -384,27 +396,24 @@ namespace ICD.Common.Utils
 
         #region Conversion
 
-        /// <summary>
-        /// Shorthand for parsing string to enum.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <param name="ignoreCase"></param>
-        /// <returns></returns>
-        public static T Parse<T>(string data, bool ignoreCase)
+		/// <summary>
+		/// Shorthand for parsing string to enum.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="data"></param>
+		/// <param name="ignoreCase"></param>
+		/// <returns></returns>
+		public static T Parse<T>(string data, bool ignoreCase)
 		{
 			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
-			try
-			{
-				return (T)Enum.Parse(typeof(T), data, ignoreCase);
-			}
-			catch (Exception e)
-			{
-				throw new FormatException(
-					string.Format("Failed to parse {0} as {1}", StringUtils.ToRepresentation(data), typeof(T).Name), e);
-			}
+			T output;
+			if (TryParse(data, ignoreCase, out output))
+				return output;
+
+			string message = string.Format("Failed to parse {0} as {1}", StringUtils.ToRepresentation(data), typeof(T).Name);
+			throw new FormatException(message);
 		}
 
 		/// <summary>
@@ -424,7 +433,7 @@ namespace ICD.Common.Utils
 
 			try
 			{
-				result = Parse<T>(data, ignoreCase);
+				result = (T)Enum.Parse(typeof(T), data, ignoreCase);
 				return true;
 			}
 			catch (Exception)

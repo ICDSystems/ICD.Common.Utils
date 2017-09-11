@@ -71,6 +71,9 @@ namespace ICD.Common.Utils.Tests
         {
             Assert.IsFalse(EnumUtils.IsDefined((eTestEnum)20));
             Assert.IsTrue(EnumUtils.IsDefined((eTestEnum)2));
+
+            Assert.IsFalse(EnumUtils.IsDefined((eTestFlagsEnum)8));
+            Assert.IsTrue(EnumUtils.IsDefined((eTestFlagsEnum)3));
         }
 
         #region Values
@@ -262,18 +265,29 @@ namespace ICD.Common.Utils.Tests
         {
             Assert.AreEqual(eTestEnum.A, EnumUtils.ParseStrict<eTestEnum>("1", false));
             Assert.Throws<ArgumentOutOfRangeException>(() => EnumUtils.ParseStrict<eTestEnum>("4", false));
+
+            Assert.AreEqual(eTestFlagsEnum.A | eTestFlagsEnum.B, EnumUtils.ParseStrict<eTestFlagsEnum>("3", false));
+            Assert.Throws<ArgumentOutOfRangeException>(() => EnumUtils.ParseStrict<eTestFlagsEnum>("8", false));
         }
 
         [Test]
         public void TryParseStrictGenericTest()
         {
-            eTestEnum output;
+            eTestEnum outputA;
 
-            Assert.AreEqual(true, EnumUtils.TryParseStrict("1", false, out output));
-            Assert.AreEqual(eTestEnum.A, output);
+            Assert.AreEqual(true, EnumUtils.TryParseStrict("1", false, out outputA));
+            Assert.AreEqual(eTestEnum.A, outputA);
 
-            Assert.AreEqual(false, EnumUtils.TryParseStrict("4", false, out output));
-            Assert.AreEqual(eTestEnum.None, output);
+            Assert.AreEqual(false, EnumUtils.TryParseStrict("4", false, out outputA));
+            Assert.AreEqual(eTestEnum.None, outputA);
+
+            eTestFlagsEnum outputB;
+
+            Assert.AreEqual(true, EnumUtils.TryParseStrict("3", false, out outputB));
+            Assert.AreEqual(eTestFlagsEnum.A | eTestFlagsEnum.B, outputB);
+
+            Assert.AreEqual(false, EnumUtils.TryParseStrict("8", false, out outputB));
+            Assert.AreEqual(eTestFlagsEnum.None, outputB);
         }
 
         [Test]
