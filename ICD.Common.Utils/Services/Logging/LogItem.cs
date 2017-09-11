@@ -17,10 +17,15 @@ namespace ICD.Common.Services.Logging
 		#region Properties
 
 		/// <summary>
-		/// Accessor only for timestamp.
+		/// Gets the log time in UTC.
 		/// </summary>
 		[PublicAPI]
 		public DateTime Timestamp { get { return m_Timestamp; } }
+
+		/// <summary>
+		/// Gets the log time in local time.
+		/// </summary>
+		public DateTime LocalTimestamp { get { return Timestamp.ToLocalTime(); } }
 
 		/// <summary>
 		/// Get/Set for severity level.
@@ -45,7 +50,7 @@ namespace ICD.Common.Services.Logging
 		{
 			m_Severity = severity;
 			m_Message = message;
-			m_Timestamp = IcdEnvironment.GetLocalTime();
+			m_Timestamp = IcdEnvironment.GetLocalTime().ToUniversalTime();
 		}
 
 		#endregion
