@@ -564,6 +564,27 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Given a sequence [A, B, C] returns a sequence [[A, B], [B, C]]
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static IEnumerable<T[]> GetAdjacentPairs<T>(this IEnumerable<T> extends)
+		{
+			T previous = default(T);
+			bool first = true;
+
+			foreach (T item in extends)
+			{
+				if (!first)
+					yield return new T[] {previous, item};
+
+				first = false;
+				previous = item;
+			}
+		}
+
+		/// <summary>
 		/// Returns the minimal element of the given sequence, based on
 		/// the given projection.
 		/// </summary>

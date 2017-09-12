@@ -332,6 +332,25 @@ namespace ICD.Common.Utils.Tests.Extensions
         }
 
         [Test]
+        public void GetAdjacentPairsTest()
+        {
+            IEnumerable<int> a = new int[] {};
+            Assert.AreEqual(0, a.GetAdjacentPairs().Count());
+
+            IEnumerable<int> b = new int[] { 1 };
+            Assert.AreEqual(0, b.GetAdjacentPairs().Count());
+
+            IEnumerable<int> c = new int[] { 1, 2, 3 };
+            int[][] cPairs = c.GetAdjacentPairs().ToArray();
+
+            Assert.AreEqual(2, cPairs.Length);
+            Assert.AreEqual(1, cPairs[0][0]);
+            Assert.AreEqual(2, cPairs[0][1]);
+            Assert.AreEqual(2, cPairs[1][0]);
+            Assert.AreEqual(3, cPairs[1][1]);
+        }
+
+        [Test]
         public void MinByTest()
         {
             Assert.AreEqual(1, (new int[] { 3, 6, 2, 7, 1 }).MinBy(i => i));
