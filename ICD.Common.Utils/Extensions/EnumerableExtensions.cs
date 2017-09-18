@@ -577,7 +577,7 @@ namespace ICD.Common.Utils.Extensions
 			foreach (T item in extends)
 			{
 				if (!first)
-					yield return new T[] {previous, item};
+					yield return new[] {previous, item};
 
 				first = false;
 				previous = item;
