@@ -1,6 +1,5 @@
 ﻿#if SIMPLSHARP
 using Crestron.SimplSharp;
-
 #else
 using System.Diagnostics;
 #endif
@@ -47,19 +46,37 @@ namespace ICD.Common.Utils.Timers
 
 		#region Methods
 
+		/// <summary>
+		/// Stops the stopwatch at the current elapsed time.
+		/// </summary>
 		public void Stop()
 		{
 			m_Stopwatch.Stop();
 		}
 
+		/// <summary>
+		/// Starts or resumes the stopwatch from the current elapsed time.
+		/// </summary>
 		public void Start()
 		{
 			m_Stopwatch.Start();
 		}
 
+		/// <summary>
+		/// Stops the stopwatch and resets the elapsed time to 0.
+		/// </summary>
 		public void Reset()
 		{
 			m_Stopwatch.Reset();
+		}
+
+		/// <summary>
+		/// Resets the stopwatch and starts again from an elapsed time of 0.
+		/// </summary>
+		public void Restart()
+		{
+			Reset();
+			Start();
 		}
 
 		#endregion
