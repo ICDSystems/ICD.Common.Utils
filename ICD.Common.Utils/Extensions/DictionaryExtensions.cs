@@ -21,15 +21,11 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			try
-			{
-				TKey key = extends.GetKey(value);
-				return extends.Remove(key);
-			}
-			catch (ArgumentOutOfRangeException)
-			{
+			TKey key;
+			if (!extends.TryGetKey(value, out key))
 				return false;
-			}
+
+			return extends.Remove(key);
 		}
 
 		/// <summary>

@@ -11,32 +11,85 @@ namespace ICD.Common.Utils.Tests.Extensions
         [Test]
         public void RemoveValueTest()
         {
-            Assert.Inconclusive();
-        }
+			Dictionary<int, int> dict = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 20 },
+				{ 3, 30 },
+				{ 4, 40 },
+			};
+
+			Assert.IsTrue(dict.RemoveValue(10));
+			Assert.IsFalse(dict.RemoveValue(0));
+
+			Assert.IsFalse(dict.ContainsKey(1));
+			Assert.AreEqual(3, dict.Count);
+		}
 
         [Test]
         public void RemoveAllValuesTest()
         {
-            Assert.Inconclusive();
-        }
+			Dictionary<int, int> dict = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 10 },
+				{ 3, 30 },
+				{ 4, 40 },
+			};
+
+			dict.RemoveAllValues(10);
+
+			Assert.IsFalse(dict.ContainsKey(1));
+			Assert.IsFalse(dict.ContainsKey(2));
+			Assert.AreEqual(2, dict.Count);
+		}
 
         [Test]
         public void GetDefaultTest()
         {
-            Assert.Inconclusive();
-        }
+			Dictionary<int, int> dict = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 10 },
+				{ 3, 30 },
+				{ 4, 40 },
+			};
+
+			Assert.AreEqual(10, dict.GetDefault(1));
+			Assert.AreEqual(0, dict.GetDefault(0));
+		}
 
         [Test]
         public void GetDefaultValueTest()
         {
-            Assert.Inconclusive();
-        }
+			Dictionary<int, int> dict = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 10 },
+				{ 3, 30 },
+				{ 4, 40 },
+			};
+
+			Assert.AreEqual(10, dict.GetDefault(1, 1000));
+			Assert.AreEqual(1000, dict.GetDefault(0, 1000));
+		}
 
         [Test]
         public void GetOrAddDefaultTest()
         {
-            Assert.Inconclusive();
-        }
+			Dictionary<int, int> dict = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 10 },
+				{ 3, 30 },
+				{ 4, 40 },
+			};
+
+			Assert.AreEqual(10, dict.GetOrAddDefault(1, 1000));
+			Assert.AreEqual(1000, dict.GetOrAddDefault(0, 1000));
+			Assert.AreEqual(1000, dict[0]);
+			Assert.AreEqual(5, dict.Count);
+		}
 
         [Test]
         public void GetKeyTest()
