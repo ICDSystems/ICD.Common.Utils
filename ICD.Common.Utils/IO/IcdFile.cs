@@ -28,6 +28,15 @@ namespace ICD.Common.Utils.IO
 		}
 
 		[PublicAPI]
+		public static DateTime GetLastWriteTime(string path)
+		{
+			if (path == null)
+				throw new ArgumentNullException("path");
+
+			return File.GetLastWriteTime(path);
+		}
+
+		[PublicAPI]
 		public static bool Exists(string path)
 		{
 			if (path == null)
