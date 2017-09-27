@@ -100,7 +100,7 @@
     <Compile Include="Services\ServiceProvider.cs" />
     <Compile Include="Collections\IcdHashSet.cs" />
     <Compile Include="Collections\ScrollQueue.cs" />
-    <Compile Include="CrestronUtils.cs" />
+    <Compile Include="ProcessorUtils.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="IcdConsole.cs" />

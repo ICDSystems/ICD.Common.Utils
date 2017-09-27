@@ -1,14 +1,12 @@
-﻿#if SIMPLSHARP
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
-using Crestron.SimplSharp;
 using ICD.Common.Properties;
 using ICD.Common.Services;
 using ICD.Common.Services.Logging;
 
 namespace ICD.Common.Utils
 {
-	public static class CrestronUtils
+	public static class ProcessorUtils
 	{
 		private const string MODEL_NAME_REGEX = @"^(\S*)";
 		private const string MODEL_VERSION_REGEX = @" [[]v(\S*)";
@@ -19,22 +17,6 @@ namespace ICD.Common.Utils
 		private static string s_VersionResult;
 
 		#region Properties
-
-		/// <summary>
-		/// Gets the default mac address of the processor.
-		/// </summary>
-		[PublicAPI]
-		public static string DefaultMacAddress
-		{
-			get
-			{
-				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
-					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_MAC_ADDRESS;
-				const EthernetAdapterType type = EthernetAdapterType.EthernetLANAdapter;
-				short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
-				return CrestronEthernetHelper.GetEthernetParameter(param, id);
-			}
-		}
 
 		/// <summary>
 		/// Gets the version text from the console.
@@ -49,7 +31,7 @@ namespace ICD.Common.Utils
 					{
 						ServiceProvider.TryGetService<ILoggerService>()
 						               .AddEntry(eSeverity.Warning, "{0} - Failed to send console command \"{1}\"",
-						                         typeof(CrestronUtils).Name, "version");
+						                         typeof(ProcessorUtils).Name, "version");
 					}
 				}
 
@@ -200,17 +182,9 @@ namespace ICD.Common.Utils
 			{
 				ServiceProvider.TryGetService<ILoggerService>()
 				               .AddEntry(eSeverity.Warning, "{0} - Failed to send console command \"{1}\"",
-				                         typeof(CrestronUtils).Name, RAMFREE_COMMAND);
+				                         typeof(ProcessorUtils).Name, RAMFREE_COMMAND);
 			}
 			return ramfree;
 		}
-
-		[PublicAPI]
-		public static string GetMilliseconds()
-		{
-			return IcdEnvironment.GetLocalTime().ToString("fff");
-		}
 	}
 }
-
-#endif
