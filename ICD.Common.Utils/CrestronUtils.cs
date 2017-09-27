@@ -45,7 +45,7 @@ namespace ICD.Common.Utils
 			{
 				if (string.IsNullOrEmpty(s_VersionResult))
 				{
-					if (!CrestronConsole.SendControlSystemCommand("version", ref s_VersionResult))
+					if (!IcdConsole.SendControlSystemCommand("version", ref s_VersionResult))
 					{
 						ServiceProvider.TryGetService<ILoggerService>()
 						               .AddEntry(eSeverity.Warning, "{0} - Failed to send console command \"{1}\"",
@@ -174,7 +174,7 @@ namespace ICD.Common.Utils
 		{
 			string consoleResult = string.Empty;
 			string command = string.Format("progreset -p:{0:D2}", ProgramUtils.ProgramNumber);
-			CrestronConsole.SendControlSystemCommand(command, ref consoleResult);
+			IcdConsole.SendControlSystemCommand(command, ref consoleResult);
 		}
 
 		/// <summary>
@@ -184,7 +184,7 @@ namespace ICD.Common.Utils
 		public static void Reboot()
 		{
 			string consoleResult = string.Empty;
-			CrestronConsole.SendControlSystemCommand("reboot", ref consoleResult);
+			IcdConsole.SendControlSystemCommand("reboot", ref consoleResult);
 		}
 
 		#endregion
@@ -196,7 +196,7 @@ namespace ICD.Common.Utils
 		private static string GetRamFree()
 		{
 			string ramfree = null;
-			if (!CrestronConsole.SendControlSystemCommand(RAMFREE_COMMAND, ref ramfree))
+			if (!IcdConsole.SendControlSystemCommand(RAMFREE_COMMAND, ref ramfree))
 			{
 				ServiceProvider.TryGetService<ILoggerService>()
 				               .AddEntry(eSeverity.Warning, "{0} - Failed to send console command \"{1}\"",
