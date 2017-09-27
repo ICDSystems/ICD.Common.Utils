@@ -8,15 +8,15 @@ namespace ICD.Common.Utils.Extensions
 	/// </summary>
 	public static class DateTimeExtensions
 	{
-        /// <summary>
-        /// Replacement for missing DateTime.ToShortTimeString() absent from NetStandard.
-        /// </summary>
-        /// <param name="extends"></param>
-        /// <returns></returns>
-        public static string ToShortTimeString(this DateTime extends)
-        {
-            return extends.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
-        }
+		/// <summary>
+		/// Replacement for missing DateTime.ToShortTimeString() absent from NetStandard.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static string ToShortTimeString(this DateTime extends)
+		{
+			return extends.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
+		}
 
 		/// <summary>
 		/// Gets a string representation of the DateTime with millisecond precision.

@@ -83,7 +83,7 @@ namespace ICD.Common.Utils
 				                         e.Message);
 			}
 
-			foreach (var type in types)
+			foreach (CType type in types)
 				CacheType(type);
 		}
 

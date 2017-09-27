@@ -10,8 +10,8 @@ namespace ICD.Common.Utils
 	{
 		private readonly object m_Instance;
 
-		private readonly List<string> m_PropertyOrder; 
-		private readonly Dictionary<string, object> m_PropertyValues; 
+		private readonly List<string> m_PropertyOrder;
+		private readonly Dictionary<string, object> m_PropertyValues;
 
 		/// <summary>
 		/// Constructor.

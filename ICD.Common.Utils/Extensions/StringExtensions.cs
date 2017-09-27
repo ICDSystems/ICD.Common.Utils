@@ -126,7 +126,7 @@ namespace ICD.Common.Utils.Extensions
 				throw new InvalidOperationException("chunkSize must be greater than 0");
 
 			return Enumerable.Range(0, (int)Math.Ceiling(extends.Length / (double)chunkSize))
-							 .Select(i => extends.Substring(i * chunkSize, Math.Min(chunkSize, extends.Length - (i * chunkSize))));
+			                 .Select(i => extends.Substring(i * chunkSize, Math.Min(chunkSize, extends.Length - (i * chunkSize))));
 		}
 
 		/// <summary>
@@ -208,8 +208,6 @@ namespace ICD.Common.Utils.Extensions
 				       : extends.Split(delimitersArray.First())
 				                .SelectMany(s => s.Split(delimitersArray.Skip(1)));
 		}
-
-
 
 		/// <summary>
 		/// Removes whitespace from the string.

@@ -10,8 +10,8 @@ using System.Linq;
 
 namespace ICD.Common.Utils
 {
-    public static partial class ProgramUtils
-    {
+	public static partial class ProgramUtils
+	{
 		private const string APPLICATION_NAME_KEY = "Application Name";
 		private const string APPLICATION_NAME_SIMPL_KEY = "System Name";
 		private const string PROGRAM_FILE_KEY = "Program File";
@@ -34,13 +34,7 @@ namespace ICD.Common.Utils
 		/// Gets the program number.
 		/// </summary>
 		[PublicAPI]
-		public static uint ProgramNumber
-		{
-			get
-			{
-				return InitialParametersClass.ApplicationNumber;
-			}
-		}
+		public static uint ProgramNumber { get { return InitialParametersClass.ApplicationNumber; } }
 
 		/// <summary>
 		/// Gets the compile date of the program.
@@ -108,7 +102,7 @@ namespace ICD.Common.Utils
 				return output;
 			}
 
-			foreach (string line in progInfo.Split(new[] { "\n\r", "\r\n", "\n", "\r" }))
+			foreach (string line in progInfo.Split(new[] {"\n\r", "\r\n", "\n", "\r"}))
 			{
 				if (string.IsNullOrEmpty(line))
 					continue;
@@ -118,7 +112,7 @@ namespace ICD.Common.Utils
 				if (pair.Length < 2)
 				{
 					ServiceProvider.GetService<ILoggerService>()
-								   .AddEntry(eSeverity.Warning, "Failed to parse prog comments line - {0}", line);
+					               .AddEntry(eSeverity.Warning, "Failed to parse prog comments line - {0}", line);
 					continue;
 				}
 

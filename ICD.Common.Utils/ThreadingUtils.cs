@@ -12,11 +12,11 @@ namespace ICD.Common.Utils
 {
 	public static class ThreadingUtils
 	{
-        /// <summary>
-        /// Executes the callback as a short-lived, threaded task.
-        /// </summary>
-        /// <param name="callback"></param>
-        [PublicAPI]
+		/// <summary>
+		/// Executes the callback as a short-lived, threaded task.
+		/// </summary>
+		/// <param name="callback"></param>
+		[PublicAPI]
 		public static object SafeInvoke(Action callback)
 		{
 			return SafeInvoke<object>(unused => callback(), null);
@@ -36,7 +36,7 @@ namespace ICD.Common.Utils
 #else
             return Task.Run(GetHandledCallback(callback, param));
 #endif
-        }
+		}
 
 		/// <summary>
 		/// Wraps the given callback in a try/catch to avoid crashing crestron programs.
@@ -46,19 +46,19 @@ namespace ICD.Common.Utils
 		/// <param name="callback"></param>
 		/// <param name="param"></param>
 		private static Action GetHandledCallback<T>(Action<T> callback, T param)
-        {
-            return () =>
-            {
-                try
-                {
-                    callback(param);
-                }
-                catch (Exception e)
-                {
-                    ServiceProvider.TryGetService<ILoggerService>()
-                                   .AddEntry(eSeverity.Error, e, e.Message);
-                }
-            };
-        }
+		{
+			return () =>
+			       {
+				       try
+				       {
+					       callback(param);
+				       }
+				       catch (Exception e)
+				       {
+					       ServiceProvider.TryGetService<ILoggerService>()
+					                      .AddEntry(eSeverity.Error, e, e.Message);
+				       }
+			       };
+		}
 	}
 }

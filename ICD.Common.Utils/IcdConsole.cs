@@ -35,7 +35,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void ConsoleCommandResponse(string message, params object[] args)
 		{
-			if(args != null && args.Any())
+			if (args != null && args.Any())
 				message = string.Format(message, args);
 
 #if SIMPLSHARP

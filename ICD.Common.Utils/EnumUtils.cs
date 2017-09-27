@@ -31,7 +31,7 @@ namespace ICD.Common.Utils
 #if !SIMPLSHARP
 				                                            .GetTypeInfo()
 #endif
-															.IsEnum;
+				                                            .IsEnum;
 		}
 
 		/// <summary>
@@ -225,14 +225,14 @@ namespace ICD.Common.Utils
 				.IsDefined(typeof(FlagsAttribute), false);
 		}
 
-  		/// <summary>
-  		/// Gets the overlapping values of the given enum flags.
-  		/// </summary>
-  		/// <typeparam name="T"></typeparam>
+		/// <summary>
+		/// Gets the overlapping values of the given enum flags.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
 		/// <param name="values"></param>
-  		/// <returns></returns>
+		/// <returns></returns>
 		public static T GetFlagsIntersection<T>(params T[] values)
-  		{
+		{
 			if (values.Length == 0)
 				return GetNoneValue<T>();
 
@@ -240,8 +240,8 @@ namespace ICD.Common.Utils
 			foreach (T item in values.Skip(1))
 				output &= (int)(object)item;
 
-  			return (T)Enum.ToObject(typeof(T), output);
-  		}
+			return (T)Enum.ToObject(typeof(T), output);
+		}
 
 		/// <summary>
 		/// Gets all of the set flags on the given enum.
@@ -374,27 +374,27 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <returns></returns>
 		[PublicAPI]
-        public static bool HasAnyFlags<T>(T value)
-        {
-            return GetFlagsExceptNone(value).Any();
-        }
+		public static bool HasAnyFlags<T>(T value)
+		{
+			return GetFlagsExceptNone(value).Any();
+		}
 
-        /// <summary>
-        /// Returns true if the enum contains any of the given flag values.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        [PublicAPI]
-        public static bool HasAnyFlags<T>(T value, T other)
-        {
-	        T intersection = GetFlagsIntersection(value, other);
-	        return HasAnyFlags(intersection);
-        }
+		/// <summary>
+		/// Returns true if the enum contains any of the given flag values.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool HasAnyFlags<T>(T value, T other)
+		{
+			T intersection = GetFlagsIntersection(value, other);
+			return HasAnyFlags(intersection);
+		}
 
-        #endregion
+		#endregion
 
-        #region Conversion
+		#region Conversion
 
 		/// <summary>
 		/// Shorthand for parsing string to enum.
@@ -442,71 +442,71 @@ namespace ICD.Common.Utils
 			}
 		}
 
-        /// <summary>
-        /// Shorthand for parsing string to enum.
-        /// Will fail if the resulting value is not defined as part of the enum.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <param name="ignoreCase"></param>
-        /// <returns></returns>
-        public static T ParseStrict<T>(string data, bool ignoreCase)
-        {
-            if (!IsEnumType<T>())
-                throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+		/// <summary>
+		/// Shorthand for parsing string to enum.
+		/// Will fail if the resulting value is not defined as part of the enum.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="data"></param>
+		/// <param name="ignoreCase"></param>
+		/// <returns></returns>
+		public static T ParseStrict<T>(string data, bool ignoreCase)
+		{
+			if (!IsEnumType<T>())
+				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
-            T output;
+			T output;
 
-            try
-            {
-                output = Parse<T>(data, ignoreCase);
-            }
-            catch (Exception e)
-            {
-                throw new FormatException(
-                    string.Format("Failed to parse {0} as {1}", StringUtils.ToRepresentation(data), typeof(T).Name), e);
-            }
+			try
+			{
+				output = Parse<T>(data, ignoreCase);
+			}
+			catch (Exception e)
+			{
+				throw new FormatException(
+					string.Format("Failed to parse {0} as {1}", StringUtils.ToRepresentation(data), typeof(T).Name), e);
+			}
 
-            if (!IsDefined(output))
-                throw new ArgumentOutOfRangeException(string.Format("{0} is not a valid {1}", output, typeof(T).Name));
+			if (!IsDefined(output))
+				throw new ArgumentOutOfRangeException(string.Format("{0} is not a valid {1}", output, typeof(T).Name));
 
-            return output;
-        }
+			return output;
+		}
 
-        /// <summary>
-        /// Shorthand for parsing a string to enum. Returns false if the parse failed.
-        /// Will fail if the resulting value is not defined as part of the enum.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <param name="ignoreCase"></param>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        public static bool TryParseStrict<T>(string data, bool ignoreCase, out T result)
-        {
-            if (!IsEnumType<T>())
-                throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+		/// <summary>
+		/// Shorthand for parsing a string to enum. Returns false if the parse failed.
+		/// Will fail if the resulting value is not defined as part of the enum.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="data"></param>
+		/// <param name="ignoreCase"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		public static bool TryParseStrict<T>(string data, bool ignoreCase, out T result)
+		{
+			if (!IsEnumType<T>())
+				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
-            result = default(T);
+			result = default(T);
 
-            try
-            {
-                result = ParseStrict<T>(data, ignoreCase);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
+			try
+			{
+				result = ParseStrict<T>(data, ignoreCase);
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+		}
 
-        /// <summary>
-        /// Converts the given enum value to an Enum.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static Enum ToEnum<T>(T value)
+		/// <summary>
+		/// Converts the given enum value to an Enum.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static Enum ToEnum<T>(T value)
 		{
 			if (!IsEnum(value))
 // ReSharper disable once CompareNonConstrainedGenericWithNull

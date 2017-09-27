@@ -314,8 +314,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		[PublicAPI]
 		public static bool DictionaryEqual<TKey, TValue>(this IDictionary<TKey, TValue> extends,
-														 IDictionary<TKey, TValue> other,
-														 Func<TValue, TValue, bool> valueComparer)
+		                                                 IDictionary<TKey, TValue> other,
+		                                                 Func<TValue, TValue, bool> valueComparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

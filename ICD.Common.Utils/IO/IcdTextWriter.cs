@@ -2,6 +2,7 @@
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 using GC = Crestron.SimplSharp.CrestronEnvironment.GC;
+
 #else
 using System.IO;
 using GC = System.GC;
@@ -46,9 +47,7 @@ namespace ICD.Common.Utils.IO
 				return;
 
 			if (disposing)
-			{
 				m_TextWriter.Dispose();
-			}
 			m_Disposed = true;
 		}
 	}
