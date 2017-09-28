@@ -371,7 +371,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value);
+			return extends.OrderByKey().Select(kvp => kvp.Value);
 		}
 	}
 }

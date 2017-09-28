@@ -186,8 +186,32 @@ namespace ICD.Common.Utils.Tests.Extensions
         [Test]
         public void DictionaryEqualComparerTest()
         {
-            Assert.Inconclusive();
-        }
+			Dictionary<int, int> a = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 20 },
+				{ 3, 30 },
+			};
+
+			Dictionary<int, int> b = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 20 },
+				{ 3, 30 },
+			};
+
+			Dictionary<int, int> c = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 20 }
+			};
+
+			Assert.IsTrue(a.DictionaryEqual(b));
+			Assert.IsTrue(b.DictionaryEqual(a));
+
+			Assert.IsFalse(a.DictionaryEqual(c));
+			Assert.IsFalse(c.DictionaryEqual(a));
+		}
 
         [Test]
         public void DictionaryEqualFuncComparerTest()
@@ -196,15 +220,39 @@ namespace ICD.Common.Utils.Tests.Extensions
         }
 
         [Test]
-        public void OrderByKey()
+        public void OrderByKeyTest()
         {
-            Assert.Inconclusive();
-        }
+			Dictionary<int, int> a = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 20 },
+				{ 3, 30 },
+			};
+
+			KeyValuePair<int, int>[] ordered = a.OrderByKey().ToArray();
+
+			Assert.AreEqual(3, ordered.Length);
+			Assert.AreEqual(10, ordered[0].Value);
+			Assert.AreEqual(20, ordered[1].Value);
+			Assert.AreEqual(30, ordered[2].Value);
+		}
 
         [Test]
         public void OrderValuesByKeyTest()
         {
-            Assert.Inconclusive();
-        }
+			Dictionary<int, int> a = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 20 },
+				{ 3, 30 },
+			};
+
+			int[] ordered = a.OrderValuesByKey().ToArray();
+
+			Assert.AreEqual(3, ordered.Length);
+			Assert.AreEqual(10, ordered[0]);
+			Assert.AreEqual(20, ordered[1]);
+			Assert.AreEqual(30, ordered[2]);
+		}
     }
 }
