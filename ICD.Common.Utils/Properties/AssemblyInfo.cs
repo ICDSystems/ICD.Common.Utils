@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("ICD.SimplSharp.Common")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ICD.SimplSharp.Common")]
+[assembly: AssemblyTitle("ICD.Common.Utils")]
+[assembly: AssemblyCompany("ICD Systems")]
+[assembly: AssemblyProduct("ICD.Common.Utils")]
 [assembly: AssemblyCopyright("Copyright © ICD Systems 2017")]
 [assembly: AssemblyVersion("1.0.1.*")]
