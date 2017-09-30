@@ -7,7 +7,7 @@ using Crestron.SimplSharp;
 
 namespace ICD.Common.Utils
 {
-	public sealed class IcdConsole
+	public static class IcdConsole
 	{
 		public enum eAccessLevel
 		{
@@ -48,7 +48,7 @@ namespace ICD.Common.Utils
 				CrestronConsole.Print(message);
 			}
 #else
-			System.Console.Write(message, args);
+			Console.Write(message, args);
 #endif
 		}
 
@@ -57,17 +57,14 @@ namespace ICD.Common.Utils
 #if SIMPLSHARP
 			CrestronConsole.PrintLine(message);
 #else
-			System.Console.WriteLine(message);
+			Console.WriteLine(message);
 #endif
 		}
 
 		public static void PrintLine(string message, params object[] args)
 		{
-#if SIMPLSHARP
-			CrestronConsole.PrintLine(message, args);
-#else
-			System.Console.WriteLine(message, args);
-#endif
+			message = string.Format(message, args);
+			PrintLine(message);
 		}
 
 		public static void Print(string message)
@@ -75,17 +72,14 @@ namespace ICD.Common.Utils
 #if SIMPLSHARP
 			CrestronConsole.Print(message);
 #else
-            System.Console.Write(message);
+            Console.Write(message);
 #endif
 		}
 
 		public static void Print(string message, params object[] args)
 		{
-#if SIMPLSHARP
-			CrestronConsole.Print(message, args);
-#else
-            System.Console.Write(message, args);
-#endif
+			message = string.Format(message, args);
+			Print(message);
 		}
 
 		public static bool SendControlSystemCommand(string command, ref string result)
