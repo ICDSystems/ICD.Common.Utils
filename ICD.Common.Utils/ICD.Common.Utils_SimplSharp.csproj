@@ -112,6 +112,7 @@
     <Compile Include="IcdZip.cs" />
     <Compile Include="IO\IcdDirectory.cs" />
     <Compile Include="EnumUtils.cs" />
+	<Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
