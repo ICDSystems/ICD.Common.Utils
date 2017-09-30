@@ -1,5 +1,7 @@
 ﻿using System;
-#if STANDARD
+#if SIMPLSHARP
+using Crestron.SimplSharp.Reflection;
+#else
 using System.Reflection;
 #endif
 using System.Collections.Generic;
@@ -8,6 +10,20 @@ namespace ICD.Common.Utils.Extensions
 {
 	public static class TypeExtensions
 	{
+		public static Assembly GetAssembly(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends
+#if SIMPLSHARP
+				.GetCType()
+#else
+				.GetTypeInfo()
+#endif
+				.Assembly;
+		}
+
 		public static bool IsAssignableTo(this Type from, Type to)
 		{
 			if (from == null)
