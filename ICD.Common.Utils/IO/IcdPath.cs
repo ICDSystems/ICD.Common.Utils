@@ -1,4 +1,5 @@
 ﻿using System;
+using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 #else
@@ -25,6 +26,7 @@ namespace ICD.Common.Utils.IO
 			return Path.GetFileNameWithoutExtension(path);
 		}
 
+		[CanBeNull]
 		public static string GetDirectoryName(string path)
 		{
 			if (path == null)
