@@ -13,6 +13,19 @@ namespace ICD.Common.Utils
 	public static class ThreadingUtils
 	{
 		/// <summary>
+		/// Puts the current thread to sleep for the given amount of time.
+		/// </summary>
+		/// <param name="milliseconds"></param>
+		public static void Sleep(long milliseconds)
+		{
+#if SIMPLSHARP
+			throw new NotImplementedException();
+#else
+			Task.Delay(TimeSpan.FromMilliseconds(milliseconds)).Wait();
+#endif
+		}
+
+		/// <summary>
 		/// Executes the callback as a short-lived, threaded task.
 		/// </summary>
 		/// <param name="callback"></param>
