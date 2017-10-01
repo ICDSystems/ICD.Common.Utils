@@ -45,10 +45,10 @@ namespace ICD.Common.Utils
 			}
 			catch (NotSupportedException)
 			{
-				CrestronConsole.Print(message);
+				Print(message);
 			}
 #else
-			Console.Write(message, args);
+			Print(message, args);
 #endif
 		}
 
