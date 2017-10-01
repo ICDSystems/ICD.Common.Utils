@@ -5,16 +5,6 @@ namespace ICD.Common.Utils
 {
 	public sealed partial class SafeCriticalSection
 	{
-		private readonly Mutex m_Mutex;
-
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public SafeCriticalSection()
-		{
-			m_Mutex = new Mutex();
-		}
-
 		#region Methods
 
 		/// <summary>
@@ -22,7 +12,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		public void Enter()
 		{
-			m_Mutex.WaitOne();
+			Monitor.Enter(this);
 		}
 
 		/// <summary>
@@ -30,7 +20,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		public void Leave()
 		{
-			m_Mutex.ReleaseMutex();
+			Monitor.Exit(this);
 		}
 
 		/// <summary>
@@ -41,7 +31,7 @@ namespace ICD.Common.Utils
 		/// </returns>
 		public bool TryEnter()
 		{
-			return m_Mutex.WaitOne(0);
+			return Monitor.TryEnter(this);
 		}
 
 		#endregion
