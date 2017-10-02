@@ -20,7 +20,8 @@ namespace ICD.Common.Utils
 		/// </summary>
 		public void Leave()
 		{
-			Monitor.Exit(this);
+			if (Monitor.IsEntered(this))
+				Monitor.Exit(this);
 		}
 
 		/// <summary>

@@ -32,6 +32,9 @@ namespace ICD.Common.Utils.Tests
 		[Test]
 		public void LeaveTest()
 		{
+			SafeCriticalSection section = new SafeCriticalSection();
+			Assert.DoesNotThrow(() => section.Leave());
+
 			Assert.Inconclusive();
 		}
 
