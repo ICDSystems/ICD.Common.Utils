@@ -31,15 +31,14 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
+			ConstructorInfo constructor =
 #if SIMPLSHARP
-			CType[] types = values.Select(v => (CType)v.GetType())
-			                      .ToArray();
-			ConstructorInfo constructor = ((CType)type).GetConstructor(types);
+				((CType)type)
 #else
-			Type[] types = values.Select(v => v.GetType())
-			                      .ToArray();
-			ConstructorInfo constructor = type.GetTypeInfo().GetConstructor(types);
+				type
 #endif
+					.GetConstructors()
+					.FirstOrDefault(c => MatchesConstructorParameters(c, values));
 
 			try
 			{
@@ -53,6 +52,29 @@ namespace ICD.Common.Utils
 
 			string message = string.Format("Unable to find constructor for {0}", type.Name);
 			throw new InvalidOperationException(message);
+		}
+
+		/// <summary>
+		/// Returns true if the parameters match the constructor parameters.
+		/// </summary>
+		/// <param name="constructor"></param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
+		public static bool MatchesConstructorParameters(ConstructorInfo constructor, IEnumerable<object> parameters)
+		{
+			if (constructor == null)
+				throw new ArgumentNullException("constructor");
+
+			if (parameters == null)
+				throw new ArgumentNullException("parameters");
+
+#if SIMPLSHARP
+			CType[] methodTypes
+#else
+			Type[] methodTypes
+#endif
+				= constructor.GetParameters().Select(p => p.ParameterType).ToArray();
+			return ParametersMatchTypes(methodTypes, parameters);
 		}
 
 		/// <summary>
