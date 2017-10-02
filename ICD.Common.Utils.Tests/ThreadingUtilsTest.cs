@@ -20,7 +20,7 @@ namespace ICD.Common.Utils.Tests
 		public void SafeInvokeTest()
 		{
 			bool result = false;
-			ThreadingUtils.SafeInvoke(() => result = true);
+			ThreadingUtils.SafeInvoke(() => { ThreadingUtils.Sleep(100); result = true; });
 
 			Assert.IsFalse(result);
 			ThreadingUtils.Sleep(1000);
@@ -31,7 +31,7 @@ namespace ICD.Common.Utils.Tests
 		public void SafeInvokeParamTest()
 		{
 			bool result = false;
-			ThreadingUtils.SafeInvoke(p => result = p, true);
+			ThreadingUtils.SafeInvoke(p => { ThreadingUtils.Sleep(100); result = p; }, true);
 
 			Assert.IsFalse(result);
 			ThreadingUtils.Sleep(1000);
