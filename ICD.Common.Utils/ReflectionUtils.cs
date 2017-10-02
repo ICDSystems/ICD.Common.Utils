@@ -69,11 +69,11 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("parameters");
 
 #if SIMPLSHARP
-			CType[] methodTypes
+			IEnumerable<CType> methodTypes
 #else
-			Type[] methodTypes
+			IEnumerable<Type> methodTypes
 #endif
-				= constructor.GetParameters().Select(p => p.ParameterType).ToArray();
+				= constructor.GetParameters().Select(p => p.ParameterType);
 			return ParametersMatchTypes(methodTypes, parameters);
 		}
 
@@ -92,11 +92,11 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("parameters");
 
 #if SIMPLSHARP
-			CType[] methodTypes
+			IEnumerable<CType> methodTypes
 #else
-			Type[] methodTypes
+			IEnumerable<Type> methodTypes
 #endif
-				= method.GetParameters().Select(p => p.ParameterType).ToArray();
+				= method.GetParameters().Select(p => p.ParameterType);
 			return ParametersMatchTypes(methodTypes, parameters);
 		}
 
