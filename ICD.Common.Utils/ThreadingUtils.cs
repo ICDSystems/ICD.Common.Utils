@@ -16,10 +16,10 @@ namespace ICD.Common.Utils
 		/// Puts the current thread to sleep for the given amount of time.
 		/// </summary>
 		/// <param name="milliseconds"></param>
-		public static void Sleep(long milliseconds)
+		public static void Sleep(int milliseconds)
 		{
 #if SIMPLSHARP
-			throw new NotImplementedException();
+			CrestronEnvironment.Sleep(milliseconds);
 #else
 			Task.Delay(TimeSpan.FromMilliseconds(milliseconds)).Wait();
 #endif
