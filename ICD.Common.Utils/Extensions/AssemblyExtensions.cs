@@ -30,7 +30,9 @@ namespace ICD.Common.Utils.Extensions
 
 			if (path == null)
 			{
+#if STANDARD
 				path = extends.Location;
+#endif
 			}
 			else
 			{
