@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Linq;
+using ICD.Common.Utils.Extensions;
+using NUnit.Framework;
 
-namespace ICD.Common.Utils.Extensions
+namespace ICD.Common.Utils.Tests.Extensions
 {
     [TestFixture]
     public sealed class TypeExtensionsTest

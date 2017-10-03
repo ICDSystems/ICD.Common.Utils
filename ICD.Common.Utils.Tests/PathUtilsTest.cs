@@ -1,14 +1,12 @@
-﻿using System.Linq;
+﻿using ICD.Common.Properties;
 using NUnit.Framework;
-using ICD.Common.Utils;
-using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.IO;
 #else
 using System.IO;
 #endif
 
-namespace RSD.SimplSharp.Common.Interfaces.Tests.Utils
+namespace ICD.Common.Utils.Tests
 {
 	[TestFixture]
 	public sealed class PathUtilsTest

@@ -1,9 +1,9 @@
 ﻿using System;
-using NUnit.Framework;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Collections;
+using NUnit.Framework;
 
-namespace Icd.Common.Utils.Tests.Collections
+namespace ICD.Common.Utils.Tests.Collections
 {
 	[TestFixture]
 	public sealed class IcdHashSetTest
