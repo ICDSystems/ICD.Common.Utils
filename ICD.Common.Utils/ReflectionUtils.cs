@@ -254,7 +254,14 @@ namespace ICD.Common.Utils
 #if SIMPLSHARP
 			return assembly.GetCustomAttributes(typeof(T), false).Cast<T>();
 #else
-            return assembly.GetCustomAttributes<T>();
+			try
+			{
+				return assembly.GetCustomAttributes<T>();
+			}
+			catch (FileNotFoundException)
+			{
+				return Enumerable.Empty<object>();
+			}
 #endif
 		}
 
