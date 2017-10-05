@@ -245,14 +245,14 @@ namespace ICD.Common.Utils
 		/// <typeparam name="T"></typeparam>
 		/// <param name="assembly"></param>
 		/// <returns></returns>
-		public static IEnumerable<object> GetCustomAttributes<T>(Assembly assembly)
+		public static IEnumerable<T> GetCustomAttributes<T>(Assembly assembly)
 			where T : Attribute
 		{
 			if (assembly == null)
 				throw new ArgumentNullException("assembly");
 
 #if SIMPLSHARP
-			return assembly.GetCustomAttributes(typeof(T), false);
+			return assembly.GetCustomAttributes(typeof(T), false).Cast<T>();
 #else
             return assembly.GetCustomAttributes<T>();
 #endif
