@@ -152,6 +152,38 @@ namespace ICD.Common.Services
 			Instance.AddServiceInstance(tService, service);
 		}
 
+		/// <summary>
+		/// Attempts to remove the given service from the given type.
+		/// </summary>
+		/// <typeparam name="TService"></typeparam>
+		/// <param name="service"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool RemoveService<TService>(TService service)
+		{
+// ReSharper disable once CompareNonConstrainedGenericWithNull
+			if (service == null)
+				throw new ArgumentNullException("service");
+
+			return RemoveService(typeof(TService), service);
+		}
+
+		/// <summary>
+		/// Attempts to remove the given service from the given type.
+		/// </summary>
+		/// <param name="tService"></param>
+		/// <param name="service"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool RemoveService(Type tService, object service)
+		{
+			// ReSharper disable once CompareNonConstrainedGenericWithNull
+			if (service == null)
+				throw new ArgumentNullException("service");
+
+			return Instance.RemoveServiceInstance(tService, service);
+		}
+
 		#endregion
 
 		#region Private Methods
@@ -204,7 +236,6 @@ namespace ICD.Common.Services
 		/// </summary>
 		/// <param name="tService"></param>
 		/// <param name="service"></param>
-		[PublicAPI]
 		private void AddServiceInstance(Type tService, object service)
 		{
 			if (tService == null)
@@ -224,6 +255,34 @@ namespace ICD.Common.Services
 				}
 
 				m_Services.Add(tService, service);
+			}
+			finally
+			{
+				m_ServicesSection.Leave();
+			}
+		}
+
+		/// <summary>
+		/// Removes the given service from the given type.
+		/// </summary>
+		/// <param name="tService"></param>
+		/// <param name="service"></param>
+		private bool RemoveServiceInstance(Type tService, object service)
+		{
+			if (tService == null)
+				throw new ArgumentNullException("tService");
+
+			if (service == null)
+				throw new ArgumentNullException("service");
+
+			try
+			{
+				m_ServicesSection.Enter();
+
+				if (!m_Services.ContainsKey(tService))
+					return false;
+
+				return m_Services[tService] == service && m_Services.Remove(tService);
 			}
 			finally
 			{
