@@ -216,6 +216,13 @@ namespace ICD.Common.Services
 			try
 			{
 				m_ServicesSection.Enter();
+
+				if (m_Services.ContainsKey(tService))
+				{
+					string message = string.Format(string.Format("{0} already contains a {0} service", GetType().Name, tService.Name));
+					throw new InvalidOperationException(message);
+				}
+
 				m_Services.Add(tService, service);
 			}
 			finally
