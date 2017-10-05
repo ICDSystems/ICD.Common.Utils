@@ -156,8 +156,30 @@ namespace ICD.Common.Utils.Tests.Extensions
         [Test]
         public void UpdateTest()
         {
-            Assert.Inconclusive();
-        }
+			Dictionary<int, int> a = new Dictionary<int, int>
+			{
+				{ 1, 10 },
+				{ 2, 10 },
+			};
+
+			Dictionary<int, int> b = new Dictionary<int, int>
+			{
+				{ 2, 20 },
+				{ 3, 30 }
+			};
+
+			a.Update(b);
+
+			Assert.AreEqual(3, a.Count);
+			Assert.AreEqual(10, a[1]);
+			Assert.AreEqual(20, a[2]);
+			Assert.AreEqual(30, a[3]);
+
+			Assert.AreEqual(2, b.Count);
+			Assert.AreEqual(20, b[2]);
+			Assert.AreEqual(30, b[3]);
+
+		}
 
         [Test]
         public void AddRangeValueKeyFuncTest()
