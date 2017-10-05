@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
 #else
@@ -10,18 +11,21 @@ using System.Reflection;
 namespace ICD.Common.Utils.Tests
 {
 	[TestFixture]
-    public sealed class ReflectionUtilsTest
-    {
+	public sealed class ReflectionUtilsTest
+	{
+		[UsedImplicitly]
 		private string TestProperty { get; set; }
 
+		[UsedImplicitly]
 		private void TestMethod(string param1, int param2)
 		{
 		}
 
-		private class TestClass
+		[UsedImplicitly]
+		private sealed class TestClass
 		{
-			public string Param1 { get; set; }
-			public int Param2 { get; set; }
+			public string Param1 { get; }
+			public int Param2 { get; }
 
 			public TestClass(string param1, int param2)
 			{
@@ -46,31 +50,31 @@ namespace ICD.Common.Utils.Tests
 		{
 			Assert.Throws<ArgumentNullException>(() => ReflectionUtils.MatchesConstructorParameters(null, new object[] { "test", 10 }));
 
-			ConstructorInfo constructor = typeof(TestClass).GetConstructor(new Type[] { typeof(string), typeof(int) });
+			ConstructorInfo constructor = typeof(TestClass).GetConstructor(new Type[] {typeof(string), typeof(int)});
 
-			Assert.IsTrue(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] { "test", 10 }));
-			Assert.IsTrue(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] { null, 10 }));
-			Assert.IsFalse(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] { "test", "test" }));
-			Assert.IsFalse(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] { "test" }));
-			Assert.IsFalse(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] { "test", "test", "test" }));
-			Assert.IsFalse(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] { 10, 10 }));
+			Assert.IsTrue(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] {"test", 10}));
+			Assert.IsTrue(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] {null, 10}));
+			Assert.IsFalse(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] {"test", "test"}));
+			Assert.IsFalse(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] {"test"}));
+			Assert.IsFalse(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] {"test", "test", "test"}));
+			Assert.IsFalse(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] {10, 10}));
 		}
 
 		[Test]
 		public void MatchesMethodParametersTest()
 		{
-			Assert.Throws<ArgumentNullException>(() => ReflectionUtils.MatchesMethodParameters(null, new object[] { "test", 10 }));
+			Assert.Throws<ArgumentNullException>(() => ReflectionUtils.MatchesMethodParameters(null, new object[] {"test", 10}));
 
 			MethodInfo method = GetType().GetMethod("TestMethod",
-				BindingFlags.NonPublic |
-				BindingFlags.Instance);
+			                                        BindingFlags.NonPublic |
+			                                        BindingFlags.Instance);
 
-			Assert.IsTrue(ReflectionUtils.MatchesMethodParameters(method, new object[] { "test", 10 }));
-			Assert.IsTrue(ReflectionUtils.MatchesMethodParameters(method, new object[] { null, 10 }));
-			Assert.IsFalse(ReflectionUtils.MatchesMethodParameters(method, new object[] { "test", "test" }));
-			Assert.IsFalse(ReflectionUtils.MatchesMethodParameters(method, new object[] { "test" }));
-			Assert.IsFalse(ReflectionUtils.MatchesMethodParameters(method, new object[] { "test", "test", "test" }));
-			Assert.IsFalse(ReflectionUtils.MatchesMethodParameters(method, new object[] { 10, 10 }));
+			Assert.IsTrue(ReflectionUtils.MatchesMethodParameters(method, new object[] {"test", 10}));
+			Assert.IsTrue(ReflectionUtils.MatchesMethodParameters(method, new object[] {null, 10}));
+			Assert.IsFalse(ReflectionUtils.MatchesMethodParameters(method, new object[] {"test", "test"}));
+			Assert.IsFalse(ReflectionUtils.MatchesMethodParameters(method, new object[] {"test"}));
+			Assert.IsFalse(ReflectionUtils.MatchesMethodParameters(method, new object[] {"test", "test", "test"}));
+			Assert.IsFalse(ReflectionUtils.MatchesMethodParameters(method, new object[] {10, 10}));
 		}
 
 		[Test]
@@ -79,9 +83,9 @@ namespace ICD.Common.Utils.Tests
 			Assert.Throws<ArgumentNullException>(() => ReflectionUtils.MatchesPropertyParameter(null, 10));
 
 			PropertyInfo prop = GetType().GetProperty("TestProperty",
-				BindingFlags.NonPublic |
-				BindingFlags.Instance |
-				BindingFlags.GetProperty);
+			                                          BindingFlags.NonPublic |
+			                                          BindingFlags.Instance |
+			                                          BindingFlags.GetProperty);
 
 			Assert.IsTrue(ReflectionUtils.MatchesPropertyParameter(prop, "test"));
 			Assert.IsTrue(ReflectionUtils.MatchesPropertyParameter(prop, null));

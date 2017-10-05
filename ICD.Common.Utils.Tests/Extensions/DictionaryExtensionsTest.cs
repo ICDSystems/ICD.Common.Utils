@@ -5,18 +5,18 @@ using System.Linq;
 
 namespace ICD.Common.Utils.Tests.Extensions
 {
-    [TestFixture]
-    public sealed class DictionaryExtensionsTest
-    {
-        [Test]
-        public void RemoveValueTest()
-        {
+	[TestFixture]
+	public sealed class DictionaryExtensionsTest
+	{
+		[Test]
+		public void RemoveValueTest()
+		{
 			Dictionary<int, int> dict = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 20 },
-				{ 3, 30 },
-				{ 4, 40 },
+				{1, 10},
+				{2, 20},
+				{3, 30},
+				{4, 40},
 			};
 
 			Assert.IsTrue(dict.RemoveValue(10));
@@ -26,15 +26,15 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(3, dict.Count);
 		}
 
-        [Test]
-        public void RemoveAllValuesTest()
-        {
+		[Test]
+		public void RemoveAllValuesTest()
+		{
 			Dictionary<int, int> dict = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 10 },
-				{ 3, 30 },
-				{ 4, 40 },
+				{1, 10},
+				{2, 10},
+				{3, 30},
+				{4, 40},
 			};
 
 			dict.RemoveAllValues(10);
@@ -44,45 +44,45 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(2, dict.Count);
 		}
 
-        [Test]
-        public void GetDefaultTest()
-        {
+		[Test]
+		public void GetDefaultTest()
+		{
 			Dictionary<int, int> dict = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 10 },
-				{ 3, 30 },
-				{ 4, 40 },
+				{1, 10},
+				{2, 10},
+				{3, 30},
+				{4, 40},
 			};
 
 			Assert.AreEqual(10, dict.GetDefault(1));
 			Assert.AreEqual(0, dict.GetDefault(0));
 		}
 
-        [Test]
-        public void GetDefaultValueTest()
-        {
+		[Test]
+		public void GetDefaultValueTest()
+		{
 			Dictionary<int, int> dict = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 10 },
-				{ 3, 30 },
-				{ 4, 40 },
+				{1, 10},
+				{2, 10},
+				{3, 30},
+				{4, 40},
 			};
 
 			Assert.AreEqual(10, dict.GetDefault(1, 1000));
 			Assert.AreEqual(1000, dict.GetDefault(0, 1000));
 		}
 
-        [Test]
-        public void GetOrAddDefaultTest()
-        {
+		[Test]
+		public void GetOrAddDefaultTest()
+		{
 			Dictionary<int, int> dict = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 10 },
-				{ 3, 30 },
-				{ 4, 40 },
+				{1, 10},
+				{2, 10},
+				{3, 30},
+				{4, 40},
 			};
 
 			Assert.AreEqual(10, dict.GetOrAddDefault(1, 1000));
@@ -91,81 +91,81 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(5, dict.Count);
 		}
 
-        [Test]
-        public void GetKeyTest()
-        {
-            Dictionary<int, int> dict = new Dictionary<int, int>
-            {
-                { 1, 10 },
-                { 2, 20 },
-                { 3, 30 }
-            };
+		[Test]
+		public void GetKeyTest()
+		{
+			Dictionary<int, int> dict = new Dictionary<int, int>
+			{
+				{1, 10},
+				{2, 20},
+				{3, 30}
+			};
 
-            Assert.AreEqual(1, dict.GetKey(10));
-            Assert.AreEqual(2, dict.GetKey(20));
-            Assert.AreEqual(3, dict.GetKey(30));
-            Assert.Throws<KeyNotFoundException>(() => dict.GetKey(40));
-        }
+			Assert.AreEqual(1, dict.GetKey(10));
+			Assert.AreEqual(2, dict.GetKey(20));
+			Assert.AreEqual(3, dict.GetKey(30));
+			Assert.Throws<KeyNotFoundException>(() => dict.GetKey(40));
+		}
 
-        [Test]
-        public void TryGetKeyTest()
-        {
-            Dictionary<int, int> dict = new Dictionary<int, int>
-            {
-                { 1, 10 },
-                { 2, 20 },
-                { 3, 30 }
-            };
+		[Test]
+		public void TryGetKeyTest()
+		{
+			Dictionary<int, int> dict = new Dictionary<int, int>
+			{
+				{1, 10},
+				{2, 20},
+				{3, 30}
+			};
 
-            int key;
+			int key;
 
-            Assert.IsTrue(dict.TryGetKey(10, out key));
-            Assert.AreEqual(1, key);
+			Assert.IsTrue(dict.TryGetKey(10, out key));
+			Assert.AreEqual(1, key);
 
-            Assert.IsTrue(dict.TryGetKey(20, out key));
-            Assert.AreEqual(2, key);
+			Assert.IsTrue(dict.TryGetKey(20, out key));
+			Assert.AreEqual(2, key);
 
-            Assert.IsTrue(dict.TryGetKey(30, out key));
-            Assert.AreEqual(3, key);
-        }
+			Assert.IsTrue(dict.TryGetKey(30, out key));
+			Assert.AreEqual(3, key);
+		}
 
-        [Test]
-        public void GetKeysTest()
-        {
-            Dictionary<int, int> dict = new Dictionary<int, int>
-            {
-                { 1, 10 },
-                { 2, 10 },
-                { 3, 30 }
-            };
+		[Test]
+		public void GetKeysTest()
+		{
+			Dictionary<int, int> dict = new Dictionary<int, int>
+			{
+				{1, 10},
+				{2, 10},
+				{3, 30}
+			};
 
-            int[] aKeys = dict.GetKeys(10).ToArray();
-            int[] bKeys = dict.GetKeys(20).ToArray();
-            int[] cKeys = dict.GetKeys(30).ToArray();
+			int[] aKeys = dict.GetKeys(10).ToArray();
+			int[] bKeys = dict.GetKeys(20).ToArray();
+			int[] cKeys = dict.GetKeys(30).ToArray();
 
-            Assert.AreEqual(2, aKeys.Length);
-            Assert.IsTrue(aKeys.Contains(1));
-            Assert.IsTrue(aKeys.Contains(2));
+			Assert.AreEqual(2, aKeys.Length);
+			Assert.IsTrue(aKeys.Contains(1));
+			Assert.IsTrue(aKeys.Contains(2));
 
-            Assert.AreEqual(0, bKeys.Length);
+			Assert.AreEqual(0, bKeys.Length);
 
-            Assert.AreEqual(1, cKeys.Length);
-            Assert.IsTrue(cKeys.Contains(3));
-        }
+			Assert.AreEqual(1, cKeys.Length);
+			Assert.IsTrue(cKeys.Contains(3));
+		}
 
-        [Test]
-        public void UpdateTest()
-        {
+		[Test]
+		public void UpdateTest()
+		{
 			Dictionary<int, int> a = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 10 },
+				{1, 10},
+				{2, 10},
 			};
 
 			Dictionary<int, int> b = new Dictionary<int, int>
 			{
-				{ 2, 20 },
-				{ 3, 30 }
+				{2, 20},
+				{3, 30}
 			};
 
 			a.Update(b);
@@ -181,51 +181,45 @@ namespace ICD.Common.Utils.Tests.Extensions
 
 		}
 
-        [Test]
-        public void AddRangeValueKeyFuncTest()
-        {
-            Assert.Inconclusive();
-        }
+		[Test]
+		public void AddRangeValueKeyFuncTest()
+		{
+			Assert.Inconclusive();
+		}
 
-        [Test]
-        public void AddRangeKeyValueFuncTest()
-        {
-            Assert.Inconclusive();
-        }
+		[Test]
+		public void AddRangeKeyValueFuncTest()
+		{
+			Assert.Inconclusive();
+		}
 
-        [Test]
-        public void AddRangeTest()
-        {
-            Assert.Inconclusive();
-        }
+		[Test]
+		public void AddRangeTest()
+		{
+			Assert.Inconclusive();
+		}
 
-        [Test]
-        public void DictionaryEqualTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void DictionaryEqualComparerTest()
-        {
+		[Test]
+		public void DictionaryEqualTest()
+		{
 			Dictionary<int, int> a = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 20 },
-				{ 3, 30 },
+				{1, 10},
+				{2, 20},
+				{3, 30}
 			};
 
 			Dictionary<int, int> b = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 20 },
-				{ 3, 30 },
+				{1, 10},
+				{2, 20},
+				{3, 30}
 			};
 
 			Dictionary<int, int> c = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 20 }
+				{1, 10},
+				{2, 20}
 			};
 
 			Assert.IsTrue(a.DictionaryEqual(b));
@@ -235,20 +229,50 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.IsFalse(c.DictionaryEqual(a));
 		}
 
-        [Test]
-        public void DictionaryEqualFuncComparerTest()
-        {
-            Assert.Inconclusive();
-        }
+		[Test]
+		public void DictionaryEqualComparerTest()
+		{
+			Assert.Inconclusive();
+		}
 
-        [Test]
-        public void OrderByKeyTest()
-        {
+		[Test]
+		public void DictionaryEqualFuncComparerTest()
+		{
 			Dictionary<int, int> a = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 20 },
-				{ 3, 30 },
+				{1, 10},
+				{2, 20},
+				{3, 30}
+			};
+
+			Dictionary<int, int> b = new Dictionary<int, int>
+			{
+				{1, 10},
+				{2, 20},
+				{3, 30}
+			};
+
+			Dictionary<int, int> c = new Dictionary<int, int>
+			{
+				{1, 10},
+				{2, 20}
+			};
+
+			Assert.IsTrue(a.DictionaryEqual(b, (left, right) => left / 10 == right / 10));
+			Assert.IsTrue(b.DictionaryEqual(a, (left, right) => left / 10 == right / 10));
+
+			Assert.IsFalse(a.DictionaryEqual(c, (left, right) => left / 10 == right / 10));
+			Assert.IsFalse(c.DictionaryEqual(a, (left, right) => left / 10 == right / 10));
+		}
+
+		[Test]
+		public void OrderByKeyTest()
+		{
+			Dictionary<int, int> a = new Dictionary<int, int>
+			{
+				{1, 10},
+				{2, 20},
+				{3, 30}
 			};
 
 			KeyValuePair<int, int>[] ordered = a.OrderByKey().ToArray();
@@ -259,14 +283,14 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(30, ordered[2].Value);
 		}
 
-        [Test]
-        public void OrderValuesByKeyTest()
-        {
+		[Test]
+		public void OrderValuesByKeyTest()
+		{
 			Dictionary<int, int> a = new Dictionary<int, int>
 			{
-				{ 1, 10 },
-				{ 2, 20 },
-				{ 3, 30 },
+				{1, 10},
+				{2, 20},
+				{3, 30},
 			};
 
 			int[] ordered = a.OrderValuesByKey().ToArray();
@@ -276,5 +300,5 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(20, ordered[1]);
 			Assert.AreEqual(30, ordered[2]);
 		}
-    }
+	}
 }
