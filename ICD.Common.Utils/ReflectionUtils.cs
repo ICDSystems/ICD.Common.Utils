@@ -260,7 +260,7 @@ namespace ICD.Common.Utils
 			}
 			catch (FileNotFoundException)
 			{
-				return Enumerable.Empty<object>();
+				return Enumerable.Empty<T>();
 			}
 #endif
 		}
