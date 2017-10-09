@@ -4,7 +4,6 @@ using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Services;
 using ICD.Common.Services.Logging;
-using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
 
 namespace ICD.Common.Utils
@@ -193,28 +192,6 @@ namespace ICD.Common.Utils
 		{
 			string local = Join(localPath);
 			return Join(ProgramConfigPath, local);
-		}
-
-		/// <summary>
-		/// Searches the application path, program config path and common config path to
-		/// find the first IR driver that exists with the given local path.
-		/// </summary>
-		/// <param name="localPath"></param>
-		/// <returns></returns>
-		public static string GetIrDriversPath(params string[] localPath)
-		{
-			return GetDefaultConfigPath(localPath.Prepend("IRDrivers").ToArray());
-		}
-
-		/// <summary>
-		/// Searches the application path, program config path and common config path to
-		/// find the first SSL Driver that exists with the given local path.
-		/// </summary>
-		/// <param name="localPath"></param>
-		/// <returns></returns>
-		public static string GetSslCertificatesPath(params string[] localPath)
-		{
-			return GetDefaultConfigPath(localPath.Prepend("SSLCertificates").ToArray());
 		}
 
 		/// <summary>
