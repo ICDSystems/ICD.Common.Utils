@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
-using ICD.Common.Services;
-using ICD.Common.Services.Logging;
 using ICD.Common.Utils.IO;
 
 namespace ICD.Common.Utils
@@ -125,41 +123,10 @@ namespace ICD.Common.Utils
 		public static IEnumerable<string> RecurseFilePaths(string path)
 		{
 			if (!IcdDirectory.Exists(path))
-				yield break;
+				return Enumerable.Empty<string>();
 
-			Queue<string> queue = new Queue<string>();
-			queue.Enqueue(path);
-
-			while (queue.Count > 0)
-			{
-				path = queue.Dequeue();
-
-				// Get the subdirectories
-				try
-				{
-					foreach (string subDir in IcdDirectory.GetDirectories(path))
-						queue.Enqueue(subDir);
-				}
-				catch (Exception e)
-				{
-					ServiceProvider.TryGetService<ILoggerService>().AddEntry(eSeverity.Error, e, e.Message);
-				}
-
-				// Get the files
-				string[] files;
-				try
-				{
-					files = IcdDirectory.GetFiles(path);
-				}
-				catch (Exception e)
-				{
-					ServiceProvider.TryGetService<ILoggerService>().AddEntry(eSeverity.Error, e, e.Message);
-					continue;
-				}
-
-				foreach (string filePath in files)
-					yield return filePath;
-			}
+			return RecursionUtils.BreadthFirstSearch(path, IcdDirectory.GetDirectories)
+			                     .SelectMany(p => IcdDirectory.GetFiles(p));
 		}
 
 		/// <summary>
@@ -168,6 +135,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="localPath"></param>
 		/// <returns></returns>
+		[PublicAPI]
 		public static string GetDefaultConfigPath(params string[] localPath)
 		{
 			string local = Join(localPath);
@@ -199,6 +167,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
+		[PublicAPI]
 		public static bool PathExists(string path)
 		{
 			return IcdFile.Exists(path) || IcdDirectory.Exists(path);
