@@ -3,6 +3,7 @@
 using Crestron.SimplSharp.CrestronIO;
 #else
 using System.IO;
+using Microsoft.DotNet.PlatformAbstractions;
 #endif
 
 namespace ICD.Common.Utils.IO
@@ -14,6 +15,7 @@ namespace ICD.Common.Utils.IO
 #if SIMPLSHARP
 			return Directory.GetApplicationDirectory();
 #else
+			return ApplicationEnvironment.ApplicationBasePath;
             return Directory.GetCurrentDirectory();
 #endif
 		}
