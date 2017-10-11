@@ -40,6 +40,22 @@ namespace ICD.Common.Utils
 			}
 		}
 
+		/// <summary>
+		/// Gets the mac address(es) of the processor.
+		/// </summary>
+		[PublicAPI]
+		public static IEnumerable<string> MacAddresses
+		{
+			get
+			{
+				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
+					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_MAC_ADDRESS;
+				const EthernetAdapterType type = EthernetAdapterType.EthernetLANAdapter;
+				short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+				yield return CrestronEthernetHelper.GetEthernetParameter(param, id);
+			}
+		}
+
 		#region Methods
 
 		public static DateTime GetLocalTime()
