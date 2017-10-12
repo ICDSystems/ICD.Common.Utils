@@ -22,14 +22,6 @@ namespace ICD.Common.Utils.IO
 		{
 		}
 
-		public static IcdFileStream OpenWrite(string path)
-		{
-			if (path == null)
-				throw new ArgumentNullException("path");
-
-			return new IcdFileStream(File.OpenWrite(path));
-		}
-
 		public void Flush()
 		{
 			WrappedFileStream.Flush();
