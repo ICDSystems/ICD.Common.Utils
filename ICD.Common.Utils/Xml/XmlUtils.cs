@@ -1015,23 +1015,19 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static string Format(string xml)
 		{
-			using (IcdMemoryStream mStream = new IcdMemoryStream())
+			StringBuilder builder = new StringBuilder();
+
+			using (IcdStringWriter stringWriter = new IcdStringWriter(builder))
 			{
-				using (IcdXmlTextWriter writer = new IcdXmlTextWriter(mStream, Encoding.UTF8))
+				using (IcdXmlTextWriter writer = new IcdXmlTextWriter(stringWriter))
 				{
 					IcdXmlDocument document = new IcdXmlDocument();
-
-					// Load the XmlDocument with the XML.
 					document.LoadXml(xml);
-
-					// Write the XML into a formatting IcdXmlTextWriter
 					document.WriteContentTo(writer);
-					writer.Flush();
-					mStream.Flush();
 
-					// Have to rewind the MemoryStream in order to read its contents.
-					mStream.Position = 0;
-					return new IcdStreamReader(mStream).ReadToEnd();
+					writer.Flush();
+
+					return builder.ToString();
 				}
 			}
 		}
