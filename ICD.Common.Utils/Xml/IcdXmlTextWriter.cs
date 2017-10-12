@@ -43,7 +43,7 @@ namespace ICD.Common.Utils.Xml
 #if SIMPLSHARP
 			: this(new XmlTextWriter(textWriter.WrappedTextWriter))
 #else
-			: this(XmlWriter.Create(textWriter.WrappedTextWriter))
+			: this(XmlWriter.Create(textWriter.WrappedTextWriter, GetSettings()))
 #endif
 		{
 		}
@@ -129,14 +129,21 @@ namespace ICD.Common.Utils.Xml
 #if STANDARD
 		private static XmlWriterSettings GetSettings(Encoding encoding)
 		{
+			XmlWriterSettings output = GetSettings();
+			output.Encoding = encoding;
+			return output;
+		}
+
+		private static XmlWriterSettings GetSettings()
+		{
 			return new XmlWriterSettings
 			{
-				Encoding = encoding,
+				ConformanceLevel = ConformanceLevel.Fragment,
 				Indent = true
 			};
 		}
 #endif
 
-#endregion
+		#endregion
 	}
 }
