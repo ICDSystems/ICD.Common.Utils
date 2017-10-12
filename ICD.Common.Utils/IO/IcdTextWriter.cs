@@ -41,7 +41,7 @@ namespace ICD.Common.Utils.IO
 			GC.SuppressFinalize(this);
 		}
 
-		protected void Dispose(bool disposing)
+		private void Dispose(bool disposing)
 		{
 			if (m_Disposed)
 				return;
