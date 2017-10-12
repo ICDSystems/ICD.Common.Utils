@@ -1,7 +1,6 @@
 ﻿#if SIMPLSHARP
 using Crestron.SimplSharp;
 using Crestron.SimplSharp.CrestronXml;
-
 #else
 using System.Xml;
 #endif

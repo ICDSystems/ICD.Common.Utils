@@ -1,6 +1,5 @@
 ﻿#if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
-
 #else
 using System.IO;
 #endif

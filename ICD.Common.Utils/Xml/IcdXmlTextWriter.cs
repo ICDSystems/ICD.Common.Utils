@@ -19,6 +19,8 @@ namespace ICD.Common.Utils.Xml
 
 		public XmlWriter WrappedWriter { get { return m_Writer; } }
 
+		#region Constructors
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -62,6 +64,8 @@ namespace ICD.Common.Utils.Xml
 			m_Writer.Formatting = Formatting.Indented;
 #endif
 		}
+
+		#endregion
 
 		#region Methods
 
