@@ -41,7 +41,10 @@ namespace ICD.Common.Utils.Xml
 		public static bool HasAttribute(string xml, string name)
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
+			{
+				reader.SkipToNextElement();
 				return reader.HasAttribute(name);
+			}
 		}
 
 		/// <summary>
