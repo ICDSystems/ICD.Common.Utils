@@ -71,5 +71,11 @@ namespace ICD.Common.Utils.IO
 		{
 			return new IcdFileStream(File.OpenWrite(path));
 		}
+
+		[PublicAPI]
+		public static IcdFileStream Open(string path, FileMode mode)
+		{
+			return new IcdFileStream(File.Open(path, mode));
+		}
 	}
 }
