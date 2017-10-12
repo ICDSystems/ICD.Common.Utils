@@ -29,6 +29,17 @@ namespace ICD.Common.Utils.Tests.Xml
 		                                     + "<Level2 />"
 		                                     + "</Level1>";
 
+		#region Attributes
+
+		[Test]
+		public void HasAttributeTest()
+		{
+			Assert.IsTrue(XmlUtils.HasAttribute(EXAMPLE_XML, "attr1"));
+			Assert.IsTrue(XmlUtils.HasAttribute(EXAMPLE_XML, "attr2"));
+			Assert.IsFalse(XmlUtils.HasAttribute(EXAMPLE_XML, "attr3"));
+			Assert.IsFalse(XmlUtils.HasAttribute(EXAMPLE_XML_2, "attr1"));
+		}
+
 		[Test, UsedImplicitly]
 		public void GetAttributesTest()
 		{
@@ -57,6 +68,8 @@ namespace ICD.Common.Utils.Tests.Xml
 				Assert.AreEqual(1, value);
 			}
 		}
+
+		#endregion
 
 		[Test, UsedImplicitly]
 		public void RecursionTest()
