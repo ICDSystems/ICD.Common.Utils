@@ -160,5 +160,17 @@ namespace ICD.Common.Utils.Tests.Xml
 			Assert.IsFalse(XmlUtils.IsValidXml(@"<Foo></Bar>"));
 			Assert.IsTrue(XmlUtils.IsValidXml(EXAMPLE_XML));
 		}
+
+		[Test]
+		public void FormatTest()
+		{
+			const string xml = "<Test1><Test2></Test2><Test2></Test2></Test1>";
+			const string expected = @"<Test1>
+  <Test2></Test2>
+  <Test2></Test2>
+</Test1>";
+
+			Assert.AreEqual(expected, XmlUtils.Format(xml));
+		}
 	}
 }
