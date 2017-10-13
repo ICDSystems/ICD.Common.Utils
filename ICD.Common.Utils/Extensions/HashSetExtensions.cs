@@ -1,11 +1,9 @@
 ﻿#if STANDARD
-using ICD.Common.Properties;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using ICD.Common.Properties;
 
-namespace ICD.NetStandard.Common.Utils.Extensions
+namespace ICD.Common.Utils.Extensions
 {
     public static class HashSetExtensions
     {
