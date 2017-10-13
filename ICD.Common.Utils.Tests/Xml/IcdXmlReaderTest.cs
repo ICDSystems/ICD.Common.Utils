@@ -48,7 +48,20 @@ namespace ICD.Common.Utils.Tests.Xml
 
 		public void ValueTest()
 		{
-			Assert.Inconclusive();
+			IcdXmlReader reader = new IcdXmlReader("<Test>test</Test>");
+			reader.SkipToNextElement();
+
+			Assert.AreEqual("test", reader.Value);
+
+			reader = new IcdXmlReader("<Test></Test>");
+			reader.SkipToNextElement();
+
+			Assert.AreEqual("", reader.Value);
+
+			reader = new IcdXmlReader("<Test />");
+			reader.SkipToNextElement();
+
+			Assert.AreEqual(null, reader.Value);
 		}
 
 		public void NodeTypeTest()
@@ -72,7 +85,12 @@ namespace ICD.Common.Utils.Tests.Xml
 
 		public void GetAttributeTest()
 		{
-			Assert.Inconclusive();
+			IcdXmlReader reader = new IcdXmlReader(EXAMPLE_XML);
+			reader.SkipToNextElement();
+
+			Assert.AreEqual("1", reader.GetAttribute("attr1"));
+			Assert.AreEqual("2", reader.GetAttribute("attr2"));
+			Assert.AreEqual(null, reader.GetAttribute("attr3"));
 		}
 
 		public void ReadStringTest()
