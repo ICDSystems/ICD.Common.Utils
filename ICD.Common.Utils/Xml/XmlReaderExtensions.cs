@@ -42,7 +42,7 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("extends");
 
 			if (!extends.HasAttributes)
-				return new IcdXmlAttribute[0];
+				return Enumerable.Empty<IcdXmlAttribute>();
 
 			List<IcdXmlAttribute> attributes = new List<IcdXmlAttribute>();
 			while (extends.MoveToNextAttribute())

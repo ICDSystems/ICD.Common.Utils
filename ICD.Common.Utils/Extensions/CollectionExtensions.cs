@@ -10,23 +10,6 @@ namespace ICD.Common.Utils.Extensions
 	public static class CollectionExtensions
 	{
 		/// <summary>
-		/// Removes items matching the predicate.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="predicate"></param>
-		public static void RemoveAll<T>(this ICollection<T> extends, Func<T, bool> predicate)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (predicate == null)
-				throw new ArgumentNullException("predicate");
-
-			extends.RemoveAll(extends.Where(predicate).ToArray());
-		}
-
-		/// <summary>
 		/// Removes all of the items from the other collection.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -40,7 +23,24 @@ namespace ICD.Common.Utils.Extensions
 			if (other == null)
 				throw new ArgumentNullException("other");
 
-			foreach (T item in other)
+			extends.RemoveAll(i => other.Contains(i));
+		}
+
+		/// <summary>
+		/// Removes items matching the predicate.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="predicate"></param>
+		public static void RemoveAll<T>(this ICollection<T> extends, Func<T, bool> predicate)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (predicate == null)
+				throw new ArgumentNullException("predicate");
+
+			foreach (T item in extends.Where(predicate).ToArray())
 				extends.Remove(item);
 		}
 	}
