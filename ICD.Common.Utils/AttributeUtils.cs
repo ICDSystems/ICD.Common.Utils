@@ -141,7 +141,7 @@ namespace ICD.Common.Utils
 			if (method == null)
 				throw new ArgumentNullException("method");
 
-			foreach (Attribute attribute in method.GetCustomAttributes<Attribute>(false))
+			foreach (Attribute attribute in ReflectionExtensions.GetCustomAttributes<Attribute>(method, false))
 				s_AttributeToMethodCache[attribute] = method;
 		}
 
