@@ -111,13 +111,13 @@ namespace ICD.Common.Attributes.Rpc
 #if SIMPLSHARP
 							.GetCType()
 #else
-                        .GetTypeInfo()
+							.GetTypeInfo()
 #endif
 							.GetMethods(BindingFlags.Public |
 							            BindingFlags.NonPublic |
 							            BindingFlags.Instance)
-							.Where(m => m.GetCustomAttributes<RpcAttribute>(true)
-							             .Any(a => a.m_Key == key))
+							.Where(m => ReflectionExtensions.GetCustomAttributes<RpcAttribute>(m, true)
+							                                .Any(a => a.m_Key == key))
 							.ToHashSet();
 				}
 
@@ -154,13 +154,13 @@ namespace ICD.Common.Attributes.Rpc
 #if SIMPLSHARP
 							.GetCType()
 #else
-                        .GetTypeInfo()
+							.GetTypeInfo()
 #endif
 							.GetProperties(BindingFlags.Public |
 							               BindingFlags.NonPublic |
 							               BindingFlags.Instance)
-							.Where(p => p.CanWrite && p.GetCustomAttributes<RpcAttribute>(true)
-							                           .Any(a => a.m_Key == key))
+							.Where(p => p.CanWrite && ReflectionExtensions.GetCustomAttributes<RpcAttribute>(p, true)
+							                                              .Any(a => a.m_Key == key))
 							.ToHashSet();
 				}
 

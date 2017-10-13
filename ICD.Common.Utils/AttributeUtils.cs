@@ -112,16 +112,17 @@ namespace ICD.Common.Utils
 				s_TypeToAttributesCache[type] = new IcdHashSet<Attribute>(type.GetCustomAttributes<Attribute>(false));
 				methods = type.GetMethods();
 #else
-                s_TypeToAttributesCache[type] = new IcdHashSet<Attribute>(type.GetTypeInfo().GetCustomAttributes<Attribute>(false));
-                methods = type.GetTypeInfo().GetMethods();
+				s_TypeToAttributesCache[type] =
+					new IcdHashSet<Attribute>(ReflectionExtensions.GetCustomAttributes<Attribute>(type.GetTypeInfo(), false));
+				methods = type.GetTypeInfo().GetMethods();
 #endif
 			}
-				// GetMethods for Open Generic Types is not supported.
+			// GetMethods for Open Generic Types is not supported.
 			catch (NotSupportedException)
 			{
 				return;
 			}
-				// Not sure why this happens :/
+			// Not sure why this happens :/
 			catch (InvalidProgramException)
 			{
 				return;

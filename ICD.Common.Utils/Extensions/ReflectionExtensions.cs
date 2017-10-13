@@ -1,8 +1,11 @@
-﻿#if SIMPLSHARP
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
+#else
+using System.Reflection;
+#endif
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -28,4 +31,3 @@ namespace ICD.Common.Utils.Extensions
 		}
 	}
 }
-#endif
