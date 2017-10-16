@@ -27,6 +27,8 @@ namespace ICD.Common.Utils
 		private static readonly Dictionary<Attribute, MethodInfo> s_AttributeToMethodCache;
 		private static readonly Dictionary<Type, IcdHashSet<Attribute>> s_TypeToAttributesCache;
 
+		private static ILoggerService Logger { get { return ServiceProvider.TryGetService<ILoggerService>(); } }
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -58,33 +60,52 @@ namespace ICD.Common.Utils
 		/// Pre-emptively caches the given assembly for lookup.
 		/// </summary>
 		/// <param name="assembly"></param>
-		public static void CacheAssembly(Assembly assembly)
+		public static bool CacheAssembly(Assembly assembly)
 		{
 			if (assembly == null)
 				throw new ArgumentNullException("assembly");
 
 			if (s_CachedAssemblies.Contains(assembly))
-				return;
-			s_CachedAssemblies.Add(assembly);
+				return true;
 
 #if SIMPLSHARP
-			CType[] types = new CType[0];
+			CType[] types;
 #else
-            Type[] types = new Type[0];
+            Type[] types;
 #endif
 			try
 			{
 				types = assembly.GetTypes();
 			}
+#if STANDARD
+			catch (ReflectionTypeLoadException e)
+			{
+				foreach (Exception inner in e.LoaderExceptions)
+				{
+					Logger.AddEntry(eSeverity.Error, inner, "{0} failed to cache assembly {1}", typeof(AttributeUtils).Name,
+					                assembly.GetName().Name);
+				}
+
+				return false;
+			}
+#endif
 			catch (TypeLoadException e)
 			{
-				ServiceProvider.TryGetService<ILoggerService>()
-				               .AddEntry(eSeverity.Error, e, "Failed to cache assembly {0} - {1}", assembly.GetName().Name,
-				                         e.Message);
+#if SIMPLSHARP
+				Logger.AddEntry(eSeverity.Error, e, "{0} failed to cache assembly {1}", typeof(AttributeUtils).Name,
+					            assembly.GetName().Name);
+#else
+				Logger.AddEntry(eSeverity.Error, e, "{0} failed to cache assembly {1} - could not load type {2}",
+								typeof(AttributeUtils).Name, assembly.GetName().Name, e.TypeName);
+#endif
+				return false;
 			}
 
 			foreach (var type in types)
 				CacheType(type);
+
+			s_CachedAssemblies.Add(assembly);
+			return true;
 		}
 
 		/// <summary>
@@ -145,9 +166,9 @@ namespace ICD.Common.Utils
 				s_AttributeToMethodCache[attribute] = method;
 		}
 
-		#endregion
+#endregion
 
-		#region Lookup
+#region Lookup
 
 		/// <summary>
 		/// Gets the first attribute on the given class type matching the generic type.
@@ -223,6 +244,6 @@ namespace ICD.Common.Utils
 			return s_AttributeToMethodCache[attribute];
 		}
 
-		#endregion
+#endregion
 	}
 }
