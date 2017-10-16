@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -15,6 +16,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="other"></param>
+		[PublicAPI]
 		public static void RemoveAll<T>(this ICollection<T> extends, IEnumerable<T> other)
 		{
 			if (extends == null)
@@ -23,7 +25,7 @@ namespace ICD.Common.Utils.Extensions
 			if (other == null)
 				throw new ArgumentNullException("other");
 
-			extends.RemoveAll(i => other.Contains(i));
+			extends.RemoveAll(other.Contains);
 		}
 
 		/// <summary>
@@ -32,6 +34,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="predicate"></param>
+		[PublicAPI]
 		public static void RemoveAll<T>(this ICollection<T> extends, Func<T, bool> predicate)
 		{
 			if (extends == null)
