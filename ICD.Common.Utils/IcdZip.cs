@@ -1,7 +1,7 @@
-﻿#if SIMPLSHARP
+﻿using System;
+#if SIMPLSHARP
 using Crestron.SimplSharp;
 #else
-using System;
 using System.IO.Compression;
 #endif
 
@@ -17,23 +17,29 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="path"></param>
 		/// <param name="outputPath"></param>
-		public static bool Unzip(string path, string outputPath)
+		/// <param name="message"></param>
+		public static bool Unzip(string path, string outputPath, out string message)
 		{
+			message = null;
+
+			try
+			{
 #if SIMPLSHARP
-			return CrestronZIP.Unzip(path, outputPath) == CrestronZIP.ResultCode.ZR_OK;
+				CrestronZIP.ResultCode result = CrestronZIP.Unzip(path, outputPath);
+				message = result.ToString();
+				return result == CrestronZIP.ResultCode.ZR_OK;
 #else
-            try
-            {
                 using (ZipArchive archive = ZipFile.Open(path, ZipArchiveMode.Read))
                     archive.ExtractToDirectory(outputPath);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            
-            return true;
+				message = "Success";
+				return true;
 #endif
+			}
+			catch (Exception e)
+			{
+				message = e.Message;
+				return false;
+			}
 		}
 	}
 }
