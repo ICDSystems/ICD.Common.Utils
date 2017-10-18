@@ -48,6 +48,9 @@ namespace ICD.Common.Utils.Timers
 		/// <param name="repeatPeriod"></param>
 		public SafeTimer(Action callback, long dueTime, long repeatPeriod)
 		{
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
 			m_Callback = callback;
 #if SIMPLSHARP
 			m_Timer = new CTimer(SafeCallback, null, dueTime, repeatPeriod);
@@ -106,6 +109,7 @@ namespace ICD.Common.Utils.Timers
 			m_Timer.Reset();
 #else
 			m_Timer.Change(0, m_RepeatPeriod);
+			m_Callback();
 #endif
 		}
 
