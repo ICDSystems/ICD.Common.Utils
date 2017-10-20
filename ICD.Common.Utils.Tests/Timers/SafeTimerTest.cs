@@ -81,7 +81,7 @@ namespace ICD.Common.Utils.Tests.Timers
 
 			ThreadingUtils.Sleep(50);
 
-			Assert.AreEqual(4, called, 1);
+			Assert.AreEqual(4, called, 2);
 
 			timer.Dispose();
 		}
