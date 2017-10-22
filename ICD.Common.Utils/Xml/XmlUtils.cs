@@ -881,8 +881,8 @@ namespace ICD.Common.Utils.Xml
 			if (dict == null)
 				throw new ArgumentNullException("dict");
 
-			Action<TKey> writeKey = key => writer.WriteElementString(keyElement, IcdXmlConvert.ToString(key));
-			Action<TValue> writeValue = value => writer.WriteElementString(valueElement, IcdXmlConvert.ToString(value));
+			Action<IcdXmlTextWriter, TKey> writeKey = (w, k) => w.WriteElementString(keyElement, IcdXmlConvert.ToString(k));
+			Action<IcdXmlTextWriter, TValue> writeValue = (w, v) => w.WriteElementString(valueElement, IcdXmlConvert.ToString(v));
 
 			WriteDictToXml(writer, dict, rootElement, childElement, writeKey, writeValue);
 		}
@@ -899,8 +899,9 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="writeKey"></param>
 		/// <param name="writeValue"></param>
 		public static void WriteDictToXml<TKey, TValue>(IcdXmlTextWriter writer, IEnumerable<KeyValuePair<TKey, TValue>> dict,
-		                                                string rootElement, string childElement, Action<TKey> writeKey,
-		                                                Action<TValue> writeValue)
+		                                                string rootElement, string childElement,
+		                                                Action<IcdXmlTextWriter, TKey> writeKey,
+		                                                Action<IcdXmlTextWriter, TValue> writeValue)
 		{
 			if (writer == null)
 				throw new ArgumentNullException("writer");
@@ -914,15 +915,15 @@ namespace ICD.Common.Utils.Xml
 			if (writeValue == null)
 				throw new ArgumentNullException("writeValue");
 
-			Action<KeyValuePair<TKey, TValue>> writeItem =
-				pair =>
+			Action<IcdXmlTextWriter, KeyValuePair<TKey, TValue>> writeItem =
+				(w, p) =>
 				{
-					writer.WriteStartElement(childElement);
+					w.WriteStartElement(childElement);
 					{
-						writeKey(pair.Key);
-						writeValue(pair.Value);
+						writeKey(w, p.Key);
+						writeValue(w, p.Value);
 					}
-					writer.WriteEndElement();
+					w.WriteEndElement();
 				};
 
 			WriteListToXml(writer, dict, rootElement, writeItem);
@@ -945,7 +946,7 @@ namespace ICD.Common.Utils.Xml
 			if (list == null)
 				throw new ArgumentNullException("list");
 
-			Action<T> writeItem = child => writer.WriteElementString(childElement, IcdXmlConvert.ToString(child));
+			Action<IcdXmlTextWriter, T> writeItem = (w, c) => w.WriteElementString(childElement, IcdXmlConvert.ToString(c));
 			WriteListToXml(writer, list, listElement, writeItem);
 		}
 
@@ -958,7 +959,7 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="listElement"></param>
 		/// <param name="writeItem"></param>
 		public static void WriteListToXml<T>(IcdXmlTextWriter writer, IEnumerable<T> list, string listElement,
-		                                     Action<T> writeItem)
+		                                     Action<IcdXmlTextWriter, T> writeItem)
 		{
 			if (writer == null)
 				throw new ArgumentNullException("writer");
@@ -972,7 +973,7 @@ namespace ICD.Common.Utils.Xml
 			writer.WriteStartElement(listElement);
 			{
 				foreach (T child in list)
-					writeItem(child);
+					writeItem(writer, child);
 			}
 			writer.WriteEndElement();
 		}
