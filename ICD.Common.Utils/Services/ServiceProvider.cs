@@ -34,12 +34,9 @@ namespace ICD.Common.Services
 			try
 			{
 				m_ServicesSection.Enter();
-				foreach (object service in m_Services.Values.Distinct())
-				{
-					if (!(service is IDisposable))
-						continue;
-					((IDisposable)service).Dispose();
-				}
+
+				foreach (IDisposable service in m_Services.Values.OfType<IDisposable>().Distinct().ToArray())
+					service.Dispose();
 				m_Services.Clear();
 			}
 			finally
