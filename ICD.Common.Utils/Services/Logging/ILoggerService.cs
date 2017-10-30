@@ -92,6 +92,18 @@ namespace ICD.Common.Services.Logging
 			if (e == null)
 				throw new ArgumentNullException("e");
 
+#if STANDARD
+			if (e is AggregateException)
+			{
+				AggregateException aggregate = e as AggregateException;
+				// We want the stack trace from the aggregate exception but the type and message from the inner.
+				foreach (Exception inner in aggregate.InnerExceptions)
+					extends.AddEntry(severity, string.Format("{0}: {1}{2}{3}{2}{4}", inner.GetType().Name, message,
+					                                         IcdEnvironment.NewLine, inner.Message, e.StackTrace));
+				return;
+			}
+#endif
+
 			extends.AddEntry(severity, string.Format("{0}: {1}{2}{3}{2}{4}", e.GetType().Name, message,
 			                                         IcdEnvironment.NewLine, e.Message, e.StackTrace));
 		}
