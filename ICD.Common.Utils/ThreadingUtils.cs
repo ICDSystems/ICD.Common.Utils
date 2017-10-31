@@ -69,7 +69,7 @@ namespace ICD.Common.Utils
 				       catch (Exception e)
 				       {
 					       ServiceProvider.TryGetService<ILoggerService>()
-					                      .AddEntry(eSeverity.Error, e, e.Message);
+					                      .AddEntry(eSeverity.Error, e, "{0} failed to execute callback", typeof(ThreadingUtils).Name);
 				       }
 			       };
 		}
