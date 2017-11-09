@@ -71,12 +71,5 @@ namespace ICD.Common.Utils.Tests
             IEnumerable<int> values = new int[] { 0, 15, 30, 45 };
             Assert.AreEqual(15, MathUtils.RoundToNearest(21, values));
         }
-
-        [Test, UsedImplicitly]
-        public void GetNewIdTest()
-        {
-            IEnumerable<int> ids = Enumerable.Range(1, 10);
-            Assert.AreEqual(11, MathUtils.GetNewId(ids));
-        }
     }
 }
