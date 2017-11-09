@@ -202,19 +202,5 @@ namespace ICD.Common.Utils
 
 			return nearest.Aggregate((x, y) => Math.Abs(x - number) < Math.Abs(y - number) ? x : y);
 		}
-
-		/// <summary>
-		/// Gets a new, unique id given a sequence of existing ids.
-		/// </summary>
-		/// <param name="existingIds"></param>
-		/// <returns></returns>
-		public static int GetNewId(IEnumerable<int> existingIds)
-		{
-			if (existingIds == null)
-				throw new ArgumentNullException("existingIds");
-
-			IcdHashSet<int> existing = existingIds.ToHashSet();
-			return Enumerable.Range(1, int.MaxValue).First(i => !existing.Contains(i));
-		}
 	}
 }
