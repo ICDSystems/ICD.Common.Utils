@@ -247,7 +247,7 @@ namespace ICD.Common.Services
 
 				if (m_Services.ContainsKey(tService))
 				{
-					string message = string.Format(string.Format("{0} already contains a {0} service", GetType().Name, tService.Name));
+					string message = string.Format("{0} already contains a {1} service", GetType().Name, tService.Name);
 					throw new InvalidOperationException(message);
 				}
 
