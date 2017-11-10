@@ -167,8 +167,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="other"></param>
 		/// <returns></returns>
-		public static
-			bool ScrambledEquals<T>(this IEnumerable<T> extends, IEnumerable<T> other)
+		public static bool ScrambledEquals<T>(this IEnumerable<T> extends, IEnumerable<T> other)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
