@@ -11,7 +11,7 @@ namespace ICD.Common.Utils.Tests.Attributes.Rpc
 		private class TestClass
 		{
 			[Rpc("A")]
-			public int TestProperty { get; set; }
+			public string TestProperty { get; set; }
 
 			[Rpc("A")]
 			public void TestMethod()

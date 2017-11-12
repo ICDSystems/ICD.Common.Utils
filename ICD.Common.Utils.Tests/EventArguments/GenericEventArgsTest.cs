@@ -1,5 +1,4 @@
-﻿using ICD.Common.Utils.EventArguments;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests.EventArguments
 {
