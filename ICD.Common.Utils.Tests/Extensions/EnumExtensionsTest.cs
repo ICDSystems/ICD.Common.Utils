@@ -1,26 +1,36 @@
-﻿using NUnit.Framework;
+﻿using System;
+using ICD.Common.Utils.Extensions;
+using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests.Extensions
 {
 	[TestFixture]
 	public sealed class EnumExtensionsTest
 	{
-		[Test]
-		public void HasFlagTest()
+		[Flags]
+		public enum eTestEnum
 		{
-			Assert.Inconclusive();
+			A = 1,
+			B = 2,
+			C = 4
 		}
 
-		[Test]
-		public void HasFlagsTest()
+		[TestCase(eTestEnum.A, eTestEnum.A, true)]
+		[TestCase(eTestEnum.A | eTestEnum.B, eTestEnum.A, true)]
+		[TestCase(eTestEnum.A | eTestEnum.B, eTestEnum.C, false)]
+		public void HasFlagTest(eTestEnum value, eTestEnum flag, bool expected)
 		{
-			Assert.Inconclusive();
+			Assert.AreEqual(expected, EnumExtensions.HasFlag(value, flag));
 		}
 
-		[Test]
-		public void CastTest()
+		[TestCase(eTestEnum.A, eTestEnum.A, true)]
+		[TestCase(eTestEnum.A | eTestEnum.B, eTestEnum.A, true)]
+		[TestCase(eTestEnum.A | eTestEnum.B, eTestEnum.C, false)]
+		[TestCase(eTestEnum.A, eTestEnum.A | eTestEnum.B, false)]
+		[TestCase(eTestEnum.A | eTestEnum.B, eTestEnum.A | eTestEnum.B, true)]
+		public void HasFlagsTest(eTestEnum value, eTestEnum flags, bool expected)
 		{
-			Assert.Inconclusive();
+			Assert.AreEqual(expected, value.HasFlags(flags));
 		}
 	}
 }
