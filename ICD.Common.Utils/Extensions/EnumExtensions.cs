@@ -52,20 +52,5 @@ namespace ICD.Common.Utils.Extensions
 			ulong num = Convert.ToUInt64(value);
 			return (Convert.ToUInt64(extends) & num) == num;
 		}
-
-		/// <summary>
-		/// Casts the enum to the given type.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="extends"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public static T Cast<T>(this Enum extends)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			return (T)Enum.ToObject(typeof(T), extends);
-		}
 	}
 }
