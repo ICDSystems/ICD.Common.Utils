@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ICD.Common.Utils.Json
 {
@@ -12,6 +15,9 @@ namespace ICD.Common.Utils.Json
 	[PublicAPI]
 	public static class JsonUtils
 	{
+		// 2016-02-26T19:24:59
+		private const string DATE_FORMAT = @"yyyy-MM-dd\THH:mm:ss";
+
 		/// <summary>
 		/// Forces Newtonsoft to cache the given type for faster subsequent usage.
 		/// </summary>
@@ -21,6 +27,49 @@ namespace ICD.Common.Utils.Json
 		{
 			string serialized = JsonConvert.SerializeObject(ReflectionUtils.CreateInstance<T>());
 			JsonConvert.DeserializeObject<T>(serialized);
+		}
+
+		/// <summary>
+		/// Gets the token as a DateTime value.
+		/// </summary>
+		/// <param name="token"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static DateTime ParseDateTime(JToken token)
+		{
+			if (token == null)
+				throw new ArgumentNullException("token");
+
+#if SIMPLSHARP
+			return DateTime.ParseExact((string)token, DATE_FORMAT, CultureInfo.CurrentCulture);
+#else
+			return (DateTime)token;
+#endif
+		}
+
+		/// <summary>
+		/// Gets the token as a DateTime value.
+		/// </summary>
+		/// <param name="token"></param>
+		/// <param name="output"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryParseDateTime(JToken token, out DateTime output)
+		{
+			if (token == null)
+				throw new ArgumentNullException("token");
+
+			output = default(DateTime);
+
+			try
+			{
+				output = ParseDateTime(token);
+				return true;
+			}
+			catch (InvalidCastException)
+			{
+				return false;
+			}
 		}
 
 		/// <summary>
