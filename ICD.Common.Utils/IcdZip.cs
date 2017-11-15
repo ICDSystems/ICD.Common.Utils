@@ -20,8 +20,6 @@ namespace ICD.Common.Utils
 		/// <param name="message"></param>
 		public static bool Unzip(string path, string outputPath, out string message)
 		{
-			message = null;
-
 			try
 			{
 #if SIMPLSHARP
