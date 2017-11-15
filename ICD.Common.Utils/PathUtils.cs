@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
 
 namespace ICD.Common.Utils
@@ -68,14 +69,9 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static string Join(params string[] items)
 		{
-			try
-			{
-				return items.Skip(1).Aggregate(items.First(), IcdPath.Combine);
-			}
-			catch (ArgumentException e)
-			{
-				throw new ArgumentException("Failed to join path: " + StringUtils.ArrayFormat(items), e);
-			}
+			return items.Length > 1
+				       ? items.Skip(1).Aggregate(items.First(), IcdPath.Combine)
+				       : items.FirstOrDefault(string.Empty);
 		}
 
 		/// <summary>
@@ -141,15 +137,26 @@ namespace ICD.Common.Utils
 			string local = Join(localPath);
 
 			// Program slot configuration
-			string programPath = Join(ProgramConfigPath, local);
+			string programPath = GetProgramConfigPath(localPath);
 			if (PathExists(programPath))
 				return programPath;
 
 			// Common program configuration
-			string commonPath = Join(CommonConfigPath, local);
-			return PathExists(commonPath)
-				       ? commonPath
-				       : Join(IcdDirectory.GetApplicationDirectory(), local); // Installation defaults
+			string commonPath = GetCommonConfigPath(local);
+			if (PathExists(commonPath))
+				return commonPath;
+
+			return Join(IcdDirectory.GetApplicationDirectory(), local); // Installation defaults
+		}
+
+		/// <summary>
+		/// Appends the local path to the common config path.
+		/// </summary>
+		/// <returns></returns>
+		public static string GetCommonConfigPath(params string[] localPath)
+		{
+			string local = Join(localPath);
+			return Join(CommonConfigPath, local);
 		}
 
 		/// <summary>
