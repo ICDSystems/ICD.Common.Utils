@@ -13,6 +13,28 @@ namespace ICD.Common.Utils
 	public static class ThreadingUtils
 	{
 		/// <summary>
+		/// Wait until the given condition is true.
+		/// </summary>
+		/// <param name="condition"></param>
+		/// <param name="timeout"></param>
+		/// <returns></returns>
+		public static bool Wait(Func<bool> condition, long timeout)
+		{
+			if (condition == null)
+				throw new ArgumentNullException("condition");
+
+			DateTime end = IcdEnvironment.GetLocalTime().AddMilliseconds(timeout);
+
+			while (!condition())
+			{
+				if (IcdEnvironment.GetLocalTime() >= end)
+					return false;
+			}
+
+			return true;
+		}
+
+		/// <summary>
 		/// Puts the current thread to sleep for the given amount of time.
 		/// </summary>
 		/// <param name="milliseconds"></param>

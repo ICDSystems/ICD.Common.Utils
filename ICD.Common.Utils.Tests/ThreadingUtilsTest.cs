@@ -4,8 +4,25 @@ using NUnit.Framework;
 namespace ICD.Common.Utils.Tests
 {
 	[TestFixture]
-    public sealed class ThreadingUtilsTest
-    {
+	public sealed class ThreadingUtilsTest
+	{
+		[Test]
+		public static void WaitTest()
+		{
+			Assert.IsFalse(ThreadingUtils.Wait(() => false, 100));
+			Assert.IsTrue(ThreadingUtils.Wait(() => true, 100));
+
+			bool complete = false;
+
+			ThreadingUtils.SafeInvoke(() =>
+			                          {
+				                          ThreadingUtils.Sleep(50);
+				                          complete = true;
+			                          });
+
+			Assert.IsTrue(ThreadingUtils.Wait(() => complete, 100));
+		}
+
 		[Test]
 		public void Sleep()
 		{
@@ -20,7 +37,11 @@ namespace ICD.Common.Utils.Tests
 		public void SafeInvokeTest()
 		{
 			bool result = false;
-			ThreadingUtils.SafeInvoke(() => { ThreadingUtils.Sleep(100); result = true; });
+			ThreadingUtils.SafeInvoke(() =>
+			                          {
+				                          ThreadingUtils.Sleep(100);
+				                          result = true;
+			                          });
 
 			Assert.IsFalse(result);
 			ThreadingUtils.Sleep(1000);
@@ -31,7 +52,11 @@ namespace ICD.Common.Utils.Tests
 		public void SafeInvokeParamTest()
 		{
 			bool result = false;
-			ThreadingUtils.SafeInvoke(p => { ThreadingUtils.Sleep(100); result = p; }, true);
+			ThreadingUtils.SafeInvoke(p =>
+			                          {
+				                          ThreadingUtils.Sleep(100);
+				                          result = p;
+			                          }, true);
 
 			Assert.IsFalse(result);
 			ThreadingUtils.Sleep(1000);
