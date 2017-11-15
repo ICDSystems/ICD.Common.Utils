@@ -44,8 +44,7 @@ namespace ICD.Common.Utils.Tests
 			                          });
 
 			Assert.IsFalse(result);
-			ThreadingUtils.Sleep(1000);
-			Assert.IsTrue(result);
+			Assert.IsTrue(ThreadingUtils.Wait(() => result, 1000));
 		}
 
 		[Test]
@@ -59,8 +58,7 @@ namespace ICD.Common.Utils.Tests
 			                          }, true);
 
 			Assert.IsFalse(result);
-			ThreadingUtils.Sleep(1000);
-			Assert.IsTrue(result);
+			Assert.IsTrue(ThreadingUtils.Wait(() => result, 1000));
 		}
 	}
 }

@@ -48,9 +48,8 @@ namespace ICD.Common.Utils.Tests
 
 			// ReSharper disable once NotAccessedVariable
 			object handle = ThreadingUtils.SafeInvoke(() => { result = section.TryEnter() ? 0 : 1; });
-			ThreadingUtils.Sleep(1000);
-
-			Assert.AreEqual(1, result);
+			
+			Assert.IsTrue(ThreadingUtils.Wait(() => result == 1, 1000));
 
 			section.Leave();
 
@@ -60,9 +59,8 @@ namespace ICD.Common.Utils.Tests
 				result = section.TryEnter() ? 2 : 0;
 				section.Leave();
 			});
-			ThreadingUtils.Sleep(1000);
 
-			Assert.AreEqual(2, result);
+			Assert.IsTrue(ThreadingUtils.Wait(() => result == 2, 1000));
 		}
 	}
 }

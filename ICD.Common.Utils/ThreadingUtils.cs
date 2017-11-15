@@ -17,7 +17,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="condition"></param>
 		/// <param name="timeout"></param>
-		/// <returns></returns>
+		/// <returns>False if the call times out</returns>
 		public static bool Wait(Func<bool> condition, long timeout)
 		{
 			if (condition == null)
