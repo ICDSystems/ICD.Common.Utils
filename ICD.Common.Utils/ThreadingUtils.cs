@@ -1,12 +1,12 @@
 ﻿using System;
+using ICD.Common.Properties;
+using ICD.Common.Services;
+using ICD.Common.Services.Logging;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
 #else
 using System.Threading.Tasks;
 #endif
-using ICD.Common.Properties;
-using ICD.Common.Services;
-using ICD.Common.Services.Logging;
 
 namespace ICD.Common.Utils
 {

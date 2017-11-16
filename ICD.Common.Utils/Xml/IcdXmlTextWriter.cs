@@ -3,6 +3,7 @@ using System.Text;
 using ICD.Common.Utils.IO;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronXml;
+
 #else
 using System.Xml;
 #endif
@@ -122,9 +123,9 @@ namespace ICD.Common.Utils.Xml
 			m_Writer.WriteRaw(xml);
 		}
 
-#endregion
+		#endregion
 
-#region Private Methods
+		#region Private Methods
 
 #if STANDARD
 		private static XmlWriterSettings GetSettings(Encoding encoding)

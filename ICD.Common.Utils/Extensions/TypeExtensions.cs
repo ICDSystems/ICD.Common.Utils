@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
 #else
 using System.Reflection;
 #endif
-using System.Collections.Generic;
 
 namespace ICD.Common.Utils.Extensions
 {

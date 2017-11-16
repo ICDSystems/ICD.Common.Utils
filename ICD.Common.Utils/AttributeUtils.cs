@@ -93,7 +93,7 @@ namespace ICD.Common.Utils
 			{
 #if SIMPLSHARP
 				Logger.AddEntry(eSeverity.Error, e, "{0} failed to cache assembly {1}", typeof(AttributeUtils).Name,
-					            assembly.GetName().Name);
+				                assembly.GetName().Name);
 #else
 				Logger.AddEntry(eSeverity.Error, e, "{0} failed to cache assembly {1} - could not load type {2}",
 								typeof(AttributeUtils).Name, assembly.GetName().Name, e.TypeName);
@@ -166,9 +166,9 @@ namespace ICD.Common.Utils
 				s_AttributeToMethodCache[attribute] = method;
 		}
 
-#endregion
+		#endregion
 
-#region Lookup
+		#region Lookup
 
 		/// <summary>
 		/// Gets the first attribute on the given class type matching the generic type.
@@ -244,6 +244,6 @@ namespace ICD.Common.Utils
 			return s_AttributeToMethodCache[attribute];
 		}
 
-#endregion
+		#endregion
 	}
 }
