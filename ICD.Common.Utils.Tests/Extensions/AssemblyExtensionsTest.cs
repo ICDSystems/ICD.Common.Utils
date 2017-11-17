@@ -10,5 +10,11 @@ namespace ICD.Common.Utils.Tests.Extensions
 	    {
 			Assert.Inconclusive();
 	    }
+
+		[Test]
+	    public void GetCreationTimeTest()
+	    {
+			Assert.Inconclusive();
+	    }
 	}
 }

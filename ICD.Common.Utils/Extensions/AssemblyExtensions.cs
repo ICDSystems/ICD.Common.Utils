@@ -20,7 +20,7 @@ namespace ICD.Common.Utils.Extensions
 		public static string GetPath(this Assembly extends)
 		{
 			if (extends == null)
-				throw new ArgumentNullException();
+				throw new ArgumentNullException("extends");
 
 			string path = extends
 #if SIMPLSHARP
@@ -42,6 +42,20 @@ namespace ICD.Common.Utils.Extensions
 			}
 
 			return IcdFile.Exists(path) ? path : null;
+		}
+
+		/// <summary>
+		/// Gets the creation date of the given assembly.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static DateTime GetCreationTime(this Assembly extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string path = extends.GetPath();
+			return path == null ? DateTime.MinValue : IcdFile.GetCreationTime(path);
 		}
 	}
 }

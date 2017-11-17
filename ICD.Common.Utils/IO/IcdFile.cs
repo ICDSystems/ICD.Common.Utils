@@ -77,5 +77,11 @@ namespace ICD.Common.Utils.IO
 		{
 			return new IcdFileStream(File.Open(path, mode));
 		}
+
+		[PublicAPI]
+		public static DateTime GetCreationTime(string path)
+		{
+			return File.GetCreationTime(path);
+		}
 	}
 }
