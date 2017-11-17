@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ICD.Common.Utils.Collections;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
 #else
@@ -10,6 +11,78 @@ namespace ICD.Common.Utils.Extensions
 {
 	public static class TypeExtensions
 	{
+		private static readonly IcdHashSet<Type> s_NumericTypes = new IcdHashSet<Type>
+		{
+			typeof(byte),
+			typeof(decimal),
+			typeof(double),
+			typeof(float),
+			typeof(int),
+			typeof(long),
+			typeof(sbyte),
+			typeof(short),
+			typeof(uint),
+			typeof(ulong),
+			typeof(ushort)
+		};
+
+		private static readonly IcdHashSet<Type> s_SignedNumericTypes = new IcdHashSet<Type>
+		{
+			typeof(decimal),
+			typeof(double),
+			typeof(float),
+			typeof(int),
+			typeof(long),
+			typeof(sbyte),
+			typeof(short),
+		};
+
+		private static readonly IcdHashSet<Type> s_DecimalNumericTypes = new IcdHashSet<Type>
+		{
+			typeof(decimal),
+			typeof(double),
+			typeof(float),
+		};
+
+		/// <summary>
+		/// Returns true if the given type is a numeric type.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static bool IsNumeric(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentException("extends");
+
+			return s_NumericTypes.Contains(extends);
+		}
+
+		/// <summary>
+		/// Returns true if the given type is a signed numeric type.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static bool IsSignedNumeric(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentException("extends");
+
+			return s_SignedNumericTypes.Contains(extends);
+		}
+
+		/// <summary>
+		/// Returns true if the given type is a non-integer numeric type.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static bool IsDecimalNumeric(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentException("extends");
+
+			return s_DecimalNumericTypes.Contains(extends);
+		}
+
 		public static Assembly GetAssembly(this Type extends)
 		{
 			if (extends == null)
@@ -68,7 +141,7 @@ namespace ICD.Common.Utils.Extensions
 			{
 				extends = extends
 #if !SIMPLSHARP
-                    .GetTypeInfo()
+					.GetTypeInfo()
 #endif
 					.BaseType;
 
