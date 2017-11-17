@@ -135,6 +135,21 @@ namespace ICD.Common.Services
 		/// <summary>
 		/// Registers a service instance to the type given.
 		/// </summary>
+		/// <typeparam name="TService"></typeparam>
+		/// <param name="service"></param>
+		[PublicAPI]
+		public static bool TryAddService<TService>(TService service)
+		{
+			// ReSharper disable once CompareNonConstrainedGenericWithNull
+			if (service == null)
+				throw new ArgumentNullException("service");
+
+			return TryAddService(typeof(TService), service);
+		}
+
+		/// <summary>
+		/// Registers a service instance to the type given.
+		/// </summary>
 		/// <param name="tService"></param>
 		/// <param name="service"></param>
 		[PublicAPI]
@@ -147,6 +162,23 @@ namespace ICD.Common.Services
 				throw new ArgumentNullException("service");
 
 			Instance.AddServiceInstance(tService, service);
+		}
+
+		/// <summary>
+		/// Registers a service instance to the type given.
+		/// </summary>
+		/// <param name="tService"></param>
+		/// <param name="service"></param>
+		[PublicAPI]
+		public static bool TryAddService(Type tService, object service)
+		{
+			if (tService == null)
+				throw new ArgumentNullException("tService");
+
+			if (service == null)
+				throw new ArgumentNullException("service");
+
+			return Instance.TryAddServiceInstance(tService, service);
 		}
 
 		/// <summary>
@@ -257,6 +289,37 @@ namespace ICD.Common.Services
 			{
 				m_ServicesSection.Leave();
 			}
+		}
+
+		/// <summary>
+		/// Adds the given service under the given type.
+		/// </summary>
+		/// <param name="tService"></param>
+		/// <param name="service"></param>
+		private bool TryAddServiceInstance(Type tService, object service)
+		{
+			if (tService == null)
+				throw new ArgumentNullException("tService");
+
+			if (service == null)
+				throw new ArgumentNullException("service");
+
+			try
+			{
+				m_ServicesSection.Enter();
+
+				if (m_Services.ContainsKey(tService))
+				{
+					return false;
+				}
+
+				m_Services.Add(tService, service);
+			}
+			finally
+			{
+				m_ServicesSection.Leave();
+			}
+			return true;
 		}
 
 		/// <summary>
