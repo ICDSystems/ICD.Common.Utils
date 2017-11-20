@@ -246,7 +246,7 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("extends");
 
 			string content = extends.ReadElementContentAsString();
-			return (byte)Convert.ToInt64(content, 16);
+			return StringUtils.FromIpIdString(content);
 		}
 
 		/// <summary>

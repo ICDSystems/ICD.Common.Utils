@@ -452,8 +452,17 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static byte FromIpIdString(string value)
 		{
-			value = value.Replace("0x", "");
-			return Convert.ToByte(value, 16);
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			try
+			{
+				return (byte)Convert.ToInt64(value, 16);
+			}
+			catch (ArgumentOutOfRangeException e)
+			{
+				throw new FormatException(e.Message, e);
+			}
 		}
 
 		/// <summary>
