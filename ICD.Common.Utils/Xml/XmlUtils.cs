@@ -401,7 +401,7 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="childElement"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		private static float? ReadChildElementContentAsFloat(string xml, string childElement)
+		public static float ReadChildElementContentAsFloat(string xml, string childElement)
 		{
 			string child = GetChildElementAsString(xml, childElement);
 			using (IcdXmlReader reader = new IcdXmlReader(child))
@@ -518,6 +518,10 @@ namespace ICD.Common.Utils.Xml
 			{
 				return ReadChildElementContentAsLong(xml, childElement);
 			}
+			catch (IcdXmlException)
+			{
+				return null;
+			}
 			catch (FormatException)
 			{
 				return null;
@@ -556,6 +560,10 @@ namespace ICD.Common.Utils.Xml
 			{
 				return ReadChildElementContentAsFloat(xml, childElement);
 			}
+			catch (IcdXmlException)
+			{
+				return null;
+			}
 			catch (FormatException)
 			{
 				return null;
@@ -593,6 +601,10 @@ namespace ICD.Common.Utils.Xml
 			try
 			{
 				return ReadChildElementContentAsByte(xml, childElement);
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				return null;
 			}
 			catch (FormatException)
 			{
