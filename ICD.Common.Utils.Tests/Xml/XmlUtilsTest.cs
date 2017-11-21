@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using ICD.Common.Properties;
@@ -28,6 +29,14 @@ namespace ICD.Common.Utils.Tests.Xml
 		                                     + "<Level2 />"
 		                                     + "<Level2 />"
 		                                     + "</Level1>";
+
+		[Flags]
+		public enum eTestEnum
+		{
+			A = 1,
+			B = 2,
+			C = 4
+		}
 
 		#region Attributes
 
@@ -185,5 +194,159 @@ namespace ICD.Common.Utils.Tests.Xml
 
 			Assert.AreEqual(expected, XmlUtils.Format(xml));
 		}
+
+		#region Read Child Element
+
+		[TestCase("<Test><Child>Test</Child></Test>", "Child", "Test")]
+		public void ReadChildElementContentAsStringTest(string xml, string childElement, string expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.ReadChildElementContentAsString(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", 1)]
+		public void ReadChildElementContentAsIntTest(string xml, string childElement, int expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.ReadChildElementContentAsInt(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", (uint)1)]
+		public void ReadChildElementContentAsUintTest(string xml, string childElement, uint expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.ReadChildElementContentAsUint(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", (long)1)]
+		public void ReadChildElementContentAsLongTest(string xml, string childElement, long expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.ReadChildElementContentAsLong(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", (ushort)1)]
+		public void ReadChildElementContentAsUShortTest(string xml, string childElement, ushort expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.ReadChildElementContentAsUShort(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", 1.0f)]
+		public void ReadChildElementContentAsFloatTest(string xml, string childElement, float expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.ReadChildElementContentAsFloat(xml, childElement), 0.001f);
+		}
+
+		[TestCase("<Test><Child>True</Child></Test>", "Child", true)]
+		[TestCase("<Test><Child>true</Child></Test>", "Child", true)]
+		[TestCase("<Test><Child>False</Child></Test>", "Child", false)]
+		[TestCase("<Test><Child>false</Child></Test>", "Child", false)]
+		public void ReadChildElementContentAsBooleanTest(string xml, string childElement, bool expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.ReadChildElementContentAsBoolean(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", (byte)1)]
+		[TestCase("<Test><Child>0x01</Child></Test>", "Child", (byte)1)]
+		[TestCase("<Test><Child>0X01</Child></Test>", "Child", (byte)1)]
+		public void ReadChildElementContentAsByteTest(string xml, string childElement, byte expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.ReadChildElementContentAsByte(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>A</Child></Test>", "Child", true, eTestEnum.A)]
+		[TestCase("<Test><Child>A, B</Child></Test>", "Child", true, eTestEnum.A | eTestEnum.B)]
+		public void ReadChildElementContentAsEnumTest<T>(string xml, string childElement, bool ignoreCase, T expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.ReadChildElementContentAsEnum<T>(xml, childElement, ignoreCase));
+		}
+
+		#endregion
+
+		#region Try Read Child Element
+
+		[TestCase("<Test><Child>Test</Child></Test>", "Child", "Test")]
+		[TestCase("<Test></Test>", "Child", null)]
+		public void TryReadChildElementContentAsStringTest(string xml, string childElement, string expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.TryReadChildElementContentAsString(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", 1)]
+		[TestCase("<Test><Child>fgfdgfd</Child></Test>", "Child", null)]
+		[TestCase("<Test></Test>", "Child", null)]
+		public void TryReadChildElementContentAsIntTest(string xml, string childElement, int? expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.TryReadChildElementContentAsInt(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", (long)1)]
+		[TestCase("<Test><Child>fgfdgfd</Child></Test>", "Child", null)]
+		[TestCase("<Test></Test>", "Child", null)]
+		public void TryReadChildElementContentAsLongTest(string xml, string childElement, long? expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.TryReadChildElementContentAsLong(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", (ushort)1)]
+		[TestCase("<Test><Child>fgfdgfd</Child></Test>", "Child", null)]
+		[TestCase("<Test></Test>", "Child", null)]
+		public void TryReadChildElementContentAsUShortTest(string xml, string childElement, ushort? expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.TryReadChildElementContentAsUShort(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", 1.0f)]
+		[TestCase("<Test><Child>fgfdgfd</Child></Test>", "Child", null)]
+		[TestCase("<Test></Test>", "Child", null)]
+		public void TryReadChildElementContentAsFloatTest(string xml, string childElement, float? expected)
+		{
+			float? result = XmlUtils.TryReadChildElementContentAsFloat(xml, childElement);
+
+			if (result == null)
+				Assert.AreEqual(expected, null);
+			else if (expected == null)
+				Assert.Fail();
+			else
+				Assert.AreEqual((float)expected, (float)result, 0.001f);
+		}
+
+		[TestCase("<Test><Child>True</Child></Test>", "Child", true)]
+		[TestCase("<Test><Child>true</Child></Test>", "Child", true)]
+		[TestCase("<Test><Child>False</Child></Test>", "Child", false)]
+		[TestCase("<Test><Child>false</Child></Test>", "Child", false)]
+		[TestCase("<Test><Child>fgfdgfd</Child></Test>", "Child", null)]
+		[TestCase("<Test></Test>", "Child", null)]
+		public void TryReadChildElementContentAsBooleanTest(string xml, string childElement, bool? expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.TryReadChildElementContentAsBoolean(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>1</Child></Test>", "Child", (byte)1)]
+		[TestCase("<Test><Child>0x01</Child></Test>", "Child", (byte)1)]
+		[TestCase("<Test><Child>0X01</Child></Test>", "Child", (byte)1)]
+		[TestCase("<Test><Child>fgfdgfd</Child></Test>", "Child", null)]
+		[TestCase("<Test></Test>", "Child", null)]
+		public void TryReadChildElementContentAsByteTest(string xml, string childElement, byte? expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.TryReadChildElementContentAsByte(xml, childElement));
+		}
+
+		[TestCase("<Test><Child>A</Child></Test>", "Child", true, eTestEnum.A)]
+		[TestCase("<Test><Child>A, B</Child></Test>", "Child", true, eTestEnum.A | eTestEnum.B)]
+		[TestCase("<Test><Child>fgfdgfd</Child></Test>", "Child", true, null)]
+		[TestCase("<Test></Test>", "Child", true, null)]
+		public void TryReadChildElementContentAsEnumTest(string xml, string childElement, bool ignoreCase, eTestEnum? expected)
+		{
+			Assert.AreEqual(expected, XmlUtils.TryReadChildElementContentAsEnum<eTestEnum>(xml, childElement, ignoreCase));
+		}
+
+		[TestCase("<Test><Child>A</Child></Test>", "Child", true, true)]
+		[TestCase("<Test><Child>A, B</Child></Test>", "Child", true, true)]
+		[TestCase("<Test><Child>fgfdgfd</Child></Test>", "Child", true, false)]
+		[TestCase("<Test></Test>", "Child", true, false)]
+		public void TryReadChildElementContentAsEnumTest(string xml, string childElement, bool ignoreCase, bool expected)
+		{
+			eTestEnum output;
+			Assert.AreEqual(expected, XmlUtils.TryReadChildElementContentAsEnum(xml, childElement, ignoreCase, out output));
+		}
+
+		#endregion
 	}
 }
