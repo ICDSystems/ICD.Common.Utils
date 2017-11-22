@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Services
 {
-	public sealed class ServiceProvider : IDisposable
+	public sealed class ServiceProvider
 	{
 		private static ServiceProvider s_Instance;
 
@@ -23,39 +24,6 @@ namespace ICD.Common.Services
 			m_Services = new Dictionary<Type, object>();
 			m_ServicesSection = new SafeCriticalSection();
 		}
-
-		#region IDisposable
-
-		/// <summary>
-		/// Release resources.
-		/// </summary>
-		public void Dispose()
-		{
-			try
-			{
-				m_ServicesSection.Enter();
-
-				foreach (IDisposable service in m_Services.Values.OfType<IDisposable>().Distinct().ToArray())
-					service.Dispose();
-				m_Services.Clear();
-			}
-			finally
-			{
-				m_ServicesSection.Leave();
-			}
-		}
-
-		/// <summary>
-		/// Release resources.
-		/// </summary>
-		public static void DisposeStatic()
-		{
-			if (s_Instance != null)
-				s_Instance.Dispose();
-			s_Instance = null;
-		}
-
-		#endregion
 
 		#region Methods
 
@@ -86,6 +54,15 @@ namespace ICD.Common.Services
 				throw new ArgumentNullException("tService");
 
 			return Instance.GetServiceInstance(tService);
+		}
+
+		/// <summary>
+		/// Retrieves the registered services.
+		/// </summary>
+		/// <returns></returns>
+		public static IEnumerable<object> GetServices()
+		{
+			return Instance.GetServicesInstance();
 		}
 
 		/// <summary>
@@ -182,6 +159,20 @@ namespace ICD.Common.Services
 		}
 
 		/// <summary>
+		/// Attempts to remove the given service from every registered type.
+		/// </summary>
+		/// <param name="service"></param>
+		[PublicAPI]
+		public static void RemoveAllServices(object service)
+		{
+			// ReSharper disable once CompareNonConstrainedGenericWithNull
+			if (service == null)
+				throw new ArgumentNullException("service");
+
+			Instance.RemoveAllServicesInstance(service);
+		}
+
+		/// <summary>
 		/// Attempts to remove the given service from the given type.
 		/// </summary>
 		/// <typeparam name="TService"></typeparam>
@@ -258,6 +249,15 @@ namespace ICD.Common.Services
 				return service;
 
 			throw new ServiceNotFoundException(tService);
+		}
+
+		/// <summary>
+		/// Gets the registered services.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<object> GetServicesInstance()
+		{
+			return m_ServicesSection.Execute(() => m_Services.Values.ToList());
 		}
 
 		/// <summary>
@@ -348,6 +348,18 @@ namespace ICD.Common.Services
 			{
 				m_ServicesSection.Leave();
 			}
+		}
+
+		/// <summary>
+		/// Removes the given service from all registered types.
+		/// </summary>
+		/// <param name="service"></param>
+		private void RemoveAllServicesInstance(object service)
+		{
+			if (service == null)
+				throw new ArgumentNullException("service");
+
+			m_ServicesSection.Execute(() => m_Services.RemoveAllValues(service));
 		}
 
 		#endregion
