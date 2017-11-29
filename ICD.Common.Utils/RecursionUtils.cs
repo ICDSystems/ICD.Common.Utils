@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Collections;
 
 namespace ICD.Common.Utils
 {
@@ -103,11 +104,21 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		private static IEnumerable<T> GetPath<T>(T start, IDictionary<T, T> nodeParents)
 		{
+			IcdHashSet<T> visited = new IcdHashSet<T>();
+
 			while (true)
 			{
 				yield return start;
-				if (!nodeParents.TryGetValue(start, out start))
+				visited.Add(start);
+
+				T next;
+				if (!nodeParents.TryGetValue(start, out next))
 					break;
+
+				if (visited.Contains(next))
+					break;
+
+				start = next;
 			}
 		}
 	}
