@@ -3,8 +3,8 @@
 namespace ICD.Common.Utils.Tests.Json
 {
 	[TestFixture]
-    public sealed class JsonUtilsTest
-    {
+	public sealed class JsonUtilsTest
+	{
 		[Test]
 		public void CacheTypeTest()
 		{

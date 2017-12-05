@@ -20,7 +20,7 @@ namespace ICD.Common.Utils.Json
 		private const string DATE_FORMAT = @"yyyy-MM-dd\THH:mm:ss";
 
 		private const string MESSAGE_NAME_PROPERTY = "m";
-		private const string MESSAGE_DATA_PROPERTY = "d"; 
+		private const string MESSAGE_DATA_PROPERTY = "d";
 
 		/// <summary>
 		/// Forces Newtonsoft to cache the given type for faster subsequent usage.
@@ -197,10 +197,10 @@ namespace ICD.Common.Utils.Json
 			                 {
 				                 w.WriteStartObject();
 				                 {
-									 w.WritePropertyName(MESSAGE_NAME_PROPERTY);
-									 w.WriteValue(messageName);
+					                 w.WritePropertyName(MESSAGE_NAME_PROPERTY);
+					                 w.WriteValue(messageName);
 
-									 w.WritePropertyName(MESSAGE_DATA_PROPERTY);
+					                 w.WritePropertyName(MESSAGE_DATA_PROPERTY);
 					                 serializeMethod(w);
 				                 }
 				                 w.WriteEndObject();
