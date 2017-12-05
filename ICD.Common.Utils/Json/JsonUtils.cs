@@ -206,5 +206,59 @@ namespace ICD.Common.Utils.Json
 				                 w.WriteEndObject();
 			                 });
 		}
+
+		/// <summary>
+		/// Deserializes a json object wrapped in a json message structure.
+		/// E.g.
+		/// { a = 1 }
+		/// Becomes
+		/// { m = "Test", d = { a = 1 } }
+		/// </summary>
+		/// <param name="deserializeMethod"></param>
+		/// <param name="json"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static T DeserializeMessage<T>(Func<JsonReader, string, T> deserializeMethod, string json)
+		{
+			if (deserializeMethod == null)
+				throw new ArgumentNullException("deserializeMethod");
+
+			return Deserialize(r =>
+			                   {
+				                   T output = default(T);
+				                   string messageName = null;
+
+				                   while (r.Read())
+				                   {
+					                   if (r.TokenType == JsonToken.EndObject)
+					                   {
+						                   r.Read();
+						                   break;
+					                   }
+
+					                   if (r.TokenType != JsonToken.PropertyName)
+						                   continue;
+
+					                   string property = r.Value as string;
+
+					                   // Read to the value
+					                   r.Read();
+
+					                   switch (property)
+					                   {
+						                   case MESSAGE_NAME_PROPERTY:
+							                   messageName = r.GetValueAsString();
+							                   break;
+
+						                   case MESSAGE_DATA_PROPERTY:
+							                   output = deserializeMethod(r, messageName);
+							                   break;
+					                   }
+				                   }
+
+				                   return output;
+			                   },
+			                   json);
+		}
 	}
 }
