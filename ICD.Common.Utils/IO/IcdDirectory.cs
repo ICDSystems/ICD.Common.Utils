@@ -16,7 +16,6 @@ namespace ICD.Common.Utils.IO
 			return Directory.GetApplicationDirectory();
 #else
 			return ApplicationEnvironment.ApplicationBasePath;
-            return Directory.GetCurrentDirectory();
 #endif
 		}
 
