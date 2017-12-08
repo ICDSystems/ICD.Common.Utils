@@ -233,16 +233,32 @@ namespace ICD.Common.Utils.Extensions
 			if (match == null)
 				throw new ArgumentNullException("match");
 
+			return extends.FindIndices(match).FirstOrDefault(-1);
+		}
+
+		/// <summary>
+		/// Returns the indices that match the predicate.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="match"></param>
+		/// <returns></returns>
+		public static IEnumerable<int> FindIndices<T>(this IEnumerable<T> extends, Predicate<T> match)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (match == null)
+				throw new ArgumentNullException("match");
+
 			int index = 0;
 
 			foreach (T item in extends)
 			{
 				if (match(item))
-					return index;
+					yield return index;
 				index++;
 			}
-
-			return -1;
 		}
 
 		/// <summary>
@@ -581,6 +597,18 @@ namespace ICD.Common.Utils.Extensions
 				first = false;
 				previous = item;
 			}
+		}
+
+		/// <summary>
+		/// Gets the item from the sequence with the smallest calculated delta.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="getDelta"></param>
+		/// <returns></returns>
+		public static T GetClosest<T>(this IEnumerable<T> extends, Func<T, int> getDelta)
+		{
+			return extends.MinBy(n => Math.Abs(getDelta(n)));
 		}
 
 		/// <summary>
