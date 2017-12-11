@@ -77,9 +77,9 @@ namespace ICD.Common.Utils.Tests.Timers
 			int called = 0;
 			SafeTimer timer = SafeTimer.Stopped(() => called++);
 
-			timer.Reset(10, 10);
+			timer.Reset(100, 100);
 
-			ThreadingUtils.Sleep(50);
+			ThreadingUtils.Sleep(500);
 
 			Assert.AreEqual(4, called, 2);
 

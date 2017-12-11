@@ -20,7 +20,7 @@ namespace ICD.Common.Utils.Tests
 				                          complete = true;
 			                          });
 
-			Assert.IsTrue(ThreadingUtils.Wait(() => complete, 100));
+			Assert.IsTrue(ThreadingUtils.Wait(() => complete, 200));
 		}
 
 		[Test]
