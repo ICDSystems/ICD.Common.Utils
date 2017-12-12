@@ -6,8 +6,8 @@ using System.Linq;
 namespace ICD.Common.Utils.Tests
 {
 	[TestFixture]
-    public sealed class RecursionUtilsTest
-    {
+	public sealed class RecursionUtilsTest
+	{
 		private IEnumerable<int> Graph(int node)
 		{
 			switch (node)
@@ -41,7 +41,7 @@ namespace ICD.Common.Utils.Tests
 		}
 
 		[Test]
-		public void BreadthFirstSearchPath()
+		public void BreadthFirstSearchPathTest()
 		{
 			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearchPath(1, 4, null).ToArray());
 
@@ -55,6 +55,18 @@ namespace ICD.Common.Utils.Tests
 			IEnumerable<int> noPath = RecursionUtils.BreadthFirstSearchPath(3, 4, Graph);
 
 			Assert.IsNull(noPath);
+		}
+
+		/// <summary>
+		/// Test to ensure that when start and end node are the same, breadth first search returns that single node.
+		/// </summary>
+		[Test]
+		public void BreadthFirstSearchPathSingleNodeTest()
+		{
+			int[] path = RecursionUtils.BreadthFirstSearchPath(1, 1, Graph).ToArray();
+
+			Assert.AreEqual(1, path.Length);
+			Assert.AreEqual(1, path[0]);
 		}
 	}
 }

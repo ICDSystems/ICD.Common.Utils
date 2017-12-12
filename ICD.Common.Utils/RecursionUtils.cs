@@ -69,6 +69,10 @@ namespace ICD.Common.Utils
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
 
+			// Edge case - root and destination are the same
+			if (comparer.Equals(root, destination))
+				return new[] {root};
+
 			Queue<T> queue = new Queue<T>();
 			queue.Enqueue(root);
 
