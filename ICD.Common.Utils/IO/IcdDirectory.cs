@@ -35,6 +35,13 @@ namespace ICD.Common.Utils.IO
 			return Directory.GetFiles(path);
 		}
 
+	    public static string[] GetFiles(string path, string filter)
+	    {
+	        if(path == null)
+                throw new ArgumentException("path");
+	        return Directory.GetFiles(path, filter);
+	    }
+
 		public static string[] GetDirectories(string path)
 		{
 			if (path == null)
