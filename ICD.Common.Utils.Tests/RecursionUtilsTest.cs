@@ -6,8 +6,8 @@ using System.Linq;
 namespace ICD.Common.Utils.Tests
 {
 	[TestFixture]
-    public sealed class RecursionUtilsTest
-    {
+	public sealed class RecursionUtilsTest
+	{
 		private IEnumerable<int> Graph(int node)
 		{
 			switch (node)
@@ -41,7 +41,7 @@ namespace ICD.Common.Utils.Tests
 		}
 
 		[Test]
-		public void BreadthFirstSearchPath()
+		public void BreadthFirstSearchPathTest()
 		{
 			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearchPath(1, 4, null).ToArray());
 
