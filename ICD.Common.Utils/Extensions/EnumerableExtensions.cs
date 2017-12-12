@@ -95,6 +95,55 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns true if there is at least 1 item in the sequence.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="item">Outputs the last item in the sequence.</param>
+		/// <returns></returns>
+		public static bool TryLast<T>(this IEnumerable<T> extends, out T item)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.TryLast(i => true, out item);
+		}
+
+		/// <summary>
+		/// Returns true if there is at least 1 item in the sequence.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="predicate"></param>
+		/// <param name="item">Outputs the last item in the sequence.</param>
+		/// <returns></returns>
+		public static bool TryLast<T>(this IEnumerable<T> extends, Func<T, bool> predicate, out T item)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (predicate == null)
+				throw new ArgumentNullException("predicate");
+
+			item = default(T);
+			bool output = false;
+
+			using (IEnumerator<T> iterator = extends.GetEnumerator())
+			{
+				while (iterator.MoveNext())
+				{
+					if (!predicate(iterator.Current))
+						continue;
+
+					item = iterator.Current;
+					output = true;
+				}
+			}
+
+			return output;
+		}
+
+		/// <summary>
 		/// Returns the true if an element with the given index is in the sequence.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>

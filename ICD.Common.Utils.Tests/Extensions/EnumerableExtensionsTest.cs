@@ -3,7 +3,6 @@ using ICD.Common.Utils.Extensions;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace ICD.Common.Utils.Tests.Extensions
 {
@@ -57,6 +56,41 @@ namespace ICD.Common.Utils.Tests.Extensions
 
 			sequence = new[] {expected};
 			exists = sequence.TryFirst(i => i == expected, out result);
+
+			Assert.AreEqual(expected, result);
+			Assert.AreEqual(true, exists);
+		}
+
+		[TestCase(1)]
+		public void TryLastTest(int expected)
+		{
+			IEnumerable<int> sequence = Enumerable.Empty<int>();
+			int result;
+			bool exists = sequence.TryLast(out result);
+
+			Assert.AreEqual(0, result);
+			Assert.AreEqual(false, exists);
+
+			sequence = new[] { expected };
+			exists = sequence.TryLast(out result);
+
+			Assert.AreEqual(expected, result);
+			Assert.AreEqual(true, exists);
+		}
+
+		[TestCase(0)]
+		[TestCase(1)]
+		public void TryLastPredicateTest(int expected)
+		{
+			IEnumerable<int> sequence = Enumerable.Range(1, 10).Except(expected);
+			int result;
+			bool exists = sequence.TryLast(i => i == expected, out result);
+
+			Assert.AreEqual(0, result);
+			Assert.AreEqual(false, exists);
+
+			sequence = new[] { expected };
+			exists = sequence.TryLast(i => i == expected, out result);
 
 			Assert.AreEqual(expected, result);
 			Assert.AreEqual(true, exists);
