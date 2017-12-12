@@ -56,5 +56,17 @@ namespace ICD.Common.Utils.Tests
 
 			Assert.IsNull(noPath);
 		}
+
+		/// <summary>
+		/// Test to ensure that when start and end node are the same, breadth first search returns that single node.
+		/// </summary>
+		[Test]
+		public void BreadthFirstSearchPathSingleNodeTest()
+		{
+			int[] path = RecursionUtils.BreadthFirstSearchPath(1, 1, Graph).ToArray();
+
+			Assert.AreEqual(1, path.Length);
+			Assert.AreEqual(1, path[0]);
+		}
 	}
 }
