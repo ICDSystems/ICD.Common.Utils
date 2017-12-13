@@ -505,6 +505,49 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Optimized ToArray implementation with fewer allocations.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="count"></param>
+		/// <returns></returns>
+		public static T[] ToArray<T>(this IEnumerable<T> extends, int count)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (count < 0)
+				throw new ArgumentOutOfRangeException("count");
+
+			T[] array = new T[count];
+			int i = 0;
+
+			foreach (T item in extends)
+				array[i++] = item;
+			return array;
+		}
+
+		/// <summary>
+		/// Optimized ToList implementation with fewer allocations.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="count"></param>
+		/// <returns></returns>
+		public static List<T> ToList<T>(this IEnumerable<T> extends, int count)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (count < 0)
+				throw new ArgumentOutOfRangeException("count");
+
+			List<T> list = new List<T>(count);
+			list.AddRange(extends);
+			return list;
+		}
+
+		/// <summary>
 		/// Returns the sequence as an index:value dictionary.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>

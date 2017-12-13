@@ -289,6 +289,24 @@ namespace ICD.Common.Utils.Tests.Extensions
 		}
 
 		[Test]
+		public void ToArrayCountTest()
+		{
+			int[] array = Enumerable.Range(0, 100).ToArray();
+			int[] copy = array.ToArray(array.Length);
+
+			Assert.IsTrue(copy.SequenceEqual(array));
+		}
+
+		[Test]
+		public void ToListCountTest()
+		{
+			List<int> array = Enumerable.Range(0, 100).ToList();
+			List<int> copy = array.ToList(array.Count);
+
+			Assert.IsTrue(copy.SequenceEqual(array));
+		}
+
+		[Test]
 		public void ToHashSetTest()
 		{
 			IcdHashSet<int> values = (new[] {1, 2, 3}).ToHashSet();
