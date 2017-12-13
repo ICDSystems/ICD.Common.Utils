@@ -25,11 +25,7 @@ namespace ICD.Common.Utils
         [PublicAPI]
         public static string ProgramPath
         {
-            get
-            {
-                string directoryName = string.Format("Program{0}", ProgramUtils.ProgramNumber);
-                return Join(RootPath, directoryName);
-            }
+            get { return IcdDirectory.GetApplicationDirectory(); }
         }
 
         /// <summary>
