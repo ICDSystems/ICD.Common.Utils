@@ -475,6 +475,21 @@ namespace ICD.Common.Utils
 			return text == null ? null : new string(text.Where(c => !Char.IsWhiteSpace(c)).ToArray());
 		}
 
+        /// <summary>
+        /// Returns true if the string is entirely whitespace characters, or empty, or null.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+	    public static bool IsNullOrWhitespace(string text)
+	    {
+            if (string.IsNullOrEmpty(text))
+            {
+                return true;
+            }
+	        var trimmed = text.Trim();
+	        return trimmed.Length == 0;
+	    }
+
 		/// <summary>
 		/// Returns the password as a series of *s
 		/// </summary>
