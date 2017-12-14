@@ -78,5 +78,18 @@ namespace ICD.Common.Utils.Tests
 		{
 			Assert.AreEqual(0x67, StringUtils.FromIpIdString("0x67"));
 		}
+
+		[UsedImplicitly]
+		[TestCase(null, true)]
+		[TestCase("", true)]
+		[TestCase("\n", true)]
+		[TestCase("\r", true)]
+		[TestCase("Test", false)]
+		[TestCase("Test\n", false)]
+		[TestCase("\nTest", false)]
+		public void IsNullOrWhitespaceTest(string value, bool expectedResult)
+		{
+			Assert.AreEqual(StringUtils.IsNullOrWhitespace(value), expectedResult);
+		}
 	}
 }
