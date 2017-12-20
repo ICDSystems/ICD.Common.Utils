@@ -33,11 +33,14 @@ namespace ICD.Common.Utils.Tests.Timers
 		{
 			bool called = false;
 			SafeTimer timer = SafeTimer.Stopped(() => called = true);
+
+			ThreadingUtils.Sleep(200);
+			Assert.IsFalse(called);
+
 			timer.Reset(100);
 			timer.Stop();
 
 			ThreadingUtils.Sleep(200);
-
 			Assert.IsFalse(called);
 
 			timer.Dispose();
