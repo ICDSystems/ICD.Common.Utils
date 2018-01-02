@@ -144,14 +144,10 @@ namespace ICD.Common.Utils
 			}
 
 			foreach (T destination in destinationsProcessed)
-			{
 				destinationsToBeProcessed.RemoveValue(destination);
-			}
 			destinationsProcessed.Clear();
 			if (destinationsToBeProcessed.Count == 0)
-			{
 				return pathsToReturn;
-			}
 
 			Queue<T> queue = new Queue<T>();
 			queue.Enqueue(root);
@@ -167,9 +163,10 @@ namespace ICD.Common.Utils
 					queue.Enqueue(node);
 					nodeParents.Add(node, current);
 
+					T closureNode = node;
 					foreach (
 						KeyValuePair<T2, T> destination in
-							destinationsToBeProcessed.Where(destination => comparer.Equals(node, destination.Value)))
+							destinationsToBeProcessed.Where(destination => comparer.Equals(closureNode, destination.Value)))
 					{
 						destinationsProcessed.Add(destination.Value);
 						pathsToReturn.Add(destination.Key, GetPath(destination.Value, nodeParents).Reverse());
