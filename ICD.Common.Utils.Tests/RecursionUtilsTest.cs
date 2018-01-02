@@ -8,7 +8,7 @@ namespace ICD.Common.Utils.Tests
 	[TestFixture]
 	public sealed class RecursionUtilsTest
 	{
-		private IEnumerable<int> Graph(int node)
+		private static IEnumerable<int> Graph(int node)
 		{
 			switch (node)
 			{
@@ -29,6 +29,7 @@ namespace ICD.Common.Utils.Tests
 		[Test]
 		public void BreadthFirstSearchTest()
 		{
+			// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
 			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearch(1, null).ToArray());
 
 			int[] nodes = RecursionUtils.BreadthFirstSearch(1, Graph).ToArray();
@@ -43,8 +44,11 @@ namespace ICD.Common.Utils.Tests
 		[Test]
 		public void BreadthFirstSearchPathTest()
 		{
-			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearchPath(1, 4, null).ToArray());
+			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearchPath(1, 4, null));
 
+			Assert.IsNull(RecursionUtils.BreadthFirstSearchPath(1, 5, Graph));
+
+			// ReSharper disable once AssignNullToNotNullAttribute
 			int[] path = RecursionUtils.BreadthFirstSearchPath(1, 4, Graph).ToArray();
 
 			Assert.AreEqual(3, path.Length);
@@ -63,6 +67,7 @@ namespace ICD.Common.Utils.Tests
 		[Test]
 		public void BreadthFirstSearchPathSingleNodeTest()
 		{
+			// ReSharper disable once AssignNullToNotNullAttribute
 			int[] path = RecursionUtils.BreadthFirstSearchPath(1, 1, Graph).ToArray();
 
 			Assert.AreEqual(1, path.Length);

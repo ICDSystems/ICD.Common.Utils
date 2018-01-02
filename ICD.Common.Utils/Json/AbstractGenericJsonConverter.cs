@@ -12,7 +12,7 @@ namespace ICD.Common.Utils.Json
 		/// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter"/> to write to.</param>
 		/// <param name="value">The value.</param>
 		/// <param name="serializer">The calling serializer.</param>
-		public override sealed void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+		public sealed override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 		{
 			if (value == null)
 			{
@@ -42,7 +42,7 @@ namespace ICD.Common.Utils.Json
 		/// <returns>
 		/// The object value.
 		/// </returns>
-		public override sealed object ReadJson(JsonReader reader, Type objectType, object existingValue,
+		public sealed override object ReadJson(JsonReader reader, Type objectType, object existingValue,
 		                                       JsonSerializer serializer)
 		{
 			if (reader.TokenType == JsonToken.Null)
