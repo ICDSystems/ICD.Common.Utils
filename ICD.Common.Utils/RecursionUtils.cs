@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Collections;
-using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils
 {
@@ -101,10 +100,10 @@ namespace ICD.Common.Utils
 		}
 
 		[NotNull]
-		public static Dictionary<T2, IEnumerable<T>> BreadthFirstSearchManyDestinations<T, T2>(T root,
-		                                                                                       Dictionary<T2, T> destinations,
-		                                                                                       Func<T, IEnumerable<T>>
-			                                                                                       getChildren)
+		public static Dictionary<T, IEnumerable<T>> BreadthFirstSearchManyDestinations<T>(T root,
+		                                                                                  IEnumerable<T> destinations,
+		                                                                                  Func<T, IEnumerable<T>>
+			                                                                                  getChildren)
 		{
 			if (getChildren == null)
 				throw new ArgumentNullException("getChildren");
@@ -113,13 +112,13 @@ namespace ICD.Common.Utils
 		}
 
 		[NotNull]
-		public static Dictionary<T2, IEnumerable<T>> BreadthFirstSearchPathManyDestinations<T, T2>(T root,
-		                                                                                           Dictionary<T2, T>
-			                                                                                           destinations,
-		                                                                                           Func<T, IEnumerable<T>>
-			                                                                                           getChildren,
-		                                                                                           IEqualityComparer<T>
-			                                                                                           comparer)
+		public static Dictionary<T, IEnumerable<T>> BreadthFirstSearchPathManyDestinations<T>(T root,
+		                                                                                      IEnumerable<T>
+			                                                                                      destinations,
+		                                                                                      Func<T, IEnumerable<T>>
+			                                                                                      getChildren,
+		                                                                                      IEqualityComparer<T>
+			                                                                                      comparer)
 		{
 			if (destinations == null)
 				throw new ArgumentNullException("destinations");
@@ -130,21 +129,20 @@ namespace ICD.Common.Utils
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
 
-			Dictionary<T2, T> destinationsToBeProcessed = new Dictionary<T2, T>(destinations);
-			List<T> destinationsProcessed = new List<T>();
-			Dictionary<T2, IEnumerable<T>> pathsToReturn = new Dictionary<T2, IEnumerable<T>>();
+			IcdHashSet<T> destinationsToBeProcessed = new IcdHashSet<T>(destinations);
+			IcdHashSet<T> destinationsProcessed = new IcdHashSet<T>();
+			Dictionary<T, IEnumerable<T>> pathsToReturn = new Dictionary<T, IEnumerable<T>>();
 
 			// Edge case, root is the destination
-			foreach (
-				KeyValuePair<T2, T> destination in
-					destinationsToBeProcessed.Where(destination => comparer.Equals(root, destination.Value)))
+			foreach (T destination in
+					destinationsToBeProcessed.Where(destination => comparer.Equals(root, destination)))
 			{
-				destinationsProcessed.Add(destination.Value);
-				pathsToReturn.Add(destination.Key, new[] {root});
+				destinationsProcessed.Add(destination);
+				pathsToReturn.Add(destination, new[] {root});
 			}
 
 			foreach (T destination in destinationsProcessed)
-				destinationsToBeProcessed.RemoveValue(destination);
+				destinationsToBeProcessed.Remove(destination);
 			destinationsProcessed.Clear();
 			if (destinationsToBeProcessed.Count == 0)
 				return pathsToReturn;
@@ -164,16 +162,15 @@ namespace ICD.Common.Utils
 					nodeParents.Add(node, current);
 
 					T closureNode = node;
-					foreach (
-						KeyValuePair<T2, T> destination in
-							destinationsToBeProcessed.Where(destination => comparer.Equals(closureNode, destination.Value)))
+					foreach (T destination in
+							destinationsToBeProcessed.Where(destination => comparer.Equals(closureNode, destination)))
 					{
-						destinationsProcessed.Add(destination.Value);
-						pathsToReturn.Add(destination.Key, GetPath(destination.Value, nodeParents).Reverse());
+						destinationsProcessed.Add(destination);
+						pathsToReturn.Add(destination, GetPath(destination, nodeParents).Reverse());
 					}
 
 					foreach (T destination in destinationsProcessed)
-						destinationsToBeProcessed.RemoveValue(destination);
+						destinationsToBeProcessed.Remove(destination);
 
 					destinationsProcessed.Clear();
 
