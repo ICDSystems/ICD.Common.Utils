@@ -18,7 +18,7 @@ namespace ICD.Common.Utils.Timers
 		private readonly CTimer m_Timer;
 #else
         private readonly Timer m_Timer;
-        private int m_DueTime, m_RepeatPeriod;
+        private int m_RepeatPeriod;
 #endif
 		private readonly Action m_Callback;
 
@@ -55,9 +55,8 @@ namespace ICD.Common.Utils.Timers
 #if SIMPLSHARP
 			m_Timer = new CTimer(SafeCallback, null, dueTime, repeatPeriod);
 #else
-            m_DueTime = (int)dueTime;
             m_RepeatPeriod = (int)repeatPeriod;
-            m_Timer = new Timer(SafeCallback, null, m_DueTime, m_RepeatPeriod);
+            m_Timer = new Timer(SafeCallback, null, (int)dueTime, m_RepeatPeriod);
 #endif
 		}
 
@@ -122,8 +121,7 @@ namespace ICD.Common.Utils.Timers
 #if SIMPLSHARP
 			m_Timer.Reset(dueTime);
 #else
-            m_DueTime = (int)dueTime;
-            m_Timer.Change(m_DueTime, m_RepeatPeriod);
+            m_Timer.Change((int)dueTime, m_RepeatPeriod);
 #endif
 		}
 
@@ -137,9 +135,8 @@ namespace ICD.Common.Utils.Timers
 #if SIMPLSHARP
 			m_Timer.Reset(dueTime, repeatPeriod);
 #else
-            m_DueTime = (int)dueTime;
             m_RepeatPeriod = (int)repeatPeriod;
-            m_Timer.Change(m_DueTime, m_RepeatPeriod);
+            m_Timer.Change((int)dueTime, m_RepeatPeriod);
 #endif
 		}
 
