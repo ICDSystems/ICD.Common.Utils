@@ -92,7 +92,7 @@ namespace ICD.Common.Utils
 
 					// Found a path to the destination
 					if (comparer.Equals(node, destination))
-						return GetPath(destination, nodeParents).Reverse();
+						return GetPath(destination, root, nodeParents, comparer).Reverse();
 				}
 			}
 
@@ -166,7 +166,7 @@ namespace ICD.Common.Utils
 							destinationsToBeProcessed.Where(destination => comparer.Equals(closureNode, destination)))
 					{
 						destinationsProcessed.Add(destination);
-						pathsToReturn.Add(destination, GetPath(destination, nodeParents).Reverse());
+						pathsToReturn.Add(destination, GetPath(destination, root, nodeParents, comparer).Reverse().ToArray());
 					}
 
 					foreach (T destination in destinationsProcessed)
@@ -187,15 +187,20 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="start"></param>
+		/// /// <param name="end"></param>
 		/// <param name="nodeParents"></param>
 		/// <returns></returns>
-		private static IEnumerable<T> GetPath<T>(T start, IDictionary<T, T> nodeParents)
+		private static IEnumerable<T> GetPath<T>(T start, T end, IDictionary<T, T> nodeParents, IEqualityComparer<T> comparer)
 		{
 			IcdHashSet<T> visited = new IcdHashSet<T>();
 
 			while (true)
 			{
 				yield return start;
+
+				if (comparer.Equals(start, end))
+					break;
+
 				visited.Add(start);
 
 				T next;
