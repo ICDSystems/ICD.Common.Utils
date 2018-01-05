@@ -166,7 +166,7 @@ namespace ICD.Common.Utils
 							destinationsToBeProcessed.Where(destination => comparer.Equals(closureNode, destination)))
 					{
 						destinationsProcessed.Add(destination);
-						pathsToReturn.Add(destination, GetPath(destination, root, nodeParents, comparer).Reverse().ToArray());
+						pathsToReturn.Add(destination, GetPath(destination, root, nodeParents, comparer).Reverse());
 					}
 
 					foreach (T destination in destinationsProcessed)
