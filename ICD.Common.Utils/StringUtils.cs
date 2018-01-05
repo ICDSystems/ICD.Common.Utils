@@ -192,6 +192,54 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Attempts to parse the string as a short integer.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryParse(string value, out short result)
+		{
+			return TryConvert(Convert.ToInt16, value, out result);
+		}
+
+		/// <summary>
+		/// Attempts to parse the string as an unsigned short integer.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryParse(string value, out ushort result)
+		{
+			return TryConvert(Convert.ToUInt16, value, out result);
+		}
+
+		/// <summary>
+		/// Attempts to parse the string as a long integer.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryParse(string value, out long result)
+		{
+			return TryConvert(Convert.ToInt64, value, out result);
+		}
+
+		/// <summary>
+		/// Attempts to parse the string as an unsigned long integer.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryParse(string value, out ulong result)
+		{
+			return TryConvert(Convert.ToUInt64, value, out result);
+		}
+
+		/// <summary>
 		/// Attempts to parse the string as a float.
 		/// </summary>
 		/// <param name="value"></param>
