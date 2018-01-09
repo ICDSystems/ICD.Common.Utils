@@ -309,7 +309,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void ToHashSetTest()
 		{
-			IcdHashSet<int> values = EnumerableExtensions.ToHashSet(new[] {1, 2, 3});
+			IcdHashSet<int> values = new[] {1, 2, 3}.ToIcdHashSet();
 
 			Assert.AreEqual(3, values.Count);
 			Assert.IsTrue(values.Contains(1));

@@ -118,7 +118,7 @@ namespace ICD.Common.Utils.Attributes.Rpc
 							            BindingFlags.Instance)
 							.Where(m => ReflectionExtensions.GetCustomAttributes<RpcAttribute>(m, true)
 							                                .Any(a => a.m_Key == key))
-							.ToHashSet();
+							.ToIcdHashSet();
 				}
 
 				return s_MethodCache[clientType][key];
@@ -161,7 +161,7 @@ namespace ICD.Common.Utils.Attributes.Rpc
 							               BindingFlags.Instance)
 							.Where(p => p.CanWrite && ReflectionExtensions.GetCustomAttributes<RpcAttribute>(p, true)
 							                                              .Any(a => a.m_Key == key))
-							.ToHashSet();
+							.ToIcdHashSet();
 				}
 
 				return s_PropertyCache[clientType][key];
