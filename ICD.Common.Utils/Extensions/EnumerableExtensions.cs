@@ -496,7 +496,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static IcdHashSet<T> ToHashSet<T>(this IEnumerable<T> extends)
+		public static IcdHashSet<T> ToIcdHashSet<T>(this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

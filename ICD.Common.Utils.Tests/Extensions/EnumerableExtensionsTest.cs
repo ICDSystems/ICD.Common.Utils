@@ -234,7 +234,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void PrependManyTest()
 		{
-			int[] values = (new[] {4, 5, 6}).PrependMany(1, 2, 3).ToArray();
+			int[] values = new[] {4, 5, 6}.PrependMany(1, 2, 3).ToArray();
 
 			Assert.AreEqual(6, values.Length);
 			Assert.AreEqual(1, values[0]);
@@ -256,7 +256,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void AppendManyTest()
 		{
-			int[] values = (new[] {1, 2, 3}).AppendMany(4, 5, 6).ToArray();
+			int[] values = new[] {1, 2, 3}.AppendMany(4, 5, 6).ToArray();
 
 			Assert.AreEqual(6, values.Length);
 			Assert.AreEqual(1, values[0]);
@@ -270,7 +270,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void OrderTest()
 		{
-			int[] values = (new[] {2, 3, 1}).Order().ToArray();
+			int[] values = new[] {2, 3, 1}.Order().ToArray();
 
 			Assert.AreEqual(3, values.Length);
 			Assert.AreEqual(1, values[0]);
@@ -281,7 +281,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void ExceptTest()
 		{
-			int[] values = (new[] {1, 2, 3}).Except(2).ToArray();
+			int[] values = new[] {1, 2, 3}.Except(2).ToArray();
 
 			Assert.AreEqual(2, values.Length);
 			Assert.AreEqual(1, values[0]);
@@ -309,7 +309,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void ToHashSetTest()
 		{
-			IcdHashSet<int> values = EnumerableExtensions.ToHashSet(new[] {1, 2, 3});
+			IcdHashSet<int> values = new[] {1, 2, 3}.ToIcdHashSet();
 
 			Assert.AreEqual(3, values.Count);
 			Assert.IsTrue(values.Contains(1));
@@ -320,7 +320,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void ToDictionaryIntTest()
 		{
-			Dictionary<int, int> values = (new[] {1, 2, 3}).ToDictionary();
+			Dictionary<int, int> values = new[] {1, 2, 3}.ToDictionary();
 
 			Assert.AreEqual(3, values.Count);
 			Assert.AreEqual(1, values[0]);
@@ -331,7 +331,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void ToDictionaryUIntTest()
 		{
-			Dictionary<uint, int> values = (new[] {1, 2, 3}).ToDictionaryUInt();
+			Dictionary<uint, int> values = new[] {1, 2, 3}.ToDictionaryUInt();
 
 			Assert.AreEqual(3, values.Count);
 			Assert.AreEqual(1, values[0]);
@@ -360,24 +360,24 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void UnanimousTest()
 		{
-			Assert.IsTrue((new[] {true, true, true}).Unanimous());
-			Assert.IsTrue((new[] {false, false, false}).Unanimous());
-			Assert.IsFalse((new[] {false, true, false}).Unanimous());
-			Assert.IsFalse((new bool[] { }).Unanimous());
+			Assert.IsTrue(new[] {true, true, true}.Unanimous());
+			Assert.IsTrue(new[] {false, false, false}.Unanimous());
+			Assert.IsFalse(new[] {false, true, false}.Unanimous());
+			Assert.IsFalse(new bool[] { }.Unanimous());
 		}
 
 		[Test]
 		public void UnanimousOtherTest()
 		{
-			Assert.AreEqual("A", (new[] {"A", "A", "A"}).Unanimous("B"));
-			Assert.AreEqual("C", (new[] {"B", "A", "B"}).Unanimous("C"));
-			Assert.AreEqual("A", (new string[] { }).Unanimous("A"));
+			Assert.AreEqual("A", new[] {"A", "A", "A"}.Unanimous("B"));
+			Assert.AreEqual("C", new[] {"B", "A", "B"}.Unanimous("C"));
+			Assert.AreEqual("A", new string[] { }.Unanimous("A"));
 		}
 
 		[Test]
 		public void PartitionTest()
 		{
-			int[][] items = (new[] {1, 2, 3, 4, 5, 6, 7, 8}).Partition(3)
+			int[][] items = new[] {1, 2, 3, 4, 5, 6, 7, 8}.Partition(3)
 			                                                .Select(p => p.ToArray())
 			                                                .ToArray();
 

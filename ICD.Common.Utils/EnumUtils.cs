@@ -119,7 +119,7 @@ namespace ICD.Common.Utils
 
 			// Reflection is slow and this method is called a lot, so we cache the results.
 			if (!s_EnumValuesCache.ContainsKey(type))
-				s_EnumValuesCache[type] = GetValuesUncached(type).ToHashSet();
+				s_EnumValuesCache[type] = GetValuesUncached(type).ToIcdHashSet();
 
 			return s_EnumValuesCache[type];
 		}
