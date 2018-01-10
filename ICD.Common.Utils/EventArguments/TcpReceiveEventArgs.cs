@@ -19,6 +19,9 @@ namespace ICD.Common.Utils.EventArguments
 		/// <param name="data"></param>
 		public TcpReceiveEventArgs(uint clientId, IEnumerable<byte> data)
 		{
+			if (data == null)
+				throw new ArgumentNullException("data");
+
 			m_ClientId = clientId;
 			m_Data = StringUtils.ToString(data);
 		}
@@ -31,6 +34,9 @@ namespace ICD.Common.Utils.EventArguments
 		/// <param name="length"></param>
 		public TcpReceiveEventArgs(uint clientId, IEnumerable<byte> data, int length)
 		{
+			if (data == null)
+				throw new ArgumentNullException("data");
+
 			m_ClientId = clientId;
 			m_Data = StringUtils.ToString(data, length);
 		}
