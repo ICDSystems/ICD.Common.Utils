@@ -91,5 +91,77 @@ namespace ICD.Common.Utils.Tests
 		{
 			Assert.AreEqual(StringUtils.IsNullOrWhitespace(value), expectedResult);
 		}
+
+		[Test, UsedImplicitly]
+		public void TryParseIntTest()
+		{
+			int testVal;
+			Assert.IsFalse(StringUtils.TryParse("fish", out testVal));
+			Assert.IsTrue(StringUtils.TryParse("1", out testVal));
+			Assert.AreEqual(1, testVal);
+		}
+
+		[Test, UsedImplicitly]
+		public void TryParseUintTest()
+		{
+			uint testVal;
+			Assert.IsFalse(StringUtils.TryParse("fish", out testVal));
+			Assert.IsTrue(StringUtils.TryParse("1", out testVal));
+			Assert.AreEqual((uint)1, testVal);
+		}
+
+		[Test, UsedImplicitly]
+		public void TryParseShortTest()
+		{
+			short testVal;
+			Assert.IsFalse(StringUtils.TryParse("fish", out testVal));
+			Assert.IsTrue(StringUtils.TryParse("1", out testVal));
+			Assert.AreEqual((short)1, testVal);
+		}
+
+		[Test, UsedImplicitly]
+		public void TryParseUshortTest()
+		{
+			ushort testVal;
+			Assert.IsFalse(StringUtils.TryParse("fish", out testVal));
+			Assert.IsTrue(StringUtils.TryParse("1", out testVal));
+			Assert.AreEqual((ushort)1, testVal);
+		}
+
+		[Test, UsedImplicitly]
+		public void TryParseLongTest()
+		{
+			long testVal;
+			Assert.IsFalse(StringUtils.TryParse("fish", out testVal));
+			Assert.IsTrue(StringUtils.TryParse("1", out testVal));
+			Assert.AreEqual((long)1, testVal);
+		}
+
+		[Test, UsedImplicitly]
+		public void TryParseUlongTest()
+		{
+			ulong testVal;
+			Assert.IsFalse(StringUtils.TryParse("fish", out testVal));
+			Assert.IsTrue(StringUtils.TryParse("1", out testVal));
+			Assert.AreEqual((ulong)1, testVal);
+		}
+
+		[Test, UsedImplicitly]
+		public void  TryParseFloatTest()
+		{
+			float testVal;
+			Assert.IsFalse(StringUtils.TryParse("fish", out testVal));
+			Assert.IsTrue(StringUtils.TryParse("1.1", out testVal));
+			Assert.AreEqual((float)1.1, testVal);
+		}
+
+		[Test, UsedImplicitly]
+		public void TryParseBoolTest()
+		{
+			bool testVal;
+			Assert.IsFalse(StringUtils.TryParse("fish", out testVal));
+			Assert.IsTrue(StringUtils.TryParse("true", out testVal));
+			Assert.AreEqual(true, testVal);
+		}
 	}
 }

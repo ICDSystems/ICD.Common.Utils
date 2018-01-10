@@ -87,7 +87,6 @@ namespace ICD.Common.Utils
 #if SIMPLSHARP
 			return CrestronConsole.SendControlSystemCommand(command, ref result);
 #else
-            result = string.Empty;
 			return false;
 #endif
 		}
