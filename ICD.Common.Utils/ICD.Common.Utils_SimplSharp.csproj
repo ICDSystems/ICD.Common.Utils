@@ -79,7 +79,6 @@
     <Compile Include="EventArguments\GenericEventArgs.cs" />
     <Compile Include="EventArguments\IntEventArgs.cs" />
     <Compile Include="EventArguments\StringEventArgs.cs" />
-    <Compile Include="EventArguments\TcpReceiveEventArgs.cs" />
     <Compile Include="EventArguments\UShortEventArgs.cs" />
     <Compile Include="EventArguments\XmlRecursionEventArgs.cs" />
     <None Include="ObfuscationSettings.cs" />
