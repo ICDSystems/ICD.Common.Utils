@@ -5,6 +5,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>ICD.Common.Utils</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<Deterministic>false</Deterministic>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Chris Cameron, Jeff Thompson</Authors>
     <Company>Integrated Commercial Design</Company>
@@ -33,7 +35,7 @@
 
   <ItemGroup>
     <Compile Remove="ObfuscationSettings.cs" />
-    <Compile Remove="Properties\AssemblyInfo.cs" />
+    
   </ItemGroup>
 
   <ItemGroup>
