@@ -70,7 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\AbstractIcdAttribute.cs" />
-    <Compile Include="Attributes\KrangPluginAttribute.cs" />
     <Compile Include="Attributes\Rpc\RpcAttribute.cs" />
     <Compile Include="EventArguments\BoolEventArgs.cs" />
     <Compile Include="EventArguments\CharEventArgs.cs" />
