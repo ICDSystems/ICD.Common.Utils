@@ -1,4 +1,4 @@
-﻿using ICD.Common.Services.Logging;
+﻿using ICD.Common.Utils.Services.Logging;
 using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests.Services.Logging

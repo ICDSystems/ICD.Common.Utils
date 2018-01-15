@@ -1,5 +1,5 @@
 ﻿using System;
-using ICD.Common.Services;
+using ICD.Common.Utils.Services;
 using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests.Services

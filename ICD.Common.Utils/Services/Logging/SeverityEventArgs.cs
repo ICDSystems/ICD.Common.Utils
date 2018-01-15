@@ -1,6 +1,6 @@
 ﻿using ICD.Common.Utils.EventArguments;
 
-namespace ICD.Common.Services.Logging
+namespace ICD.Common.Utils.Services.Logging
 {
 	public sealed class SeverityEventArgs : GenericEventArgs<eSeverity>
 	{

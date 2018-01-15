@@ -1,9 +1,9 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Common.Utils.Services;
+using ICD.Common.Utils.Services.Logging;
+#if SIMPLSHARP
 using System;
 using System.Text.RegularExpressions;
 using ICD.Common.Properties;
-using ICD.Common.Services;
-using ICD.Common.Services.Logging;
 
 namespace ICD.Common.Utils
 {

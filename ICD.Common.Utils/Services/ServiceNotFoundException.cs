@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICD.Common.Services
+namespace ICD.Common.Utils.Services
 {
 	public sealed class ServiceNotFoundException : Exception
 	{

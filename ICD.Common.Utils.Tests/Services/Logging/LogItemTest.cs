@@ -1,7 +1,7 @@
 ﻿using ICD.Common.Properties;
-using ICD.Common.Services.Logging;
 using NUnit.Framework;
 using System;
+using ICD.Common.Utils.Services.Logging;
 
 namespace ICD.Common.Utils.Tests.Services.Logging
 {

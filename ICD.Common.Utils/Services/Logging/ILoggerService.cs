@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using ICD.Common.Properties;
-using ICD.Common.Utils;
 
-namespace ICD.Common.Services.Logging
+namespace ICD.Common.Utils.Services.Logging
 {
 	public enum eSeverity
 	{

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Text;
 using ICD.Common.Properties;
-using ICD.Common.Utils;
 
-namespace ICD.Common.Services.Logging
+namespace ICD.Common.Utils.Services.Logging
 {
 	/// <summary>
 	/// Log Entry Item

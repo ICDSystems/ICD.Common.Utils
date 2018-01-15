@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICD.Common.Attributes
+namespace ICD.Common.Utils.Attributes
 {
 	/// <summary>
 	/// AbstractIcdAttribute is the base class for all ICD attributes.
