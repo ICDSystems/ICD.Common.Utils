@@ -187,8 +187,9 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="start"></param>
-		/// /// <param name="end"></param>
+		/// <param name="end"></param>
 		/// <param name="nodeParents"></param>
+		/// <param name="comparer"></param>
 		/// <returns></returns>
 		private static IEnumerable<T> GetPath<T>(T start, T end, IDictionary<T, T> nodeParents, IEqualityComparer<T> comparer)
 		{
