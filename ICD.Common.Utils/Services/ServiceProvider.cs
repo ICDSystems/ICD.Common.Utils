@@ -308,9 +308,7 @@ namespace ICD.Common.Utils.Services
 				m_ServicesSection.Enter();
 
 				if (m_Services.ContainsKey(tService))
-				{
 					return false;
-				}
 
 				m_Services.Add(tService, service);
 			}

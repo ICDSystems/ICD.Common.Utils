@@ -135,7 +135,7 @@ namespace ICD.Common.Utils
 
 			// Edge case, root is the destination
 			foreach (T destination in
-					destinationsToBeProcessed.Where(destination => comparer.Equals(root, destination)))
+				destinationsToBeProcessed.Where(destination => comparer.Equals(root, destination)))
 			{
 				destinationsProcessed.Add(destination);
 				pathsToReturn.Add(destination, new[] {root});
@@ -163,7 +163,7 @@ namespace ICD.Common.Utils
 
 					T closureNode = node;
 					foreach (T destination in
-							destinationsToBeProcessed.Where(destination => comparer.Equals(closureNode, destination)))
+						destinationsToBeProcessed.Where(destination => comparer.Equals(closureNode, destination)))
 					{
 						destinationsProcessed.Add(destination);
 						pathsToReturn.Add(destination, GetPath(destination, root, nodeParents, comparer).Reverse());
