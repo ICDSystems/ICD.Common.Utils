@@ -26,22 +26,22 @@ namespace ICD.Common.Utils.Tests.Xml
 		public void HasAttributesTest()
 		{
 			IcdXmlReader reader = new IcdXmlReader(EXAMPLE_XML);
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 			Assert.IsTrue(reader.HasAttributes);
 
 			reader = new IcdXmlReader(EXAMPLE_XML_2);
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 			Assert.IsFalse(reader.HasAttributes);
 		}
 
 		public void NameTest()
 		{
 			IcdXmlReader reader = new IcdXmlReader(EXAMPLE_XML);
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 
 			Assert.AreEqual("Level1", reader.Name);
 
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 
 			Assert.AreEqual("Level2", reader.Name);
 		}
@@ -49,17 +49,17 @@ namespace ICD.Common.Utils.Tests.Xml
 		public void ValueTest()
 		{
 			IcdXmlReader reader = new IcdXmlReader("<Test>test</Test>");
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 
 			Assert.AreEqual("test", reader.Value);
 
 			reader = new IcdXmlReader("<Test></Test>");
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 
 			Assert.AreEqual("", reader.Value);
 
 			reader = new IcdXmlReader("<Test />");
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 
 			Assert.AreEqual(null, reader.Value);
 		}
@@ -86,7 +86,7 @@ namespace ICD.Common.Utils.Tests.Xml
 		public void GetAttributeTest()
 		{
 			IcdXmlReader reader = new IcdXmlReader(EXAMPLE_XML);
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 
 			Assert.AreEqual("1", reader.GetAttribute("attr1"));
 			Assert.AreEqual("2", reader.GetAttribute("attr2"));

@@ -32,7 +32,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 
 			Assert.IsFalse(reader.HasAttribute("attr1"));
 
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 
 			Assert.IsTrue(reader.HasAttribute("attr1"));
 			Assert.IsTrue(reader.HasAttribute("attr2"));
@@ -47,7 +47,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 
 			Assert.IsEmpty(reader.GetAttributes());
 
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 
 			IcdXmlAttribute[] attributes = reader.GetAttributes().ToArray();
 			Assert.AreEqual(2, attributes.Length);
@@ -62,7 +62,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 
 			Assert.Throws<FormatException>(() => reader.GetAttributeAsString("attr1"));
 
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 
 			Assert.AreEqual("1", reader.GetAttributeAsString("attr1"));
 			Assert.AreEqual("2", reader.GetAttributeAsString("attr2"));
@@ -77,7 +77,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 
 			Assert.Throws<FormatException>(() => reader.GetAttributeAsInt("attr1"));
 
-			reader.SkipToNextElement();
+			reader.ReadToNextElement();
 
 			Assert.AreEqual(1, reader.GetAttributeAsInt("attr1"));
 			Assert.AreEqual(2, reader.GetAttributeAsInt("attr2"));

@@ -24,7 +24,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				return reader.ReadInnerXml();
@@ -44,7 +44,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 				return reader.HasAttribute(name);
 			}
 		}
@@ -59,7 +59,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 				return reader.GetAttributes();
 			}
 		}
@@ -91,7 +91,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 				return reader.GetAttributeAsString(name);
 			}
 		}
@@ -107,7 +107,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 				return reader.GetAttributeAsInt(name);
 			}
 		}
@@ -123,7 +123,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 				return reader.GetAttributeAsBool(name);
 			}
 		}
@@ -162,7 +162,7 @@ namespace ICD.Common.Utils.Xml
 
 			using (IcdXmlReader childReader = new IcdXmlReader(xml))
 			{
-				if (!childReader.SkipToNextElement())
+				if (!childReader.ReadToNextElement())
 					return;
 
 				path.Push(childReader.Name);
@@ -190,7 +190,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				return reader.HasChildElements();
@@ -208,7 +208,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				return reader.GetChildElement(element);
@@ -225,7 +225,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				foreach (IcdXmlReader child in reader.GetChildElements())
@@ -243,7 +243,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				foreach (string item in reader.GetChildElementsAsString(element))
@@ -261,7 +261,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				foreach (string item in reader.GetChildElementsAsString())
@@ -297,7 +297,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				return reader.TryGetChildElementAsString(element, out output);
@@ -645,7 +645,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				return reader.ReadElementContentAsString();
@@ -662,7 +662,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				return reader.ReadElementContentAsUint();
@@ -679,7 +679,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				return reader.ReadElementContentAsInt();
@@ -696,7 +696,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				return reader.ReadElementContentAsUShort();
@@ -718,7 +718,7 @@ namespace ICD.Common.Utils.Xml
 
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				return reader.ReadElementContentAsEnum<T>(ignoreCase);
@@ -739,7 +739,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				try
@@ -763,7 +763,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to find element in given xml");
 
 				try
@@ -790,7 +790,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				if (!reader.SkipToNextElement())
+				if (!reader.ReadToNextElement())
 					throw new FormatException("Unable to read element name, no element in given xml");
 
 				return reader.Name;

@@ -143,11 +143,11 @@ namespace ICD.Common.Utils.Xml
 		}
 
 		/// <summary>
-		/// Skips the current node to the next element.
+		/// Continues reading until an element is reached.
 		/// </summary>
 		/// <param name="extends"></param>
 		[PublicAPI]
-		public static bool SkipToNextElement(this IcdXmlReader extends)
+		public static bool ReadToNextElement(this IcdXmlReader extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -215,7 +215,7 @@ namespace ICD.Common.Utils.Xml
 
 			foreach (IcdXmlReader output in extends.GetChildElementsAsString().Select(child => new IcdXmlReader(child)))
 			{
-				output.SkipToNextElement();
+				output.ReadToNextElement();
 				yield return output;
 			}
 		}
@@ -233,7 +233,7 @@ namespace ICD.Common.Utils.Xml
 
 			foreach (IcdXmlReader output in extends.GetChildElementsAsString(element).Select(child => new IcdXmlReader(child)))
 			{
-				output.SkipToNextElement();
+				output.ReadToNextElement();
 				yield return output;
 			}
 		}
@@ -250,7 +250,7 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("extends");
 
 			// Step into the first child.
-			extends.SkipToNextElement();
+			extends.ReadToNextElement();
 
 			while (extends.NodeType == XmlNodeType.Element || extends.NodeType == XmlNodeType.Comment)
 			{
@@ -282,7 +282,7 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("extends");
 
 			// Step into the first child.
-			extends.SkipToNextElement();
+			extends.ReadToNextElement();
 
 			while (extends.NodeType == XmlNodeType.Element || extends.NodeType == XmlNodeType.Comment)
 			{

@@ -54,7 +54,7 @@ namespace ICD.Common.Utils.Tests.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(EXAMPLE_XML))
 			{
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 
 				IcdXmlAttribute[] attributes = reader.GetAttributes().ToArray();
 
@@ -71,7 +71,7 @@ namespace ICD.Common.Utils.Tests.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(EXAMPLE_XML))
 			{
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 
 				int value = reader.GetAttributeAsInt("attr1");
 				Assert.AreEqual(1, value);
@@ -102,7 +102,7 @@ namespace ICD.Common.Utils.Tests.Xml
 
 			using (IcdXmlReader reader = new IcdXmlReader(nodes[3]))
 			{
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 				Assert.AreEqual("Some text", reader.ReadInnerXml());
 			}
 		}
@@ -125,10 +125,10 @@ namespace ICD.Common.Utils.Tests.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(EXAMPLE_XML))
 			{
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 				Assert.AreEqual("Level1", reader.Name);
 
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 				Assert.AreEqual("Level2", reader.Name);
 			}
 		}
@@ -162,7 +162,7 @@ namespace ICD.Common.Utils.Tests.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(EXAMPLE_XML))
 			{
-				reader.SkipToNextElement();
+				reader.ReadToNextElement();
 
 				IEnumerable<IcdXmlReader> results = reader.GetChildElements();
 				IcdXmlReader[] children = results.ToArray();
