@@ -24,7 +24,9 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
 				return reader.ReadInnerXml();
 			}
 		}
@@ -158,28 +160,21 @@ namespace ICD.Common.Utils.Xml
 			if (callback == null)
 				throw new ArgumentNullException("callback");
 
-			IcdXmlReader childReader;
-
-			try
+			using (IcdXmlReader childReader = new IcdXmlReader(xml))
 			{
-				childReader = new IcdXmlReader(xml);
-				childReader.SkipToNextElement();
+				if (!childReader.SkipToNextElement())
+					return;
+
+				path.Push(childReader.Name);
+				string[] pathOutput = path.Reverse().ToArray(path.Count);
+
+				callback(new XmlRecursionEventArgs(xml, pathOutput));
+
+				foreach (string child in childReader.GetChildElementsAsString())
+					Recurse(child, path, callback);
+
+				path.Pop();
 			}
-			catch (IcdXmlException)
-			{
-				return;
-			}
-
-			path.Push(childReader.Name);
-			string[] pathOutput = path.Reverse().ToArray();
-
-			callback(new XmlRecursionEventArgs(xml, pathOutput));
-
-			foreach (string child in childReader.GetChildElementsAsString())
-				Recurse(child, path, callback);
-
-			path.Pop();
-			childReader.Dispose();
 		}
 
 		#endregion
@@ -195,8 +190,28 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
 				return reader.HasChildElements();
+			}
+		}
+
+		/// <summary>
+		/// Gets the child elements from the topmost element in the xml.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="element"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static IcdXmlReader GetChildElement(string xml, string element)
+		{
+			using (IcdXmlReader reader = new IcdXmlReader(xml))
+			{
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
+				return reader.GetChildElement(element);
 			}
 		}
 
@@ -208,13 +223,14 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static IEnumerable<IcdXmlReader> GetChildElements(string xml)
 		{
-			IcdXmlReader reader = new IcdXmlReader(xml);
-			reader.SkipToNextElement();
+			using (IcdXmlReader reader = new IcdXmlReader(xml))
+			{
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
 
-			foreach (IcdXmlReader child in reader.GetChildElements())
-				yield return child;
-
-			reader.Dispose();
+				foreach (IcdXmlReader child in reader.GetChildElements())
+					yield return child;
+			}
 		}
 
 		/// <summary>
@@ -227,19 +243,11 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
 
-				foreach (IcdXmlReader child in reader.GetChildElements())
-				{
-					string output = null;
-					if (child.Name == element)
-						output = child.ReadOuterXml();
-
-					child.Dispose();
-
-					if (output != null)
-						yield return output;
-				}
+				foreach (string item in reader.GetChildElementsAsString(element))
+					yield return item;
 			}
 		}
 
@@ -253,7 +261,9 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
 				foreach (string item in reader.GetChildElementsAsString())
 					yield return item;
 			}
@@ -287,22 +297,11 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
 
-				foreach (IcdXmlReader child in reader.GetChildElements())
-				{
-					output = null;
-					if (child.Name == element)
-						output = child.ReadOuterXml();
-
-					child.Dispose();
-
-					if (output != null)
-						return true;
-				}
+				return reader.TryGetChildElementAsString(element, out output);
 			}
-			output = null;
-			return false;
 		}
 
 		#endregion
@@ -318,12 +317,8 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static string ReadChildElementContentAsString(string xml, string childElement)
 		{
-			string child = GetChildElementAsString(xml, childElement);
-			using (IcdXmlReader reader = new IcdXmlReader(child))
-			{
-				reader.SkipToNextElement();
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
 				return reader.ReadElementContentAsString();
-			}
 		}
 
 		/// <summary>
@@ -335,12 +330,8 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static int ReadChildElementContentAsInt(string xml, string childElement)
 		{
-			string child = GetChildElementAsString(xml, childElement);
-			using (IcdXmlReader reader = new IcdXmlReader(child))
-			{
-				reader.SkipToNextElement();
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
 				return reader.ReadElementContentAsInt();
-			}
 		}
 
 		/// <summary>
@@ -352,12 +343,8 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static uint ReadChildElementContentAsUint(string xml, string childElement)
 		{
-			string child = GetChildElementAsString(xml, childElement);
-			using (IcdXmlReader reader = new IcdXmlReader(child))
-			{
-				reader.SkipToNextElement();
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
 				return reader.ReadElementContentAsUint();
-			}
 		}
 
 		/// <summary>
@@ -369,12 +356,8 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static long ReadChildElementContentAsLong(string xml, string childElement)
 		{
-			string child = GetChildElementAsString(xml, childElement);
-			using (IcdXmlReader reader = new IcdXmlReader(child))
-			{
-				reader.SkipToNextElement();
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
 				return reader.ReadElementContentAsLong();
-			}
 		}
 
 		/// <summary>
@@ -386,12 +369,8 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static ushort ReadChildElementContentAsUShort(string xml, string childElement)
 		{
-			string child = GetChildElementAsString(xml, childElement);
-			using (IcdXmlReader reader = new IcdXmlReader(child))
-			{
-				reader.SkipToNextElement();
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
 				return reader.ReadElementContentAsUShort();
-			}
 		}
 
 		/// <summary>
@@ -403,12 +382,8 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static float ReadChildElementContentAsFloat(string xml, string childElement)
 		{
-			string child = GetChildElementAsString(xml, childElement);
-			using (IcdXmlReader reader = new IcdXmlReader(child))
-			{
-				reader.SkipToNextElement();
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
 				return reader.ReadElementContentAsFloat();
-			}
 		}
 
 		/// <summary>
@@ -434,12 +409,8 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static byte ReadChildElementContentAsByte(string xml, string childElement)
 		{
-			string child = GetChildElementAsString(xml, childElement);
-			using (IcdXmlReader reader = new IcdXmlReader(child))
-			{
-				reader.SkipToNextElement();
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
 				return reader.ReadElementContentAsByte();
-			}
 		}
 
 		/// <summary>
@@ -455,12 +426,8 @@ namespace ICD.Common.Utils.Xml
 			if (!EnumUtils.IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
-			string child = GetChildElementAsString(xml, childElement);
-			using (IcdXmlReader reader = new IcdXmlReader(child))
-			{
-				reader.SkipToNextElement();
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
 				return reader.ReadElementContentAsEnum<T>(ignoreCase);
-			}
 		}
 
 		#endregion
@@ -678,7 +645,9 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.SkipToNextElement();
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
 				return reader.ReadElementContentAsString();
 			}
 		}
@@ -693,7 +662,9 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.Read();
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
 				return reader.ReadElementContentAsUint();
 			}
 		}
@@ -708,7 +679,9 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.Read();
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
 				return reader.ReadElementContentAsInt();
 			}
 		}
@@ -723,7 +696,9 @@ namespace ICD.Common.Utils.Xml
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.Read();
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
 				return reader.ReadElementContentAsUShort();
 			}
 		}
@@ -743,7 +718,9 @@ namespace ICD.Common.Utils.Xml
 
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				reader.Read();
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
 				return reader.ReadElementContentAsEnum<T>(ignoreCase);
 			}
 		}
@@ -760,15 +737,19 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static uint? TryReadElementContentAsUint(string xml)
 		{
-			IcdXmlReader reader = new IcdXmlReader(xml);
-			reader.Read();
-			try
+			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				return reader.ReadElementContentAsUint();
-			}
-			catch
-			{
-				return null;
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
+				try
+				{
+					return reader.ReadElementContentAsUint();
+				}
+				catch
+				{
+					return null;
+				}
 			}
 		}
 
@@ -780,15 +761,19 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static int? TryReadElementContentAsInt(string xml)
 		{
-			IcdXmlReader reader = new IcdXmlReader(xml);
-			reader.Read();
-			try
+			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
-				return reader.ReadElementContentAsInt();
-			}
-			catch
-			{
-				return null;
+				if (!reader.SkipToNextElement())
+					throw new FormatException("Unable to find element in given xml");
+
+				try
+				{
+					return reader.ReadElementContentAsInt();
+				}
+				catch
+				{
+					return null;
+				}
 			}
 		}
 
@@ -807,6 +792,7 @@ namespace ICD.Common.Utils.Xml
 			{
 				if (!reader.SkipToNextElement())
 					throw new FormatException("Unable to read element name, no element in given xml");
+
 				return reader.Name;
 			}
 		}

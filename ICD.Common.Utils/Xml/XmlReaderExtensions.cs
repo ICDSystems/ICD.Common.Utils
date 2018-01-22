@@ -183,6 +183,27 @@ namespace ICD.Common.Utils.Xml
 		}
 
 		/// <summary>
+		/// Gets the child element with the given name under the current element.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="element"></param>
+		/// <returns></returns>
+		public static IcdXmlReader GetChildElement(this IcdXmlReader extends, string element)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			try
+			{
+				return extends.GetChildElements(element).First();
+			}
+			catch (InvalidOperationException e)
+			{
+				throw new FormatException("No child element with name " + element, e);
+			}
+		}
+
+		/// <summary>
 		/// Gets the child elements for the current element.
 		/// </summary>
 		/// <param name="extends"></param>
@@ -193,6 +214,24 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("extends");
 
 			foreach (IcdXmlReader output in extends.GetChildElementsAsString().Select(child => new IcdXmlReader(child)))
+			{
+				output.SkipToNextElement();
+				yield return output;
+			}
+		}
+
+		/// <summary>
+		/// Gets the child elements for the current element.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="element"></param>
+		/// <returns></returns>
+		public static IEnumerable<IcdXmlReader> GetChildElements(this IcdXmlReader extends, string element)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			foreach (IcdXmlReader output in extends.GetChildElementsAsString(element).Select(child => new IcdXmlReader(child)))
 			{
 				output.SkipToNextElement();
 				yield return output;
@@ -227,6 +266,57 @@ namespace ICD.Common.Utils.Xml
 				}
 
 				extends.SkipInsignificantWhitespace();
+			}
+		}
+
+		/// <summary>
+		/// Gets the child elements for the current element.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="element"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static IEnumerable<string> GetChildElementsAsString(this IcdXmlReader extends, string element)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			// Step into the first child.
+			extends.SkipToNextElement();
+
+			while (extends.NodeType == XmlNodeType.Element || extends.NodeType == XmlNodeType.Comment)
+			{
+				switch (extends.NodeType)
+				{
+					case XmlNodeType.Comment:
+						extends.Skip();
+						break;
+
+					case XmlNodeType.Element:
+						string name = extends.Name;
+						string output = extends.ReadOuterXml();
+						if (name == element)
+							yield return output;
+						break;
+				}
+
+				extends.SkipInsignificantWhitespace();
+			}
+		}
+
+
+		public static bool TryGetChildElementAsString(this IcdXmlReader extends, string element, out string output)
+		{
+			output = null;
+
+			try
+			{
+				output = extends.GetChildElementsAsString(element).First();
+				return true;
+			}
+			catch (InvalidOperationException)
+			{
+				return false;
 			}
 		}
 
