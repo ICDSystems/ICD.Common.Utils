@@ -77,7 +77,7 @@ namespace ICD.Common.Utils.Xml
 			if (GetAttributes(xml).TryFirst(a => a.Name == name, out output))
 				return output;
 
-			throw new KeyNotFoundException(string.Format("No attribute with name {0}", name));
+			throw new FormatException(string.Format("No attribute with name {0}", name));
 		}
 
 		/// <summary>
