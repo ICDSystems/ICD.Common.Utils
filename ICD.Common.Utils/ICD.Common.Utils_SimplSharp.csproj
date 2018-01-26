@@ -64,6 +64,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpReflectionInterface.dll</HintPath>
     </Reference>
+    <Reference Include="SimplSharpSQLHelperInterface, Version=1.0.92.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\ProgramData\Crestron\SDK\SimplSharpSQLHelperInterface.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -146,6 +150,10 @@
     <Compile Include="SafeCriticalSection.SimplSharp.cs" />
     <Compile Include="SafeCriticalSection.Standard.cs" />
     <Compile Include="SafeMutex.cs" />
+    <Compile Include="Sqlite\eDbType.cs" />
+    <Compile Include="Sqlite\IcdSqliteCommand.cs" />
+    <Compile Include="Sqlite\IcdSqliteConnection.cs" />
+    <Compile Include="Sqlite\IcdSqliteDataReader.cs" />
     <Compile Include="StringUtils.cs" />
     <Compile Include="TableBuilder.cs" />
     <Compile Include="ThreadingUtils.cs" />
