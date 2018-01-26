@@ -83,5 +83,11 @@ namespace ICD.Common.Utils.IO
 		{
 			return File.GetCreationTime(path);
 		}
+
+		[PublicAPI]
+		public static IcdFileStream Create(string path)
+		{
+			return new IcdFileStream(File.Create(path));
+		}
 	}
 }
