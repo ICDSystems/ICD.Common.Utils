@@ -50,5 +50,10 @@ namespace ICD.Common.Utils.Sqlite
 		{
 			return m_Command.ExecuteNonQuery();
 		}
+
+		public object ExecuteScalar()
+		{
+			return m_Command.ExecuteScalar();
+		}
 	}
 }

@@ -3,21 +3,32 @@ using Microsoft.Data.Sqlite;
 
 namespace ICD.Common.Utils.Sqlite
 {
-	public sealed class IcdSqliteDataReader : IDisposable
+	public sealed class IcdSqliteDataReader : IcdDbDataReader
 	{
-		public IcdSqliteDataReader(SqliteDataReader executeReader)
+		private readonly SqliteDataReader m_Reader;
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="reader"></param>
+		public IcdSqliteDataReader(SqliteDataReader reader)
 		{
-			throw new NotImplementedException();
+			m_Reader = reader;
 		}
 
-		public void Dispose()
+		/// <summary>
+		/// Release resources.
+		/// </summary>
+		public override void Dispose()
 		{
-			throw new NotImplementedException();
+			m_Reader.Dispose();
 		}
 
-		public bool Read()
+		public override bool Read()
 		{
-			throw new NotImplementedException();
+			return m_Reader.Read();
 		}
+
+		public override object this[string columnId] { get { return m_Reader[columnId]; } }
 	}
 }
