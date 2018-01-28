@@ -53,25 +53,13 @@ namespace ICD.Common.Utils.Sqlite
 #else
 			switch (extends)
 			{
-				case eDbType.AnsiString:
-					break;
-				case eDbType.Binary:
-					break;
-				case eDbType.Byte:
-					break;
-				case eDbType.Boolean:
-					break;
-				case eDbType.Currency:
-					break;
-				case eDbType.Date:
-					break;
-				case eDbType.DateTime:
-					break;
 				case eDbType.Decimal:
 				case eDbType.Double:
 					return SqliteType.Real;
-				case eDbType.Guid:
-					break;
+
+				case eDbType.Boolean:
+				case eDbType.Byte:
+				case eDbType.Currency:
 				case eDbType.Int16:
 				case eDbType.Int32:
 				case eDbType.Int64:
@@ -80,29 +68,26 @@ namespace ICD.Common.Utils.Sqlite
 				case eDbType.UInt64:
 				case eDbType.SByte:
 				case eDbType.Single:
-					return SqliteType.Integer;
-				
-				case eDbType.Object:
-					break;
-				
-					break;
-				case eDbType.String:
-					break;
-				case eDbType.Time:
-					break;
-
-					break;
-				case eDbType.VarNumeric:
-					break;
-				case eDbType.AnsiStringFixedLength:
-				case eDbType.StringFixedLength:
-					break;
-				case eDbType.Xml:
-					break;
+				case eDbType.Date:
+				case eDbType.DateTime:
 				case eDbType.DateTime2:
-					break;
 				case eDbType.DateTimeOffset:
-					break;
+				case eDbType.Time:
+				case eDbType.VarNumeric:
+					return SqliteType.Integer;
+
+				case eDbType.Binary:
+				case eDbType.Object:
+					return SqliteType.Blob;
+
+				case eDbType.Guid:
+				case eDbType.String:
+				case eDbType.StringFixedLength:
+				case eDbType.AnsiString:
+				case eDbType.AnsiStringFixedLength:
+				case eDbType.Xml:
+					return SqliteType.Text;
+
 				default:
 					throw new ArgumentOutOfRangeException("extends");
 			}
