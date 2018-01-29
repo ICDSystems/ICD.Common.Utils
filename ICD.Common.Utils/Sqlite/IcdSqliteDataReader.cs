@@ -1,11 +1,17 @@
-﻿using System;
+﻿#if SIMPLSHARP
+using SqliteDataReader = Crestron.SimplSharp.SQLite.SQLiteDataReader;
+#else
+using System;
 using Microsoft.Data.Sqlite;
+#endif
 
 namespace ICD.Common.Utils.Sqlite
 {
 	public sealed class IcdSqliteDataReader : IcdDbDataReader
 	{
 		private readonly SqliteDataReader m_Reader;
+
+		public override object this[string columnId] { get { return m_Reader[columnId]; } }
 
 		/// <summary>
 		/// Constructor.
@@ -28,7 +34,5 @@ namespace ICD.Common.Utils.Sqlite
 		{
 			return m_Reader.Read();
 		}
-
-		public override object this[string columnId] { get { return m_Reader[columnId]; } }
 	}
 }

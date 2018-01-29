@@ -151,9 +151,14 @@
     <Compile Include="SafeCriticalSection.Standard.cs" />
     <Compile Include="SafeMutex.cs" />
     <Compile Include="Sqlite\eDbType.cs" />
+    <Compile Include="Sqlite\IcdDbDataReader.cs" />
     <Compile Include="Sqlite\IcdSqliteCommand.cs" />
     <Compile Include="Sqlite\IcdSqliteConnection.cs" />
     <Compile Include="Sqlite\IcdSqliteDataReader.cs" />
+    <Compile Include="Sqlite\IcdSqliteParameter.cs" />
+    <Compile Include="Sqlite\IcdSqliteParameterCollection.cs" />
+    <Compile Include="Sqlite\IIcdDataReader.cs" />
+    <Compile Include="Sqlite\IIcdDataRecord.cs" />
     <Compile Include="StringUtils.cs" />
     <Compile Include="TableBuilder.cs" />
     <Compile Include="ThreadingUtils.cs" />

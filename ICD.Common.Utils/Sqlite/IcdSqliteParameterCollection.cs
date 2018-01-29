@@ -19,12 +19,9 @@ namespace ICD.Common.Utils.Sqlite
 			m_Parameters = commandParameters;
 		}
 
-
 		public IcdSqliteParameter Add(string name, eDbType type)
 	    {
-			SqliteType
-
-		    return new IcdSqliteParameter(m_Parameters.Add(name, type));
+			return new IcdSqliteParameter(m_Parameters.Add(name, type.ToParamType()));
 	    }
     }
 }
