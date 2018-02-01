@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Extensions
@@ -63,6 +64,47 @@ namespace ICD.Common.Utils.Extensions
 				index = ~index;
 
 			extends.Insert(index, item);
+		}
+
+		/// <summary>
+		/// Pads the list to the given total length.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="totalLength"></param>
+		[PublicAPI]
+		public static void PadRight<T>(this List<T> extends, int totalLength)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (totalLength < 0)
+				throw new ArgumentOutOfRangeException("totalLength", "totalLength must be greater or equal to 0");
+
+			extends.PadRight(totalLength, default(T));
+		}
+
+		/// <summary>
+		/// Pads the list to the given total length with the given item.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="totalLength"></param>
+		/// <param name="item"></param>
+		[PublicAPI]
+		public static void PadRight<T>(this List<T> extends, int totalLength, T item)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (totalLength < 0)
+				throw new ArgumentOutOfRangeException("totalLength", "totalLength must be greater or equal to 0");
+
+			int pad = totalLength - extends.Count;
+			if (pad <= 0)
+				return;
+
+			extends.AddRange(Enumerable.Repeat(item, pad));
 		}
 	}
 }
