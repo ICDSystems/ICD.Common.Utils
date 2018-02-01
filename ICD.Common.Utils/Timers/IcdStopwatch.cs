@@ -1,4 +1,6 @@
-﻿#if SIMPLSHARP
+﻿using System;
+using ICD.Common.Properties;
+#if SIMPLSHARP
 using Crestron.SimplSharp;
 #else
 using System.Diagnostics;
@@ -8,6 +10,10 @@ namespace ICD.Common.Utils.Timers
 {
 	public sealed class IcdStopwatch
 	{
+		// Used with profiling
+		private const long YELLOW_MILLISECONDS = 100;
+		private const long RED_MILLISECONDS = 400;
+
 		private readonly Stopwatch m_Stopwatch;
 
 		#region Properties
@@ -77,6 +83,63 @@ namespace ICD.Common.Utils.Timers
 		{
 			Reset();
 			Start();
+		}
+
+		#endregion
+
+		#region Profiling
+
+		/// <summary>
+		/// Executes the action and prints the duration to the console.
+		/// </summary>
+		/// <param name="action"></param>
+		/// <param name="name"></param>
+		[PublicAPI]
+		public static void Profile(Action action, string name)
+		{
+			if (action == null)
+				throw new ArgumentNullException("action");
+
+			IcdStopwatch stopwatch = StartNew();
+			action();
+			PrintProfile(stopwatch, name);
+		}
+
+		/// <summary>
+		/// Executes the function and prints the duration to the console.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="func"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static T Profile<T>(Func<T> func, string name)
+		{
+			if (func == null)
+				throw new ArgumentNullException("func");
+
+			T output = default(T);
+
+			Profile(() =>
+			        {
+				        output = func();
+			        }, name);
+
+			return output;
+		}
+
+		private static void PrintProfile(IcdStopwatch stopwatch, string name)
+		{
+			long elapsed = stopwatch.ElapsedMilliseconds;
+
+			eConsoleColor color = eConsoleColor.Green;
+			if (elapsed >= YELLOW_MILLISECONDS)
+				color = eConsoleColor.Yellow;
+			if (elapsed >= RED_MILLISECONDS)
+				color = eConsoleColor.Red;
+
+			IcdConsole.Print(color, "{0}ms", elapsed);
+			IcdConsole.PrintLine(" to execute {0}", name);
 		}
 
 		#endregion

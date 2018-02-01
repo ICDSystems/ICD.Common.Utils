@@ -67,6 +67,24 @@ namespace ICD.Common.Utils
 			PrintLine(message);
 		}
 
+		public static void PrintLine(eConsoleColor color, string message)
+		{
+#if SIMPLSHARP
+			PrintLine(color.FormatAnsi(message));
+#else
+			System.Console.ForegroundColor = color.ToForegroundConsoleColor();
+			System.Console.BackgroundColor = color.ToBackgroundConsoleColor();
+			System.Console.Error.WriteLine(message);
+			System.Console.ResetColor();
+#endif
+		}
+
+		public static void PrintLine(eConsoleColor color, string message, params object[] args)
+		{
+			message = string.Format(message, args);
+			PrintLine(color, message);
+		}
+
 		public static void Print(string message)
 		{
 #if SIMPLSHARP
@@ -80,6 +98,24 @@ namespace ICD.Common.Utils
 		{
 			message = string.Format(message, args);
 			Print(message);
+		}
+
+		public static void Print(eConsoleColor color, string message)
+		{
+#if SIMPLSHARP
+			Print(color.FormatAnsi(message));
+#else
+			System.Console.ForegroundColor = color.ToForegroundConsoleColor();
+			System.Console.BackgroundColor = color.ToBackgroundConsoleColor();
+			System.Console.Error.Write(message);
+			System.Console.ResetColor();
+#endif
+		}
+
+		public static void Print(eConsoleColor color, string message, params object[] args)
+		{
+			message = string.Format(message, args);
+			Print(color, message);
 		}
 
 		public static bool SendControlSystemCommand(string command, ref string result)

@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Attributes\AbstractIcdAttribute.cs" />
     <Compile Include="Attributes\Rpc\RpcAttribute.cs" />
+    <Compile Include="ConsoleColor.cs" />
     <Compile Include="EventArguments\BoolEventArgs.cs" />
     <Compile Include="EventArguments\CharEventArgs.cs" />
     <Compile Include="EventArguments\DateTimeEventArgs.cs" />
