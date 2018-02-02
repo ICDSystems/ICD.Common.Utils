@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using NUnit.Framework;
 using ICD.Common.Properties;
+using NUnit.Framework;
 using ICD.Common.Utils.Collections;
 
 namespace ICD.Common.Utils.Tests.Collections

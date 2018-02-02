@@ -1,6 +1,6 @@
-﻿using ICD.Common.Properties;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Services.Logging;
 
 namespace ICD.Common.Utils.Tests.Services.Logging

@@ -1,5 +1,4 @@
-﻿using ICD.Common.Properties;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 #if SIMPLSHARP
 using Crestron.IO;
 #else

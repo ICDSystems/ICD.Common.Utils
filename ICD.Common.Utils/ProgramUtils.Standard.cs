@@ -1,8 +1,8 @@
 ﻿#if !SIMPLSHARP
-using ICD.Common.Properties;
 using ICD.Common.Utils.IO;
 using System;
 using System.Reflection;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils
 {
