@@ -220,7 +220,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return new string(extends.Where(c => !Char.IsWhiteSpace(c)).ToArray());
+			return new string(extends.Where(c => !char.IsWhiteSpace(c)).ToArray());
 		}
 
 		/// <summary>
