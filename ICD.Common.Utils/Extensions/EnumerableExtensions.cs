@@ -597,9 +597,9 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Returns other if the list is empty.
-		/// Returns other if the list is non-empty and there are two different elements.
-		/// Returns the element of the list if it is non-empty and all elements are the same.
+		/// Returns other if the sequence is empty.
+		/// Returns other if the sequence is non-empty and there are two different elements.
+		/// Returns the element of the sequence if it is non-empty and all elements are the same.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <param name="other"></param>
@@ -610,14 +610,14 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			T[] array = extends as T[] ?? extends.ToArray();
-			return array.Unanimous() ? array.First() : other;
+			T[] array = extends.Distinct().ToArray();
+			return array.Length == 1 ? array[0] : other;
 		}
 
 		/// <summary>
-		/// Returns false if the list is empty.
-		/// Returns false if the list is non-empty and there are two different elements.
-		/// Returns true if the list is non-empty and all elements are the same.
+		/// Returns false if the sequence is empty.
+		/// Returns false if the sequence is non-empty and there are two different elements.
+		/// Returns true if the sequence is non-empty and all elements are the same.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
@@ -627,13 +627,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			T[] array = extends as T[] ?? extends.ToArray();
-
-			if (array.Length == 0)
-				return false;
-
-			T val = array.First();
-			return array.All(x => EqualityComparer<T>.Default.Equals(x, val));
+			return extends.Distinct().Count() == 1;
 		}
 
 		/// <summary>
