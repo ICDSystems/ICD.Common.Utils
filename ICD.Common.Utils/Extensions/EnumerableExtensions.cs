@@ -156,17 +156,24 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			item = default(T);
-
 			if (index < 0)
-				return false;
+				throw new ArgumentException("Index must be greater or equal to 0", "index");
 
-			T[] itemArray = extends as T[] ?? extends.ToArray();
-			if (index >= itemArray.Length)
-				return false;
+			item = default(T);
+			int eachIndex = 0;
 
-			item = itemArray[index];
-			return true;
+			foreach (T each in extends)
+			{
+				if (eachIndex == index)
+				{
+					item = each;
+					return true;
+				}
+
+				eachIndex++;
+			}
+
+			return false;
 		}
 
 		/// <summary>
@@ -396,7 +403,9 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.PrependMany(new[] {item});
+			yield return item;
+			foreach (T next in extends)
+				yield return next;
 		}
 #endif
 
@@ -435,7 +444,9 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.AppendMany(new[] {item});
+			foreach (T first in extends)
+				yield return first;
+			yield return item;
 		}
 #endif
 
@@ -487,7 +498,26 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.Except(new[] {item});
+			return extends.Except(item, EqualityComparer<T>.Default);
+		}
+
+		/// <summary>
+		/// Returns every item in the sequence except the given item.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="item"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> Except<T>(this IEnumerable<T> extends, T item, IEqualityComparer<T> comparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			return extends.Where(i => !comparer.Equals(item, i));
 		}
 
 		/// <summary>
