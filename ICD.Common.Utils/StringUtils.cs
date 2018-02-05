@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -481,6 +482,17 @@ namespace ICD.Common.Utils
 				return input;
 
 			return char.ToUpper(input[0]) + input.Substring(1);
+		}
+
+		/// <summary>
+		/// Capitalizes the first character of each word.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static string ToTitleCase(string input)
+		{
+			return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input.ToLower());
 		}
 
 		/// <summary>

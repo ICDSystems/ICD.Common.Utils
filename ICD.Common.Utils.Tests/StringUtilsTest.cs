@@ -67,6 +67,13 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual("Foobar", StringUtils.UppercaseFirst("foobar"));
 		}
 
+		[TestCase("test", "Test")]
+		[TestCase("test test", "Test Test")]
+		public static void ToTitleCase(string input, string expected)
+		{
+			Assert.AreEqual(expected, StringUtils.ToTitleCase(input));
+		}
+
 		[Test, UsedImplicitly]
 		public void ToIpIdStringTest()
 		{
