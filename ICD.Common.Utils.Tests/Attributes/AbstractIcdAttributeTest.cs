@@ -1,6 +1,9 @@
-﻿namespace ICD.Common.Utils.Tests.Attributes
+﻿using ICD.Common.Utils.Attributes;
+
+namespace ICD.Common.Utils.Tests.Attributes
 {
-    public abstract class AbstractIcdAttributeTest
+    public abstract class AbstractIcdAttributeTest<TAttribute>
+		where TAttribute : AbstractIcdAttribute
     {
     }
 }
