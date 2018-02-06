@@ -8,6 +8,22 @@ namespace ICD.Common.Utils.Extensions
 	public static class DictionaryExtensions
 	{
 		/// <summary>
+		/// Removes all of the given keys from the dictionary.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="keys"></param>
+		public static void RemoveAll<TKey, TValue>(this IDictionary<TKey, TValue> extends, IEnumerable<TKey> keys)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			foreach (TKey key in keys)
+				extends.Remove(key);
+		}
+
+		/// <summary>
 		/// Removes the first key with a value matching the given value.
 		/// </summary>
 		/// <typeparam name="TKey"></typeparam>
@@ -22,10 +38,7 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("extends");
 
 			TKey key;
-			if (!extends.TryGetKey(value, out key))
-				return false;
-
-			return extends.Remove(key);
+			return extends.TryGetKey(value, out key) && extends.Remove(key);
 		}
 
 		/// <summary>
