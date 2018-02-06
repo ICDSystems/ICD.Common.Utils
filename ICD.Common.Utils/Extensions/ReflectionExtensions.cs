@@ -21,7 +21,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="inherits"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> GetCustomAttributes<T>(this MemberInfo extends, bool inherits)
+		public static IEnumerable<T> GetCustomAttributes<T>(this ICustomAttributeProvider extends, bool inherits)
 			where T : Attribute
 		{
 			if (extends == null)
