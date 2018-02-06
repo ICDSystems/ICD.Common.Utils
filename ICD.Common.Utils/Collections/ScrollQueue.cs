@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Collections
 {
@@ -86,8 +86,17 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public void Enqueue(TContents item)
 		{
-			m_CollectionLock.Execute(() => m_Collection.AddLast(item));
-			Trim();
+			m_CollectionLock.Enter();
+
+			try
+			{
+				m_Collection.AddLast(item);
+				Trim();
+			}
+			finally
+			{
+				m_CollectionLock.Leave();
+			}
 		}
 
 		/// <summary>
@@ -132,7 +141,7 @@ namespace ICD.Common.Utils.Collections
 
 		public IEnumerator<TContents> GetEnumerator()
 		{
-			return m_CollectionLock.Execute(() => m_Collection.ToList().GetEnumerator());
+			return m_CollectionLock.Execute(() => m_Collection.ToList(Count).GetEnumerator());
 		}
 
 		void ICollection.CopyTo(Array myArr, int index)
