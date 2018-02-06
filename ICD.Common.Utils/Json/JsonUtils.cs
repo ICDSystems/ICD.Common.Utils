@@ -260,5 +260,29 @@ namespace ICD.Common.Utils.Json
 			                   },
 			                   json);
 		}
+
+		/// <summary>
+		/// Deserializes the given token based on the known type.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="token"></param>
+		/// <returns></returns>
+		public static object Deserialize(Type type, JToken token)
+		{
+			return Deserialize(type, token, new JsonSerializer());
+		}
+
+		/// <summary>
+		/// Deserializes the given token based on the known type.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="token"></param>
+		/// <param name="serializer"></param>
+		/// <returns></returns>
+		public static object Deserialize(Type type, JToken token, JsonSerializer serializer)
+		{
+			using (JTokenReader jsonReader = new JTokenReader(token))
+				return serializer.Deserialize(jsonReader, type);
+		}
 	}
 }
