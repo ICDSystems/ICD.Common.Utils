@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
@@ -251,9 +252,6 @@ namespace ICD.Common.Utils
 			if (assembly == null)
 				throw new ArgumentNullException("assembly");
 
-#if SIMPLSHARP
-			return assembly.GetCustomAttributes(typeof(T), false).Cast<T>();
-#else
 			try
 			{
 				return assembly.GetCustomAttributes<T>();
@@ -262,7 +260,6 @@ namespace ICD.Common.Utils
 			{
 				return Enumerable.Empty<T>();
 			}
-#endif
 		}
 
 		/// <summary>
