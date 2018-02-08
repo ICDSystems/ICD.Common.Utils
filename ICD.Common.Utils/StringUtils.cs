@@ -492,7 +492,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static string ToTitleCase(string input)
 		{
-			return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input.ToLower());
+			return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input);
 		}
 
 		/// <summary>
