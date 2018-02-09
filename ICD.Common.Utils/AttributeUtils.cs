@@ -25,6 +25,7 @@ namespace ICD.Common.Utils
 		private static readonly IcdHashSet<Type> s_CachedTypes;
 
 		private static readonly Dictionary<Attribute, MethodInfo> s_AttributeToMethodCache;
+		private static readonly Dictionary<Attribute, Type> s_AttributeToTypeCache;
 		private static readonly Dictionary<Type, IcdHashSet<Attribute>> s_TypeToAttributesCache;
 
 		private static ILoggerService Logger { get { return ServiceProvider.TryGetService<ILoggerService>(); } }
@@ -38,6 +39,7 @@ namespace ICD.Common.Utils
 			s_CachedTypes = new IcdHashSet<Type>();
 
 			s_AttributeToMethodCache = new Dictionary<Attribute, MethodInfo>();
+			s_AttributeToTypeCache = new Dictionary<Attribute, Type>();
 			s_TypeToAttributesCache = new Dictionary<Type, IcdHashSet<Attribute>>();
 		}
 
@@ -129,14 +131,11 @@ namespace ICD.Common.Utils
 
 			try
 			{
-#if SIMPLSHARP
 				s_TypeToAttributesCache[type] = new IcdHashSet<Attribute>(type.GetCustomAttributes<Attribute>(false));
+				foreach (Attribute attribute in s_TypeToAttributesCache[type])
+					s_AttributeToTypeCache[attribute] = type;
+
 				methods = type.GetMethods();
-#else
-				s_TypeToAttributesCache[type] =
-					new IcdHashSet<Attribute>(ReflectionExtensions.GetCustomAttributes<Attribute>(type.GetTypeInfo(), false));
-				methods = type.GetTypeInfo().GetMethods();
-#endif
 			}
 			// GetMethods for Open Generic Types is not supported.
 			catch (NotSupportedException)
@@ -169,6 +168,18 @@ namespace ICD.Common.Utils
 		#endregion
 
 		#region Lookup
+
+		/// <summary>
+		/// Gets the class attributes of the given generic type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static IEnumerable<T> GetClassAttributes<T>()
+			where T : Attribute
+		{
+			return s_AttributeToTypeCache.Select(kvp => kvp.Key)
+			                             .OfType<T>();
+		}
 
 		/// <summary>
 		/// Gets the first attribute on the given class type matching the generic type.
@@ -216,6 +227,19 @@ namespace ICD.Common.Utils
 			return s_TypeToAttributesCache.ContainsKey(type)
 				       ? s_TypeToAttributesCache[type].ToArray()
 				       : Enumerable.Empty<Attribute>();
+		}
+
+		/// <summary>
+		/// Gets the type with the given attribute.
+		/// </summary>
+		/// <param name="attribute"></param>
+		/// <returns></returns>
+		public static Type GetClass(Attribute attribute)
+		{
+			if (attribute == null)
+				throw new ArgumentNullException("attribute");
+
+			return s_AttributeToTypeCache[attribute];
 		}
 
 		/// <summary>
