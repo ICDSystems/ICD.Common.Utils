@@ -473,6 +473,31 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Pads the given sequence to the given count size with default items.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="count"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static IEnumerable<T> PadRight<T>(this IEnumerable<T> extends, int count)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			int index = 0;
+
+			foreach (T item in extends)
+			{
+				yield return item;
+				index++;
+			}
+
+			for (; index < count; index++)
+				yield return default(T);
+		}
+
+		/// <summary>
 		/// Default ordering for the items in the sequence.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>

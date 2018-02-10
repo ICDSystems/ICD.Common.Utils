@@ -268,6 +268,23 @@ namespace ICD.Common.Utils.Tests.Extensions
 		}
 
 		[Test]
+		public void PadRightTest()
+		{
+			int[] items = new[] {1, 2, 3}.PadRight(5).ToArray();
+
+			Assert.AreEqual(5, items.Length);
+			Assert.AreEqual(1, items[0]);
+			Assert.AreEqual(2, items[1]);
+			Assert.AreEqual(3, items[2]);
+			Assert.AreEqual(0, items[3]);
+			Assert.AreEqual(0, items[4]);
+
+			items = items.PadRight(2).ToArray();
+
+			Assert.AreEqual(5, items.Length);
+		}
+
+		[Test]
 		public void OrderTest()
 		{
 			int[] values = new[] {2, 3, 1}.Order().ToArray();
