@@ -653,14 +653,15 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Shim to
+		/// Gets distinct elements from the sequence based on given callbacks.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="comparer"></param>
+		/// <param name="getHashCode"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<T> Distinct<T>(this IEnumerable<T> extends, Func<T, T, bool> comparer)
+		public static IEnumerable<T> Distinct<T>(this IEnumerable<T> extends, Func<T, T, bool> comparer, Func<T, int> getHashCode)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -668,7 +669,7 @@ namespace ICD.Common.Utils.Extensions
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
 
-			return extends.Distinct(new FuncComparer<T>(comparer));
+			return extends.Distinct(new FuncComparer<T>(comparer, getHashCode));
 		}
 
 		/// <summary>

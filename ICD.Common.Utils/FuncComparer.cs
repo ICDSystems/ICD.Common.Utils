@@ -10,14 +10,17 @@ namespace ICD.Common.Utils
 	public sealed class FuncComparer<T> : IEqualityComparer<T>
 	{
 		private readonly Func<T, T, bool> m_Comparer;
+		private readonly Func<T, int> m_GetHashCode;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="comparer"></param>
-		public FuncComparer(Func<T, T, bool> comparer)
+		/// <param name="getHashCode"></param>
+		public FuncComparer(Func<T, T, bool> comparer, Func<T, int> getHashCode)
 		{
 			m_Comparer = comparer;
+			m_GetHashCode = getHashCode;
 		}
 
 		public bool Equals(T x, T y)
@@ -27,7 +30,7 @@ namespace ICD.Common.Utils
 
 		public int GetHashCode(T obj)
 		{
-			return obj.GetHashCode();
+			return m_GetHashCode(obj);
 		}
 	}
 }
