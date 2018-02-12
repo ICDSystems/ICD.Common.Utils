@@ -643,12 +643,32 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="TValue"></typeparam>
 		/// <param name="extends"></param>
 		/// <returns></returns>
+		[PublicAPI]
 		public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
 			return extends.ToDictionary(x => x.Key, x => x.Value);
+		}
+
+		/// <summary>
+		/// Shim to
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static IEnumerable<T> Distinct<T>(this IEnumerable<T> extends, Func<T, T, bool> comparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			return extends.Distinct(new FuncComparer<T>(comparer));
 		}
 
 		/// <summary>
