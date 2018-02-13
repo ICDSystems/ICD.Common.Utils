@@ -964,5 +964,73 @@ namespace ICD.Common.Utils.Extensions
 
 			return any;
 		}
+
+		/// <summary>
+		/// Applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
+		/// </summary>
+		/// <typeparam name="TFirst"></typeparam>
+		/// <typeparam name="TSecond"></typeparam>
+		/// <param name="first"></param>
+		/// <param name="second"></param>
+		/// <param name="callback"></param>
+		public static void Zip<TFirst, TSecond>(this IEnumerable<TFirst> first,
+		                                        IEnumerable<TSecond> second,
+		                                        Action<TFirst, TSecond> callback)
+		{
+			if (first == null)
+				throw new ArgumentNullException("first");
+
+			if (second == null)
+				throw new ArgumentNullException("second");
+
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
+			using (IEnumerator<TFirst> enumerator1 = first.GetEnumerator())
+			{
+				using (IEnumerator<TSecond> enumerator2 = second.GetEnumerator())
+				{
+					while (enumerator1.MoveNext() && enumerator2.MoveNext())
+						callback(enumerator1.Current, enumerator2.Current);
+				}
+			}
+		}
+
+#if SIMPLSHARP
+
+		/// <summary>
+		/// Applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
+		/// </summary>
+		/// <typeparam name="TFirst"></typeparam>
+		/// <typeparam name="TSecond"></typeparam>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="first"></param>
+		/// <param name="second"></param>
+		/// <param name="callback"></param>
+		/// <returns></returns>
+		public static IEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IEnumerable<TFirst> first,
+		                                                                 IEnumerable<TSecond> second,
+		                                                                 Func<TFirst, TSecond, TResult> callback)
+		{
+			if (first == null)
+				throw new ArgumentNullException("first");
+
+			if (second == null)
+				throw new ArgumentNullException("second");
+
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
+			using (IEnumerator<TFirst> enumerator1 = first.GetEnumerator())
+			{
+				using (IEnumerator<TSecond> enumerator2 = second.GetEnumerator())
+				{
+					while (enumerator1.MoveNext() && enumerator2.MoveNext())
+						yield return callback(enumerator1.Current, enumerator2.Current);
+				}
+			}
+		}
+
+#endif
 	}
 }
