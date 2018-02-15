@@ -35,6 +35,21 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Writes the type value.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="type"></param>
+		[PublicAPI]
+		public static void WriteType(this JsonWriter extends, Type type)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string assemblyName = type == null ? null : type.AssemblyQualifiedName;
+			extends.WriteValue(assemblyName);
+		}
+
+		/// <summary>
 		/// Gets the current value as an integer.
 		/// </summary>
 		/// <param name="extends"></param>
