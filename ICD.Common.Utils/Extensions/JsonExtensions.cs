@@ -45,8 +45,16 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			string assemblyName = type == null ? null : type.AssemblyQualifiedName;
-			extends.WriteValue(assemblyName);
+			string name;
+
+			if (type == null)
+				name = null;
+			else if (type.IsPrimitive)
+				name = type.Name;
+			else
+				name = type.AssemblyQualifiedName;
+
+			extends.WriteValue(name);
 		}
 
 		/// <summary>
