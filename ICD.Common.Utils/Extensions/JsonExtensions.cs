@@ -241,7 +241,7 @@ namespace ICD.Common.Utils.Extensions
 
 			while (reader.TokenType != JsonToken.EndObject)
 			{
-				TKey key = (TKey)Convert.ChangeType(reader.Value, typeof(TKey));
+				TKey key = (TKey)Convert.ChangeType(reader.Value, typeof(TKey), null);
 
 				// Step into the value
 				reader.Read();
