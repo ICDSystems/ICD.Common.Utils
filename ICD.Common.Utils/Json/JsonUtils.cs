@@ -29,8 +29,16 @@ namespace ICD.Common.Utils.Json
 		public static void CacheType<T>()
 			where T : new()
 		{
-			string serialized = JsonConvert.SerializeObject(ReflectionUtils.CreateInstance<T>());
-			JsonConvert.DeserializeObject<T>(serialized);
+			CacheType(typeof(T));
+		}
+
+		/// <summary>
+		/// Forces Newtonsoft to cache the given type for faster subsequent usage.
+		/// </summary>
+		public static void CacheType(Type type)
+		{
+			string serialized = JsonConvert.SerializeObject(ReflectionUtils.CreateInstance(type));
+			JsonConvert.DeserializeObject(serialized, type);
 		}
 
 		/// <summary>

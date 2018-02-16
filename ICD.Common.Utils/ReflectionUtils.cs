@@ -211,6 +211,26 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Returns true if the given type has a public parameterless constructor.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static bool HasPublicParameterlessConstructor(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			const BindingFlags binding = BindingFlags.Instance | BindingFlags.Public;
+
+#if SIMPLSHARP
+			return ((CType)type).GetConstructor(binding, null, new CType[0], null)
+#else
+			return type.GetConstructor(binding, null, new Type[0], null) 
+#endif
+			       != null;
+		}
+
+		/// <summary>
 		/// Creates an instance of the given type, calling the default constructor.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
