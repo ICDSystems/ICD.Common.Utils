@@ -42,7 +42,15 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.GetCustomAttributes(typeof(T), inherits).Cast<T>();
+			try
+			{
+				return extends.GetCustomAttributes(typeof(T), inherits).Cast<T>();
+			}
+			// Crestron bug?
+			catch (ArgumentNullException)
+			{
+				return Enumerable.Empty<T>();
+			}
 		}
 
 		/// <summary>
