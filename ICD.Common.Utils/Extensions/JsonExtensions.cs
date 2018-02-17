@@ -181,6 +181,9 @@ namespace ICD.Common.Utils.Extensions
 			{
 				TItem output = extends.Deserialize<TItem>(reader);
 				yield return output;
+
+				// Read out of the last value
+				reader.Read();
 			}
 		}
 
@@ -249,6 +252,9 @@ namespace ICD.Common.Utils.Extensions
 				TValue value = extends.Deserialize<TValue>(reader);
 
 				yield return new KeyValuePair<TKey, TValue>(key, value);
+
+				// Read out of the last value
+				reader.Read();
 			}
 		}
 	}
