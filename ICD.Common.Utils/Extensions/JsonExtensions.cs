@@ -59,6 +59,21 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Gets the current value as a Type.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static Type GetValueAsType(this JsonReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string value = extends.GetValueAsString();
+			return Type.GetType(value, false, true);
+		}
+
+		/// <summary>
 		/// Gets the current value as an integer.
 		/// </summary>
 		/// <param name="extends"></param>
@@ -146,10 +161,36 @@ namespace ICD.Common.Utils.Extensions
 			if (items == null)
 				throw new ArgumentNullException("items");
 
+			extends.SerializeArray(writer, items, (s, w, item) => s.Serialize(w, item));
+		}
+
+		/// <summary>
+		/// Serializes the given sequence of items to the writer.
+		/// </summary>
+		/// <typeparam name="TItem"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="writer"></param>
+		/// <param name="items"></param>
+		/// <param name="write"></param>
+		public static void SerializeArray<TItem>(this JsonSerializer extends, JsonWriter writer, IEnumerable<TItem> items,
+												 Action<JsonSerializer, JsonWriter, TItem> write)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
+			if (items == null)
+				throw new ArgumentNullException("items");
+
+			if (write == null)
+				throw new ArgumentNullException("write");
+
 			writer.WriteStartArray();
 			{
 				foreach (TItem item in items)
-					extends.Serialize(writer, item);
+					write(extends, writer, item);
 			}
 			writer.WriteEndArray();
 		}
@@ -168,6 +209,28 @@ namespace ICD.Common.Utils.Extensions
 			if (reader == null)
 				throw new ArgumentNullException("reader");
 
+			return extends.DeserializeArray(reader, (s, r) => extends.Deserialize<TItem>(reader));
+		}
+
+		/// <summary>
+		/// Deserializes an array of items from the reader's current value.
+		/// </summary>
+		/// <typeparam name="TItem"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="reader"></param>
+		/// <param name="read"></param>
+		public static IEnumerable<TItem> DeserializeArray<TItem>(this JsonSerializer extends, JsonReader reader,
+																 Func<JsonSerializer, JsonReader, TItem> read)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			if (read == null)
+				throw new ArgumentNullException("read");
+
 			if (reader.TokenType == JsonToken.Null)
 				yield break;
 
@@ -179,7 +242,7 @@ namespace ICD.Common.Utils.Extensions
 
 			while (reader.TokenType != JsonToken.EndArray)
 			{
-				TItem output = extends.Deserialize<TItem>(reader);
+				TItem output = read(extends, reader);
 				yield return output;
 
 				// Read out of the last value
