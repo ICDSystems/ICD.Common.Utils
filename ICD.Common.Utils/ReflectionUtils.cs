@@ -261,6 +261,21 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Creates an instance of the given type, calling the default constructor.
+		/// </summary>
+		/// <returns></returns>
+		public static T CreateInstance<T>(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsAssignableTo(typeof(T)))
+				throw new InvalidOperationException("Type is not assignable to T");
+
+			return (T)CreateInstance(type);
+		}
+
+		/// <summary>
 		/// Gets the custom attributes added to the given assembly.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
