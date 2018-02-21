@@ -375,6 +375,29 @@ namespace ICD.Common.Utils.Tests.Extensions
 		}
 
 		[Test]
+		public void DistinctTest()
+		{
+			string[] items =
+			{
+				"one",
+				"two",
+				"three"
+			};
+
+			items = items.Distinct(i => i.Length).ToArray();
+
+			Assert.AreEqual(2, items.Length);
+			Assert.AreEqual("one", items[0]);
+			Assert.AreEqual("three", items[1]);
+		}
+
+		[Test]
+		public void DistinctComparerTest()
+		{
+			Assert.Inconclusive();
+		}
+
+		[Test]
 		public void UnanimousTest()
 		{
 			Assert.IsTrue(new[] {true, true, true}.Unanimous());
