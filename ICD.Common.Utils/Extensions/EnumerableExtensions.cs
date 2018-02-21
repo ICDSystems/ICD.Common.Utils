@@ -653,23 +653,51 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Gets distinct elements from the sequence based on given callbacks.
+		/// Gets distinct elements from the sequence based on given property.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
+		/// <typeparam name="TItem"></typeparam>
+		/// <typeparam name="TProperty"></typeparam>
 		/// <param name="extends"></param>
-		/// <param name="comparer"></param>
-		/// <param name="getHashCode"></param>
+		/// <param name="getProperty"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<T> Distinct<T>(this IEnumerable<T> extends, Func<T, T, bool> comparer, Func<T, int> getHashCode)
+		public static IEnumerable<TItem> Distinct<TItem, TProperty>(this IEnumerable<TItem> extends,
+		                                                            Func<TItem, TProperty> getProperty)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (comparer == null)
-				throw new ArgumentNullException("comparer");
+			if (getProperty == null)
+				throw new ArgumentNullException("getProperty");
 
-			return extends.Distinct(new FuncComparer<T>(comparer, getHashCode));
+			IEqualityComparer<TProperty> comparer = EqualityComparer<TProperty>.Default;
+			return extends.Distinct(getProperty, comparer);
+		}
+
+		/// <summary>
+		/// Gets distinct elements from the sequence based on given property.
+		/// </summary>
+		/// <typeparam name="TItem"></typeparam>
+		/// <typeparam name="TProperty"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="getProperty"></param>
+		/// <param name="propertyComparer"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static IEnumerable<TItem> Distinct<TItem, TProperty>(this IEnumerable<TItem> extends,
+		                                                            Func<TItem, TProperty> getProperty,
+		                                                            IEqualityComparer<TProperty> propertyComparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (getProperty == null)
+				throw new ArgumentNullException("getProperty");
+
+			if (propertyComparer == null)
+				throw new ArgumentNullException("propertyComparer");
+
+			return extends.Distinct(new PropertyEqualityComparer<TItem, TProperty>(propertyComparer, getProperty));
 		}
 
 		/// <summary>
