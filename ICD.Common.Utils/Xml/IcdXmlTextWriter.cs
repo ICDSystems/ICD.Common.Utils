@@ -90,6 +90,11 @@ namespace ICD.Common.Utils.Xml
 			m_Writer.WriteComment(comment);
 		}
 
+		public void WriteValue(object value)
+		{
+			m_Writer.WriteValue(value);
+		}
+
 		public void Dispose()
 		{
 #if SIMPLSHARP
