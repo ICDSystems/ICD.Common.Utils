@@ -168,7 +168,8 @@ namespace ICD.Common.Utils.Tests.Extensions
 				{3, 30}
 			};
 
-			a.Update(b);
+			Assert.IsTrue(a.Update(b));
+			Assert.IsFalse(a.Update(b));
 
 			Assert.AreEqual(3, a.Count);
 			Assert.AreEqual(10, a[1]);

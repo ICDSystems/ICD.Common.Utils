@@ -191,8 +191,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="TValue"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="other"></param>
+		/// <returns></returns>
 		[PublicAPI]
-		public static void Update<TKey, TValue>(this IDictionary<TKey, TValue> extends, IDictionary<TKey, TValue> other)
+		public static bool Update<TKey, TValue>(this IDictionary<TKey, TValue> extends, IDictionary<TKey, TValue> other)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -200,8 +201,40 @@ namespace ICD.Common.Utils.Extensions
 			if (other == null)
 				throw new ArgumentNullException("other");
 
+			return extends.Update(other, EqualityComparer<TValue>.Default);
+		}
+
+		/// <summary>
+		/// Updates the dictionary with items from the other dictionary.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="other"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool Update<TKey, TValue>(this IDictionary<TKey, TValue> extends, IDictionary<TKey, TValue> other,
+		                                        IEqualityComparer<TValue> comparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (other == null)
+				throw new ArgumentNullException("other");
+
+			bool change = false;
+
 			foreach (KeyValuePair<TKey, TValue> pair in other)
+			{
+				if (extends.ContainsKey(pair.Key) && comparer.Equals(pair.Value, extends[pair.Key]))
+					continue;
+
 				extends[pair.Key] = pair.Value;
+				change = true;
+			}
+
+			return change;
 		}
 
 		/// <summary>
