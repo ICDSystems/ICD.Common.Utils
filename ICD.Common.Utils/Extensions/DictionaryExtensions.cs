@@ -386,5 +386,21 @@ namespace ICD.Common.Utils.Extensions
 
 			return extends.OrderByKey().Select(kvp => kvp.Value);
 		}
+
+		/// <summary>
+		/// Returns an inverse mapping of TValue -> TKey.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static Dictionary<TValue, TKey> ToInverse<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
+		}
 	}
 }
