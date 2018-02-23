@@ -16,7 +16,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 				{1, 10},
 				{2, 20},
 				{3, 30},
-				{4, 40},
+				{4, 40}
 			};
 
 			Assert.IsTrue(dict.RemoveValue(10));
@@ -34,7 +34,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 				{1, 10},
 				{2, 10},
 				{3, 30},
-				{4, 40},
+				{4, 40}
 			};
 
 			dict.RemoveAllValues(10);
@@ -52,7 +52,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 				{1, 10},
 				{2, 10},
 				{3, 30},
-				{4, 40},
+				{4, 40}
 			};
 
 			Assert.AreEqual(10, dict.GetDefault(1));
@@ -67,7 +67,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 				{1, 10},
 				{2, 10},
 				{3, 30},
-				{4, 40},
+				{4, 40}
 			};
 
 			Assert.AreEqual(10, dict.GetDefault(1, 1000));
@@ -82,7 +82,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 				{1, 10},
 				{2, 10},
 				{3, 30},
-				{4, 40},
+				{4, 40}
 			};
 
 			Assert.AreEqual(10, dict.GetOrAddDefault(1, 1000));
@@ -159,7 +159,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Dictionary<int, int> a = new Dictionary<int, int>
 			{
 				{1, 10},
-				{2, 10},
+				{2, 10}
 			};
 
 			Dictionary<int, int> b = new Dictionary<int, int>
@@ -291,7 +291,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 			{
 				{1, 10},
 				{2, 20},
-				{3, 30},
+				{3, 30}
 			};
 
 			int[] ordered = a.OrderValuesByKey().ToArray();
