@@ -114,6 +114,9 @@ namespace ICD.Common.Utils.Xml
 
 		public void Dispose()
 		{
+			if (m_Reader == null)
+				return;
+
 			try
 			{
 #if SIMPLSHARP
