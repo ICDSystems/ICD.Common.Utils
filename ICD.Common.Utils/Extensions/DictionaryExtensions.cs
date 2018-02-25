@@ -193,7 +193,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="other"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool Update<TKey, TValue>(this IDictionary<TKey, TValue> extends, IDictionary<TKey, TValue> other)
+		public static bool Update<TKey, TValue>(this IDictionary<TKey, TValue> extends,
+		                                        IEnumerable<KeyValuePair<TKey, TValue>> other)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -214,7 +215,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool Update<TKey, TValue>(this IDictionary<TKey, TValue> extends, IDictionary<TKey, TValue> other,
+		public static bool Update<TKey, TValue>(this IDictionary<TKey, TValue> extends,
+		                                        IEnumerable<KeyValuePair<TKey, TValue>> other,
 		                                        IEqualityComparer<TValue> comparer)
 		{
 			if (extends == null)
