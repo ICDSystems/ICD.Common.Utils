@@ -158,6 +158,15 @@ namespace ICD.Common.Utils.Services
 		}
 
 		/// <summary>
+		/// Removes all of the registered services.
+		/// </summary>
+		[PublicAPI]
+		public static void RemoveAllServices()
+		{
+			Instance.RemoveAllServicesInstance();
+		}
+
+		/// <summary>
 		/// Attempts to remove the given service from every registered type.
 		/// </summary>
 		/// <param name="service"></param>
@@ -345,6 +354,14 @@ namespace ICD.Common.Utils.Services
 			{
 				m_ServicesSection.Leave();
 			}
+		}
+
+		/// <summary>
+		/// Removes all of the registered services.
+		/// </summary>
+		private void RemoveAllServicesInstance()
+		{
+			m_ServicesSection.Execute(() => m_Services.Clear());
 		}
 
 		/// <summary>
