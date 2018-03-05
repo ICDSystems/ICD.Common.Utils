@@ -244,6 +244,21 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Gets the overlapping values of the given enum flags.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public static T GetFlagsIntersection<T>(T a, T b)
+		{
+			int aInt = (int)(object)a;
+			int bInt = (int)(object)b;
+
+			return (T)Enum.ToObject(typeof(T), aInt & bInt);
+		}
+
+		/// <summary>
 		/// Gets all of the set flags on the given enum.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
