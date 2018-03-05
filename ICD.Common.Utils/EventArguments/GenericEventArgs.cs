@@ -2,7 +2,7 @@
 
 namespace ICD.Common.Utils.EventArguments
 {
-	public abstract class GenericEventArgs<T> : EventArgs
+	public class GenericEventArgs<T> : EventArgs
 	{
 		public T Data { get; private set; }
 
@@ -10,7 +10,7 @@ namespace ICD.Common.Utils.EventArguments
 		/// Constructor.
 		/// </summary>
 		/// <param name="data"></param>
-		protected GenericEventArgs(T data)
+		public GenericEventArgs(T data)
 		{
 			Data = data;
 		}
