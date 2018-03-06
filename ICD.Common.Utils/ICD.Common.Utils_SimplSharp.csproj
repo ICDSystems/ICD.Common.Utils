@@ -66,7 +66,7 @@
     </Reference>
     <Reference Include="SimplSharpSQLHelperInterface, Version=1.0.92.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\ProgramData\Crestron\SDK\SimplSharpSQLHelperInterface.dll</HintPath>
+      <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpSQLHelperInterface.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
