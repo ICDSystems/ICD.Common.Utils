@@ -6,7 +6,7 @@
     <AssemblyName>ICD.Common.Utils</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<Deterministic>false</Deterministic>
+	<Deterministic>true</Deterministic>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Chris Cameron, Jeff Thompson</Authors>
     <PackageId>ICD.Common.Utils</PackageId>

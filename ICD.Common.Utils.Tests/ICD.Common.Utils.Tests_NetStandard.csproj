@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
 	<RootNamespace>ICD.Common.Utils.Tests</RootNamespace>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<Deterministic>false</Deterministic>
+	<Deterministic>true</Deterministic>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
