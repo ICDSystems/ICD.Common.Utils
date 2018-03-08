@@ -1,4 +1,5 @@
 ﻿using System;
+using ICD.Common.Utils.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -12,26 +13,17 @@ namespace ICD.Common.Utils.Json
 		private const string TYPE_TOKEN = "t";
 		private const string ITEM_TOKEN = "i";
 
-		private readonly string m_ItemTypeString;
 		private readonly object m_Item;
-
-		/// <summary>
-		/// Gets the string representation of the item type. Returns null if the item is null.
-		/// </summary>
-		public string ItemTypeString { get { return m_ItemTypeString; } }
 
 		/// <summary>
 		/// Gets the Type of the item. Returns null if the item is null.
 		/// </summary>
-		public Type ItemType
-		{
-			get { return string.IsNullOrEmpty(m_ItemTypeString) ? null : Type.GetType(m_ItemTypeString); }
-		}
+		public Type ItemType { get { return m_Item == null ? null : m_Item.GetType(); } }
 
 		/// <summary>
 		/// Gets the wrapped item.
 		/// </summary>
-		public object Item { get { return string.IsNullOrEmpty(m_ItemTypeString) ? null : m_Item; } }
+		public object Item { get { return m_Item; } }
 
 		/// <summary>
 		/// Constructor.
@@ -39,7 +31,6 @@ namespace ICD.Common.Utils.Json
 		/// <param name="item"></param>
 		public JsonItemWrapper(object item)
 		{
-			m_ItemTypeString = item == null ? null : item.GetType().FullName;
 			m_Item = item;
 		}
 
@@ -53,13 +44,13 @@ namespace ICD.Common.Utils.Json
 				throw new ArgumentNullException("writer");
 
 			writer.WriteStartObject();
+			{
+				writer.WritePropertyName(TYPE_TOKEN);
+				writer.WriteType(ItemType);
 
-			writer.WritePropertyName(TYPE_TOKEN);
-			writer.WriteValue(m_ItemTypeString);
-
-			writer.WritePropertyName(ITEM_TOKEN);
-			writer.WriteValue(JsonConvert.SerializeObject(m_Item));
-
+				writer.WritePropertyName(ITEM_TOKEN);
+				writer.WriteValue(JsonConvert.SerializeObject(m_Item));
+			}
 			writer.WriteEndObject();
 		}
 
