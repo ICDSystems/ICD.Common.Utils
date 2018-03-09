@@ -50,8 +50,8 @@ namespace ICD.Common.Utils.Extensions
 
 			if (type == null)
 				name = null;
-			//else if (type.IsPrimitive)
-			//	name = type.FullName;
+			else if (type.IsPrimitive)
+				name = type.FullName;
 			else
 				name = type.AssemblyQualifiedName;
 
