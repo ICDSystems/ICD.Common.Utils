@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
-using ICD.Common.Utils.Collections;
 using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
 using System.Globalization;
@@ -15,8 +14,15 @@ namespace ICD.Common.Utils
 {
 	public static class EnumUtils
 	{
-		private static readonly Dictionary<Type, IcdHashSet<object>> s_EnumValuesCache =
-			new Dictionary<Type, IcdHashSet<object>>();
+		private static readonly Dictionary<Type, object[]> s_EnumValuesCache;
+
+		/// <summary>
+		/// Static constructor.
+		/// </summary>
+		static EnumUtils()
+		{
+			s_EnumValuesCache = new Dictionary<Type, object[]>();
+		}
 
 		/// <summary>
 		/// Returns true if the given type is an enum.
@@ -119,7 +125,7 @@ namespace ICD.Common.Utils
 
 			// Reflection is slow and this method is called a lot, so we cache the results.
 			if (!s_EnumValuesCache.ContainsKey(type))
-				s_EnumValuesCache[type] = GetValuesUncached(type).ToIcdHashSet();
+				s_EnumValuesCache[type] = GetValuesUncached(type).ToArray();
 
 			return s_EnumValuesCache[type];
 		}
@@ -527,17 +533,7 @@ namespace ICD.Common.Utils
 // ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
-			return ToEnum((object)value);
-		}
-
-		/// <summary>
-		/// Converts the given enum value to an Enum.
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static Enum ToEnum(object value)
-		{
-			return (Enum)value;
+			return (Enum)(object)value;
 		}
 
 		#endregion

@@ -49,8 +49,8 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentException(message);
 			}
 
-			ulong num = Convert.ToUInt64(value);
-			return (Convert.ToUInt64(extends) & num) == num;
+			int num = (int)(object)value;
+			return ((int)(object)extends & num) == num;
 		}
 	}
 }
