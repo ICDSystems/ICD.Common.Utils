@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
@@ -126,6 +127,22 @@ namespace ICD.Common.Utils.Timers
 			        }, name);
 
 			return output;
+		}
+
+		/// <summary>
+		/// Profiles getting each item from the enumerable.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="enumerable"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> Profile<T>(IEnumerable<T> enumerable, string name)
+		{
+			using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
+			{
+				while (Profile(() => enumerator.MoveNext(), name))
+					yield return enumerator.Current;
+			}
 		}
 
 		private static void PrintProfile(IcdStopwatch stopwatch, string name)
