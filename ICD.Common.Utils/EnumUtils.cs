@@ -533,17 +533,7 @@ namespace ICD.Common.Utils
 // ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
-			return ToEnum((object)value);
-		}
-
-		/// <summary>
-		/// Converts the given enum value to an Enum.
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static Enum ToEnum(object value)
-		{
-			return (Enum)value;
+			return (Enum)(object)value;
 		}
 
 		#endregion
