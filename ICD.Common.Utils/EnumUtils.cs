@@ -15,6 +15,7 @@ namespace ICD.Common.Utils
 	public static class EnumUtils
 	{
 		private static readonly Dictionary<Type, object[]> s_EnumValuesCache;
+		private static readonly Dictionary<Type, Dictionary<object, object[]>> s_EnumFlagsCache;
 
 		/// <summary>
 		/// Static constructor.
@@ -22,6 +23,7 @@ namespace ICD.Common.Utils
 		static EnumUtils()
 		{
 			s_EnumValuesCache = new Dictionary<Type, object[]>();
+			s_EnumFlagsCache = new Dictionary<Type, Dictionary<object, object[]>>();
 		}
 
 		/// <summary>
@@ -276,7 +278,15 @@ namespace ICD.Common.Utils
 // ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
-			return GetValues<T>().Where(e => HasFlag(value, e));
+			Type type = typeof(T);
+
+			if (!s_EnumFlagsCache.ContainsKey(type))
+				s_EnumFlagsCache.Add(type, new Dictionary<object, object[]>());
+
+			if (!s_EnumFlagsCache[type].ContainsKey(value))
+				s_EnumFlagsCache[type][value] = GetValues<T>().Where(e => HasFlag(value, e)).Cast<object>().ToArray();
+
+			return s_EnumFlagsCache[type][value].Cast<T>();
 		}
 
 		/// <summary>
