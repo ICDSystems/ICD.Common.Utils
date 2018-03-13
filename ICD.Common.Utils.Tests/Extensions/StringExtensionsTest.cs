@@ -1,6 +1,6 @@
-﻿using ICD.Common.Utils.Extensions;
+﻿using System.Linq;
+using ICD.Common.Utils.Extensions;
 using NUnit.Framework;
-using System.Linq;
 
 namespace ICD.Common.Utils.Tests.Extensions
 {
@@ -11,7 +11,7 @@ namespace ICD.Common.Utils.Tests.Extensions
         public void IndexOfTest()
         {
             string first;
-            Assert.AreEqual(5, "test1test3test2".IndexOf(new string[] { "test2", "test3" }, out first));
+            Assert.AreEqual(5, "test1test3test2".IndexOf(new[] { "test2", "test3" }, out first));
             Assert.AreEqual("test3", first);
         }
 
@@ -63,7 +63,7 @@ namespace ICD.Common.Utils.Tests.Extensions
         [Test]
         public void SplitStringDelimitersTest()
         {
-            string[] split = "1234567890".Split(new string[] { "23", "67" }).ToArray();
+            string[] split = "1234567890".Split(new[] { "23", "67" }).ToArray();
 
             Assert.AreEqual(3, split.Length);
             Assert.AreEqual("145890", string.Join("", split));
@@ -78,7 +78,7 @@ namespace ICD.Common.Utils.Tests.Extensions
         [Test]
         public void RemoveCharactersTest()
         {
-            Assert.AreEqual("13457890", "1234567890".Remove(new char[] { '2', '6' }));
+            Assert.AreEqual("13457890", "1234567890".Remove(new[] { '2', '6' }));
         }
 
         [TestCase(true, "27652")]

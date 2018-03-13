@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ICD.Common.Utils.Extensions;
+using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests.Extensions
 {
@@ -12,7 +12,7 @@ namespace ICD.Common.Utils.Tests.Extensions
         {
             Queue<int> queue = new Queue<int>();
 
-            queue.EnqueueRange(new int[] { 1, 2, 3 });
+            queue.EnqueueRange(new[] { 1, 2, 3 });
 
             Assert.AreEqual(3, queue.Count);
             Assert.AreEqual(1, queue.Dequeue());
@@ -24,7 +24,7 @@ namespace ICD.Common.Utils.Tests.Extensions
         public void DequeueTest()
         {
             Queue<int> queue = new Queue<int>();
-            queue.EnqueueRange(new int[] { 1, 2, 3 });
+            queue.EnqueueRange(new[] { 1, 2, 3 });
 
             int output;
 

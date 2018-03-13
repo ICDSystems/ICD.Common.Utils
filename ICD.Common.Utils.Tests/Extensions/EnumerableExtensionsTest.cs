@@ -1,8 +1,8 @@
-﻿using ICD.Common.Utils.Collections;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ICD.Common.Utils.Collections;
 using ICD.Common.Utils.Extensions;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ICD.Common.Utils.Tests.Extensions
 {
@@ -117,8 +117,8 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void SequenceEqualTest()
 		{
-			int[] a = new[] {1, 2, 3, 4};
-			int[] b = new[] {1, 4, 9, 16};
+			int[] a = {1, 2, 3, 4};
+			int[] b = {1, 4, 9, 16};
 
 			Assert.IsFalse(a.SequenceEqual(b, (x, y) => x == y));
 			Assert.IsTrue(a.SequenceEqual(b, (x, y) => x * x == y));
@@ -508,7 +508,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void ConsolidateTest()
 		{
-			string[] sequence = EnumerableExtensions.Consolidate(new[] {"A", "B", "B", "C"}).ToArray();
+			string[] sequence = new[] {"A", "B", "B", "C"}.Consolidate().ToArray();
 
 			Assert.AreEqual(3, sequence.Length, StringUtils.ArrayFormat(sequence));
 			Assert.AreEqual("A", sequence[0]);
@@ -519,7 +519,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void ConsolidateComparerTest()
 		{
-			string[] sequence = EnumerableExtensions.Consolidate(new[] {"A", "B", "B", "C"}, Comparer<string>.Default).ToArray();
+			string[] sequence = new[] {"A", "B", "B", "C"}.Consolidate(Comparer<string>.Default).ToArray();
 
 			Assert.AreEqual(3, sequence.Length, StringUtils.ArrayFormat(sequence));
 			Assert.AreEqual("A", sequence[0]);

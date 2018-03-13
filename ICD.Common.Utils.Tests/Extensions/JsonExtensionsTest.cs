@@ -51,7 +51,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 			{
 				using (JsonWriter writer = new JsonTextWriter(stringWriter))
 				{
-					serializer.SerializeArray(writer, new int[] {1, 2, 3, 4});
+					serializer.SerializeArray(writer, new[] {1, 2, 3, 4});
 				}
 			}
 
@@ -76,7 +76,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 				}
 			}
 
-			Assert.IsTrue(deserialized.SequenceEqual(new int[] {1, 2, 3, 4}));
+			Assert.IsTrue(deserialized.SequenceEqual(new[] {1, 2, 3, 4}));
 		}
 
 		[Test]

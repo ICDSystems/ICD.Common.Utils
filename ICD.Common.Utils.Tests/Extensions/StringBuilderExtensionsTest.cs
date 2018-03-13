@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
-using System.Text;
+﻿using System.Text;
 using ICD.Common.Utils.Extensions;
+using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests.Extensions
 {
