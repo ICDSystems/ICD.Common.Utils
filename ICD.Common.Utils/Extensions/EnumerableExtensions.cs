@@ -263,20 +263,10 @@ namespace ICD.Common.Utils.Extensions
 			Dictionary<T, int> count = new Dictionary<T, int>(comparer);
 
 			foreach (T item in extends)
-			{
-				if (count.ContainsKey(item))
-					count[item]++;
-				else
-					count.Add(item, 1);
-			}
+				count[item] = count.GetDefault(item, 0) + 1;
 
 			foreach (T item in other)
-			{
-				if (count.ContainsKey(item))
-					count[item]--;
-				else
-					return false;
-			}
+				count[item] = count.GetDefault(item, 0) - 1;
 
 			return count.Values.All(c => c == 0);
 		}
