@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ICD.Common.Utils.Extensions
+namespace ICD.Common.Utils.Comparers
 {
 	/// <summary>
 	/// Allows for comparing items based on some property.
