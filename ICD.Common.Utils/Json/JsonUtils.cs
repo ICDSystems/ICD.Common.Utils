@@ -91,6 +91,19 @@ namespace ICD.Common.Utils.Json
 		[PublicAPI]
 		public static void Print(string json)
 		{
+			var sb = Format(json);
+
+			IcdConsole.PrintLine(sb.ToString());
+		}
+
+		/// <summary>
+		/// Formats the JSON into a human-readable form.
+		/// </summary>
+		/// <param name="json"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static string Format(string json)
+		{
 			int indent = 0;
 			bool quoted = false;
 			StringBuilder sb = new StringBuilder();
@@ -145,8 +158,7 @@ namespace ICD.Common.Utils.Json
 						break;
 				}
 			}
-
-			IcdConsole.PrintLine(sb.ToString());
+			return sb.ToString();
 		}
 
 		/// <summary>
