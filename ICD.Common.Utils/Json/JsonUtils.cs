@@ -91,9 +91,7 @@ namespace ICD.Common.Utils.Json
 		[PublicAPI]
 		public static void Print(string json)
 		{
-			var sb = Format(json);
-
-			IcdConsole.PrintLine(sb.ToString());
+			IcdConsole.PrintLine(Format(json));
 		}
 
 		/// <summary>
