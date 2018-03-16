@@ -3,11 +3,90 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Collections;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils
 {
 	public static class RecursionUtils
 	{
+		/// <summary>
+		/// Returns a sequence of the cliques in the graph.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="nodes"></param>
+		/// <param name="getAdjacent"></param>
+		/// <returns></returns>
+		public static IEnumerable<IEnumerable<T>> GetCliques<T>(IEnumerable<T> nodes, Func<T, IEnumerable<T>> getAdjacent)
+		{
+			if (nodes == null)
+				throw new ArgumentNullException("nodes");
+
+			if (getAdjacent == null)
+				throw new ArgumentNullException("getAdjacent");
+
+			Dictionary<T, IEnumerable<T>> map = nodes.ToDictionary(n => n, getAdjacent);
+			IcdHashSet<T> visited = new IcdHashSet<T>();
+
+			return map.Keys
+			          .Where(n => !visited.Contains(n))
+			          .Select(node => GetClique(map, visited, node));
+		}
+
+		/// <summary>
+		/// Gets the clique containing the given node.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="map"></param>
+		/// <param name="node"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> GetClique<T>(IDictionary<T, IEnumerable<T>> map, T node)
+		{
+			if (map == null)
+				throw new ArgumentNullException("map");
+
+// ReSharper disable once CompareNonConstrainedGenericWithNull
+			if (node == null)
+				throw new ArgumentNullException("node");
+
+			return GetClique(map, new IcdHashSet<T>(), node);
+		}
+
+		/// <summary>
+		/// Gets the clique containing the node.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="map"></param>
+		/// <param name="visited"></param>
+		/// <param name="node"></param>
+		/// <returns></returns>
+		private static IEnumerable<T> GetClique<T>(IDictionary<T, IEnumerable<T>> map, IcdHashSet<T> visited, T node)
+		{
+			if (map == null)
+				throw new ArgumentNullException("map");
+
+			if (visited == null)
+				throw new ArgumentNullException("visited");
+
+// ReSharper disable once CompareNonConstrainedGenericWithNull
+			if (node == null)
+				throw new ArgumentNullException("node");
+
+			if (visited.Contains(node))
+				yield break;
+
+			if (!map.ContainsKey(node))
+				yield break;
+
+			visited.Add(node);
+
+			yield return node;
+
+			IEnumerable<T> adjacent = map.GetDefault(node, Enumerable.Empty<T>());
+
+			foreach (T item in adjacent.SelectMany(a => GetClique(map, visited, a)))
+				yield return item;
+		}
+
 		/// <summary>
 		/// Returns all of the nodes in the tree via breadth-first search.
 		/// </summary>

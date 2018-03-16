@@ -72,6 +72,61 @@ namespace ICD.Common.Utils.Tests
 			}
 		}
 
+		private static readonly Dictionary<int, IEnumerable<int>> s_CliqueGraph = new Dictionary<int, IEnumerable<int>>
+		{
+			{1, new[] {2, 3}},
+			{2, new[] {1, 4}},
+			{3, new[] {1}},
+			{4, new[] {2}},
+			{5, new[] {6}},
+			{6, new[] {5}}
+		};
+
+		[Test]
+		public void GetCliquesTest()
+		{
+			int[][] cliques =
+				RecursionUtils.GetCliques(s_CliqueGraph.Keys, i => s_CliqueGraph[i])
+				              .Select(c => c.ToArray())
+				              .ToArray();
+
+			Assert.AreEqual(2, cliques.Length);
+
+			int[] clique1 = cliques.FirstOrDefault(c => c.Contains(1));
+			int[] clique2 = cliques.FirstOrDefault(c => c != clique1);
+
+			Assert.NotNull(clique1);
+			Assert.NotNull(clique2);
+
+			Assert.AreEqual(4, clique1.Length);
+			Assert.IsTrue(clique1.Contains(1));
+			Assert.IsTrue(clique1.Contains(2));
+			Assert.IsTrue(clique1.Contains(3));
+			Assert.IsTrue(clique1.Contains(4));
+
+			Assert.AreEqual(2, clique2.Length);
+			Assert.IsTrue(clique2.Contains(5));
+			Assert.IsTrue(clique2.Contains(6));
+		}
+
+		[Test]
+		public void GetCliqueTest()
+		{
+			int[] clique = RecursionUtils.GetClique(s_CliqueGraph, 1).ToArray();
+
+			Assert.AreEqual(4, clique.Length);
+			Assert.IsTrue(clique.Contains(1));
+			Assert.IsTrue(clique.Contains(2));
+			Assert.IsTrue(clique.Contains(3));
+			Assert.IsTrue(clique.Contains(4));
+
+			clique = RecursionUtils.GetClique(s_CliqueGraph, 5).ToArray();
+
+			Assert.AreEqual(2, clique.Length);
+			Assert.IsTrue(clique.Contains(5));
+			Assert.IsTrue(clique.Contains(6));
+		}
+
 		[Test]
 		public void BreadthFirstSearchTest()
 		{
