@@ -479,6 +479,25 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="childElement"></param>
 		/// <returns></returns>
 		[PublicAPI]
+		public static uint? TryReadChildElementContentAsUInt(string xml, string childElement)
+		{
+			try
+			{
+				return ReadChildElementContentAsUint(xml, childElement);
+			}
+			catch (FormatException)
+			{
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the content of the immediate child. Returns null if the child element was not found.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="childElement"></param>
+		/// <returns></returns>
+		[PublicAPI]
 		public static long? TryReadChildElementContentAsLong(string xml, string childElement)
 		{
 			try
