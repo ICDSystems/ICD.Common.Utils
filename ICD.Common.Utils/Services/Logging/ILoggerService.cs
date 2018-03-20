@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Services.Logging
@@ -94,18 +95,49 @@ namespace ICD.Common.Utils.Services.Logging
 #if STANDARD
 			if (e is AggregateException)
 			{
-				AggregateException aggregate = e as AggregateException;
-				// We want the stack trace from the aggregate exception but the type and message from the inner.
-				foreach (Exception inner in aggregate.InnerExceptions)
-					extends.AddEntry(severity, string.Format("{0}: {1}{2}{3}{2}{4}", inner.GetType().Name, message,
-					                                         IcdEnvironment.NewLine, inner.Message, e.StackTrace));
+				extends.AddEntry(severity, e as AggregateException, message);
 				return;
 			}
 #endif
-
 			extends.AddEntry(severity, string.Format("{0}: {1}{2}{3}{2}{4}", e.GetType().Name, message,
 			                                         IcdEnvironment.NewLine, e.Message, e.StackTrace));
 		}
+
+#if STANDARD
+		/// <summary>
+		/// Logs an aggregate exception as a formatted list of inner exceptions.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="severity"></param>
+		/// <param name="e"></param>
+		/// <param name="message"></param>
+		private static void AddEntry(this ILoggerService extends, eSeverity severity, AggregateException e, string message)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (e == null)
+				throw new ArgumentNullException("e");
+
+			StringBuilder builder = new StringBuilder();
+
+			builder.AppendFormat("{0}: {1}", e.GetType().Name, message);
+
+			builder.Append(IcdEnvironment.NewLine);
+			builder.Append('[');
+
+			foreach (Exception inner in e.Flatten().InnerExceptions)
+				builder.AppendFormat("{0}\t{1}: {2}", IcdEnvironment.NewLine, inner.GetType().Name, inner.Message);
+
+			builder.Append(IcdEnvironment.NewLine);
+			builder.Append(']');
+
+			builder.Append(IcdEnvironment.NewLine);
+			builder.Append(e.StackTrace);
+
+			extends.AddEntry(severity, builder.ToString());
+		}
+#endif
 
 		[PublicAPI]
 		public static void AddEntry(this ILoggerService extends, eSeverity severity, Exception e, string message,
