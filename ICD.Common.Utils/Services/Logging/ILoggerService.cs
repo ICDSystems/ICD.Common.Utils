@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if STANDARD
 using System.Text;
+#endif
 using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Services.Logging
