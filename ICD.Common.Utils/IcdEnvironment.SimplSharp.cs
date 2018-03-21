@@ -16,15 +16,6 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Static constructor.
-		/// </summary>
-		static IcdEnvironment()
-		{
-			CrestronEnvironment.ProgramStatusEventHandler += CrestronEnvironmentOnProgramStatusEventHandler;
-			CrestronEnvironment.EthernetEventHandler += CrestronEnvironmentOnEthernetEventHandler;
-		}
-
-		/// <summary>
 		/// Gets the network address(es) of the processor.
 		/// </summary>
 		[PublicAPI]
@@ -54,6 +45,15 @@ namespace ICD.Common.Utils
 				short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
 				yield return CrestronEthernetHelper.GetEthernetParameter(param, id);
 			}
+		}
+
+		/// <summary>
+		/// Static constructor.
+		/// </summary>
+		static IcdEnvironment()
+		{
+			CrestronEnvironment.ProgramStatusEventHandler += CrestronEnvironmentOnProgramStatusEventHandler;
+			CrestronEnvironment.EthernetEventHandler += CrestronEnvironmentOnEthernetEventHandler;
 		}
 
 		#region Methods
