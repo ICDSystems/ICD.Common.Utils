@@ -151,7 +151,8 @@ namespace ICD.Common.Utils.Xml
 			}
 			catch (XmlException e)
 			{
-				throw new IcdXmlException(e);
+				string message = string.Format("Unable to read element '{0}' content as string", m_Reader.Name);
+				throw new IcdXmlException(message, e, e.LineNumber, e.LinePosition);
 			}
 		}
 
