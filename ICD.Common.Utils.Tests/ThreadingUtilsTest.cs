@@ -13,14 +13,16 @@ namespace ICD.Common.Utils.Tests
 			Assert.IsTrue(ThreadingUtils.Wait(() => true, 100));
 
 			bool complete = false;
+			DateTime time = IcdEnvironment.GetLocalTime();
 
 			ThreadingUtils.SafeInvoke(() =>
 			                          {
-				                          ThreadingUtils.Sleep(50);
+				                          ThreadingUtils.Sleep(100);
 				                          complete = true;
 			                          });
 
 			Assert.IsTrue(ThreadingUtils.Wait(() => complete, 200));
+			Assert.AreEqual(100, (IcdEnvironment.GetLocalTime() - time).TotalMilliseconds, 20);
 		}
 
 		[Test]
