@@ -40,13 +40,13 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(expected, value.SetBitOff(index));
 		}
 
-		[TestCase(0xFF, 0x0F)]
+		[TestCase(0xAB, 0x0B)]
 		public void GetLower4BitsTest(byte b, byte expected)
 		{
 			Assert.AreEqual(expected, b.GetLower4Bits());
 		}
 
-		[TestCase(0xFF, 0xF0)]
+		[TestCase(0xAB, 0x0A)]
 		public void GetUpper4BitsTest(byte b, byte expected)
 		{
 			Assert.AreEqual(expected, b.GetUpper4Bits());
