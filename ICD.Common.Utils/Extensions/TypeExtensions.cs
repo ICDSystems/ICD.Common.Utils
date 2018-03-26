@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ICD.Common.Utils.Collections;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
@@ -43,6 +44,18 @@ namespace ICD.Common.Utils.Extensions
 			typeof(double),
 			typeof(float),
 		};
+
+		private static readonly Dictionary<Type, Type[]> s_TypeAllTypes;
+		private static readonly Dictionary<Type, Type[]> s_TypeBaseTypes; 
+
+		/// <summary>
+		/// Static constructor.
+		/// </summary>
+		static TypeExtensions()
+		{
+			s_TypeAllTypes = new Dictionary<Type, Type[]>();
+			s_TypeBaseTypes = new Dictionary<Type, Type[]>();
+		}
 
 		/// <summary>
 		/// Returns true if the given type is a numeric type.
@@ -118,13 +131,18 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			yield return extends;
+			if (!s_TypeAllTypes.ContainsKey(extends))
+			{
+				Type[] types =
+					extends.GetBaseTypes()
+					       .Concat(extends.GetInterfaces())
+					       .Prepend(extends)
+					       .ToArray();
 
-			foreach (Type type in extends.GetBaseTypes())
-				yield return type;
+				s_TypeAllTypes.Add(extends, types);
+			}
 
-			foreach (Type type in extends.GetInterfaces())
-				yield return type;
+			return s_TypeAllTypes[extends];
 		}
 
 		/// <summary>
@@ -137,17 +155,31 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+			if (!s_TypeBaseTypes.ContainsKey(extends))
+			{
+				Type[] types = GetBaseTypesInternal(extends).ToArray();
+				s_TypeBaseTypes.Add(extends, types);
+			}
+
+			return s_TypeBaseTypes[extends];
+		}
+
+		private static IEnumerable<Type> GetBaseTypesInternal(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
 			do
 			{
-				extends = extends
+				type = type
 #if !SIMPLSHARP
 					.GetTypeInfo()
 #endif
 					.BaseType;
 
-				if (extends != null)
-					yield return extends;
-			} while (extends != null);
+				if (type != null)
+					yield return type;
+			} while (type != null);
 		}
 	}
 }
