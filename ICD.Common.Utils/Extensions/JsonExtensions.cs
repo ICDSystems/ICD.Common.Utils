@@ -46,14 +46,16 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			string name;
-
 			if (type == null)
-				name = null;
-			else if (type.IsPrimitive)
-				name = type.FullName;
-			else
-				name = type.AssemblyQualifiedName;
+			{
+				extends.WriteNull();
+				return;
+			}
+
+			// Find the smallest possible name representation for the type that will still resolve
+			string name = Type.GetType(type.FullName, false, true) == null
+				              ? type.AssemblyQualifiedName
+				              : type.FullName;
 
 			extends.WriteValue(name);
 		}
