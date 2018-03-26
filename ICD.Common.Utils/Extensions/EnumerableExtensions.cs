@@ -509,6 +509,24 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Shorthand for ordering the given sequence with the given comparer.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> extends, IComparer<T> comparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			return extends.OrderBy(i => i, comparer);
+		}
+
+		/// <summary>
 		/// Returns every item in the sequence except the given item.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
