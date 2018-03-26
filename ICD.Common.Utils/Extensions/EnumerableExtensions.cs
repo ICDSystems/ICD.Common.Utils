@@ -694,7 +694,7 @@ namespace ICD.Common.Utils.Extensions
 			if (propertyComparer == null)
 				throw new ArgumentNullException("propertyComparer");
 
-			return extends.Distinct(new PropertyEqualityComparer<TItem, TProperty>(propertyComparer, getProperty));
+			return extends.Distinct(new PredicateEqualityComparer<TItem, TProperty>(propertyComparer, getProperty));
 		}
 
 		/// <summary>
