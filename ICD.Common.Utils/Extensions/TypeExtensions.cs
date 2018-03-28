@@ -47,6 +47,7 @@ namespace ICD.Common.Utils.Extensions
 
 		private static readonly Dictionary<Type, Type[]> s_TypeAllTypes;
 		private static readonly Dictionary<Type, Type[]> s_TypeBaseTypes;
+		private static readonly Dictionary<Type, Type[]> s_TypeImmediateInterfaces;
 		private static readonly Dictionary<Type, Type[]> s_TypeMinimalInterfaces;
 
 		/// <summary>
@@ -56,6 +57,7 @@ namespace ICD.Common.Utils.Extensions
 		{
 			s_TypeAllTypes = new Dictionary<Type, Type[]>();
 			s_TypeBaseTypes = new Dictionary<Type, Type[]>();
+			s_TypeImmediateInterfaces = new Dictionary<Type, Type[]>();
 			s_TypeMinimalInterfaces = new Dictionary<Type, Type[]>();
 		}
 
@@ -182,6 +184,35 @@ namespace ICD.Common.Utils.Extensions
 				if (type != null)
 					yield return type;
 			} while (type != null);
+		}
+
+		/// <summary>
+		/// Gets the interfaces that the given type implements that are not implemented further
+		/// down the inheritance chain.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static IEnumerable<Type> GetImmediateInterfaces(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (!s_TypeImmediateInterfaces.ContainsKey(extends))
+			{
+				IEnumerable<Type> allInterfaces = extends.GetInterfaces();
+
+				IEnumerable<Type> childInterfaces =
+					extends.GetAllTypes()
+					       .Except(extends)
+					       .SelectMany(t => t.GetImmediateInterfaces())
+					       .Distinct();
+
+				Type[] immediateInterfaces = allInterfaces.Except(childInterfaces).ToArray();
+
+				s_TypeImmediateInterfaces.Add(extends, immediateInterfaces);
+			}
+
+			return s_TypeImmediateInterfaces[extends];
 		}
 
 		/// <summary>

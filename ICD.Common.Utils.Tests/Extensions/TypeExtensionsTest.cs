@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Utils.Extensions;
 using NUnit.Framework;
@@ -91,6 +93,20 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.IsFalse(baseTypes.Contains(typeof(B)));
 			Assert.IsTrue(baseTypes.Contains(typeof(A)));
 			Assert.IsTrue(baseTypes.Contains(typeof(object)));
+		}
+
+		[Test]
+		public void GetImmediateInterfacesTest()
+		{
+			Type[] interfaces = typeof(ICollection<int>).GetImmediateInterfaces().ToArray();
+
+			Assert.AreEqual(1, interfaces.Length);
+			Assert.AreEqual(typeof(IEnumerable<int>), interfaces[0]);
+
+			interfaces = typeof(IEnumerable<int>).GetImmediateInterfaces().ToArray();
+
+			Assert.AreEqual(1, interfaces.Length);
+			Assert.AreEqual(typeof(IEnumerable), interfaces[0]);
 		}
 
 		private interface C
