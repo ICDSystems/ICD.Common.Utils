@@ -46,7 +46,8 @@ namespace ICD.Common.Utils.Extensions
 		};
 
 		private static readonly Dictionary<Type, Type[]> s_TypeAllTypes;
-		private static readonly Dictionary<Type, Type[]> s_TypeBaseTypes; 
+		private static readonly Dictionary<Type, Type[]> s_TypeBaseTypes;
+		private static readonly Dictionary<Type, Type[]> s_TypeMinimalInterfaces;
 
 		/// <summary>
 		/// Static constructor.
@@ -55,6 +56,7 @@ namespace ICD.Common.Utils.Extensions
 		{
 			s_TypeAllTypes = new Dictionary<Type, Type[]>();
 			s_TypeBaseTypes = new Dictionary<Type, Type[]>();
+			s_TypeMinimalInterfaces = new Dictionary<Type, Type[]>();
 		}
 
 		/// <summary>
@@ -180,6 +182,29 @@ namespace ICD.Common.Utils.Extensions
 				if (type != null)
 					yield return type;
 			} while (type != null);
+		}
+
+		/// <summary>
+		/// Gets the smallest set of interfaces for the given type that cover all implemented interfaces.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static IEnumerable<Type> GetMinimalInterfaces(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (!s_TypeMinimalInterfaces.ContainsKey(extends))
+			{
+				Type[] allInterfaces = extends.GetInterfaces();
+				Type[] minimalInterfaces =
+					allInterfaces.Except(allInterfaces.SelectMany(t => t.GetInterfaces()))
+					             .ToArray();
+
+				s_TypeMinimalInterfaces.Add(extends, minimalInterfaces);
+			}
+
+			return s_TypeMinimalInterfaces[extends];
 		}
 	}
 }
