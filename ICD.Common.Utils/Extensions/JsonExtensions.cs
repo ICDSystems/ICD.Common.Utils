@@ -53,7 +53,7 @@ namespace ICD.Common.Utils.Extensions
 			}
 
 			// Find the smallest possible name representation for the type that will still resolve
-			string name = Type.GetType(type.FullName, false, true) == null
+			string name = Type.GetType(type.FullName) == null
 				              ? type.AssemblyQualifiedName
 				              : type.FullName;
 
@@ -72,7 +72,7 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("extends");
 
 			string value = extends.GetValueAsString();
-			return Type.GetType(value, false, true);
+			return Type.GetType(value);
 		}
 
 		/// <summary>
