@@ -1057,45 +1057,45 @@ namespace ICD.Common.Utils.Extensions
 			}
 		}
 
-        // since S# can't do anonymous types
-        private struct TryParseStruct<T>
-        {
-            public readonly T value;
-            public readonly bool isParsed;
-            public TryParseStruct(T value, bool isParsed)
-            {
-                this.value = value;
-                this.isParsed = isParsed;
-            }
-        }
-        // since Func<...,T> can't specify `out` parameters
-        public delegate bool TryParseDelegate<T>(string input, out T output);
+		// since S# can't do anonymous types
+		private struct TryParseStruct<T>
+		{
+			public readonly T value;
+			public readonly bool isParsed;
+			public TryParseStruct(T value, bool isParsed)
+			{
+				this.value = value;
+				this.isParsed = isParsed;
+			}
+		}
+		// since Func<...,T> can't specify `out` parameters
+		public delegate bool TryParseDelegate<T>(string input, out T output);
 
-        /// <summary>
-        /// Attempts to parse each value of the enumerable,
-        /// throwing away the values that don't parse correctly.
-        /// </summary>
-        /// <typeparam name="T">type to parse to</typeparam>
-        /// <param name="extends">enumerable of strings to parse</param>
-        /// <param name="tryParseFunc">TryParse function for given type</param>
-        /// <returns>enumerable of successfully parsed values</returns>
-        public static IEnumerable<T> TryParseSkipFailures<T>(this IEnumerable<string> extends, TryParseDelegate<T> tryParseFunc)
-        {
-            if (extends == null)
-                throw new ArgumentNullException("extends");
+		/// <summary>
+		/// Attempts to parse each value of the enumerable,
+		/// throwing away the values that don't parse correctly.
+		/// </summary>
+		/// <typeparam name="T">type to parse to</typeparam>
+		/// <param name="extends">enumerable of strings to parse</param>
+		/// <param name="tryParseFunc">TryParse function for given type</param>
+		/// <returns>enumerable of successfully parsed values</returns>
+		public static IEnumerable<T> TryParseSkipFailures<T>(this IEnumerable<string> extends, TryParseDelegate<T> tryParseFunc)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
 
-            if (tryParseFunc == null)
-                throw new ArgumentNullException("tryParseFunc");
+			if (tryParseFunc == null)
+				throw new ArgumentNullException("tryParseFunc");
 
-            return extends.Select(str =>
-            {
-                T value = default(T);
-                bool isParsed = tryParseFunc(str, out value);
-                return new TryParseStruct<T>(value, isParsed);
-            })
-            .Where(v => v.isParsed == true)
-            .Select(v => v.value);
-        }
+			return extends.Select(str =>
+			{
+				T value = default(T);
+				bool isParsed = tryParseFunc(str, out value);
+				return new TryParseStruct<T>(value, isParsed);
+			})
+			.Where(v => v.isParsed == true)
+			.Select(v => v.value);
+		}
 
 #if SIMPLSHARP
 
