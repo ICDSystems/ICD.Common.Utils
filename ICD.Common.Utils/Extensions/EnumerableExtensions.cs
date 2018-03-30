@@ -1081,6 +1081,12 @@ namespace ICD.Common.Utils.Extensions
         /// <returns>enumerable of successfully parsed values</returns>
         public static IEnumerable<T> TryParseSkipFailures<T>(this IEnumerable<string> extends, TryParseDelegate<T> tryParseFunc)
         {
+            if (extends == null)
+                throw new ArgumentNullException("extends");
+
+            if (tryParseFunc == null)
+                throw new ArgumentNullException("tryParseFunc");
+
             return extends.Select(str =>
             {
                 T value = default(T);
