@@ -306,6 +306,25 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Gets all of the flag combinations on the given flag enum value.
+		/// 
+		/// IE: If you have an enum type with flags{a, b, c}, and you pass this method {a|b},
+		/// It will return {a, b, a|b}
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> GetAllFlagCombinationsExceptNone<T>(T value)
+		{
+			if (!IsEnum(value))
+				// ReSharper disable once CompareNonConstrainedGenericWithNull
+				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
+
+			int maxEnumValue = (GetValues<T>().Max(v => (int)(object)v) * 2) -1 ;
+			return Enumerable.Range(1, maxEnumValue).Cast<T>().Where(v => HasFlags(value, v));
+		}
+
+		/// <summary>
 		/// Gets an enum value of the given type with every flag set.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
