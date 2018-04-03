@@ -4,6 +4,7 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
 	<RootNamespace>ICD.Common.Utils.Tests</RootNamespace>
+	<AssemblyName>ICD.Common.Utils.Tests</AssemblyName>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<Deterministic>true</Deterministic>
   </PropertyGroup>
