@@ -5,8 +5,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>ICD.Common.Utils</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
-	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <Deterministic>true</Deterministic>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<Deterministic>true</Deterministic>
     <Authors>Chris Cameron, Jeff Thompson</Authors>
     <PackageId>ICD.Common.Utils</PackageId>
     <PackageProjectUrl></PackageProjectUrl>
