@@ -21,7 +21,8 @@ namespace ICD.Common.Utils.Tests
 			None = 0,
 			A = 1,
 			B = 2,
-			C = 4
+			C = 4,
+			D = 32
 		}
 		
 		[Test]
@@ -160,11 +161,12 @@ namespace ICD.Common.Utils.Tests
 			eTestFlagsEnum a = EnumUtils.GetFlagsAllValue<eTestFlagsEnum>();
 			eTestFlagsEnum[] aValues = EnumUtils.GetFlags(a).ToArray();
 
-			Assert.AreEqual(4, aValues.Length);
+			Assert.AreEqual(5, aValues.Length);
 			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.None));
 			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.A));
 			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.B));
 			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.C));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.D));
 		}
 
 		[Test]
@@ -173,18 +175,44 @@ namespace ICD.Common.Utils.Tests
 			eTestFlagsEnum a = EnumUtils.GetFlagsAllValue<eTestFlagsEnum>();
 			eTestFlagsEnum[] aValues = EnumUtils.GetFlagsExceptNone(a).ToArray();
 
-			Assert.AreEqual(3, aValues.Length);
+			Assert.AreEqual(4, aValues.Length);
 			Assert.IsFalse(aValues.Contains(eTestFlagsEnum.None));
 			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.A));
 			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.B));
 			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.C));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.D));
+		}
+
+	    [Test]
+	    public void GetAllFlagCombinationsExceptNoneGenericTest()
+	    {
+		    eTestFlagsEnum a = eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D;
+		    eTestFlagsEnum[] aValues = EnumUtils.GetAllFlagCombinationsExceptNone(a).ToArray();
+
+			Assert.AreEqual(15, aValues.Length);
+			Assert.IsFalse(aValues.Contains(eTestFlagsEnum.None));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.A));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.B));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.C));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.D));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.A | eTestFlagsEnum.B));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.A | eTestFlagsEnum.C));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.A | eTestFlagsEnum.D));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.B | eTestFlagsEnum.C));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.B | eTestFlagsEnum.D));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.C | eTestFlagsEnum.D));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.D));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.A | eTestFlagsEnum.C | eTestFlagsEnum.D));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D));
+			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D));
 		}
 
 		[Test]
 		public void GetFlagsAllValueGenericTest()
 		{
 			eTestFlagsEnum value = EnumUtils.GetFlagsAllValue<eTestFlagsEnum>();
-			Assert.AreEqual(eTestFlagsEnum.None | eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C, value);
+			Assert.AreEqual(eTestFlagsEnum.None | eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D, value);
 		}
 
 		[Test]
