@@ -335,5 +335,38 @@ namespace ICD.Common.Utils
 				: AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
 #endif
 		}
+
+		/// <summary>
+		/// Finds the corresponding property info on the given type.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="property"></param>
+		/// <returns></returns>
+		public static PropertyInfo GetImplementation(Type type, PropertyInfo property)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (property == null)
+				throw new ArgumentNullException("property");
+
+			if (type.IsInterface)
+				throw new InvalidOperationException("Type must not be an interface");
+
+			property = type
+#if SIMPLSHARP
+				.GetCType()
+#else
+				.GetTypeInfo()
+#endif
+				.GetProperty(property.Name, property.PropertyType);
+
+			if (property == null)
+				return null;
+
+			return property.DeclaringType == type
+				? property
+				: GetImplementation(property.DeclaringType, property);
+		}
 	}
 }
