@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using ICD.Common.Properties;
@@ -92,6 +91,17 @@ namespace ICD.Common.Utils.Json
 		public static void Print(string json)
 		{
 			IcdConsole.PrintLine(Format(json));
+		}
+
+		/// <summary>
+		/// Serializes the given item and pretty-prints to JSON.
+		/// </summary>
+		/// <param name="value"></param>
+		[PublicAPI]
+		public static void Print(object value)
+		{
+			string serial = JsonConvert.SerializeObject(value);
+			Print(serial);
 		}
 
 		/// <summary>
