@@ -34,12 +34,13 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("parameters");
 
 #if SIMPLSHARP
-			IEnumerable<CType> methodTypes
+			IEnumerable<CType>
 #else
-			IEnumerable<Type> methodTypes
+			IEnumerable<Type>
 #endif
-				= constructor.GetParameters().Select(p => p.ParameterType);
-			return ParametersMatchTypes(methodTypes, parameters);
+				parameterTypes = constructor.GetParameters().Select(p => p.ParameterType);
+
+			return ParametersMatchTypes(parameterTypes, parameters);
 		}
 
 		/// <summary>
@@ -57,12 +58,13 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("parameters");
 
 #if SIMPLSHARP
-			IEnumerable<CType> methodTypes
+			IEnumerable<CType>
 #else
-			IEnumerable<Type> methodTypes
+			IEnumerable<Type> 
 #endif
-				= method.GetParameters().Select(p => p.ParameterType);
-			return ParametersMatchTypes(methodTypes, parameters);
+				parameterTypes = method.GetParameters().Select(p => p.ParameterType);
+
+			return ParametersMatchTypes(parameterTypes, parameters);
 		}
 
 		/// <summary>
@@ -77,11 +79,12 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("property");
 
 #if SIMPLSHARP
-			CType propertyType
+			CType
 #else
-			Type propertyType
+			Type
 #endif
-				= property.PropertyType;
+				propertyType = property.PropertyType;
+
 			return ParametersMatchTypes(new[] {propertyType}, new[] {parameter});
 		}
 
@@ -91,23 +94,32 @@ namespace ICD.Common.Utils
 		/// <param name="types"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
+		private static bool ParametersMatchTypes(
 #if SIMPLSHARP
-		private static bool ParametersMatchTypes(IEnumerable<CType> types, IEnumerable<object> parameters)
-		{
-			if (types == null)
-				throw new ArgumentNullException("types");
-
-			CType[] typesArray = types as CType[] ?? types.ToArray();
-#else
-		private static bool ParametersMatchTypes(IEnumerable<Type> types, IEnumerable<object> parameters)
-		{
-			if (types == null)
-				throw new ArgumentNullException("types");
-
-			Type[] typesArray = types as Type[] ?? types.ToArray();
+			IEnumerable<CType>
+#else	
+			IEnumerable<Type>
 #endif
+				types, IEnumerable<object> parameters)
+		{
+			if (types == null)
+				throw new ArgumentNullException("types");
+
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
+
+#if SIMPLSHARP
+			CType[]
+#else
+			Type[]
+#endif
+				typesArray = types as
+#if SIMPLSHARP
+				             CType[]
+#else
+				             Type[]
+#endif
+				             ?? types.ToArray();
 
 			object[] parametersArray = parameters as object[] ?? parameters.ToArray();
 
@@ -115,7 +127,8 @@ namespace ICD.Common.Utils
 				return false;
 
 			// Compares each pair of items in the two arrays.
-			return !parametersArray.Where((t, index) => !ParameterMatchesType(typesArray[index], t)).Any();
+			return !parametersArray.Where((t, index) => !ParameterMatchesType(typesArray[index], t))
+			                       .Any();
 		}
 
 		/// <summary>
@@ -124,50 +137,38 @@ namespace ICD.Common.Utils
 		/// <param name="type"></param>
 		/// <param name="parameter"></param>
 		/// <returns></returns>
-#if SIMPLSHARP
-		private static bool ParameterMatchesType(CType type, object parameter)
+		private static bool ParameterMatchesType(Type type, object parameter)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
 
+#if SIMPLSHARP
 			// Can the parameter be assigned a null value?
 			if (parameter == null)
 				return (type.IsClass || !type.IsValueType || Nullable.GetUnderlyingType(type) != null);
-
 			return type.IsInstanceOfType(parameter);
-		}
 #else
-        private static bool ParameterMatchesType(Type type, object parameter)
-        {
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-            TypeInfo info = type.GetTypeInfo();
+			TypeInfo info = type.GetTypeInfo();
 			// Can the parameter be assigned a null value?
 			if (parameter == null)
 				return (info.IsClass || !info.IsValueType || Nullable.GetUnderlyingType(type) != null);
-
 			return info.IsInstanceOfType(parameter);
-        }
 #endif
+		}
 
 		/// <summary>
 		/// Same as doing default(Type).
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-#if SIMPLSHARP
-		public static object GetDefaultValue(CType type)
-#else
 		public static object GetDefaultValue(Type type)
-#endif
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
 
 			return type
 #if !SIMPLSHARP
-		               .GetTypeInfo()
+				       .GetTypeInfo()
 #endif
 				       .IsValueType
 				       ? Activator.CreateInstance(type)
@@ -220,13 +221,12 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("parameters");
 
 			ConstructorInfo constructor =
-#if SIMPLSHARP
-				type.GetCType()
-#else
 				type
+#if SIMPLSHARP
+					.GetCType()
 #endif
-				    .GetConstructors()
-				    .FirstOrDefault(c => MatchesConstructorParameters(c, parameters));
+					.GetConstructors()
+					.FirstOrDefault(c => MatchesConstructorParameters(c, parameters));
 
 			try
 			{
