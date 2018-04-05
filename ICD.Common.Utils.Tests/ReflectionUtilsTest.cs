@@ -121,9 +121,33 @@ namespace ICD.Common.Utils.Tests
 		}
 
 		[Test]
-		public void LoadAssemblyFromPath()
+		public void LoadAssemblyFromPathTest()
 		{
 			Assert.Inconclusive();
+		}
+
+		[Test]
+		public void GetImplementationTest()
+		{
+			Assert.Inconclusive();
+		}
+
+		[Test]
+		public void ChangeTypeTest()
+		{
+			// Same type
+			Assert.AreEqual(10, ReflectionUtils.ChangeType(10, typeof(int)));
+
+			// Null
+			Assert.AreEqual(null, ReflectionUtils.ChangeType(null, typeof(string)));
+
+			// Enums
+			Assert.AreEqual(BindingFlags.GetProperty, ReflectionUtils.ChangeType((int)(object)BindingFlags.GetProperty, typeof(BindingFlags)));
+			Assert.AreEqual(BindingFlags.GetProperty, ReflectionUtils.ChangeType(BindingFlags.GetProperty.ToString(), typeof(BindingFlags)));
+			Assert.AreEqual(BindingFlags.GetProperty, ReflectionUtils.ChangeType(((int)(object)BindingFlags.GetProperty).ToString(), typeof(BindingFlags)));
+
+			// Everything else
+			Assert.AreEqual(10, ReflectionUtils.ChangeType("10", typeof(int)));
 		}
 	}
 }
