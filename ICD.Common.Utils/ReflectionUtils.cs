@@ -6,11 +6,13 @@ using ICD.Common.Utils.IO;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharp.Reflection;
+using Activator = Crestron.SimplSharp.Reflection.Activator;
 #else
 using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.DependencyModel;
 using System.Runtime.Loader;
+using Activator = System.Activator;
 #endif
 
 namespace ICD.Common.Utils
@@ -168,7 +170,7 @@ namespace ICD.Common.Utils
 		               .GetTypeInfo()
 #endif
 				       .IsValueType
-				       ? CreateInstance(type)
+				       ? Activator.CreateInstance(type)
 				       : null;
 		}
 
