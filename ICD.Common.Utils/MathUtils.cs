@@ -71,6 +71,9 @@ namespace ICD.Common.Utils
 		/// <returns>The newly mapped value</returns>
 		public static double MapRange(double inputStart, double inputEnd, double outputStart, double outputEnd, double value)
 		{
+			if (inputStart.Equals(inputEnd))
+				throw new DivideByZeroException();
+
 			double slope = (outputEnd - outputStart) / (inputEnd - inputStart);
 			return outputStart + slope * (value - inputStart);
 		}
