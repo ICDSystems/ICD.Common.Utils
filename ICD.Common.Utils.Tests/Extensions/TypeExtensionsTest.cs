@@ -10,6 +10,14 @@ namespace ICD.Common.Utils.Tests.Extensions
 	[TestFixture]
 	public sealed class TypeExtensionsTest
 	{
+		[TestCase(typeof(byte), false)]
+		[TestCase(typeof(byte?), true)]
+		[TestCase(typeof(string), true)]
+		public void CanBeNullTest(Type value, bool expected)
+		{
+			Assert.AreEqual(expected, value.CanBeNull());
+		}
+
 		[TestCase(typeof(byte), true)]
 		[TestCase(typeof(decimal), true)]
 		[TestCase(typeof(double), true)]
@@ -59,6 +67,23 @@ namespace ICD.Common.Utils.Tests.Extensions
 		public void IsDecimalNumericTest(Type value, bool expected)
 		{
 			Assert.AreEqual(expected, value.IsDecimalNumeric());
+		}
+
+		[TestCase(typeof(byte), true)]
+		[TestCase(typeof(decimal), false)]
+		[TestCase(typeof(double), false)]
+		[TestCase(typeof(float), false)]
+		[TestCase(typeof(int), true)]
+		[TestCase(typeof(long), true)]
+		[TestCase(typeof(sbyte), true)]
+		[TestCase(typeof(short), true)]
+		[TestCase(typeof(uint), true)]
+		[TestCase(typeof(ulong), true)]
+		[TestCase(typeof(ushort), true)]
+		[TestCase(typeof(string), false)]
+		public void IsIntegerNumericTest(Type value, bool expected)
+		{
+			Assert.AreEqual(expected, value.IsIntegerNumeric());
 		}
 
 		[TestCase(typeof(string), typeof(object), true)]

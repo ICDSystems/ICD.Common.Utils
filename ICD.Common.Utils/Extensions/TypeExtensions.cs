@@ -45,6 +45,18 @@ namespace ICD.Common.Utils.Extensions
 			typeof(float),
 		};
 
+		private static readonly IcdHashSet<Type> s_IntegerNumericTypes = new IcdHashSet<Type>
+		{
+			typeof(byte),
+			typeof(int),
+			typeof(long),
+			typeof(sbyte),
+			typeof(short),
+			typeof(uint),
+			typeof(ulong),
+			typeof(ushort)
+		};
+
 		private static readonly Dictionary<Type, Type[]> s_TypeAllTypes;
 		private static readonly Dictionary<Type, Type[]> s_TypeBaseTypes;
 		private static readonly Dictionary<Type, Type[]> s_TypeImmediateInterfaces;
@@ -59,6 +71,19 @@ namespace ICD.Common.Utils.Extensions
 			s_TypeBaseTypes = new Dictionary<Type, Type[]>();
 			s_TypeImmediateInterfaces = new Dictionary<Type, Type[]>();
 			s_TypeMinimalInterfaces = new Dictionary<Type, Type[]>();
+		}
+
+		/// <summary>
+		/// Returns true if the given type can represent a null value.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static bool CanBeNull(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentException("extends");
+
+			return !extends.IsValueType || Nullable.GetUnderlyingType(extends) != null;
 		}
 
 		/// <summary>
@@ -100,6 +125,24 @@ namespace ICD.Common.Utils.Extensions
 			return s_DecimalNumericTypes.Contains(extends);
 		}
 
+		/// <summary>
+		/// Returns true if the given type is an integer numeric type.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static bool IsIntegerNumeric(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentException("extends");
+
+			return s_IntegerNumericTypes.Contains(extends);
+		}
+
+		/// <summary>
+		/// Gets the Assembly containing the type.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
 		public static Assembly GetAssembly(this Type extends)
 		{
 			if (extends == null)
@@ -114,6 +157,12 @@ namespace ICD.Common.Utils.Extensions
 				.Assembly;
 		}
 
+		/// <summary>
+		/// Returns true if the type is assignable to the given type.
+		/// </summary>
+		/// <param name="from"></param>
+		/// <param name="to"></param>
+		/// <returns></returns>
 		public static bool IsAssignableTo(this Type from, Type to)
 		{
 			if (from == null)

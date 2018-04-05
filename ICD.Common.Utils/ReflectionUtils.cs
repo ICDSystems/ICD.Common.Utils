@@ -368,5 +368,42 @@ namespace ICD.Common.Utils
 				? property
 				: GetImplementation(property.DeclaringType, property);
 		}
+
+		/// <summary>
+		/// Changes the given value to the given type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static object ChangeType(object value, Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			// Handle null value
+			if (value == null)
+			{
+				if (type.CanBeNull())
+					return null;
+
+				throw new InvalidCastException();
+			}
+
+			Type valueType = value.GetType();
+			if (valueType.IsAssignableTo(type))
+				return value;
+
+			// Handle enum
+			if (type.IsEnum)
+			{
+				if (valueType.IsIntegerNumeric())
+					return Enum.ToObject(type, value);
+
+				if (value is string)
+					return Enum.Parse(type, value as string, false);
+			}
+
+			return Convert.ChangeType(value, type, null);
+		}
 	}
 }
