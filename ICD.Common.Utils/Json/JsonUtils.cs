@@ -37,6 +37,9 @@ namespace ICD.Common.Utils.Json
 		/// </summary>
 		public static void CacheType(Type type)
 		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
 			string serialized = JsonConvert.SerializeObject(ReflectionUtils.CreateInstance(type));
 			JsonConvert.DeserializeObject(serialized, type);
 		}
@@ -91,7 +94,11 @@ namespace ICD.Common.Utils.Json
 		[PublicAPI]
 		public static void Print(string json)
 		{
-			IcdConsole.PrintLine(Format(json));
+			if (json == null)
+				throw new ArgumentNullException("json");
+
+			string formatted = Format(json);
+			IcdConsole.PrintLine(formatted);
 		}
 
 		/// <summary>
@@ -113,6 +120,9 @@ namespace ICD.Common.Utils.Json
 		[PublicAPI]
 		public static string Format(string json)
 		{
+			if (json == null)
+				throw new ArgumentNullException("json");
+
 			int indent = 0;
 			bool quoted = false;
 			StringBuilder sb = new StringBuilder();
@@ -298,6 +308,12 @@ namespace ICD.Common.Utils.Json
 		/// <returns></returns>
 		public static object Deserialize(Type type, JToken token)
 		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (token == null)
+				throw new ArgumentNullException("token");
+
 			return Deserialize(type, token, new JsonSerializer());
 		}
 
@@ -310,6 +326,15 @@ namespace ICD.Common.Utils.Json
 		/// <returns></returns>
 		public static object Deserialize(Type type, JToken token, JsonSerializer serializer)
 		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (token == null)
+				throw new ArgumentNullException("token");
+
+			if (serializer == null)
+				throw new ArgumentNullException("serializer");
+
 			using (JTokenReader jsonReader = new JTokenReader(token))
 				return serializer.Deserialize(jsonReader, type);
 		}
