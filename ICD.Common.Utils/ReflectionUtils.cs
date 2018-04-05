@@ -1,60 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharp.Reflection;
-using Activator = Crestron.SimplSharp.Reflection.Activator;
 #else
 using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.DependencyModel;
 using System.Runtime.Loader;
-using Activator = System.Activator;
 #endif
 
 namespace ICD.Common.Utils
 {
 	public static class ReflectionUtils
 	{
-		/// <summary>
-		/// Instantiates the given type using the constructor matching the given values.
-		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="values"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public static object Instantiate(Type type, params object[] values)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			ConstructorInfo constructor =
-#if SIMPLSHARP
-				((CType)type)
-#else
-				type
-#endif
-					.GetConstructors()
-					.FirstOrDefault(c => MatchesConstructorParameters(c, values));
-
-			try
-			{
-				if (constructor != null)
-					return constructor.Invoke(values);
-			}
-			catch (TypeLoadException e)
-			{
-				throw new TypeLoadException(e.GetBaseException().Message);
-			}
-
-			string message = string.Format("Unable to find constructor for {0}", type.Name);
-			throw new InvalidOperationException(message);
-		}
-
 		/// <summary>
 		/// Returns true if the parameters match the constructor parameters.
 		/// </summary>
@@ -206,7 +168,7 @@ namespace ICD.Common.Utils
 		               .GetTypeInfo()
 #endif
 				       .IsValueType
-				       ? Activator.CreateInstance(type)
+				       ? CreateInstance(type)
 				       : null;
 		}
 
@@ -235,29 +197,47 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static T CreateInstance<T>()
-			where T : new()
+		public static T CreateInstance<T>(params object[] parameters)
 		{
-			return (T)CreateInstance(typeof(T));
+			if (parameters == null)
+				throw new ArgumentNullException("parameters");
+
+			return (T)CreateInstance(typeof(T), parameters);
 		}
 
 		/// <summary>
 		/// Creates an instance of the given type, calling the default constructor.
 		/// </summary>
 		/// <returns></returns>
-		public static object CreateInstance(Type type)
+		public static object CreateInstance(Type type, params object[] parameters)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
 
+			if (parameters == null)
+				throw new ArgumentNullException("parameters");
+
+			ConstructorInfo constructor =
+#if SIMPLSHARP
+				type.GetCType()
+#else
+				type
+#endif
+				    .GetConstructors()
+				    .FirstOrDefault(c => MatchesConstructorParameters(c, parameters));
+
 			try
 			{
-				return Activator.CreateInstance(type);
+				if (constructor != null)
+					return constructor.Invoke(parameters);
 			}
-			catch (TargetInvocationException e)
+			catch (TypeLoadException e)
 			{
-				throw e.GetBaseException();
+				throw new TypeLoadException(e.GetBaseException().Message);
 			}
+
+			string message = string.Format("Unable to find constructor for {0}", type.Name);
+			throw new InvalidOperationException(message);
 		}
 
 		/// <summary>
