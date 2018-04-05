@@ -34,23 +34,12 @@ namespace ICD.Common.Utils.Tests
 			}
 		}
 
-		[TestCase("test", 10)]
-		[TestCase(null, 0)]
-		public void InstantiateTest(string param1, int param2)
-		{
-			TestClass result = ReflectionUtils.Instantiate(typeof(TestClass), param1, param2) as TestClass;
-
-			Assert.NotNull(result);
-			Assert.AreEqual(param1, result.Param1);
-			Assert.AreEqual(param2, result.Param2);
-		}
-
 		[Test]
 		public void MatchesConstructorParametersTest()
 		{
 			Assert.Throws<ArgumentNullException>(() => ReflectionUtils.MatchesConstructorParameters(null, new object[] { "test", 10 }));
 
-			ConstructorInfo constructor = typeof(TestClass).GetConstructor(new Type[] {typeof(string), typeof(int)});
+			ConstructorInfo constructor = typeof(TestClass).GetConstructor(new[] {typeof(string), typeof(int)});
 
 			Assert.IsTrue(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] {"test", 10}));
 			Assert.IsTrue(ReflectionUtils.MatchesConstructorParameters(constructor, new object[] {null, 10}));
@@ -112,6 +101,17 @@ namespace ICD.Common.Utils.Tests
 		{
 			List<string> output = ReflectionUtils.CreateInstance(typeof(List<string>)) as List<string>;
 			Assert.NotNull(output);
+		}
+
+		[TestCase("test", 10)]
+		[TestCase(null, 0)]
+		public void CreateInstanceTest(string param1, int param2)
+		{
+			TestClass result = ReflectionUtils.CreateInstance(typeof(TestClass), param1, param2) as TestClass;
+
+			Assert.NotNull(result);
+			Assert.AreEqual(param1, result.Param1);
+			Assert.AreEqual(param2, result.Param2);
 		}
 
 		[Test]
