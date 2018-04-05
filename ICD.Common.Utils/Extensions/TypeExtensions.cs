@@ -100,6 +100,11 @@ namespace ICD.Common.Utils.Extensions
 			return s_DecimalNumericTypes.Contains(extends);
 		}
 
+		/// <summary>
+		/// Gets the Assembly containing the type.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
 		public static Assembly GetAssembly(this Type extends)
 		{
 			if (extends == null)
@@ -114,6 +119,12 @@ namespace ICD.Common.Utils.Extensions
 				.Assembly;
 		}
 
+		/// <summary>
+		/// Returns true if the type is assignable to the given type.
+		/// </summary>
+		/// <param name="from"></param>
+		/// <param name="to"></param>
+		/// <returns></returns>
 		public static bool IsAssignableTo(this Type from, Type to)
 		{
 			if (from == null)
