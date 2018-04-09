@@ -387,5 +387,23 @@ namespace ICD.Common.Utils
 
 			return Convert.ChangeType(value, type, null);
 		}
+
+		/// <summary>
+		/// Platform independant delegate instantiation.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="firstArgument"></param>
+		/// <param name="method"></param>
+		/// <returns></returns>
+		public static Delegate CreateDelegate(Type type, object firstArgument, MethodInfo method)
+		{
+			return
+#if SIMPLSHARP
+				CDelegate
+#else
+				Delegate
+#endif
+					.CreateDelegate(type, firstArgument, method);
+		}
 	}
 }
