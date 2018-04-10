@@ -3,6 +3,8 @@ using System.Text;
 
 namespace ICD.Common.Utils
 {
+	public delegate void AddReprPropertyDelegate(string name, object value);
+
 	/// <summary>
 	/// Simple class for building a string representation of an object.
 	/// </summary>
