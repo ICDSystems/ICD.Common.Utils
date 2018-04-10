@@ -5,8 +5,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>ICD.Common.Utils</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
-	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <Deterministic>true</Deterministic>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<Deterministic>true</Deterministic>
     <Authors>Chris Cameron, Jeff Thompson</Authors>
     <PackageId>ICD.Common.Utils</PackageId>
     <PackageProjectUrl></PackageProjectUrl>
@@ -44,7 +44,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SQLite" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>

@@ -14,6 +14,12 @@ namespace ICD.Common.Utils.Json
 		/// <param name="serializer">The calling serializer.</param>
 		public sealed override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 		{
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
+			if (serializer == null)
+				throw new ArgumentNullException("serializer");
+
 			if (value == null)
 			{
 				writer.WriteNull();
@@ -45,6 +51,12 @@ namespace ICD.Common.Utils.Json
 		public sealed override object ReadJson(JsonReader reader, Type objectType, object existingValue,
 		                                       JsonSerializer serializer)
 		{
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			if (serializer == null)
+				throw new ArgumentNullException("serializer");
+
 			return ReadJson(reader, (T)existingValue, serializer);
 		}
 

@@ -1062,12 +1062,14 @@ namespace ICD.Common.Utils.Extensions
 		{
 			public readonly T value;
 			public readonly bool isParsed;
+
 			public TryParseStruct(T value, bool isParsed)
 			{
 				this.value = value;
 				this.isParsed = isParsed;
 			}
 		}
+
 		// since Func<...,T> can't specify `out` parameters
 		public delegate bool TryParseDelegate<T>(string input, out T output);
 
@@ -1079,7 +1081,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends">enumerable of strings to parse</param>
 		/// <param name="tryParseFunc">TryParse function for given type</param>
 		/// <returns>enumerable of successfully parsed values</returns>
-		public static IEnumerable<T> TryParseSkipFailures<T>(this IEnumerable<string> extends, TryParseDelegate<T> tryParseFunc)
+		public static IEnumerable<T> TryParseSkipFailures<T>(this IEnumerable<string> extends,
+		                                                     TryParseDelegate<T> tryParseFunc)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1088,13 +1091,13 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("tryParseFunc");
 
 			return extends.Select(str =>
-			{
-				T value = default(T);
-				bool isParsed = tryParseFunc(str, out value);
-				return new TryParseStruct<T>(value, isParsed);
-			})
-			.Where(v => v.isParsed == true)
-			.Select(v => v.value);
+			                      {
+				                      T value;
+				                      bool isParsed = tryParseFunc(str, out value);
+				                      return new TryParseStruct<T>(value, isParsed);
+			                      })
+			              .Where(v => v.isParsed)
+			              .Select(v => v.value);
 		}
 
 #if SIMPLSHARP

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
 #if SIMPLSHARP
@@ -21,41 +20,6 @@ namespace ICD.Common.Utils
 	public static class ReflectionUtils
 	{
 		/// <summary>
-		/// Instantiates the given type using the constructor matching the given values.
-		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="values"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public static object Instantiate(Type type, params object[] values)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			ConstructorInfo constructor =
-#if SIMPLSHARP
-				((CType)type)
-#else
-				type
-#endif
-					.GetConstructors()
-					.FirstOrDefault(c => MatchesConstructorParameters(c, values));
-
-			try
-			{
-				if (constructor != null)
-					return constructor.Invoke(values);
-			}
-			catch (TypeLoadException e)
-			{
-				throw new TypeLoadException(e.GetBaseException().Message);
-			}
-
-			string message = string.Format("Unable to find constructor for {0}", type.Name);
-			throw new InvalidOperationException(message);
-		}
-
-		/// <summary>
 		/// Returns true if the parameters match the constructor parameters.
 		/// </summary>
 		/// <param name="constructor"></param>
@@ -70,12 +34,13 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("parameters");
 
 #if SIMPLSHARP
-			IEnumerable<CType> methodTypes
+			IEnumerable<CType>
 #else
-			IEnumerable<Type> methodTypes
+			IEnumerable<Type>
 #endif
-				= constructor.GetParameters().Select(p => p.ParameterType);
-			return ParametersMatchTypes(methodTypes, parameters);
+				parameterTypes = constructor.GetParameters().Select(p => p.ParameterType);
+
+			return ParametersMatchTypes(parameterTypes, parameters);
 		}
 
 		/// <summary>
@@ -93,12 +58,13 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("parameters");
 
 #if SIMPLSHARP
-			IEnumerable<CType> methodTypes
+			IEnumerable<CType>
 #else
-			IEnumerable<Type> methodTypes
+			IEnumerable<Type> 
 #endif
-				= method.GetParameters().Select(p => p.ParameterType);
-			return ParametersMatchTypes(methodTypes, parameters);
+				parameterTypes = method.GetParameters().Select(p => p.ParameterType);
+
+			return ParametersMatchTypes(parameterTypes, parameters);
 		}
 
 		/// <summary>
@@ -113,11 +79,12 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("property");
 
 #if SIMPLSHARP
-			CType propertyType
+			CType
 #else
-			Type propertyType
+			Type
 #endif
-				= property.PropertyType;
+				propertyType = property.PropertyType;
+
 			return ParametersMatchTypes(new[] {propertyType}, new[] {parameter});
 		}
 
@@ -127,23 +94,32 @@ namespace ICD.Common.Utils
 		/// <param name="types"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
+		private static bool ParametersMatchTypes(
 #if SIMPLSHARP
-		private static bool ParametersMatchTypes(IEnumerable<CType> types, IEnumerable<object> parameters)
-		{
-			if (types == null)
-				throw new ArgumentNullException("types");
-
-			CType[] typesArray = types as CType[] ?? types.ToArray();
-#else
-		private static bool ParametersMatchTypes(IEnumerable<Type> types, IEnumerable<object> parameters)
-		{
-			if (types == null)
-				throw new ArgumentNullException("types");
-
-			Type[] typesArray = types as Type[] ?? types.ToArray();
+			IEnumerable<CType>
+#else	
+			IEnumerable<Type>
 #endif
+				types, IEnumerable<object> parameters)
+		{
+			if (types == null)
+				throw new ArgumentNullException("types");
+
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
+
+#if SIMPLSHARP
+			CType[]
+#else
+			Type[]
+#endif
+				typesArray = types as
+#if SIMPLSHARP
+				             CType[]
+#else
+				             Type[]
+#endif
+				             ?? types.ToArray();
 
 			object[] parametersArray = parameters as object[] ?? parameters.ToArray();
 
@@ -151,7 +127,8 @@ namespace ICD.Common.Utils
 				return false;
 
 			// Compares each pair of items in the two arrays.
-			return !parametersArray.Where((t, index) => !ParameterMatchesType(typesArray[index], t)).Any();
+			return !parametersArray.Where((t, index) => !ParameterMatchesType(typesArray[index], t))
+			                       .Any();
 		}
 
 		/// <summary>
@@ -160,50 +137,38 @@ namespace ICD.Common.Utils
 		/// <param name="type"></param>
 		/// <param name="parameter"></param>
 		/// <returns></returns>
-#if SIMPLSHARP
-		private static bool ParameterMatchesType(CType type, object parameter)
+		private static bool ParameterMatchesType(Type type, object parameter)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
 
+#if SIMPLSHARP
 			// Can the parameter be assigned a null value?
 			if (parameter == null)
 				return (type.IsClass || !type.IsValueType || Nullable.GetUnderlyingType(type) != null);
-
 			return type.IsInstanceOfType(parameter);
-		}
 #else
-        private static bool ParameterMatchesType(Type type, object parameter)
-        {
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-            TypeInfo info = type.GetTypeInfo();
+			TypeInfo info = type.GetTypeInfo();
 			// Can the parameter be assigned a null value?
 			if (parameter == null)
 				return (info.IsClass || !info.IsValueType || Nullable.GetUnderlyingType(type) != null);
-
 			return info.IsInstanceOfType(parameter);
-        }
 #endif
+		}
 
 		/// <summary>
 		/// Same as doing default(Type).
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-#if SIMPLSHARP
-		public static object GetDefaultValue(CType type)
-#else
 		public static object GetDefaultValue(Type type)
-#endif
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
 
 			return type
 #if !SIMPLSHARP
-		               .GetTypeInfo()
+				       .GetTypeInfo()
 #endif
 				       .IsValueType
 				       ? Activator.CreateInstance(type)
@@ -231,33 +196,68 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Platform independant delegate instantiation.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="firstArgument"></param>
+		/// <param name="method"></param>
+		/// <returns></returns>
+		public static Delegate CreateDelegate(Type type, object firstArgument, MethodInfo method)
+		{
+			return
+#if SIMPLSHARP
+				CDelegate
+#else
+				Delegate
+#endif
+					.CreateDelegate(type, firstArgument, method);
+		}
+
+		/// <summary>
 		/// Creates an instance of the given type, calling the default constructor.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static T CreateInstance<T>()
-			where T : new()
+		public static T CreateInstance<T>(params object[] parameters)
 		{
-			return (T)CreateInstance(typeof(T));
+			if (parameters == null)
+				throw new ArgumentNullException("parameters");
+
+			return (T)CreateInstance(typeof(T), parameters);
 		}
 
 		/// <summary>
 		/// Creates an instance of the given type, calling the default constructor.
 		/// </summary>
 		/// <returns></returns>
-		public static object CreateInstance(Type type)
+		public static object CreateInstance(Type type, params object[] parameters)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
 
+			if (parameters == null)
+				throw new ArgumentNullException("parameters");
+
+			ConstructorInfo constructor =
+				type
+#if SIMPLSHARP
+					.GetCType()
+#endif
+					.GetConstructors()
+					.FirstOrDefault(c => MatchesConstructorParameters(c, parameters));
+
 			try
 			{
-				return Activator.CreateInstance(type);
+				if (constructor != null)
+					return constructor.Invoke(parameters);
 			}
-			catch (TargetInvocationException e)
+			catch (TypeLoadException e)
 			{
-				throw e.GetBaseException();
+				throw new TypeLoadException(e.GetBaseException().Message);
 			}
+
+			string message = string.Format("Unable to find constructor for {0}", type.Name);
+			throw new InvalidOperationException(message);
 		}
 
 		/// <summary>
@@ -334,6 +334,85 @@ namespace ICD.Common.Utils
 				? Assembly.Load(new AssemblyName(fileNameWithOutExtension))
 				: AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
 #endif
+		}
+
+		/// <summary>
+		/// Finds the corresponding property info on the given type.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="property"></param>
+		/// <returns></returns>
+		public static PropertyInfo GetImplementation(Type type, PropertyInfo property)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (property == null)
+				throw new ArgumentNullException("property");
+
+			if (type.IsInterface)
+				throw new InvalidOperationException("Type must not be an interface");
+
+			property = type
+#if SIMPLSHARP
+				.GetCType()
+#else
+				.GetTypeInfo()
+#endif
+				.GetProperty(property.Name, property.PropertyType);
+
+			if (property == null)
+				return null;
+
+			return property.DeclaringType == type
+				? property
+				: GetImplementation(property.DeclaringType, property);
+		}
+
+		/// <summary>
+		/// Changes the given value to the given type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static object ChangeType(object value, Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			// Handle null value
+			if (value == null)
+			{
+				if (type.CanBeNull())
+					return null;
+
+				throw new InvalidCastException(string.Format("Unable to convert NULL to type {0}", type.Name));
+			}
+
+			Type valueType = value.GetType();
+			if (valueType.IsAssignableTo(type))
+				return value;
+
+			try
+			{
+				// Handle enum
+				if (type.IsEnum)
+				{
+					if (valueType.IsIntegerNumeric())
+						return Enum.ToObject(type, value);
+
+					if (value is string)
+						return Enum.Parse(type, value as string, false);
+				}
+
+				return Convert.ChangeType(value, type, null);
+			}
+			catch (Exception e)
+			{
+				string valueString = valueType.ToString();
+				string message = string.Format("Failed to convert {0} to type {1} - {2}", valueString, type, e.Message);
+				throw new InvalidCastException(message, e);
+			}
 		}
 	}
 }
