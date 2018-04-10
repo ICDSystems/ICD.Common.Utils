@@ -321,7 +321,7 @@ namespace ICD.Common.Utils
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			int maxEnumValue = (GetValues<T>().Max(v => (int)(object)v) * 2) -1 ;
-			return Enumerable.Range(1, maxEnumValue).Cast<T>().Where(v => HasFlags(value, v));
+			return Enumerable.Range(1, maxEnumValue).Select(i => (T)(object)i ).Where(v => HasFlags(value, v));
 		}
 
 		/// <summary>
