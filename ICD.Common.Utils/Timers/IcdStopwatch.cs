@@ -140,6 +140,7 @@ namespace ICD.Common.Utils.Timers
 		{
 			using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
 			{
+// ReSharper disable once AccessToDisposedClosure
 				while (Profile(() => enumerator.MoveNext(), name))
 					yield return enumerator.Current;
 			}
