@@ -14,9 +14,6 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="sender"></param>
 		public static void Raise(this EventHandler extends, object sender)
 		{
-			if (sender == null)
-				throw new ArgumentNullException("sender");
-
 			if (extends != null)
 				extends(sender, EventArgs.Empty);
 		}
@@ -31,9 +28,6 @@ namespace ICD.Common.Utils.Extensions
 		public static void Raise<T>(this EventHandler<T> extends, object sender, T args)
 			where T : EventArgs
 		{
-			if (sender == null)
-				throw new ArgumentNullException("sender");
-
 			if (args == null)
 				throw new ArgumentNullException("args");
 
