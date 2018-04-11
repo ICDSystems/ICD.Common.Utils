@@ -103,7 +103,6 @@ namespace ICD.Common.Utils.Collections
 		}
 	}
 
-
 	/// <summary>
 	/// WeakDictionary keeps weak references to keys and drops key/value pairs once the key is garbage collected.
 	/// </summary>
