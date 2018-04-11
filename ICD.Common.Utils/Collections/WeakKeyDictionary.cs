@@ -231,11 +231,6 @@ namespace ICD.Common.Utils.Collections
 				            .Where(weakKey => !weakKey.IsAlive)
 							.ToArray();
 
-			IcdConsole.PrintLine("-------------------");
-			foreach (var item in toRemove)
-				IcdConsole.PrintLine("{0} - {1}", item, item.Target);
-			IcdConsole.PrintLine("-------------------");
-
 			m_Dictionary.RemoveAll(toRemove);
 		}
 
