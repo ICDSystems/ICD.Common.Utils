@@ -116,20 +116,13 @@ namespace ICD.Common.Utils.Collections
 
 		#region Properties
 
-		public int Count
-		{
-			get
-			{
-				RemoveCollectedEntries();
-				return m_Dictionary.Count;
-			}
-		}
+		public int Count { get { return GetAliveKvps().Count(); } }
 
 		public bool IsReadOnly { get { return false; } }
 
-		public ICollection<TKey> Keys { get { throw new NotImplementedException(); } }
+		public ICollection<TKey> Keys { get { return GetAliveKvps().Select(kvp => kvp.Key).ToArray(); } }
 
-		public ICollection<TValue> Values { get { throw new NotImplementedException(); } }
+		public ICollection<TValue> Values { get { return GetAliveKvps().Select(kvp => kvp.Value).ToArray(); } }
 
 		public TValue this[TKey key]
 		{
@@ -178,22 +171,13 @@ namespace ICD.Common.Utils.Collections
 
 		#region Methods
 
-		bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
-		{
-			throw new NotImplementedException();
-		}
-
 		public void Add(TKey key, TValue value)
 		{
 			if (key == null)
 				throw new ArgumentNullException("key");
 
 			WeakKeyReference<TKey> weakKey = new WeakKeyReference<TKey>(key, m_Comparer);
-			IcdConsole.PrintLine("Adding key {0} with hash code {1}", weakKey.Target, weakKey.HashCode);
-
 			m_Dictionary.Add(weakKey, value);
-
-			IcdConsole.PrintLine("Internal dict count is now {0}", m_Dictionary.Count);
 		}
 
 		public bool ContainsKey(TKey key)
@@ -241,21 +225,22 @@ namespace ICD.Common.Utils.Collections
 			Add(item.Key, item.Value);
 		}
 
+		bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
+		{
+			return Remove(item.Key);
+		}
+
 		bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
 		{
-			throw new NotImplementedException();
+			return ContainsKey(item.Key);
 		}
 
 		void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
 		{
-			throw new NotImplementedException();
+			GetAliveKvps().CopyTo(array, arrayIndex);
 		}
 
-		#endregion
-
-		#region IEnumerator
-
-		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+		private IEnumerable<KeyValuePair<TKey, TValue>> GetAliveKvps()
 		{
 			foreach (KeyValuePair<WeakKeyReference<TKey>, TValue> kvp in m_Dictionary)
 			{
@@ -264,6 +249,15 @@ namespace ICD.Common.Utils.Collections
 				if (weakKey.IsAlive)
 					yield return new KeyValuePair<TKey, TValue>(key, kvp.Value);
 			}
+		}
+
+		#endregion
+
+		#region IEnumerator
+
+		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+		{
+			return GetAliveKvps().GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
