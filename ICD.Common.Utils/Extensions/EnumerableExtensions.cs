@@ -579,6 +579,23 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Copies all the elements of the current one-dimensional array to the specified one-dimensional array
+		/// starting at the specified destination array index. The index is specified as a 32-bit integer.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="array"></param>
+		/// <param name="index"></param>
+		public static void CopyTo<T>(this IEnumerable<T> extends, T[] array, int index)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			ICollection<T> collection = extends as ICollection<T> ?? extends.ToArray();
+			collection.CopyTo(array, index);
+		}
+
+		/// <summary>
 		/// Returns the sequence as a IcdHashSet.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
