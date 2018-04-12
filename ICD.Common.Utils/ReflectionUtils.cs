@@ -414,5 +414,26 @@ namespace ICD.Common.Utils
 				throw new InvalidCastException(message, e);
 			}
 		}
+
+		/// <summary>
+		/// Subscribes to the event on the given instance using the handler and callback method.
+		/// </summary>
+		/// <param name="instance"></param>
+		/// <param name="eventInfo"></param>
+		/// <param name="handler"></param>
+		/// <param name="callback"></param>
+		/// <returns></returns>
+		public static Delegate SubscribeEvent(object instance, EventInfo eventInfo, object handler, MethodInfo callback)
+		{
+			if (eventInfo == null)
+				throw new ArgumentNullException("eventInfo");
+
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
+			Delegate output = CreateDelegate(eventInfo.EventHandlerType, handler, callback);
+			eventInfo.AddEventHandler(instance, output);
+			return output;
+		}
 	}
 }
