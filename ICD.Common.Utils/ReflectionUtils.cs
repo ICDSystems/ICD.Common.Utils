@@ -418,10 +418,10 @@ namespace ICD.Common.Utils
 		/// <summary>
 		/// Subscribes to the event on the given instance using the handler and callback method.
 		/// </summary>
-		/// <param name="instance"></param>
-		/// <param name="eventInfo"></param>
-		/// <param name="handler"></param>
-		/// <param name="callback"></param>
+		/// <param name="instance">The instance with the event. Null for static types.</param>
+		/// <param name="eventInfo">The EventInfo for the event.</param>
+		/// <param name="handler">The instance with the callback MethodInfo. Null for static types.</param>
+		/// <param name="callback">The MethodInfo for the callback method.</param>
 		/// <returns></returns>
 		public static Delegate SubscribeEvent(object instance, EventInfo eventInfo, object handler, MethodInfo callback)
 		{
@@ -434,6 +434,23 @@ namespace ICD.Common.Utils
 			Delegate output = CreateDelegate(eventInfo.EventHandlerType, handler, callback);
 			eventInfo.AddEventHandler(instance, output);
 			return output;
+		}
+
+		/// <summary>
+		/// Unsubscribes from the event on the given instance.
+		/// </summary>
+		/// <param name="instance">The instance with the event. Null for static types.</param>
+		/// <param name="eventInfo">The EventInfo for the event.</param>
+		/// <param name="callback">The Delegate to be removed from the event.</param>
+		public static void UnsubscribeEvent(object instance, EventInfo eventInfo, Delegate callback)
+		{
+			if (eventInfo == null)
+				throw new ArgumentNullException("eventInfo");
+
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
+			eventInfo.RemoveEventHandler(instance, callback);
 		}
 	}
 }
