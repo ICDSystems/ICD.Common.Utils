@@ -185,6 +185,24 @@ namespace ICD.Common.Utils
 			return IcdFile.Exists(path) || IcdDirectory.Exists(path);
 		}
 
+		/// <summary>
+		/// Returns the path if the given path is already a directory or has a trailing slash.
+		/// Otherwise returns the parent directory name.
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static string GetDirectoryNameFromPath(string path)
+		{
+			if (IcdDirectory.Exists(path))
+				return path;
+
+			if (path.EndsWith(IcdPath.DirectorySeparatorChar) || path.EndsWith(IcdPath.AltDirectorySeparatorChar))
+				return path;
+
+			return IcdPath.GetDirectoryName(path);
+		}
+
 		#endregion
 	}
 }
