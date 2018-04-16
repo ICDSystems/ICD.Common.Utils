@@ -11,6 +11,46 @@ namespace ICD.Common.Utils.Extensions
 	public static class ListExtensions
 	{
 		/// <summary>
+		/// Adds the items into a sorted list.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="items"></param>
+		[PublicAPI]
+		public static void AddSorted<T>(this List<T> extends, IEnumerable<T> items)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (items == null)
+				throw new ArgumentNullException("items");
+
+			extends.AddSorted(items, Comparer<T>.Default);
+		}
+
+		/// <summary>
+		/// Adds the item into a sorted list.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="items"></param>
+		/// <param name="comparer"></param>
+		[PublicAPI]
+		public static void AddSorted<T>(this List<T> extends, IEnumerable<T> items, IComparer<T> comparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (items == null)
+				throw new ArgumentNullException("items");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			items.ForEach(i => extends.AddSorted(i, comparer));
+		}
+
+		/// <summary>
 		/// Adds the item into a sorted list.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
