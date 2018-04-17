@@ -29,7 +29,7 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Adds the item into a sorted list.
+		/// Adds the items into a sorted list.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
