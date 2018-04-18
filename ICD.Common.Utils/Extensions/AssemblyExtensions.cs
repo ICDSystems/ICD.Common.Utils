@@ -57,5 +57,18 @@ namespace ICD.Common.Utils.Extensions
 			string path = extends.GetPath();
 			return path == null ? DateTime.MinValue : IcdFile.GetCreationTime(path);
 		}
+
+		/// <summary>
+		/// Gets the informational version for the given assembly.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static string GetInformationalVersion(this Assembly extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+		}
 	}
 }
