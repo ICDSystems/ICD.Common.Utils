@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.IO;
 #if SIMPLSHARP
@@ -70,7 +71,28 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+			string version;
+			if (extends.TryGetInformationalVersion(out version))
+				return version;
+
+			throw new InvalidOperationException("Assembly has no informational version attribute.");
+		}
+
+		/// <summary>
+		/// Tries to get the informational version for the assembly.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="version"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryGetInformationalVersion(this Assembly extends, out string version)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.GetCustomAttributes<AssemblyInformationalVersionAttribute>()
+			              .Select(a => a.InformationalVersion)
+			              .TryFirst(out version);
 		}
 	}
 }
