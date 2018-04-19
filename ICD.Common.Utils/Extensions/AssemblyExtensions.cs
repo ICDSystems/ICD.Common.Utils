@@ -12,7 +12,7 @@ namespace ICD.Common.Utils.Extensions
 	public static class AssemblyExtensions
 	{
 		/// <summary>
-		/// Gets the path for the given assembly. Returns null if the assembly can not be found on disk.
+		/// Gets the path for the assembly. Returns null if the assembly can not be found on disk.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
@@ -45,10 +45,11 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Gets the creation date of the given assembly.
+		/// Gets the creation date of the assembly.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
+		[PublicAPI]
 		public static DateTime GetCreationTime(this Assembly extends)
 		{
 			if (extends == null)
@@ -59,10 +60,11 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Gets the informational version for the given assembly.
+		/// Gets the informational version for the assembly.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
+		[PublicAPI]
 		public static string GetInformationalVersion(this Assembly extends)
 		{
 			if (extends == null)
