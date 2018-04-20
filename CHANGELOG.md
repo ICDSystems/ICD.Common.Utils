@@ -8,3 +8,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Adding extension method for getting Informational Version from an Assembly
  
+### Changed
+ - JSON serialization/deserialization features moved into base converter
+ 
