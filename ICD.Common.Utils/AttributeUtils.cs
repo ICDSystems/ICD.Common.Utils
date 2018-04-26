@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Collections;
@@ -85,7 +84,7 @@ namespace ICD.Common.Utils
 			{
 				foreach (Exception inner in e.LoaderExceptions)
 				{
-					if (inner is FileNotFoundException)
+					if (inner is System.IO.FileNotFoundException)
 					{
 						Logger.AddEntry(eSeverity.Error,
 						                "{0} failed to cache assembly {1} - Could not find one or more dependencies by path",
