@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Comparers;
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -29,7 +30,7 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Adds the item into a sorted list.
+		/// Adds the items into a sorted list.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
@@ -48,6 +49,30 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("comparer");
 
 			items.ForEach(i => extends.AddSorted(i, comparer));
+		}
+
+		/// <summary>
+		/// Adds the items into a sorted list.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <typeparam name="TProp"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="items"></param>
+		/// <param name="predicate"></param>
+		[PublicAPI]
+		public static void AddSorted<T, TProp>(this List<T> extends, IEnumerable<T> items, Func<T, TProp> predicate)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (items == null)
+				throw new ArgumentNullException("items");
+
+			if (predicate == null)
+				throw new ArgumentNullException("predicate");
+
+			PredicateComparer<T, TProp> comparer = new PredicateComparer<T, TProp>(predicate);
+			extends.AddSorted(items, comparer);
 		}
 
 		/// <summary>
@@ -104,6 +129,27 @@ namespace ICD.Common.Utils.Extensions
 				index = ~index;
 
 			extends.Insert(index, item);
+		}
+
+		/// <summary>
+		/// Adds the item into a sorted list.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <typeparam name="TProp"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="item"></param>
+		/// <param name="predicate"></param>
+		[PublicAPI]
+		public static void AddSorted<T, TProp>(this List<T> extends, T item, Func<T, TProp> predicate)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (predicate == null)
+				throw new ArgumentNullException("predicate");
+
+			PredicateComparer<T, TProp> comparer = new PredicateComparer<T, TProp>(predicate);
+			extends.AddSorted(item, comparer);
 		}
 
 		/// <summary>

@@ -7,6 +7,15 @@ namespace ICD.Common.Utils.Json
 	public abstract class AbstractGenericJsonConverter<T> : JsonConverter
 	{
 		/// <summary>
+		/// Creates a new instance of T.
+		/// </summary>
+		/// <returns></returns>
+		protected virtual T Instantiate()
+		{
+			return ReflectionUtils.CreateInstance<T>();
+		}
+
+		/// <summary>
 		/// Writes the JSON representation of the object.
 		/// </summary>
 		/// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter"/> to write to.</param>
@@ -36,7 +45,24 @@ namespace ICD.Common.Utils.Json
 		/// <param name="value">The value.</param>
 		/// <param name="serializer">The calling serializer.</param>
 		[PublicAPI]
-		public abstract void WriteJson(JsonWriter writer, T value, JsonSerializer serializer);
+		public virtual void WriteJson(JsonWriter writer, T value, JsonSerializer serializer)
+		{
+			writer.WriteStartObject();
+			{
+				WriteProperties(writer, value, serializer);
+			}
+			writer.WriteEndObject();
+		}
+
+		/// <summary>
+		/// Override to write properties to the writer.
+		/// </summary>
+		/// <param name="writer"></param>
+		/// <param name="value"></param>
+		/// <param name="serializer"></param>
+		protected virtual void WriteProperties(JsonWriter writer, T value, JsonSerializer serializer)
+		{
+		}
 
 		/// <summary>
 		/// Reads the JSON representation of the object.
@@ -70,7 +96,52 @@ namespace ICD.Common.Utils.Json
 		/// The object value.
 		/// </returns>
 		[PublicAPI]
-		public abstract T ReadJson(JsonReader reader, T existingValue, JsonSerializer serializer);
+		public virtual T ReadJson(JsonReader reader, T existingValue, JsonSerializer serializer)
+		{
+			T output = default(T);
+			bool instantiated = false;
+
+			while (reader.Read())
+			{
+				if (reader.TokenType == JsonToken.Null || reader.TokenType == JsonToken.EndObject)
+					break;
+
+				if (!instantiated)
+				{
+					instantiated = true;
+					output = Instantiate();
+				}
+
+				// Get the property
+				if (reader.TokenType != JsonToken.PropertyName)
+					continue;
+				string property = (string)reader.Value;
+
+				// Read into the value
+				reader.Read();
+
+				switch (property)
+				{
+					default:
+						ReadProperty(property, reader, output, serializer);
+						break;
+				}
+			}
+
+			return output;
+		}
+
+		/// <summary>
+		/// Override to handle the current property value with the given name.
+		/// </summary>
+		/// <param name="property"></param>
+		/// <param name="reader"></param>
+		/// <param name="instance"></param>
+		/// <param name="serializer"></param>
+		protected virtual void ReadProperty(string property, JsonReader reader, T instance, JsonSerializer serializer)
+		{
+			reader.Skip();
+		}
 
 		/// <summary>
 		/// Determines whether this instance can convert the specified object type.

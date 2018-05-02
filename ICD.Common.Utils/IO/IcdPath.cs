@@ -10,6 +10,10 @@ namespace ICD.Common.Utils.IO
 {
 	public static class IcdPath
 	{
+		public static char DirectorySeparatorChar { get { return Path.DirectorySeparatorChar; } }
+
+		public static char AltDirectorySeparatorChar { get { return Path.AltDirectorySeparatorChar; } }
+
 		public static string GetFileName(string path)
 		{
 			if (path == null)

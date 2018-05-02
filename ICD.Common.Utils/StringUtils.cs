@@ -610,5 +610,77 @@ namespace ICD.Common.Utils
 		{
 			return value == null ? null : value.ToUpper();
 		}
+
+		/// <summary>
+		/// Compares the given chars for equality.
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <param name="ignoreCase"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool Compare(char a, char b, bool ignoreCase)
+		{
+			if (ignoreCase)
+			{
+				a = char.ToUpper(a, CultureInfo.InvariantCulture);
+				b = char.ToUpper(b, CultureInfo.InvariantCulture);
+			}
+
+			return a == b;
+		}
+
+		/// <summary>
+		/// Find the longest common string between the matches.
+		/// E.g.
+		///
+		/// C:\\Workspace
+		/// C:\\Workshop
+		///
+		/// Results in
+		///
+		/// C:\\Work
+		/// </summary>
+		/// <param name="items"></param>
+		/// <param name="ignoreCase"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static string GetLongestCommonIntersectionFromStart(IEnumerable<string> items, bool ignoreCase)
+		{
+			if (items == null)
+				throw new ArgumentNullException("items");
+
+			string output = null;
+
+			foreach (string item in items)
+			{
+				// If there is a null in the sequence that's the best match we can make
+				if (string.IsNullOrEmpty(item))
+					return null;
+
+				// Seed our first item
+				if (output == null)
+				{
+					output = item;
+					continue;
+				}
+
+				// Find the common substring
+				for (int index = 0; index < output.Length; index++)
+				{
+					if (index >= item.Length || !Compare(output[index], item[index], ignoreCase))
+					{
+						output = output.Substring(0, index);
+						break;
+					}
+				}
+
+				// Abandon the search if there is no common substring
+				if (string.IsNullOrEmpty(output))
+					break;
+			}
+
+			return output;
+		}
 	}
 }
