@@ -2,7 +2,7 @@
 {
 	public static class BoolExtensions
 	{
-		public static ushort ToUshort(this bool b)
+		public static ushort ToUShort(this bool b)
 		{
 			return b ? (ushort)1 : (ushort)0;
 		}

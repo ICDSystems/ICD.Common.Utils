@@ -1,6 +1,6 @@
 ﻿namespace ICD.Common.Utils.Extensions
 {
-	public static class UshortExtensions
+	public static class UShortExtensions
 	{
 		public static bool ToBool(this ushort u)
 		{
