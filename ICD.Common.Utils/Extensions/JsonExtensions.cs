@@ -76,6 +76,24 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Gets the current value as an unsigned integer.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static uint GetValueAsUInt(this JsonReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (extends.TokenType == JsonToken.Integer)
+				return (uint)(long)extends.Value;
+
+			string message = string.Format("Token {0} {1} is not {2}", extends.TokenType, extends.Value, JsonToken.Integer);
+			throw new InvalidCastException(message);
+		}
+
+		/// <summary>
 		/// Gets the current value as an integer.
 		/// </summary>
 		/// <param name="extends"></param>

@@ -196,6 +196,24 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Platform independant delegate instantiation.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="firstArgument"></param>
+		/// <param name="method"></param>
+		/// <returns></returns>
+		public static Delegate CreateDelegate(Type type, object firstArgument, MethodInfo method)
+		{
+			return
+#if SIMPLSHARP
+				CDelegate
+#else
+				Delegate
+#endif
+					.CreateDelegate(type, firstArgument, method);
+		}
+
+		/// <summary>
 		/// Creates an instance of the given type, calling the default constructor.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -368,24 +386,71 @@ namespace ICD.Common.Utils
 				if (type.CanBeNull())
 					return null;
 
-				throw new InvalidCastException();
+				throw new InvalidCastException(string.Format("Unable to convert NULL to type {0}", type.Name));
 			}
 
 			Type valueType = value.GetType();
 			if (valueType.IsAssignableTo(type))
 				return value;
 
-			// Handle enum
-			if (type.IsEnum)
+			try
 			{
-				if (valueType.IsIntegerNumeric())
-					return Enum.ToObject(type, value);
+				// Handle enum
+				if (type.IsEnum)
+				{
+					if (valueType.IsIntegerNumeric())
+						return Enum.ToObject(type, value);
 
-				if (value is string)
-					return Enum.Parse(type, value as string, false);
+					if (value is string)
+						return Enum.Parse(type, value as string, false);
+				}
+
+				return Convert.ChangeType(value, type, null);
 			}
+			catch (Exception e)
+			{
+				string valueString = valueType.ToString();
+				string message = string.Format("Failed to convert {0} to type {1} - {2}", valueString, type, e.Message);
+				throw new InvalidCastException(message, e);
+			}
+		}
 
-			return Convert.ChangeType(value, type, null);
+		/// <summary>
+		/// Subscribes to the event on the given instance using the handler and callback method.
+		/// </summary>
+		/// <param name="instance">The instance with the event. Null for static types.</param>
+		/// <param name="eventInfo">The EventInfo for the event.</param>
+		/// <param name="handler">The instance with the callback MethodInfo. Null for static types.</param>
+		/// <param name="callback">The MethodInfo for the callback method.</param>
+		/// <returns></returns>
+		public static Delegate SubscribeEvent(object instance, EventInfo eventInfo, object handler, MethodInfo callback)
+		{
+			if (eventInfo == null)
+				throw new ArgumentNullException("eventInfo");
+
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
+			Delegate output = CreateDelegate(eventInfo.EventHandlerType, handler, callback);
+			eventInfo.AddEventHandler(instance, output);
+			return output;
+		}
+
+		/// <summary>
+		/// Unsubscribes from the event on the given instance.
+		/// </summary>
+		/// <param name="instance">The instance with the event. Null for static types.</param>
+		/// <param name="eventInfo">The EventInfo for the event.</param>
+		/// <param name="callback">The Delegate to be removed from the event.</param>
+		public static void UnsubscribeEvent(object instance, EventInfo eventInfo, Delegate callback)
+		{
+			if (eventInfo == null)
+				throw new ArgumentNullException("eventInfo");
+
+			if (callback == null)
+				throw new ArgumentNullException("callback");
+
+			eventInfo.RemoveEventHandler(instance, callback);
 		}
 	}
 }

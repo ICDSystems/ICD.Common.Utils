@@ -28,6 +28,9 @@ namespace ICD.Common.Utils.Extensions
 		public static void Raise<T>(this EventHandler<T> extends, object sender, T args)
 			where T : EventArgs
 		{
+			if (args == null)
+				throw new ArgumentNullException("args");
+
 			if (extends != null)
 				extends(sender, args);
 		}

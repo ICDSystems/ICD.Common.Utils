@@ -108,8 +108,20 @@ namespace ICD.Common.Utils.Json
 		[PublicAPI]
 		public static void Print(object value)
 		{
+			string formatted = Format(value);
+			IcdConsole.PrintLine(formatted);
+		}
+
+		/// <summary>
+		/// Serializes the given item and formats the JSON into a human-readable form.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static string Format(object value)
+		{
 			string serial = JsonConvert.SerializeObject(value);
-			Print(serial);
+			return Format(serial);
 		}
 
 		/// <summary>
