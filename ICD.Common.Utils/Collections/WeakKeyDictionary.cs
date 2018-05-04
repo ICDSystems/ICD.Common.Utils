@@ -135,6 +135,7 @@ namespace ICD.Common.Utils.Collections
 			}
 			set
 			{
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 				if (key == null)
 					throw new ArgumentNullException("key");
 
@@ -172,6 +173,7 @@ namespace ICD.Common.Utils.Collections
 
 		public void Add(TKey key, TValue value)
 		{
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 			if (key == null)
 				throw new ArgumentNullException("key");
 
