@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+ - Added Yield extension to return a single-item enumerable for an object.
 
 ## [3.0.0] - 2018-04-23
 ### Added
