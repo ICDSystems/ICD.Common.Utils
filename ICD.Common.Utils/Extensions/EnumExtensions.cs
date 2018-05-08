@@ -52,5 +52,13 @@ namespace ICD.Common.Utils.Extensions
 			int num = (int)(object)value;
 			return ((int)(object)extends & num) == num;
 		}
+
+		public static ushort ToUShort(this Enum extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return (ushort)(object)extends;
+		}
 	}
 }
