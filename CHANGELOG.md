@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
- - Adding IcdOrderedDictionary collection
+ - Added IcdOrderedDictionary collection
+ - Added PriorityQueue collection
 
 ## [3.2.0] - 2018-05-09
 ### Added
