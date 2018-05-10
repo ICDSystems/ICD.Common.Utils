@@ -15,8 +15,8 @@ namespace ICD.Common.Utils.Tests.Collections
 			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>
 			{
 				{0, 0},
-				{1, 1},
-				{2, 2}
+				{1, 10},
+				{2, 20}
 			};
 
 			Assert.AreEqual(3, dict.Count);
@@ -36,8 +36,8 @@ namespace ICD.Common.Utils.Tests.Collections
 			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>
 			{
 				{0, 0},
-				{1, 1},
-				{-1, -1}
+				{1, 10},
+				{-1, -10}
 			};
 
 			int[] keys = dict.Keys.ToArray();
@@ -54,16 +54,16 @@ namespace ICD.Common.Utils.Tests.Collections
 			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>
 			{
 				{0, 0},
-				{1, 1},
-				{-1, -1}
+				{1, 10},
+				{-1, -10}
 			};
 
-			int[] keys = dict.Values.ToArray();
+			int[] values = dict.Values.ToArray();
 
-			Assert.AreEqual(3, keys.Length);
-			Assert.AreEqual(-1, keys[0]);
-			Assert.AreEqual(0, keys[1]);
-			Assert.AreEqual(1, keys[2]);
+			Assert.AreEqual(3, values.Length);
+			Assert.AreEqual(-10, values[0]);
+			Assert.AreEqual(0, values[1]);
+			Assert.AreEqual(10, values[2]);
 		}
 
 		[Test]
@@ -72,13 +72,13 @@ namespace ICD.Common.Utils.Tests.Collections
 			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>
 			{
 				{0, 0},
-				{1, 1},
-				{-1, -1}
+				{1, 10},
+				{-1, -10}
 			};
 
 			Assert.AreEqual(0, dict[0]);
-			Assert.AreEqual(1, dict[1]);
-			Assert.AreEqual(-1, dict[-1]);
+			Assert.AreEqual(10, dict[1]);
+			Assert.AreEqual(-10, dict[-1]);
 		}
 
 		#endregion
