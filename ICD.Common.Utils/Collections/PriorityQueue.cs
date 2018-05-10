@@ -87,14 +87,31 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public T Dequeue()
 		{
+			T output;
+			if (TryDequeue(out output))
+				return output;
+
+			throw new InvalidOperationException("The queue is empty.");
+		}
+
+		/// <summary>
+		/// Attempts to dequeue an item from the queue.
+		/// </summary>
+		/// <param name="output"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public bool TryDequeue(out T output)
+		{
+			output = default(T);
+
 			KeyValuePair<int, List<T>> kvp;
 			if (!m_PriorityToQueue.TryFirst(out kvp))
-				throw new InvalidOperationException("The queue is empty.");
+				return false;
 
 			int priority = kvp.Key;
 			List<T> queue = kvp.Value;
 
-			T output = queue[0];
+			output = queue[0];
 			queue.RemoveAt(0);
 
 			if (queue.Count == 0)
@@ -102,7 +119,7 @@ namespace ICD.Common.Utils.Collections
 
 			m_Count--;
 
-			return output;
+			return true;
 		}
 
 		/// <summary>
