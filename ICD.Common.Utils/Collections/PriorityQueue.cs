@@ -81,6 +81,85 @@ namespace ICD.Common.Utils.Collections
 		}
 
 		/// <summary>
+		/// Enqueues the item at the beginning of the queue.
+		/// </summary>
+		/// <param name="item"></param>
+		[PublicAPI]
+		public void EnqueueFirst(T item)
+		{
+			const int priority = int.MinValue;
+
+			if (!m_PriorityToQueue.ContainsKey(priority))
+				m_PriorityToQueue.Add(priority, new List<T>());
+
+			m_PriorityToQueue[priority].Insert(0, item);
+			m_Count++;
+		}
+
+		/// <summary>
+		/// Removes any items in the queue matching the predicate.
+		/// Inserts the given item in the position of the first removed item, or at the end of the queue.
+		/// This is useful for reducing duplication, or replacing items with something more pertinant.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="remove"></param>
+		[PublicAPI]
+		public void EnqueueRemove(T item, Func<T, bool> remove)
+		{
+			if (remove == null)
+				throw new ArgumentNullException("remove");
+
+			EnqueueRemove(item, remove, int.MaxValue);
+		}
+
+		/// <summary>
+		/// Removes any items in the queue matching the predicate.
+		/// Inserts the given item in the position of the first removed item, or at the end of the queue.
+		/// This is useful for reducing duplication, or replacing items with something more pertinant.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="remove"></param>
+		/// <param name="priority"></param>
+		[PublicAPI]
+		public void EnqueueRemove(T item, Func<T, bool> remove, int priority)
+		{
+			if (remove == null)
+				throw new ArgumentNullException("remove");
+
+			bool inserted = false;
+
+			foreach (KeyValuePair<int, List<T>> kvp in m_PriorityToQueue)
+			{
+				int[] removeIndices =
+					kvp.Value
+					   .FindIndices(v => remove(v))
+					   .Reverse()
+					   .ToArray();
+
+				if (removeIndices.Length == 0)
+					continue;
+
+				foreach (int removeIndex in removeIndices)
+				{
+					kvp.Value.RemoveAt(removeIndex);
+					m_Count--;
+				}
+
+				if (!inserted)
+				{
+					int insertIndex = removeIndices[0];
+					kvp.Value.Insert(insertIndex, item);
+					m_Count++;
+
+					inserted = true;
+				}
+			}
+
+			if (!inserted)
+				Enqueue(item, priority);
+		}
+
+		/// <summary>
 		/// Dequeues the first item with the lowest priority value.
 		/// </summary>
 		/// <returns></returns>

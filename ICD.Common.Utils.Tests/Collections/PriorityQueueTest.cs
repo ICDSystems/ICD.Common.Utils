@@ -99,6 +99,51 @@ namespace ICD.Common.Utils.Tests.Collections
 		}
 
 		[Test]
+		public void EnqueueFirstTest()
+		{
+			PriorityQueue<int> queue = new PriorityQueue<int>();
+
+			queue.Enqueue(1, int.MaxValue);
+			queue.Enqueue(2, int.MinValue);
+			queue.EnqueueFirst(3);
+
+			Assert.AreEqual(3, queue.Count);
+
+			Assert.AreEqual(3, queue.Dequeue());
+		}
+
+		[Test]
+		public void EnqueueRemoveTest()
+		{
+			PriorityQueue<int> queue = new PriorityQueue<int>();
+
+			queue.Enqueue(1);
+			queue.Enqueue(2);
+			queue.Enqueue(3);
+
+			queue.EnqueueRemove(4, i => i == 2);
+
+			Assert.AreEqual(3, queue.Count);
+
+			List<int> dequeue = new List<int>
+			{
+				queue.Dequeue(),
+				queue.Dequeue(),
+				queue.Dequeue()
+			};
+
+			Assert.AreEqual(1, dequeue[0]);
+			Assert.AreEqual(4, dequeue[1]);
+			Assert.AreEqual(3, dequeue[2]);
+		}
+
+		[Test]
+		public void EnqueueRemovePriorityTest()
+		{
+			Assert.Inconclusive();
+		}
+
+		[Test]
 		public void DequeueTest()
 		{
 			PriorityQueue<int> queue = new PriorityQueue<int>();
