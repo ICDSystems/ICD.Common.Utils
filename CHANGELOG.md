@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Added IcdOrderedDictionary collection
  - Added PriorityQueue collection
+ - Added IcdUriBuilder and UriExtensions for reading/writing URI data
 
 ## [3.2.0] - 2018-05-09
 ### Added

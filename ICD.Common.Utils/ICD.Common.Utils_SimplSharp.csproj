@@ -95,7 +95,9 @@
     <Compile Include="Extensions\ByteExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Comparers\PredicateEqualityComparer.cs" />
+    <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Extensions\UshortExtensions.cs" />
+    <Compile Include="IcdUriBuilder.cs" />
     <Compile Include="ProcessorUtils.SimplSharp.cs" />
     <Compile Include="ProcessorUtils.Standard.cs" />
     <Compile Include="ProgramUtils.SimplSharp.cs" />
