@@ -72,6 +72,7 @@ namespace ICD.Common.Utils
 			// Scheme
 			string scheme = string.IsNullOrEmpty(Scheme) ? "http" : Scheme;
 			builder.Append(scheme);
+			builder.Append(':');
 
 			// Authority
 			builder.Append("//");

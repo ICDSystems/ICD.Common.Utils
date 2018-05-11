@@ -31,7 +31,7 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(fragment, new IcdUriBuilder { Path = fragment }.Path);
 		}
 
-		[TestCase(80)]
+		[TestCase((ushort)80)]
 		public void PortTest(ushort port)
 		{
 			Assert.AreEqual(port, new IcdUriBuilder { Port = port }.Port);
@@ -40,19 +40,19 @@ namespace ICD.Common.Utils.Tests
 		[TestCase("test")]
 		public void QueryTest(string query)
 		{
-			Assert.AreEqual(query, new IcdUriBuilder { Query = query }.Fragment);
+			Assert.AreEqual(query, new IcdUriBuilder { Query = query }.Query);
 		}
 
 		[TestCase("test")]
 		public void SchemeTest(string scheme)
 		{
-			Assert.AreEqual(scheme, new IcdUriBuilder { Scheme = scheme }.Fragment);
+			Assert.AreEqual(scheme, new IcdUriBuilder { Scheme = scheme }.Scheme);
 		}
 
 		[TestCase("test")]
 		public void UserNameTest(string userName)
 		{
-			Assert.AreEqual(userName, new IcdUriBuilder { UserName = userName }.Fragment);
+			Assert.AreEqual(userName, new IcdUriBuilder { UserName = userName }.UserName);
 		}
 
 		[Test]
@@ -63,11 +63,11 @@ namespace ICD.Common.Utils.Tests
 
 		#endregion
 
-		[TestCase("http://localhost/", null, null, null, 0, null, null, null)]
-		[TestCase("http://localhost:80/", null, null, null, 80, null, null, null)]
-		[TestCase("http://username:@localhost/", null, null, null, 0, null, null, "username")]
-		[TestCase("http://:password@localhost/", null, null, "password", 0, null, null, null)]
-		[TestCase("https://localhost/", null, null, null, 0, null, "https", null)]
+		[TestCase("http://localhost/", null, null, null, (ushort)0, null, null, null)]
+		[TestCase("http://localhost:80/", null, null, null, (ushort)80, null, null, null)]
+		[TestCase("http://username@localhost/", null, null, null, (ushort)0, null, null, "username")]
+		[TestCase("http://localhost/", null, null, "password", (ushort)0, null, null, null)]
+		[TestCase("https://localhost/", null, null, null, (ushort)0, null, "https", null)]
 		public void ToStringTest(string expected, string fragment, string address, string password, ushort port, string query,
 		                         string scheme, string userName)
 		{
