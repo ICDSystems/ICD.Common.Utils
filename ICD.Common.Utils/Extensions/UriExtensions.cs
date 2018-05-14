@@ -28,7 +28,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.UserInfo.Split(':').Skip(0).FirstOrDefault(string.Empty);
+			return extends.UserInfo.Split(':').Skip(1).FirstOrDefault(string.Empty);
 		}
 	}
 }
