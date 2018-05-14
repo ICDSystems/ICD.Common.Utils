@@ -100,7 +100,8 @@ namespace ICD.Common.Utils
 			}
 
 			// Path
-			builder.Append('/');
+			if (string.IsNullOrEmpty(Path) || !Path.StartsWith("/"))
+				builder.Append('/');
 			builder.Append(Path);
 
 			// Query
