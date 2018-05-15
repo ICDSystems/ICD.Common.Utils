@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
 #else
@@ -83,5 +84,48 @@ namespace ICD.Common.Utils.Extensions
 
 			return extends.GetCustomAttributes<T>(inherits).First();
 		}
+
+#if NETSTANDARD
+		/// <summary>
+		/// Returns the custom attributes attached to the member.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="inherits"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> GetCustomAttributesIncludingBaseInterfaces<T>(this Type extends)
+			where T : Attribute
+		{
+			return extends.GetCustomAttributes<T>(true)
+				.Union(extends.GetInterfaces()
+					.SelectMany(interfaceType => interfaceType
+						.GetCustomAttributes<T>(true)))
+				.Distinct();
+		}
+
+		/// <summary>
+		/// Returns the custom attributes attached to the member.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="inherits"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> GetCustomAttributesIncludingBaseInterfaces<T>(this MemberInfo extends)
+			where T : Attribute
+		{
+			return extends.GetCustomAttributes<T>(true)
+				.Union(extends.DeclaringType?
+					       .GetInterfaces()
+					       .SelectMany(interfaceType => interfaceType
+						                                    .GetMember(
+							                                    extends.Name,
+							                                    extends.MemberType, 
+							                                    BindingFlags.Instance)
+						                                    .FirstOrDefault()?
+						                                    .GetCustomAttributes<T>(true) ?? Enumerable.Empty<T>())?
+					       .Except(null) ?? Enumerable.Empty<T>())
+				.Distinct();
+		}
+#endif
 	}
 }
