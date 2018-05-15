@@ -117,7 +117,10 @@ namespace ICD.Common.Utils.Extensions
 				.Union(extends.DeclaringType?
 					       .GetInterfaces()
 					       .SelectMany(interfaceType => interfaceType
-						                                    .GetMember(extends.Name)
+						                                    .GetMember(
+							                                    extends.Name,
+							                                    extends.MemberType, 
+							                                    BindingFlags.Instance)
 						                                    .FirstOrDefault()?
 						                                    .GetCustomAttributes<T>(true) ?? Enumerable.Empty<T>())?
 					       .Except(null) ?? Enumerable.Empty<T>())
