@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils
 {
@@ -56,6 +57,38 @@ namespace ICD.Common.Utils
 		public Uri Uri { get { return new Uri(ToString()); } }
 
 		#endregion
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		public IcdUriBuilder()
+		{
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="uri"></param>
+		public IcdUriBuilder(string uri)
+			: this(new Uri(uri))
+		{
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="uri"></param>
+		public IcdUriBuilder(Uri uri)
+		{
+			Fragment = uri.Fragment;
+			Host = uri.Host;
+			Password = uri.GetPassword();
+			Path = uri.AbsolutePath;
+			Port = (ushort)uri.Port;
+			Query = uri.Query;
+			Scheme = uri.Scheme;
+			UserName = uri.GetUserName();
+		}
 
 		/// <summary>
 		/// Builds the string representation for the URI.
