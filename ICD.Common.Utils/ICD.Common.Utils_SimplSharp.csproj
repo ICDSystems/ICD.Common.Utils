@@ -178,6 +178,7 @@
     <Compile Include="Timers\Repeater.cs" />
     <Compile Include="Timers\SafeTimer.cs" />
     <Compile Include="TryUtils.cs" />
+    <Compile Include="UriUtils.cs" />
     <Compile Include="Xml\IcdXmlConvert.cs" />
     <Compile Include="Xml\IcdXmlDocument.cs" />
     <Compile Include="Xml\IcdXmlException.cs" />
