@@ -110,7 +110,7 @@ namespace ICD.Common.Utils.Services.Logging
 		}
 
 		/// <summary>
-		///     Gets the hashcode for this instance.
+		/// Gets the hashcode for this instance.
 		/// </summary>
 		/// <returns></returns>
 		public override int GetHashCode()
