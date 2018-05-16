@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
 #else
