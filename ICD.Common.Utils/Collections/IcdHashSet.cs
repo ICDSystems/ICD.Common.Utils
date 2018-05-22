@@ -154,6 +154,14 @@ namespace ICD.Common.Utils.Collections
 			return (IsSupersetOf(setToCompare) && !setToCompare.IsSupersetOf(this));
 		}
 
+		[PublicAPI]
+		public bool SetEquals(IcdHashSet<T> set)
+		{
+			var setToCompare = set ?? NullSet;
+
+			return (IsSubsetOf(setToCompare) && setToCompare.IsSubsetOf(this));
+		}
+
 		#endregion
 
 		#region ICollection<T> Members
@@ -165,9 +173,9 @@ namespace ICD.Common.Utils.Collections
 		/// <returns></returns>
 		public bool Add(T item)
 		{
-// ReSharper disable CompareNonConstrainedGenericWithNull
+			// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (item == null)
-// ReSharper restore CompareNonConstrainedGenericWithNull
+				// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("item");
 
 			if (m_Dict.ContainsKey(item))
