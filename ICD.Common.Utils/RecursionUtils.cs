@@ -88,6 +88,42 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Returns true if there is a path from the given root to the given child node.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="root"></param>
+		/// <param name="child"></param>
+		/// <param name="getChildren"></param>
+		/// <returns></returns>
+		public static bool BreadthFirstSearch<T>(T root, T child, Func<T, IEnumerable<T>> getChildren)
+		{
+			if (getChildren == null)
+				throw new ArgumentNullException("getChildren");
+
+			return BreadthFirstSearchPath(root, child, getChildren) != null;
+		}
+
+		/// <summary>
+		/// Returns true if there is a path from the given root to the given child node.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="root"></param>
+		/// <param name="destination"></param>
+		/// <param name="getChildren"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		public static bool BreadthFirstSearch<T>(T root, T destination, Func<T, IEnumerable<T>> getChildren, IEqualityComparer<T> comparer)
+		{
+			if (getChildren == null)
+				throw new ArgumentNullException("getChildren");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			return BreadthFirstSearchPath(root, destination, getChildren, comparer) != null;
+		}
+
+		/// <summary>
 		/// Returns all of the nodes in the tree via breadth-first search.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
