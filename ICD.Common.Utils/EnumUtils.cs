@@ -290,6 +290,20 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Gets all of the set flags on the given enum type except 0.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static IEnumerable<T> GetFlagsExceptNone<T>()
+		{
+			if (!IsEnumType<T>())
+				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+
+			T allValue = GetFlagsAllValue<T>();
+			return GetFlagsExceptNone(allValue);
+		}
+
+		/// <summary>
 		/// Gets all of the set flags on the given enum except 0.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
