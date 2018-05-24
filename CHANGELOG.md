@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.5.0] - 2018-05-24
+### Added
+ - Added GetFlagsExceptNone parameterless enum method
+ - Added pathfinding methods for determining if a path exists
+
 ## [3.4.0] - 2018-05-23
 ### Added
  - Added SetEquals method to IcdHashSet
