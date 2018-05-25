@@ -245,20 +245,16 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("comparer");
 
 			IcdHashSet<T> destinationsToBeProcessed = new IcdHashSet<T>(destinations);
-			IcdHashSet<T> destinationsProcessed = new IcdHashSet<T>();
 			Dictionary<T, IEnumerable<T>> pathsToReturn = new Dictionary<T, IEnumerable<T>>();
 
 			// Edge case, root is the destination
 			foreach (T destination in
-				destinationsToBeProcessed.Where(destination => comparer.Equals(root, destination)))
+				destinationsToBeProcessed.Where(destination => comparer.Equals(root, destination)).ToArray())
 			{
-				destinationsProcessed.Add(destination);
+				destinationsToBeProcessed.Remove(destination);          
 				pathsToReturn.Add(destination, new[] {root});
 			}
 
-			foreach (T destination in destinationsProcessed)
-				destinationsToBeProcessed.Remove(destination);
-			destinationsProcessed.Clear();
 			if (destinationsToBeProcessed.Count == 0)
 				return pathsToReturn;
 
@@ -278,16 +274,11 @@ namespace ICD.Common.Utils
 
 					T closureNode = node;
 					foreach (T destination in
-						destinationsToBeProcessed.Where(destination => comparer.Equals(closureNode, destination)))
+						destinationsToBeProcessed.Where(destination => comparer.Equals(closureNode, destination)).ToArray())
 					{
-						destinationsProcessed.Add(destination);
+						destinationsToBeProcessed.Remove(destination);
 						pathsToReturn.Add(destination, GetPath(destination, root, nodeParents, comparer).Reverse());
 					}
-
-					foreach (T destination in destinationsProcessed)
-						destinationsToBeProcessed.Remove(destination);
-
-					destinationsProcessed.Clear();
 
 					if (destinationsToBeProcessed.Count == 0)
 						return pathsToReturn;
