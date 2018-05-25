@@ -191,7 +191,7 @@ namespace ICD.Common.Utils
 			Queue<T> queue = new Queue<T>();
 			queue.Enqueue(root);
 
-			Dictionary<T, T> nodeParents = new Dictionary<T, T>();
+			Dictionary<T, T> nodeParents = new Dictionary<T, T>(comparer);
 
 			while (queue.Count > 0)
 			{
@@ -265,7 +265,7 @@ namespace ICD.Common.Utils
 			Queue<T> queue = new Queue<T>();
 			queue.Enqueue(root);
 
-			Dictionary<T, T> nodeParents = new Dictionary<T, T>();
+			Dictionary<T, T> nodeParents = new Dictionary<T, T>(comparer);
 
 			while (queue.Count > 0)
 			{
