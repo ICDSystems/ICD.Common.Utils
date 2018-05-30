@@ -579,6 +579,23 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Copies all the elements of the current one-dimensional array to the specified one-dimensional array
+		/// starting at the specified destination array index. The index is specified as a 32-bit integer.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="array"></param>
+		/// <param name="index"></param>
+		public static void CopyTo<T>(this IEnumerable<T> extends, T[] array, int index)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			ICollection<T> collection = extends as ICollection<T> ?? extends.ToArray();
+			collection.CopyTo(array, index);
+		}
+
+		/// <summary>
 		/// Returns the sequence as a IcdHashSet.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -799,6 +816,17 @@ namespace ICD.Common.Utils.Extensions
 				output.Add(source.Current);
 
 			return output;
+		}
+
+		/// <summary>
+		/// Wraps this object instance into an IEnumerable consisting of a single item.
+		/// </summary>
+		/// <typeparam name="T"> Type of the object. </typeparam>
+		/// <param name="item"> The instance that will be wrapped. </param>
+		/// <returns> An IEnumerable&lt;T&gt; consisting of a single item. </returns>
+		public static IEnumerable<T> Yield<T>(this T item)
+		{
+			yield return item;
 		}
 
 		/// <summary>
@@ -1055,6 +1083,49 @@ namespace ICD.Common.Utils.Extensions
 						callback(enumerator1.Current, enumerator2.Current);
 				}
 			}
+		}
+
+		// since S# can't do anonymous types
+		private struct TryParseStruct<T>
+		{
+			public readonly T value;
+			public readonly bool isParsed;
+
+			public TryParseStruct(T value, bool isParsed)
+			{
+				this.value = value;
+				this.isParsed = isParsed;
+			}
+		}
+
+		// since Func<...,T> can't specify `out` parameters
+		public delegate bool TryParseDelegate<T>(string input, out T output);
+
+		/// <summary>
+		/// Attempts to parse each value of the enumerable,
+		/// throwing away the values that don't parse correctly.
+		/// </summary>
+		/// <typeparam name="T">type to parse to</typeparam>
+		/// <param name="extends">enumerable of strings to parse</param>
+		/// <param name="tryParseFunc">TryParse function for given type</param>
+		/// <returns>enumerable of successfully parsed values</returns>
+		public static IEnumerable<T> TryParseSkipFailures<T>(this IEnumerable<string> extends,
+		                                                     TryParseDelegate<T> tryParseFunc)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (tryParseFunc == null)
+				throw new ArgumentNullException("tryParseFunc");
+
+			return extends.Select(str =>
+			                      {
+				                      T value;
+				                      bool isParsed = tryParseFunc(str, out value);
+				                      return new TryParseStruct<T>(value, isParsed);
+			                      })
+			              .Where(v => v.isParsed)
+			              .Select(v => v.value);
 		}
 
 #if SIMPLSHARP

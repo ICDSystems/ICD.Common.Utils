@@ -67,6 +67,11 @@ namespace ICD.Common.Utils.Collections
 
 		#region Methods
 
+		/// <summary>
+		/// Returns a set containing all of this sets items plus all of the items in the given set.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
 		[PublicAPI]
 		public IcdHashSet<T> Union(IEnumerable<T> set)
 		{
@@ -80,6 +85,11 @@ namespace ICD.Common.Utils.Collections
 			return unionSet;
 		}
 
+		/// <summary>
+		/// Returns a new set of this sets items exluding the items in the given set.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
 		[PublicAPI]
 		public IcdHashSet<T> Subtract(IEnumerable<T> set)
 		{
@@ -94,13 +104,11 @@ namespace ICD.Common.Utils.Collections
 			return subtractSet;
 		}
 
-		[PublicAPI]
-		public bool IsSubsetOf(IcdHashSet<T> set)
-		{
-			IcdHashSet<T> setToCompare = set ?? NullSet;
-			return this.All(setToCompare.Contains);
-		}
-
+		/// <summary>
+		/// Returns all of the items that are common between this set and the given set.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
 		[PublicAPI]
 		public IcdHashSet<T> Intersection(IcdHashSet<T> set)
 		{
@@ -126,32 +134,74 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public IcdHashSet<T> NonIntersection(IcdHashSet<T> set)
 		{
-			return Subtract(set).Union(set.Subtract(this));
+			IcdHashSet<T> setToCompare = set ?? NullSet;
+
+			return Subtract(set).Union(setToCompare.Subtract(this));
 		}
 
+		/// <summary>
+		/// Returns true if the given set contains all of the items in this set.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public bool IsSubsetOf(IcdHashSet<T> set)
+		{
+			IcdHashSet<T> setToCompare = set ?? NullSet;
+
+			return this.All(setToCompare.Contains);
+		}
+
+		/// <summary>
+		/// Returns true if the given set contains all of the items in this set, and the sets are not equal.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
 		[PublicAPI]
 		public bool IsProperSubsetOf(IcdHashSet<T> set)
 		{
 			IcdHashSet<T> setToCompare = set ?? NullSet;
 
-			// Is a proper subset if A is a subset of B and A != B
-			return (IsSubsetOf(setToCompare) && !setToCompare.IsSubsetOf(this));
+			return IsSubsetOf(setToCompare) && !setToCompare.IsSubsetOf(this);
 		}
 
+		/// <summary>
+		/// Returns true if this set contains all of the items in the given set.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
 		[PublicAPI]
 		public bool IsSupersetOf(IcdHashSet<T> set)
 		{
 			IcdHashSet<T> setToCompare = set ?? NullSet;
+
 			return setToCompare.IsSubsetOf(this);
 		}
 
+		/// <summary>
+		/// Returns true if this set contains all of the items in the given set, and the sets are not equal.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
 		[PublicAPI]
 		public bool IsProperSupersetOf(IcdHashSet<T> set)
 		{
 			IcdHashSet<T> setToCompare = set ?? NullSet;
 
-			// B is a proper superset of A if B is a superset of A and A != B
-			return (IsSupersetOf(setToCompare) && !setToCompare.IsSupersetOf(this));
+			return IsSupersetOf(setToCompare) && !setToCompare.IsSupersetOf(this);
+		}
+
+		/// <summary>
+		/// Returns true if this set contains all of the items in the given set, and vice versa.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public bool SetEquals(IcdHashSet<T> set)
+		{
+			IcdHashSet<T> setToCompare = set ?? NullSet;
+
+			return IsSupersetOf(setToCompare) && setToCompare.IsSupersetOf(this);
 		}
 
 		#endregion
@@ -165,9 +215,9 @@ namespace ICD.Common.Utils.Collections
 		/// <returns></returns>
 		public bool Add(T item)
 		{
-// ReSharper disable CompareNonConstrainedGenericWithNull
+			// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (item == null)
-// ReSharper restore CompareNonConstrainedGenericWithNull
+				// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("item");
 
 			if (m_Dict.ContainsKey(item))
