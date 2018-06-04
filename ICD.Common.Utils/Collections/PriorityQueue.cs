@@ -148,7 +148,12 @@ namespace ICD.Common.Utils.Collections
 				if (!inserted)
 				{
 					int insertIndex = removeIndices[0];
-					kvp.Value.Insert(insertIndex, item);
+
+					if (insertIndex >= kvp.Value.Count)
+						kvp.Value.Add(item);
+					else
+						kvp.Value.Insert(insertIndex, item);
+
 					m_Count++;
 
 					inserted = true;
