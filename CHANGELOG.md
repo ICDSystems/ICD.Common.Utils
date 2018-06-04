@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.5.1] - 2018-06-04
+### Changed
+ - PriorityQueue indexing fix
+ - Pathfinding optimizations
+
 ## [3.5.0] - 2018-05-24
 ### Added
  - Added GetFlagsExceptNone parameterless enum method
