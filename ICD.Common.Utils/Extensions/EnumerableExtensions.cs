@@ -163,21 +163,16 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (index < 0)
-				throw new ArgumentException("Index must be greater or equal to 0", "index");
-
 			item = default(T);
-			int eachIndex = 0;
 
-			foreach (T each in extends)
+			try
 			{
-				if (eachIndex == index)
-				{
-					item = each;
-					return true;
-				}
-
-				eachIndex++;
+				item = extends.ElementAt(index);
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
 			}
 
 			return false;
