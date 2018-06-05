@@ -174,8 +174,23 @@ namespace ICD.Common.Utils.Extensions
 			{
 				return false;
 			}
+		}
 
-			return false;
+		/// <summary>
+		/// Gets the element at the given index. Returns the specified default value if the index does not exist.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="index"></param>
+		/// <param name="defaultValue"></param>
+		/// <returns></returns>
+		public static T ElementAtOrDefault<T>(this IEnumerable<T> extends, int index, T defaultValue)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			T output;
+			return extends.TryElementAt(index, out output) ? output : defaultValue;
 		}
 
 		/// <summary>
