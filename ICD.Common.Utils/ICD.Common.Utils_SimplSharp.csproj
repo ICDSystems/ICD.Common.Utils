@@ -98,6 +98,7 @@
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Extensions\UshortExtensions.cs" />
     <Compile Include="IcdUriBuilder.cs" />
+    <Compile Include="IO\IcdBinaryReader.cs" />
     <Compile Include="ProcessorUtils.SimplSharp.cs" />
     <Compile Include="ProcessorUtils.Standard.cs" />
     <Compile Include="ProgramUtils.SimplSharp.cs" />
