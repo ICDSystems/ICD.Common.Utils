@@ -34,9 +34,9 @@ namespace ICD.Common.Utils.IO
 			m_Stream.Dispose();
 		}
 
-		public void Seek(long offset, SeekOrigin end)
+		public void Seek(long offset, eSeekOrigin seekOrigin)
 		{
-			m_Stream.Seek(offset, end);
+			m_Stream.Seek(offset, seekOrigin.ToSeekOrigin());
 		}
 	}
 }

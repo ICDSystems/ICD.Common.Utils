@@ -90,7 +90,7 @@ namespace ICD.Common.Utils.IO.Compression
 					if (stream.Length < 22)
 						yield break;
 
-					stream.Seek(-22, eSeekOrigin.End.ToSeekOrigin());
+					stream.Seek(-22, eSeekOrigin.End);
 
 					// find directory signature
 					while (reader.ReadInt32() != DIRECTORY_SIGNATURE)
@@ -99,15 +99,15 @@ namespace ICD.Common.Utils.IO.Compression
 							yield break;
 
 						// move 1 byte back
-						stream.Seek(-5, eSeekOrigin.Current.ToSeekOrigin());
+						stream.Seek(-5, eSeekOrigin.Current);
 					}
 
 					// read directory properties
-					stream.Seek(6, eSeekOrigin.Current.ToSeekOrigin());
+					stream.Seek(6, eSeekOrigin.Current);
 					ushort entries = reader.ReadUInt16();
 					int difSize = reader.ReadInt32();
 					uint dirOffset = reader.ReadUInt32();
-					stream.Seek(dirOffset, eSeekOrigin.Begin.ToSeekOrigin());
+					stream.Seek(dirOffset, eSeekOrigin.Begin);
 
 					// read directory entries
 					for (int i = 0; i < entries; i++)
@@ -130,7 +130,7 @@ namespace ICD.Common.Utils.IO.Compression
 						reader.ReadInt32();
 						int fileHeaderOffset = reader.ReadInt32();
 						byte[] fileNameBytes = reader.ReadBytes(fileNameSize);
-						stream.Seek(extraSize, eSeekOrigin.Current.ToSeekOrigin());
+						stream.Seek(extraSize, eSeekOrigin.Current);
 						byte[] fileCommentBytes = reader.ReadBytes(commentSize);
 						int fileDataOffset = CalculateFileDataOffset(stream, reader, fileHeaderOffset);
 
@@ -157,12 +157,12 @@ namespace ICD.Common.Utils.IO.Compression
 		private static int CalculateFileDataOffset(IcdStream stream, IcdBinaryReader reader, int fileHeaderOffset)
 		{
 			long position = stream.Position;
-			stream.Seek(fileHeaderOffset + 26, eSeekOrigin.Begin.ToSeekOrigin());
+			stream.Seek(fileHeaderOffset + 26, eSeekOrigin.Begin);
 			short fileNameSize = reader.ReadInt16();
 			short extraSize = reader.ReadInt16();
 
 			int fileOffset = (int)stream.Position + fileNameSize + extraSize;
-			stream.Seek(position, eSeekOrigin.Begin.ToSeekOrigin());
+			stream.Seek(position, eSeekOrigin.Begin);
 			return fileOffset;
 		}
 
