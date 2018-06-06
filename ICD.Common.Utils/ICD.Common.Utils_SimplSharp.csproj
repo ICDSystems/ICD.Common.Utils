@@ -98,6 +98,9 @@
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Extensions\UshortExtensions.cs" />
     <Compile Include="IcdUriBuilder.cs" />
+    <Compile Include="IO\Compression\IcdZipEntry.cs" />
+    <Compile Include="IO\IcdBinaryReader.cs" />
+    <Compile Include="IO\eSeekOrigin.cs" />
     <Compile Include="ProcessorUtils.SimplSharp.cs" />
     <Compile Include="ProcessorUtils.Standard.cs" />
     <Compile Include="ProgramUtils.SimplSharp.cs" />
@@ -122,7 +125,7 @@
     <Compile Include="IcdEnvironment.cs" />
     <Compile Include="IcdEnvironment.SimplSharp.cs" />
     <Compile Include="IcdEnvironment.Standard.cs" />
-    <Compile Include="IcdZip.cs" />
+    <Compile Include="IO\Compression\IcdZip.cs" />
     <Compile Include="IO\IcdDirectory.cs" />
     <Compile Include="EnumUtils.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />

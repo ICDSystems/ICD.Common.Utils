@@ -66,6 +66,11 @@ namespace ICD.Common.Utils.IO
 			File.Delete(path);
 		}
 
+		public static IcdStream OpenRead(string path)
+		{
+			return new IcdFileStream(File.OpenRead(path));
+		}
+
 		[PublicAPI]
 		public static IcdFileStream OpenWrite(string path)
 		{
