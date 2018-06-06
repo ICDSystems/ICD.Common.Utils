@@ -99,6 +99,7 @@
     <Compile Include="Extensions\UshortExtensions.cs" />
     <Compile Include="IcdUriBuilder.cs" />
     <Compile Include="IO\IcdBinaryReader.cs" />
+    <Compile Include="IO\eSeekOrigin.cs" />
     <Compile Include="ProcessorUtils.SimplSharp.cs" />
     <Compile Include="ProcessorUtils.Standard.cs" />
     <Compile Include="ProgramUtils.SimplSharp.cs" />
