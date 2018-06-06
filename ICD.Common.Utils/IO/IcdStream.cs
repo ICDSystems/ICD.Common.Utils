@@ -13,6 +13,10 @@ namespace ICD.Common.Utils.IO
 
 		public Stream WrappedStream { get { return m_Stream; } }
 
+		public long Length { get { return m_Stream.Length; } }
+
+		public long Position { get { return m_Stream.Position; } }
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -28,6 +32,11 @@ namespace ICD.Common.Utils.IO
 		public void Dispose()
 		{
 			m_Stream.Dispose();
+		}
+
+		public void Seek(long offset, SeekOrigin end)
+		{
+			m_Stream.Seek(offset, end);
 		}
 	}
 }
