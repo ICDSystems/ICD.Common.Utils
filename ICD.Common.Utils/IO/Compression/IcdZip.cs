@@ -23,27 +23,16 @@ namespace ICD.Common.Utils.IO.Compression
 		/// </summary>
 		/// <param name="path"></param>
 		/// <param name="outputPath"></param>
-		/// <param name="message"></param>
-		public static bool Unzip(string path, string outputPath, out string message)
+		public static void Unzip(string path, string outputPath)
 		{
-			try
-			{
 #if SIMPLSHARP
-				CrestronZIP.ResultCode result = CrestronZIP.Unzip(path, outputPath);
-				message = result.ToString();
-				return result == CrestronZIP.ResultCode.ZR_OK;
+			CrestronZIP.ResultCode result = CrestronZIP.Unzip(path, outputPath);
+			if (result != CrestronZIP.ResultCode.ZR_OK)
+				throw new InvalidOperationException(result.ToString());
 #else
-                using (ZipArchive archive = ZipFile.Open(path, ZipArchiveMode.Read))
-                    archive.ExtractToDirectory(outputPath);
-				message = "Success";
-				return true;
+			using (ZipArchive archive = ZipFile.Open(path, ZipArchiveMode.Read))
+				archive.ExtractToDirectory(outputPath);
 #endif
-			}
-			catch (Exception e)
-			{
-				message = e.Message;
-				return false;
-			}
 		}
 
 		/// <summary>
