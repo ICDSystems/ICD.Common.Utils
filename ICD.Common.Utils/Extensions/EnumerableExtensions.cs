@@ -206,7 +206,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (extends == null)
+			if (other == null)
 				throw new ArgumentNullException("other");
 
 			if (comparer == null)
@@ -245,7 +245,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (extends == null)
+			if (other == null)
 				throw new ArgumentNullException("other");
 
 			return extends.ScrambledEquals(other, EqualityComparer<T>.Default);
@@ -264,7 +264,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (extends == null)
+			if (other == null)
 				throw new ArgumentNullException("other");
 
 			if (comparer == null)
