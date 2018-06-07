@@ -25,9 +25,6 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		public static string ToLongTimeStringWithMilliseconds(this DateTime extends)
 		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
 			// Todo - Better handle different cultures
 			return extends.ToString("HH:mm:ss:fff");
 		}
