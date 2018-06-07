@@ -97,8 +97,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void RestartProgram()
 		{
-			// TODO
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		/// <summary>
@@ -107,8 +106,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void Reboot()
 		{
-			// TODO
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		#endregion
