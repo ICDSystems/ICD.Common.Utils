@@ -7,9 +7,6 @@ namespace ICD.Common.Utils.Extensions
 	{
 		public static string ToReadableString(this TimeSpan extends)
 		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
 			StringBuilder builder = new StringBuilder();
 
 			if (extends.Days > 0)
