@@ -42,15 +42,10 @@ namespace ICD.Common.Utils.Extensions
 			if (predicate == null)
 				throw new ArgumentNullException("predicate");
 
-			T output = defaultItem;
-
 			foreach (T item in extends.Where(predicate))
-			{
-				output = item;
-				break;
-			}
-			
-			return output;
+				return item;
+
+			return defaultItem;
 		}
 
 		/// <summary>

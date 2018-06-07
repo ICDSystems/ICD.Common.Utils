@@ -544,6 +544,7 @@ namespace ICD.Common.Utils
 		{
 			if (string.IsNullOrEmpty(text))
 				return true;
+
 			string trimmed = text.Trim();
 			return trimmed.Length == 0;
 		}
