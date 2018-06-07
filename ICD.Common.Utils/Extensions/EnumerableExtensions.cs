@@ -42,10 +42,8 @@ namespace ICD.Common.Utils.Extensions
 			if (predicate == null)
 				throw new ArgumentNullException("predicate");
 
-			foreach (T item in extends.Where(predicate))
-				return item;
-
-			return defaultItem;
+			T output;
+			return extends.TryFirst(predicate, out output) ? output : defaultItem;
 		}
 
 		/// <summary>
@@ -309,9 +307,21 @@ namespace ICD.Common.Utils.Extensions
 			if (match == null)
 				throw new ArgumentNullException("match");
 
+			return FindIndicesIterator(extends, match);
+		}
+
+		/// <summary>
+		/// Returns the indices that match the predicate.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="sequence"></param>
+		/// <param name="match"></param>
+		/// <returns></returns>
+		private static IEnumerable<int> FindIndicesIterator<T>(IEnumerable<T> sequence, Predicate<T> match)
+		{
 			int index = 0;
 
-			foreach (T item in extends)
+			foreach (T item in sequence)
 			{
 				if (match(item))
 					yield return index;
@@ -405,8 +415,21 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+			return PrependIterator(extends, item);
+		}
+
+		/// <summary>
+		/// Prepends the item to the start of the sequence.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="sequence"></param>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		private static IEnumerable<T> PrependIterator<T>(IEnumerable<T> sequence, T item)
+		{
 			yield return item;
-			foreach (T next in extends)
+
+			foreach (T next in sequence)
 				yield return next;
 		}
 #endif
@@ -427,9 +450,22 @@ namespace ICD.Common.Utils.Extensions
 			if (items == null)
 				throw new ArgumentNullException("items");
 
+			return PrependManyIterator(extends, items);
+		}
+
+		/// <summary>
+		/// Prepends the items to the start of the sequence.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="sequence"></param>
+		/// <param name="items"></param>
+		/// <returns></returns>
+		private static IEnumerable<T> PrependManyIterator<T>(IEnumerable<T> sequence, params T[] items)
+		{
 			foreach (T item in items)
 				yield return item;
-			foreach (T each in extends)
+
+			foreach (T each in sequence)
 				yield return each;
 		}
 
@@ -446,8 +482,21 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			foreach (T first in extends)
+			return AppendIterator(extends, item);
+		}
+
+		/// <summary>
+		/// Appends the item to the end of the sequence.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="sequence"></param>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		private static IEnumerable<T> AppendIterator<T>(IEnumerable<T> sequence, T item)
+		{
+			foreach (T first in sequence)
 				yield return first;
+
 			yield return item;
 		}
 #endif
@@ -468,8 +517,21 @@ namespace ICD.Common.Utils.Extensions
 			if (items == null)
 				throw new ArgumentNullException("items");
 
-			foreach (T each in extends)
+			return AppendManyIterator(extends, items);
+		}
+
+		/// <summary>
+		/// Appends the items to the end of the sequence.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="sequence"></param>
+		/// <param name="items"></param>
+		/// <returns></returns>
+		private static IEnumerable<T> AppendManyIterator<T>(IEnumerable<T> sequence, params T[] items)
+		{
+			foreach (T each in sequence)
 				yield return each;
+
 			foreach (T item in items)
 				yield return item;
 		}
@@ -487,9 +549,21 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+			return PadRightIterator(extends, count);
+		}
+
+		/// <summary>
+		/// Pads the given sequence to the given count size with default items.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="sequence"></param>
+		/// <param name="count"></param>
+		/// <returns></returns>
+		private static IEnumerable<T> PadRightIterator<T>(IEnumerable<T> sequence, int count)
+		{
 			int index = 0;
 
-			foreach (T item in extends)
+			foreach (T item in sequence)
 			{
 				yield return item;
 				index++;
@@ -801,7 +875,18 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			using (IEnumerator<T> enumerator = extends.GetEnumerator())
+			return PartitionIterator(extends, partitionSize);
+		}
+
+		/// <summary>
+		/// Partitions a sequence into sequences of the given length.
+		/// </summary>
+		/// <param name="sequence"></param>
+		/// <param name="partitionSize"></param>
+		/// <returns></returns>
+		private static IEnumerable<IEnumerable<T>> PartitionIterator<T>(IEnumerable<T> sequence, int partitionSize)
+		{
+			using (IEnumerator<T> enumerator = sequence.GetEnumerator())
 			{
 				while (enumerator.MoveNext())
 					yield return YieldBatchElements(enumerator, partitionSize - 1);
@@ -826,9 +911,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <summary>
 		/// Wraps this object instance into an IEnumerable consisting of a single item.
 		/// </summary>
-		/// <typeparam name="T"> Type of the object. </typeparam>
-		/// <param name="item"> The instance that will be wrapped. </param>
-		/// <returns> An IEnumerable&lt;T&gt; consisting of a single item. </returns>
+		/// <typeparam name="T">Type of the object.</typeparam>
+		/// <param name="item">The instance that will be wrapped.</param>
+		/// <returns>An IEnumerable&lt;T&gt; consisting of a single item.</returns>
 		public static IEnumerable<T> Yield<T>(this T item)
 		{
 			yield return item;
@@ -842,13 +927,27 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		public static IEnumerable<T[]> GetAdjacentPairs<T>(this IEnumerable<T> extends)
 		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return GetAdjacentPairsIterator(extends);
+		}
+
+		/// <summary>
+		/// Given a sequence [A, B, C] returns a sequence [[A, B], [B, C]]
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		private static IEnumerable<T[]> GetAdjacentPairsIterator<T>(IEnumerable<T> extends)
+		{
 			T previous = default(T);
 			bool first = true;
 
 			foreach (T item in extends)
 			{
 				if (!first)
-					yield return new[] {previous, item};
+					yield return new[] { previous, item };
 
 				first = false;
 				previous = item;
@@ -932,18 +1031,22 @@ namespace ICD.Common.Utils.Extensions
 			{
 				if (!sourceIterator.MoveNext())
 					throw new InvalidOperationException("Sequence contains no elements");
+
 				TSource min = sourceIterator.Current;
 				TKey minKey = selector(min);
+
 				while (sourceIterator.MoveNext())
 				{
 					TSource candidate = sourceIterator.Current;
 					TKey candidateProjected = selector(candidate);
+
 					if (comparer.Compare(candidateProjected, minKey) >= 0)
 						continue;
 
 					min = candidate;
 					minKey = candidateProjected;
 				}
+
 				return min;
 			}
 		}
@@ -1017,16 +1120,33 @@ namespace ICD.Common.Utils.Extensions
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
 
+			return ConsolidateIterator(extends, comparer);
+		}
+
+		///  <summary>
+		///  Skips duplicate, consecutive items.
+		///  E.g.
+		/// 		[1, 2, 2, 3, 1, 1]
+		///  Becomes
+		/// 		[1, 2, 3, 1]
+		///  </summary>
+		///  <typeparam name="T"></typeparam>
+		///  <param name="sequence"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		private static IEnumerable<T> ConsolidateIterator<T>(IEnumerable<T> sequence, IComparer<T> comparer)
+		{
 			bool first = true;
 			T last = default(T);
 
-			foreach (T item in extends)
+			foreach (T item in sequence)
 			{
 				if (!first && comparer.Compare(last, item) == 0)
 					continue;
 
 				first = false;
 				last = item;
+
 				yield return item;
 			}
 		}
@@ -1141,23 +1261,40 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="TFirst"></typeparam>
 		/// <typeparam name="TSecond"></typeparam>
 		/// <typeparam name="TResult"></typeparam>
-		/// <param name="first"></param>
-		/// <param name="second"></param>
+		/// <param name="extends"></param>
+		/// <param name="other"></param>
 		/// <param name="callback"></param>
 		/// <returns></returns>
-		public static IEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IEnumerable<TFirst> first,
-		                                                                 IEnumerable<TSecond> second,
+		public static IEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IEnumerable<TFirst> extends,
+		                                                                 IEnumerable<TSecond> other,
 		                                                                 Func<TFirst, TSecond, TResult> callback)
 		{
-			if (first == null)
-				throw new ArgumentNullException("first");
+			if (extends == null)
+				throw new ArgumentNullException("extends");
 
-			if (second == null)
-				throw new ArgumentNullException("second");
+			if (other == null)
+				throw new ArgumentNullException("other");
 
 			if (callback == null)
 				throw new ArgumentNullException("callback");
 
+			return ZipIterator(extends, other, callback);
+		}
+
+		/// <summary>
+		/// Applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
+		/// </summary>
+		/// <typeparam name="TFirst"></typeparam>
+		/// <typeparam name="TSecond"></typeparam>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="first"></param>
+		/// <param name="second"></param>
+		/// <param name="callback"></param>
+		/// <returns></returns>
+		private static IEnumerable<TResult> ZipIterator<TFirst, TSecond, TResult>(IEnumerable<TFirst> first,
+																		 IEnumerable<TSecond> second,
+																		 Func<TFirst, TSecond, TResult> callback)
+		{
 			using (IEnumerator<TFirst> enumerator1 = first.GetEnumerator())
 			{
 				using (IEnumerator<TSecond> enumerator2 = second.GetEnumerator())
