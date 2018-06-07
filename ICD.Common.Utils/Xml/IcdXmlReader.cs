@@ -117,18 +117,11 @@ namespace ICD.Common.Utils.Xml
 			if (m_Reader == null)
 				return;
 
-			try
-			{
 #if SIMPLSHARP
 				m_Reader.Dispose(true);
 #else
 				m_Reader.Dispose();
 #endif
-			}
-			catch (XmlException e)
-			{
-				throw new IcdXmlException(e);
-			}
 		}
 
 		public void Skip()
