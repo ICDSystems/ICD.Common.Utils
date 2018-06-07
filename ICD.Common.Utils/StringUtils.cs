@@ -277,21 +277,20 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("convertFunc");
 
 			result = default(T);
-			bool retVal = false;
-
+			
 			try
 			{
 				result = convertFunc(value);
-				retVal = true;
+				return true;
 			}
 			catch (FormatException)
 			{
+				return false;
 			}
 			catch (InvalidCastException)
 			{
+				return false;
 			}
-
-			return retVal;
 		}
 
 		/// <summary>

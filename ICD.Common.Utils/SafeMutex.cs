@@ -66,6 +66,7 @@ namespace ICD.Common.Utils
 			}
 			catch (ObjectDisposedException)
 			{
+				// Releasing a disposed mutex in this case is valid behaviour
 			}
 		}
 
