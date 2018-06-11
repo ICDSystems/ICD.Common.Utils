@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\AbstractIcdAttribute.cs" />
+    <Compile Include="Collections\BiDictionary.cs" />
     <Compile Include="Collections\IcdOrderedDictionary.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Collections\WeakKeyDictionary.cs" />
