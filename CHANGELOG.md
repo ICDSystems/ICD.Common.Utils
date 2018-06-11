@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Added ZIP features for examining the contents of an archive
  - Added FileNameEqualityComparer
+ - Added BiDictionary for one-to-one maps
 
 ## [3.5.1] - 2018-06-04
 ### Changed
