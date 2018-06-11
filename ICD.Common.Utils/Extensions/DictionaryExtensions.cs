@@ -246,6 +246,26 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="TValue"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="items"></param>
+		[PublicAPI]
+		public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> extends, IEnumerable<KeyValuePair<TKey, TValue>> items)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (items == null)
+				throw new ArgumentNullException("items");
+
+			foreach (KeyValuePair<TKey, TValue> item in items)
+				extends.Add(item);
+		}
+
+		/// <summary>
+		/// Adds the sequence of items to the dictionary.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="items"></param>
 		/// <param name="getKey"></param>
 		[PublicAPI]
 		public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> extends, IEnumerable<TValue> items,
