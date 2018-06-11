@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace ICD.Common.Utils.Collections
 {
 	/// <summary>
-	/// Provides a 1-to-1 map of keys to values with O(1) Value->Key lookup time.
+	/// Provides a 1-to-1 map of Keys to Values with O(1) Value->Key lookup time.
 	/// </summary>
 	/// <typeparam name="TKey"></typeparam>
 	/// <typeparam name="TValue"></typeparam>
@@ -63,10 +63,10 @@ namespace ICD.Common.Utils.Collections
 			if (value == null)
 				throw new ArgumentNullException("value");
 
-			if (m_KeyToValue.ContainsKey(key))
-				throw new ArgumentException("Key is already present in the dictionary", "key");
+			if (ContainsKey(key))
+				throw new ArgumentException("Key is already present in the collection", "key");
 
-			if (m_ValueToKey.ContainsKey(value))
+			if (ContainsValue(value))
 				throw new ArgumentException("Value is already present in the collection", "value");
 
 			m_KeyToValue.Add(key, value);
@@ -82,6 +82,11 @@ namespace ICD.Common.Utils.Collections
 // ReSharper disable once CompareNonConstrainedGenericWithNull
 			if (value == null)
 				throw new ArgumentNullException("value");
+
+			// Prevent building a 2-to-1 mapping
+			if (ContainsKey(key) ^ ContainsValue(value))
+				throw new InvalidOperationException(
+					"Can not set key and value when either key or value are already present in the collection");
 
 			m_KeyToValue[key] = value;
 			m_ValueToKey[value] = key;
