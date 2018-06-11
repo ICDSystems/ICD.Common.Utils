@@ -83,13 +83,10 @@ namespace ICD.Common.Utils.Collections
 			if (value == null)
 				throw new ArgumentNullException("value");
 
-			// Prevent building a 2-to-1 mapping
-			if (ContainsKey(key) ^ ContainsValue(value))
-				throw new InvalidOperationException(
-					"Can not set key and value when either key or value are already present in the collection");
+			RemoveKey(key);
+			RemoveValue(value);
 
-			m_KeyToValue[key] = value;
-			m_ValueToKey[value] = key;
+			Add(key, value);
 		}
 
 		public TKey GetKey(TValue value)
