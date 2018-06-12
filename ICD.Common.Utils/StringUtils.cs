@@ -165,6 +165,9 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static byte[] ToBytes(string input)
 		{
+			if (input == null)
+				throw new ArgumentNullException("input");
+
 			return Encoding.GetEncoding(28591).GetBytes(input);
 		}
 
@@ -315,6 +318,9 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static string NiceName(string name)
 		{
+			if (name == null)
+				throw new ArgumentNullException("name");
+
 			Regex regex = new Regex(@"
                 (?<=[A-Z])(?=[A-Z][a-z]) |
                  (?<=[^A-Z])(?=[A-Z]) |
