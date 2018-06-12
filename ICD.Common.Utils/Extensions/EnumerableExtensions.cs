@@ -194,6 +194,28 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="other"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
+		public static bool SequenceEqual<T>(this IEnumerable<T> extends, IEnumerable<T> other, IEqualityComparer<T> comparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (other == null)
+				throw new ArgumentNullException("other");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			return extends.SequenceEqual(other, comparer.Equals);
+		}
+
+		/// <summary>
+		/// Compares the two sequences for identical values.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="other"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
 		public static bool SequenceEqual<T>(this IEnumerable<T> extends, IEnumerable<T> other, Func<T, T, bool> comparer)
 		{
 			if (extends == null)
