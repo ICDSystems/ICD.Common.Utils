@@ -138,8 +138,10 @@ namespace ICD.Common.Utils
 				return false;
 
 			CrestronConsole.AddNewConsoleCommand(str => callback(str), command, help, (ConsoleAccessLevelEnum)(int)accessLevel);
-#endif
 			return true;
+#else
+			return false;
+#endif
 		}
 	}
 }
