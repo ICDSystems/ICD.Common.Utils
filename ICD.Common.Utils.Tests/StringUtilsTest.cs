@@ -170,5 +170,13 @@ namespace ICD.Common.Utils.Tests
 			Assert.IsTrue(StringUtils.TryParse("true", out testVal));
 			Assert.AreEqual(true, testVal);
 		}
+
+		[TestCase("test", "\"test\"")]
+		[TestCase("\"test\"", "\"test\"")]
+		[TestCase("test test", "\"test test\"")]
+		public void EnquoteTest(string input, string expected)
+		{
+			Assert.AreEqual(expected, StringUtils.Enquote(input));
+		}
 	}
 }
