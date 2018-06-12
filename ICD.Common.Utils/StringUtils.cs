@@ -688,5 +688,24 @@ namespace ICD.Common.Utils
 
 			return output;
 		}
+
+		/// <summary>
+		/// Ensures the value starts and ends with a double quote.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static string Enquote(string value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (!value.StartsWith('"'))
+				value = '"' + value;
+
+			if (!value.EndsWith('"'))
+				value += '"';
+
+			return value;
+		}
 	}
 }
