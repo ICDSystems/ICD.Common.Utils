@@ -178,5 +178,12 @@ namespace ICD.Common.Utils.Tests
 		{
 			Assert.AreEqual(expected, StringUtils.Enquote(input));
 		}
+
+		[TestCase("\"test\"", "test")]
+		[TestCase("\"test test\"", "test test")]
+		public void UnEnquoteTest(string input, string expected)
+		{
+			Assert.AreEqual(expected, StringUtils.UnEnquote(input));
+		}
 	}
 }

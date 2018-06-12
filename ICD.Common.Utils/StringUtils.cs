@@ -707,5 +707,21 @@ namespace ICD.Common.Utils
 
 			return value;
 		}
+
+		/// <summary>
+		/// Removes the start and trailing double quote from the string if BOTH are present.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static string UnEnquote(string value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (value.StartsWith('"') && value.EndsWith('"'))
+				return value.Substring(1, value.Length - 2);
+
+			return value;
+		}
 	}
 }
