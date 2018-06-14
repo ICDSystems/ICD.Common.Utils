@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ICD.Common.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -160,6 +161,7 @@ namespace ICD.Common.Utils.Extensions
 
 			if (extends.TokenType == JsonToken.String)
 				return EnumUtils.Parse<T>(extends.GetValueAsString(), true);
+
 			return (T)(object)extends.GetValueAsInt();
 		}
 
@@ -252,17 +254,30 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("read");
 
 			if (reader.TokenType == JsonToken.Null)
-				yield break;
+				return Enumerable.Empty<TItem>();
 
 			if (reader.TokenType != JsonToken.StartArray)
 				throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.StartArray, reader.TokenType));
 
+			return DeserializeArrayIterator(extends, reader, read);
+		}
+
+		/// <summary>
+		/// Deserializes an array of items from the reader's current value.
+		/// </summary>
+		/// <typeparam name="TItem"></typeparam>
+		/// <param name="serializer"></param>
+		/// <param name="reader"></param>
+		/// <param name="read"></param>
+		private static IEnumerable<TItem> DeserializeArrayIterator<TItem>(JsonSerializer serializer, JsonReader reader,
+		                                                                  Func<JsonSerializer, JsonReader, TItem> read)
+		{
 			// Step into the first value
 			reader.Read();
 
 			while (reader.TokenType != JsonToken.EndArray)
 			{
-				TItem output = read(extends, reader);
+				TItem output = read(serializer, reader);
 				yield return output;
 
 				// Read out of the last value
@@ -308,7 +323,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="TValue"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="reader"></param>
-		public static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDictionary<TKey, TValue>(this JsonSerializer extends, JsonReader reader)
+		public static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDictionary<TKey, TValue>(this JsonSerializer extends,
+		                                                                                          JsonReader reader)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -317,11 +333,24 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("reader");
 
 			if (reader.TokenType == JsonToken.Null)
-				yield break;
+				return Enumerable.Empty<KeyValuePair<TKey, TValue>>();
 
 			if (reader.TokenType != JsonToken.StartObject)
 				throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.StartObject, reader.TokenType));
 
+			return DeserializeDictionaryIterator<TKey, TValue>(extends, reader);
+		}
+
+		/// <summary>
+		/// Deserializes a dictionary of items from the reader's current value.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="serializer"></param>
+		/// <param name="reader"></param>
+		private static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDictionaryIterator<TKey, TValue>(
+			JsonSerializer serializer, JsonReader reader)
+		{
 			// Step into the first key
 			reader.Read();
 
@@ -332,7 +361,7 @@ namespace ICD.Common.Utils.Extensions
 				// Step into the value
 				reader.Read();
 
-				TValue value = extends.Deserialize<TValue>(reader);
+				TValue value = serializer.Deserialize<TValue>(reader);
 
 				yield return new KeyValuePair<TKey, TValue>(key, value);
 

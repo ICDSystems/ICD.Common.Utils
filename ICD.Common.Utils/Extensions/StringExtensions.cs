@@ -88,21 +88,34 @@ namespace ICD.Common.Utils.Extensions
 			if (count < 1)
 				throw new ArgumentException("Value must be greater or equal to 1", "count");
 
+			return SplitIterator(extends, delimeter, count);
+		}
+
+		/// <summary>
+		/// Splits the string by the given delimiter, returning up to the given number of substrings.
+		/// E.g. "a:b:c".Split(':', 2) returns ["a", "b:c"]
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="delimeter"></param>
+		/// <param name="count"></param>
+		/// <returns></returns>
+		private static IEnumerable<string> SplitIterator(string value, char delimeter, int count)
+		{
 			if (count < 2)
 			{
-				yield return extends;
+				yield return value;
 				yield break;
 			}
 
-			int index = extends.IndexOf(delimeter);
+			int index = value.IndexOf(delimeter);
 			if (index < 0)
 			{
-				yield return extends;
+				yield return value;
 				yield break;
 			}
 
-			string first = extends.Substring(0, index);
-			string second = extends.Substring(index + 1);
+			string first = value.Substring(0, index);
+			string second = value.Substring(index + 1);
 			count--;
 
 			yield return first;
@@ -131,8 +144,6 @@ namespace ICD.Common.Utils.Extensions
 
 		/// <summary>
 		/// Splits a string by a given substring.
-		/// Taken from
-		/// https://social.msdn.microsoft.com/Forums/en-US/914a350f-e0e9-45e0-91a4-6b4b2168e780/string-split-function
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <param name="delimeter"></param>
@@ -146,19 +157,32 @@ namespace ICD.Common.Utils.Extensions
 			if (delimeter == null)
 				throw new ArgumentNullException("delimeter");
 
+			return SplitIterator(extends, delimeter);
+		}
+
+		/// <summary>
+		/// Splits a string by a given substring.
+		/// Taken from
+		/// https://social.msdn.microsoft.com/Forums/en-US/914a350f-e0e9-45e0-91a4-6b4b2168e780/string-split-function
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="delimeter"></param>
+		/// <returns></returns>
+		private static IEnumerable<string> SplitIterator(string value, string delimeter)
+		{
 			int dSum = 0;
 			int sSum = 0;
-			int length = extends.Length;
+			int length = value.Length;
 			int delimiterLength = delimeter.Length;
 
 			if (delimiterLength == 0 || length == 0 || length < delimiterLength)
 			{
-				yield return extends;
+				yield return value;
 				yield break;
 			}
 
 			char[] cd = delimeter.ToCharArray();
-			char[] cs = extends.ToCharArray();
+			char[] cs = value.ToCharArray();
 
 			for (int i = 0; i < delimiterLength; i++)
 			{
@@ -169,22 +193,22 @@ namespace ICD.Common.Utils.Extensions
 			int start = 0;
 			for (int i = start; i < length - delimiterLength; i++)
 			{
-				if (i >= start && dSum == sSum && extends.Substring(i, delimiterLength) == delimeter)
+				if (i >= start && dSum == sSum && value.Substring(i, delimiterLength) == delimeter)
 				{
-					yield return extends.Substring(start, i - start);
+					yield return value.Substring(start, i - start);
 					start = i + delimiterLength;
 				}
 
 				sSum += cs[i + delimiterLength] - cs[i];
 			}
 
-			if (dSum == sSum && extends.Substring(length - delimiterLength, delimiterLength) == delimeter)
+			if (dSum == sSum && value.Substring(length - delimiterLength, delimiterLength) == delimeter)
 			{
-				yield return extends.Substring(start, length - delimiterLength - start);
+				yield return value.Substring(start, length - delimiterLength - start);
 				yield return string.Empty;
 			}
 			else
-				yield return extends.Substring(start, length - start);
+				yield return value.Substring(start, length - start);
 		}
 
 		/// <summary>

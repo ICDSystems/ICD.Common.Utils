@@ -172,18 +172,29 @@ namespace ICD.Common.Utils
 			if (numbers == null)
 				throw new ArgumentNullException("numbers");
 
+			return GetRangesIterator(numbers);
+		}
+
+		/// <summary>
+		/// Takes a sequence of numbers:
+		///		1, 3, 5, 6, 7, 8, 9, 10, 12
+		/// And calculates the continuous ranges:
+		///		(1, 1), (3, 3), (5, 10), (12, 12)
+		/// </summary>
+		private static IEnumerable<int[]> GetRangesIterator(IEnumerable<int> numbers)
+		{
 			int[] currentRange = null;
 
 			foreach (int number in numbers.Order())
 			{
 				if (currentRange == null)
-					currentRange = new[] {number, number};
+					currentRange = new[] { number, number };
 				else if (currentRange[1] == number - 1)
-					currentRange = new[] {currentRange[0], number};
+					currentRange = new[] { currentRange[0], number };
 				else
 				{
 					yield return currentRange;
-					currentRange = new[] {number, number};
+					currentRange = new[] { number, number };
 				}
 			}
 

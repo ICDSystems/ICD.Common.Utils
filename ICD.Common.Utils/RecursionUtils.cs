@@ -71,6 +71,19 @@ namespace ICD.Common.Utils
 			if (node == null)
 				throw new ArgumentNullException("node");
 
+			return GetCliqueIterator(map, visited, node);
+		}
+
+		/// <summary>
+		/// Gets the clique containing the node.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="map"></param>
+		/// <param name="visited"></param>
+		/// <param name="node"></param>
+		/// <returns></returns>
+		private static IEnumerable<T> GetCliqueIterator<T>(IDictionary<T, IEnumerable<T>> map, IcdHashSet<T> visited, T node)
+		{
 			if (visited.Contains(node))
 				yield break;
 
@@ -135,6 +148,18 @@ namespace ICD.Common.Utils
 			if (getChildren == null)
 				throw new ArgumentNullException("getChildren");
 
+			return BreadthFirstSearchIterator(root, getChildren);
+		}
+
+		/// <summary>
+		/// Returns all of the nodes in the tree via breadth-first search.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="root"></param>
+		/// <param name="getChildren"></param>
+		/// <returns></returns>
+		private static IEnumerable<T> BreadthFirstSearchIterator<T>(T root, Func<T, IEnumerable<T>> getChildren)
+		{
 			Queue<T> process = new Queue<T>();
 			process.Enqueue(root);
 

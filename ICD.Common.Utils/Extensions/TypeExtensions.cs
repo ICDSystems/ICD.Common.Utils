@@ -210,18 +210,15 @@ namespace ICD.Common.Utils.Extensions
 
 			if (!s_TypeBaseTypes.ContainsKey(extends))
 			{
-				Type[] types = GetBaseTypesInternal(extends).ToArray();
+				Type[] types = GetBaseTypesIterator(extends).ToArray();
 				s_TypeBaseTypes.Add(extends, types);
 			}
 
 			return s_TypeBaseTypes[extends];
 		}
 
-		private static IEnumerable<Type> GetBaseTypesInternal(Type type)
+		private static IEnumerable<Type> GetBaseTypesIterator(Type type)
 		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
 			do
 			{
 				type = type
