@@ -82,8 +82,12 @@ namespace ICD.Common.Utils.Timers
 		/// </summary>
 		public void Dispose()
 		{
+			if (IsDisposed)
+				return;
+
 			Stop();
 			m_Timer.Dispose();
+
 			IsDisposed = true;
 		}
 

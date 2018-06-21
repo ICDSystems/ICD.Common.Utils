@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Adding SequenceComparer for ordering collections of lists, arrays, etc
 
+### Changed
+ - Potential fix for timer disposal on Net Standard
+
 ## [3.6.0] - 2018-06-19
 ### Added
  - Added ZIP features for examining the contents of an archive
