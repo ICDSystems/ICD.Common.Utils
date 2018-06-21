@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using ICD.Common.Properties;
 #if SIMPLSHARP
@@ -74,7 +75,7 @@ namespace ICD.Common.Utils
 #else
 			System.Console.ForegroundColor = color.ToForegroundConsoleColor();
 			System.Console.BackgroundColor = color.ToBackgroundConsoleColor();
-			System.Console.Error.WriteLine(message);
+			System.Console.WriteLine(message);
 			System.Console.ResetColor();
 #endif
 		}
@@ -107,7 +108,7 @@ namespace ICD.Common.Utils
 #else
 			System.Console.ForegroundColor = color.ToForegroundConsoleColor();
 			System.Console.BackgroundColor = color.ToBackgroundConsoleColor();
-			System.Console.Error.Write(message);
+			System.Console.Write(message);
 			System.Console.ResetColor();
 #endif
 		}
