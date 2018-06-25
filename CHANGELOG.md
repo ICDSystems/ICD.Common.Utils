@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
  - Potential fix for timer disposal on Net Standard
+ - Added workaround for older RPC servers where the typestring being broadcast would stil include _SimplSharp, now will be stripped
 
 ## [3.6.0] - 2018-06-19
 ### Added
