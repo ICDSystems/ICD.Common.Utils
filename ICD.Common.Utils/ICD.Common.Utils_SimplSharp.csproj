@@ -77,6 +77,7 @@
     <Compile Include="Collections\BiDictionary.cs" />
     <Compile Include="Collections\IcdOrderedDictionary.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
+    <Compile Include="Collections\RateLimitedEventQueue.cs" />
     <Compile Include="Collections\WeakKeyDictionary.cs" />
     <Compile Include="Comparers\FileNameEqualityComparer.cs" />
     <Compile Include="Comparers\PredicateComparer.cs" />
