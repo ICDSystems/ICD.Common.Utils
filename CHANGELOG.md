@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
  - Adding SequenceComparer for ordering collections of lists, arrays, etc
+ - Added RateLimitedEventQueue collection for throttling events
 
 ### Changed
  - Potential fix for timer disposal on Net Standard
