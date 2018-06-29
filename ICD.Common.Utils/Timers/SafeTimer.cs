@@ -117,7 +117,7 @@ namespace ICD.Common.Utils.Timers
 		}
 
 		/// <summary>
-		/// Callback is called after the dueTime milliseconds.
+		/// Callback is called once after the dueTime milliseconds.
 		/// </summary>
 		/// <param name="dueTime"></param>
 		public void Reset(long dueTime)
@@ -125,7 +125,7 @@ namespace ICD.Common.Utils.Timers
 #if SIMPLSHARP
 			m_Timer.Reset(dueTime);
 #else
-            m_Timer.Change((int)dueTime, m_RepeatPeriod);
+			m_Timer.Change((int)dueTime, Timeout.Infinite);
 #endif
 		}
 
