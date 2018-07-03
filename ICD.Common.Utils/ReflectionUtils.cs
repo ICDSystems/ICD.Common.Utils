@@ -253,7 +253,11 @@ namespace ICD.Common.Utils
 			}
 			catch (TypeLoadException e)
 			{
-				throw new TypeLoadException(e.GetBaseException().Message);
+				throw e.GetBaseException();
+			}
+			catch (TargetInvocationException e)
+			{
+				throw e.GetBaseException();
 			}
 
 			string message = string.Format("Unable to find constructor for {0}", type.Name);
