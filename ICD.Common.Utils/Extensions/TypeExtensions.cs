@@ -283,5 +283,25 @@ namespace ICD.Common.Utils.Extensions
 
 			return s_TypeMinimalInterfaces[extends];
 		}
+
+		/// <summary>
+		/// Gets the Type name without any trailing generic information.
+		/// 
+		/// E.g.
+		///		List`1
+		/// Becomes
+		///		List
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static string GetNameWithoutGenericArity(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string name = extends.Name;
+			int index = name.IndexOf('`');
+			return index == -1 ? name : name.Substring(0, index);
+		}
 	}
 }
