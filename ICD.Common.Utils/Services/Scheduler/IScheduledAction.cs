@@ -1,4 +1,5 @@
 ﻿using System;
+using ICD.Common.Utils.EventArguments;
 
 namespace ICD.Common.Utils.Services.Scheduler
 {
@@ -12,7 +13,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 		/// <summary>
 		/// Gets the next time this action should be run
 		/// </summary>
-		DateTime NextRunTime { get; }
+		DateTime? NextRunTime { get; }
 
 		void Run();
 	}

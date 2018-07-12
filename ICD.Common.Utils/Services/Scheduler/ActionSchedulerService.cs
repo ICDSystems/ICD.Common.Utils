@@ -24,16 +24,10 @@ namespace ICD.Common.Utils.Services.Scheduler
 
 		public void Dispose()
 		{
-			foreach (IScheduledAction action in m_Actions)
-			{
-				Unsubscribe(action);
+			Clear();
 
-				IDisposable disposable = action as IDisposable;
-				if (disposable != null)
-					disposable.Dispose();
-			}
-
-			m_Actions.Clear();
+			m_Timer.Stop();
+			m_Timer.Dispose();
 		}
 
 		#region Methods
@@ -50,6 +44,8 @@ namespace ICD.Common.Utils.Services.Scheduler
 			{
 				m_CriticalSection.Leave();
 			}
+
+			RescheduleTimer();
 		}
 
 		public void Remove(IScheduledAction action)
@@ -64,6 +60,28 @@ namespace ICD.Common.Utils.Services.Scheduler
 			{
 				m_CriticalSection.Leave();
 			}
+
+			RescheduleTimer();
+		}
+
+		public void Clear()
+		{
+			m_CriticalSection.Enter();
+			try
+			{
+				foreach (IScheduledAction action in m_Actions)
+				{
+					Unsubscribe(action);
+				}
+
+				m_Actions.Clear();
+			}
+			finally
+			{
+				m_CriticalSection.Leave();
+			}
+
+			RescheduleTimer();
 		}
 
 		public override string ToString()
@@ -105,15 +123,25 @@ namespace ICD.Common.Utils.Services.Scheduler
 				}
 			}
 
+			RescheduleTimer();
+		}
+
+		private void RescheduleTimer()
+		{
 			// enter again to check the closest next run time
 			m_CriticalSection.Enter();
 			try
 			{
-				var action = m_Actions.FirstOrDefault();
-				if (action == null)
+				var action = m_Actions.FirstOrDefault(a => a.NextRunTime != null);
+				if (action == null || action.NextRunTime == null)
+				{
+					m_Timer.Stop();
 					return;
+				}
 
-				m_Timer.Reset((long)(DateTime.Now - action.NextRunTime).TotalMilliseconds);
+				long msToNextAction = (long)(DateTime.Now - action.NextRunTime.Value).TotalMilliseconds;
+				long timerDueTime = Math.Min(msToNextAction, MAX_TIMER_INTERVAL);
+				m_Timer.Reset(timerDueTime);
 			}
 			finally
 			{
@@ -169,6 +197,8 @@ namespace ICD.Common.Utils.Services.Scheduler
 			{
 				m_CriticalSection.Leave();
 			}
+
+			RescheduleTimer();
 		}
 
 		#endregion

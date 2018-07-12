@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -27,6 +28,23 @@ namespace ICD.Common.Utils.Extensions
 		{
 			// Todo - Better handle different cultures
 			return extends.ToString("HH:mm:ss:fff");
+		}
+
+		/// <summary>
+		/// Returns the closest DateTime to the target time that is greater than the target time
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public static DateTime? NextEarliestTime(this DateTime target, params DateTime[] times)
+		{
+			if (times.Length == 0)
+				return null;
+
+			DateTime[] orderedTimes = times.OrderBy(dt => dt).ToArray();
+			var time = orderedTimes.FirstOrDefault(dt => target < dt);
+			return time == default(DateTime) ? (DateTime?) null : time;
 		}
 	}
 }
