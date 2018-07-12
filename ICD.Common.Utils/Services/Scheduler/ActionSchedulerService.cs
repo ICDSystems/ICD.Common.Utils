@@ -9,8 +9,6 @@ namespace ICD.Common.Utils.Services.Scheduler
 {
 	public sealed class ActionSchedulerService : IActionSchedulerService, IDisposable
 	{
-		private const long MAX_TIMER_INTERVAL = 5*60*1000; // 5 minutes
-
 		private readonly List<IScheduledAction> m_Actions;
 		private readonly SafeTimer m_Timer;
 		private readonly SafeCriticalSection m_CriticalSection;
@@ -140,8 +138,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 				}
 
 				long msToNextAction = (long)(DateTime.Now - action.NextRunTime.Value).TotalMilliseconds;
-				long timerDueTime = Math.Min(msToNextAction, MAX_TIMER_INTERVAL);
-				m_Timer.Reset(timerDueTime);
+				m_Timer.Reset(msToNextAction);
 			}
 			finally
 			{
