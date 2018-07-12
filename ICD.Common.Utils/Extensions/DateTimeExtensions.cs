@@ -42,9 +42,9 @@ namespace ICD.Common.Utils.Extensions
 			if (times.Length == 0)
 				return null;
 
-			DateTime[] orderedTimes = times.OrderBy(dt => dt).ToArray();
-			var time = orderedTimes.FirstOrDefault(dt => target < dt);
-			return time == default(DateTime) ? (DateTime?) null : time;
+			DateTime earliestTime;
+			bool success = times.OrderBy(dt => dt).TryFirst(dt => target < dt, out earliestTime);
+			return success ? earliestTime : (DateTime?) null;
 		}
 
 		/// <summary>
@@ -59,9 +59,9 @@ namespace ICD.Common.Utils.Extensions
 			if (times.Length == 0)
 				return null;
 
-			DateTime[] orderedTimes = times.OrderByDescending(dt => dt).ToArray();
-			var time = orderedTimes.FirstOrDefault(dt => target > dt);
-			return time == default(DateTime) ? (DateTime?) null : time;
+			DateTime latestTime;
+			bool success = times.OrderByDescending(dt => dt).TryFirst(dt => target > dt, out latestTime);
+			return success ? latestTime : (DateTime?) null;
 		}
 	}
 }
