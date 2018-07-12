@@ -137,7 +137,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 					return;
 				}
 
-				long msToNextAction = (long)(DateTime.Now - action.NextRunTime.Value).TotalMilliseconds;
+				long msToNextAction = (long)(action.NextRunTime.Value - DateTime.Now).TotalMilliseconds;
 				m_Timer.Reset(msToNextAction);
 			}
 			finally

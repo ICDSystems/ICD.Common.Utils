@@ -27,7 +27,12 @@ namespace ICD.Common.Utils.Services.Scheduler
 		public void Run()
 		{
 			RunFinal();
-			NextRunTime = UpdateRunTime();
+			NextRunTime = GetNextRunTime();
+		}
+
+		public void UpdateNextRunTime()
+		{
+			NextRunTime = GetNextRunTime();
 		}
 
 		/// <summary>
@@ -38,6 +43,6 @@ namespace ICD.Common.Utils.Services.Scheduler
 		/// <summary>
 		/// Runs after RunFinal in order to set the next run time of this action
 		/// </summary>
-		public abstract DateTime? UpdateRunTime();
+		public abstract DateTime? GetNextRunTime();
 	}
 }
