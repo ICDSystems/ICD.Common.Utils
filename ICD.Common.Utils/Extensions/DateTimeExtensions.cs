@@ -46,5 +46,22 @@ namespace ICD.Common.Utils.Extensions
 			var time = orderedTimes.FirstOrDefault(dt => target < dt);
 			return time == default(DateTime) ? (DateTime?) null : time;
 		}
+
+		/// <summary>
+		/// Returns the closest DateTime to the target time that is less than the target time
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public static DateTime? PreviousLatestTime(this DateTime target, params DateTime[] times)
+		{
+			if (times.Length == 0)
+				return null;
+
+			DateTime[] orderedTimes = times.OrderByDescending(dt => dt).ToArray();
+			var time = orderedTimes.FirstOrDefault(dt => target > dt);
+			return time == default(DateTime) ? (DateTime?) null : time;
+		}
 	}
 }
