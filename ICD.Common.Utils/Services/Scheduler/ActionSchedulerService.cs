@@ -99,7 +99,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 			try
 			{
 				actionsToRun = m_Actions
-					.Where(a => a.NextRunTime < DateTime.Now)
+					.Where(a => a.NextRunTime < IcdEnvironment.GetLocalTime())
 					.OrderBy(a => a.NextRunTime)
 					.ToArray();
 			}
@@ -137,7 +137,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 					return;
 				}
 
-				long msToNextAction = (long)(action.NextRunTime.Value - DateTime.Now).TotalMilliseconds;
+				long msToNextAction = (long)(action.NextRunTime.Value - IcdEnvironment.GetLocalTime()).TotalMilliseconds;
 				m_Timer.Reset(msToNextAction);
 			}
 			finally
