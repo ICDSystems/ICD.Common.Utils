@@ -34,15 +34,16 @@ namespace ICD.Common.Utils.Extensions
 		/// Returns the closest DateTime to the target time that is greater than the target time
 		/// </summary>
 		/// <param name="target"></param>
+		/// <param name="inclusive">Whether or not to include times equal to the target time</param>
 		/// <param name="times"></param>
 		/// <returns></returns>
-		public static DateTime? NextEarliestTime(this DateTime target, params DateTime[] times)
+		public static DateTime? NextEarliestTime(this DateTime target, bool inclusive, params DateTime[] times)
 		{
 			if (times == null)
 				throw new ArgumentNullException("times");
 
 			DateTime earliestTime;
-			bool success = times.OrderBy(dt => dt).TryFirst(dt => target < dt, out earliestTime);
+			bool success = times.OrderBy(dt => dt).TryFirst(dt => inclusive ? target <= dt : target < dt, out earliestTime);
 			return success ? earliestTime : (DateTime?) null;
 		}
 
@@ -50,15 +51,16 @@ namespace ICD.Common.Utils.Extensions
 		/// Returns the closest DateTime to the target time that is less than the target time
 		/// </summary>
 		/// <param name="target"></param>
+		/// <param name="inclusive">Whether or not to include times equal to the target time</param>
 		/// <param name="times"></param>
 		/// <returns></returns>
-		public static DateTime? PreviousLatestTime(this DateTime target, params DateTime[] times)
+		public static DateTime? PreviousLatestTime(this DateTime target, bool inclusive, params DateTime[] times)
 		{
 			if (times == null)
 				throw new ArgumentNullException("null");
 
 			DateTime latestTime;
-			bool success = times.OrderByDescending(dt => dt).TryFirst(dt => target > dt, out latestTime);
+			bool success = times.OrderByDescending(dt => dt).TryFirst(dt => inclusive ? target >= dt : target > dt, out latestTime);
 			return success ? latestTime : (DateTime?) null;
 		}
 	}
