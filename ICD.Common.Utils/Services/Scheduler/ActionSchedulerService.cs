@@ -13,11 +13,14 @@ namespace ICD.Common.Utils.Services.Scheduler
 		private readonly SafeTimer m_Timer;
 		private readonly SafeCriticalSection m_CriticalSection;
 
+		private DateTime m_LastRunTime;
+
 		public ActionSchedulerService()
 		{
 			m_Actions = new List<IScheduledAction>();
 			m_Timer = new SafeTimer(TimerCallback, -1);
 			m_CriticalSection = new SafeCriticalSection();
+			m_LastRunTime = DateTime.MinValue;
 		}
 
 		public void Dispose()
@@ -93,13 +96,14 @@ namespace ICD.Common.Utils.Services.Scheduler
 
 		private void TimerCallback()
 		{
+			DateTime currentTime = IcdEnvironment.GetLocalTime();
 			IScheduledAction[] actionsToRun;
 
 			m_CriticalSection.Enter();
 			try
 			{
 				actionsToRun = m_Actions
-					.Where(a => a.NextRunTime < IcdEnvironment.GetLocalTime())
+					.Where(a => a.NextRunTime <= currentTime && a.NextRunTime > m_LastRunTime)
 					.OrderBy(a => a.NextRunTime)
 					.ToArray();
 			}
@@ -121,6 +125,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 				}
 			}
 
+			m_LastRunTime = currentTime;
 			RescheduleTimer();
 		}
 
@@ -130,7 +135,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 			m_CriticalSection.Enter();
 			try
 			{
-				var action = m_Actions.FirstOrDefault(a => a.NextRunTime != null && a.NextRunTime > IcdEnvironment.GetLocalTime());
+				var action = m_Actions.FirstOrDefault(a => a.NextRunTime != null && a.NextRunTime > m_LastRunTime);
 				if (action == null || action.NextRunTime == null)
 				{
 					m_Timer.Stop();
@@ -139,7 +144,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 
 				long msToNextAction = (long)(action.NextRunTime.Value - IcdEnvironment.GetLocalTime()).TotalMilliseconds;
 				if (msToNextAction < 0)
-					msToNextAction = 1000;
+					msToNextAction = 0;
 				m_Timer.Reset(msToNextAction);
 			}
 			finally
