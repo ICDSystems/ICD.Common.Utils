@@ -130,7 +130,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 			m_CriticalSection.Enter();
 			try
 			{
-				var action = m_Actions.FirstOrDefault(a => a.NextRunTime != null);
+				var action = m_Actions.FirstOrDefault(a => a.NextRunTime != null && a.NextRunTime > IcdEnvironment.GetLocalTime());
 				if (action == null || action.NextRunTime == null)
 				{
 					m_Timer.Stop();
@@ -138,6 +138,8 @@ namespace ICD.Common.Utils.Services.Scheduler
 				}
 
 				long msToNextAction = (long)(action.NextRunTime.Value - IcdEnvironment.GetLocalTime()).TotalMilliseconds;
+				if (msToNextAction < 0)
+					msToNextAction = 1000;
 				m_Timer.Reset(msToNextAction);
 			}
 			finally
