@@ -34,13 +34,12 @@ namespace ICD.Common.Utils.Extensions
 		/// Returns the closest DateTime to the target time that is greater than the target time
 		/// </summary>
 		/// <param name="target"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		/// <param name="times"></param>
 		/// <returns></returns>
 		public static DateTime? NextEarliestTime(this DateTime target, params DateTime[] times)
 		{
-			if (times.Length == 0)
-				return null;
+			if (times == null)
+				throw new ArgumentNullException("times");
 
 			DateTime earliestTime;
 			bool success = times.OrderBy(dt => dt).TryFirst(dt => target < dt, out earliestTime);
@@ -51,13 +50,12 @@ namespace ICD.Common.Utils.Extensions
 		/// Returns the closest DateTime to the target time that is less than the target time
 		/// </summary>
 		/// <param name="target"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		/// <param name="times"></param>
 		/// <returns></returns>
 		public static DateTime? PreviousLatestTime(this DateTime target, params DateTime[] times)
 		{
-			if (times.Length == 0)
-				return null;
+			if (times == null)
+				throw new ArgumentNullException("null");
 
 			DateTime latestTime;
 			bool success = times.OrderByDescending(dt => dt).TryFirst(dt => target > dt, out latestTime);

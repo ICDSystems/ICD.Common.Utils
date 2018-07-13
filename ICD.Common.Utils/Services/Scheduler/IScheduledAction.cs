@@ -1,5 +1,4 @@
 ﻿using System;
-using ICD.Common.Utils.EventArguments;
 
 namespace ICD.Common.Utils.Services.Scheduler
 {
