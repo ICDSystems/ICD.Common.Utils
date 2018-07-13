@@ -98,7 +98,8 @@ namespace ICD.Common.Utils.Extensions
 			if (key == null)
 				throw new ArgumentNullException("key");
 
-			return extends.ContainsKey(key) ? extends[key] : defaultValue;
+			TValue value;
+			return extends.TryGetValue(key, out value) ? value : defaultValue;
 		}
 
 		/// <summary>
@@ -229,7 +230,8 @@ namespace ICD.Common.Utils.Extensions
 
 			foreach (KeyValuePair<TKey, TValue> pair in other)
 			{
-				if (extends.ContainsKey(pair.Key) && comparer.Equals(pair.Value, extends[pair.Key]))
+				TValue value;
+				if (extends.TryGetValue(pair.Key, out value) && comparer.Equals(pair.Value, value))
 					continue;
 
 				extends[pair.Key] = pair.Value;
