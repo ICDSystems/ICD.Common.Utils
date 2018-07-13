@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
  - Added extension method for getting type name without trailing generic info
+ - Added DateTime extensions for getting next/last time in a sequence
+ - Added action scheduler service
 
 ### Changed
  - Re-raise base exception from ReflectionUtils.CreateInstance, TargetInvocationException and TypeLoadException don't say much
