@@ -71,8 +71,12 @@ namespace ICD.Common.Utils.Json
 
 			string itemString = (string)token.SelectToken(ITEM_TOKEN);
 			Type type = Type.GetType(typeString);
+
 			if (type == null)
+			{
 				typeString = AddSimplSharpSuffix(typeString);
+				type = Type.GetType(typeString);
+			}
 
 			return JsonConvert.DeserializeObject(itemString, type);
 		}
