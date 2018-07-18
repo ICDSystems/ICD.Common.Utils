@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using ICD.Common.Utils.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -70,8 +71,17 @@ namespace ICD.Common.Utils.Json
 
 			string itemString = (string)token.SelectToken(ITEM_TOKEN);
 			Type type = Type.GetType(typeString);
+			if (type == null)
+				typeString = AddSimplSharpSuffix(typeString);
 
 			return JsonConvert.DeserializeObject(itemString, type);
+		}
+
+		private static string AddSimplSharpSuffix(string typeString)
+		{
+			return Regex.Replace(typeString,
+				"(?'prefix'[^,]+, )(?'assembly'[^,]*)(?'suffix', .*)",
+				"${prefix}${assembly}_SimplSharp${suffix}");
 		}
 	}
 }
