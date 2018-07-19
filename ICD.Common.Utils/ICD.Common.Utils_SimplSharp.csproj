@@ -100,6 +100,7 @@
     <Compile Include="Extensions\DayOfWeekExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Comparers\PredicateEqualityComparer.cs" />
+    <Compile Include="Extensions\MethodInfoExtensions.cs" />
     <Compile Include="Extensions\ParameterInfoExtensions.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Extensions\UshortExtensions.cs" />
