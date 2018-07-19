@@ -163,7 +163,7 @@ namespace ICD.Common.Utils.Extensions
 				item = extends.ElementAt(index);
 				return true;
 			}
-			catch (Exception)
+			catch (ArgumentOutOfRangeException)
 			{
 				return false;
 			}
