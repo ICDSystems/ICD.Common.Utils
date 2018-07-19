@@ -86,6 +86,12 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(expected, value.IsIntegerNumeric());
 		}
 
+		[Test]
+		public void GetAssemblyTest()
+		{
+			Assert.Inconclusive();
+		}
+
 		[TestCase(typeof(string), typeof(object), true)]
 		[TestCase(typeof(object), typeof(string), false)]
 		public void IsAssignableToTest(Type a, Type b, bool expected)
@@ -132,6 +138,27 @@ namespace ICD.Common.Utils.Tests.Extensions
 
 			Assert.AreEqual(1, interfaces.Length);
 			Assert.AreEqual(typeof(IEnumerable), interfaces[0]);
+		}
+
+		[Test]
+		public void GetMinimalInterfacesTest()
+		{
+			Assert.Inconclusive();
+		}
+
+		[TestCase(typeof(int), "Int32")]
+		[TestCase(typeof(List<int>), "List")]
+		public void GetNameWithoutGenericArityTest(Type type, string expected)
+		{
+			Assert.AreEqual(expected, type.GetNameWithoutGenericArity());
+		}
+
+		[TestCase(typeof(string), "string")]
+		[TestCase(typeof(int?), "int?")]
+		[TestCase(typeof(List<int?>), "List<int?>")]
+		public void GetSyntaxNameTest(Type type, string expected)
+		{
+			Assert.AreEqual(expected, type.GetSyntaxName());
 		}
 
 		private interface C
