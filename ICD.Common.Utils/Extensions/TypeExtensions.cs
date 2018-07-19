@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using ICD.Common.Utils.Collections;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
@@ -302,6 +303,57 @@ namespace ICD.Common.Utils.Extensions
 			string name = extends.Name;
 			int index = name.IndexOf('`');
 			return index == -1 ? name : name.Substring(0, index);
+		}
+
+		/// <summary>
+		/// Gets the type name as it would appear in code.
+		/// </summary>
+		/// <param name="extends">Type. May be generic or nullable</param>
+		/// <returns>Full type name, fully qualified namespaces</returns>
+		public static string GetSyntaxName(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			Type nullableType = Nullable.GetUnderlyingType(extends);
+			if (nullableType != null)
+				return nullableType.Name + "?";
+
+			if (!(extends.IsGenericType && extends.Name.Contains('`')))
+			{
+				switch (extends.Name)
+				{
+					case "String":
+						return "string";
+					case "Int32":
+						return "int";
+					case "Decimal":
+						return "decimal";
+					case "Object":
+						return "object";
+					case "Void":
+						return "void";
+
+					default:
+						return string.IsNullOrEmpty(extends.FullName) ? extends.Name : extends.FullName;
+				}
+			}
+
+			StringBuilder sb = new StringBuilder(extends.Name.Substring(0, extends.Name.IndexOf('`')));
+			sb.Append('<');
+
+			bool first = true;
+			foreach (Type t in extends.GetGenericArguments())
+			{
+				if (!first)
+					sb.Append(',');
+				sb.Append(t.GetSyntaxName());
+				first = false;
+			}
+
+			sb.Append('>');
+
+			return sb.ToString();
 		}
 	}
 }
