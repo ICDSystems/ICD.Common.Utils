@@ -1357,8 +1357,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="callback"></param>
 		/// <returns></returns>
 		private static IEnumerable<TResult> ZipIterator<TFirst, TSecond, TResult>(IEnumerable<TFirst> first,
-																		 IEnumerable<TSecond> second,
-																		 Func<TFirst, TSecond, TResult> callback)
+		                                                                          IEnumerable<TSecond> second,
+		                                                                          Func<TFirst, TSecond, TResult> callback)
 		{
 			using (IEnumerator<TFirst> enumerator1 = first.GetEnumerator())
 			{
