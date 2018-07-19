@@ -5,10 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [4.0.0] - 2018-07-19
 ### Added
  - Added extension method for getting type name without trailing generic info
  - Added DateTime extensions for getting next/last time in a sequence
  - Added action scheduler service
+ - Added IcdTimer methods for profiling event performance
 
 ### Changed
  - Re-raise base exception from ReflectionUtils.CreateInstance, TargetInvocationException and TypeLoadException don't say much
