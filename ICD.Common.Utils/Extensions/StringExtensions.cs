@@ -278,5 +278,19 @@ namespace ICD.Common.Utils.Extensions
 
 			return extends.All(char.IsDigit);
 		}
+
+		/// <summary>
+		/// Returns true if the string contains the given character.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="character"></param>
+		/// <returns></returns>
+		public static bool Contains(this string extends, char character)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.Contains(character.ToString());
+		}
 	}
 }
