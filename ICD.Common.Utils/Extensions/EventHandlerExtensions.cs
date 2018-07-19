@@ -1,4 +1,9 @@
 ﻿using System;
+#if SIMPLSHARP
+using Crestron.SimplSharp.Reflection;
+#else
+using System.Reflection;
+#endif
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -33,6 +38,23 @@ namespace ICD.Common.Utils.Extensions
 
 			if (extends != null)
 				extends(sender, args);
+		}
+
+		/// <summary>
+		/// Cross-platform shim for getting MethodInfo for the delegate.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static MethodInfo GetMethodInfo(this Delegate extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+#if SIMPLSHARP
+			return extends.GetMethod();
+#else
+			return extends.Method;
+#endif
 		}
 	}
 }
