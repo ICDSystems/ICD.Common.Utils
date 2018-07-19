@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
 #else
@@ -138,6 +139,8 @@ namespace ICD.Common.Utils.Timers
 		/// <returns></returns>
 		public static IEnumerable<T> Profile<T>(IEnumerable<T> enumerable, string name)
 		{
+			// TODO - Print a fancy table with a total duration for the sequence
+
 			using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
 			{
 // ReSharper disable once AccessToDisposedClosure
@@ -160,11 +163,14 @@ namespace ICD.Common.Utils.Timers
 				return;
 			}
 
+			// TODO - Print a fancy table with a total duration for the event
+
 // ReSharper disable PossibleInvalidCastExceptionInForeachLoop
 			foreach (EventHandler subscriber in eventHandler.GetInvocationList())
 // ReSharper restore PossibleInvalidCastExceptionInForeachLoop
 			{
-				string subscriberName = string.Format("{0} - {1}", name, subscriber.Target.GetType().Name);
+				string subscriberName = string.Format("{0} - {1}.{2}", name, subscriber.Target.GetType().Name,
+													  subscriber.GetMethodInfo().GetSignature(true));
 
 				EventHandler subscriber1 = subscriber;
 				Profile(() => subscriber1(sender, EventArgs.Empty), subscriberName);
@@ -174,6 +180,7 @@ namespace ICD.Common.Utils.Timers
 		/// <summary>
 		/// Executes the event handler and profiles each of the attached subscribers.
 		/// </summary>
+		/// <typeparam name="T"></typeparam>
 		/// <param name="eventHandler"></param>
 		/// <param name="sender"></param>
 		/// <param name="eventArgs"></param>
@@ -187,11 +194,14 @@ namespace ICD.Common.Utils.Timers
 				return;
 			}
 
+			// TODO - Print a fancy table with a total duration for the event
+
 // ReSharper disable PossibleInvalidCastExceptionInForeachLoop
 			foreach (EventHandler<T> subscriber in eventHandler.GetInvocationList())
 // ReSharper restore PossibleInvalidCastExceptionInForeachLoop
 			{
-				string subscriberName = string.Format("{0} - {1}", name, subscriber.Target.GetType().Name);
+				string subscriberName = string.Format("{0} - {1}.{2}", name, subscriber.Target.GetType().Name,
+													  subscriber.GetMethodInfo().GetSignature(true));
 
 				EventHandler<T> subscriber1 = subscriber;
 				Profile(() => subscriber1(sender, eventArgs), subscriberName);
