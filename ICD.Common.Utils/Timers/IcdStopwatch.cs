@@ -146,6 +146,58 @@ namespace ICD.Common.Utils.Timers
 			}
 		}
 
+		/// <summary>
+		/// Executes the event handler and profiles each of the attached subscribers.
+		/// </summary>
+		/// <param name="eventHandler"></param>
+		/// <param name="sender"></param>
+		/// <param name="name"></param>
+		public static void Profile(EventHandler eventHandler, object sender, string name)
+		{
+			if (eventHandler == null)
+			{
+				PrintProfile(new IcdStopwatch(), string.Format("{0} - No invocations", name));
+				return;
+			}
+
+// ReSharper disable PossibleInvalidCastExceptionInForeachLoop
+			foreach (EventHandler subscriber in eventHandler.GetInvocationList())
+// ReSharper restore PossibleInvalidCastExceptionInForeachLoop
+			{
+				string subscriberName = string.Format("{0} - {1}", name, subscriber.Target.GetType().Name);
+
+				EventHandler subscriber1 = subscriber;
+				Profile(() => subscriber1(sender, EventArgs.Empty), subscriberName);
+			}
+		}
+
+		/// <summary>
+		/// Executes the event handler and profiles each of the attached subscribers.
+		/// </summary>
+		/// <param name="eventHandler"></param>
+		/// <param name="sender"></param>
+		/// <param name="eventArgs"></param>
+		/// <param name="name"></param>
+		public static void Profile<T>(EventHandler<T> eventHandler, object sender, T eventArgs, string name)
+			where T : EventArgs
+		{
+			if (eventHandler == null)
+			{
+				PrintProfile(new IcdStopwatch(), string.Format("{0} - No invocations", name));
+				return;
+			}
+
+// ReSharper disable PossibleInvalidCastExceptionInForeachLoop
+			foreach (EventHandler<T> subscriber in eventHandler.GetInvocationList())
+// ReSharper restore PossibleInvalidCastExceptionInForeachLoop
+			{
+				string subscriberName = string.Format("{0} - {1}", name, subscriber.Target.GetType().Name);
+
+				EventHandler<T> subscriber1 = subscriber;
+				Profile(() => subscriber1(sender, eventArgs), subscriberName);
+			}
+		}
+
 		private static void PrintProfile(IcdStopwatch stopwatch, string name)
 		{
 			long elapsed = stopwatch.ElapsedMilliseconds;
