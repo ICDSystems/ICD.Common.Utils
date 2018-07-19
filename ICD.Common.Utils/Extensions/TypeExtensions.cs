@@ -317,7 +317,7 @@ namespace ICD.Common.Utils.Extensions
 
 			Type nullableType = Nullable.GetUnderlyingType(extends);
 			if (nullableType != null)
-				return nullableType.Name + "?";
+				return nullableType.GetSyntaxName() + "?";
 
 			if (!(extends.IsGenericType && extends.Name.Contains('`')))
 			{
