@@ -865,8 +865,8 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			T[] array = extends.Distinct().ToArray();
-			return array.Length == 1 ? array[0] : other;
+			T item;
+			return extends.Unanimous(out item) ? item : other;
 		}
 
 		/// <summary>
@@ -875,14 +875,57 @@ namespace ICD.Common.Utils.Extensions
 		/// Returns true if the sequence is non-empty and all elements are the same.
 		/// </summary>
 		/// <param name="extends"></param>
+		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool Unanimous<T>(this IEnumerable<T> extends)
+		public static bool Unanimous<T>(this IEnumerable<T> extends, out T result)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.Distinct().Count() == 1;
+			return extends.Unanimous(EqualityComparer<T>.Default, out result);
+		}
+
+		/// <summary>
+		/// Returns false if the sequence is empty.
+		/// Returns false if the sequence is non-empty and there are two different elements.
+		/// Returns true if the sequence is non-empty and all elements are the same.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="comparer"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool Unanimous<T>(this IEnumerable<T> extends, IEqualityComparer<T> comparer, out T result)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			result = default(T);
+			T output = default(T);
+			bool empty = true;
+
+			foreach (T entry in extends)
+			{
+				if (empty)
+				{
+					empty = false;
+					output = entry;
+					continue;
+				}
+
+				if (!comparer.Equals(entry, output))
+					return false;
+			}
+
+			if (empty)
+				return false;
+
+			result = output;
+			return true;
 		}
 
 		/// <summary>

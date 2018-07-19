@@ -400,10 +400,19 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void UnanimousTest()
 		{
-			Assert.IsTrue(new[] {true, true, true}.Unanimous());
-			Assert.IsTrue(new[] {false, false, false}.Unanimous());
-			Assert.IsFalse(new[] {false, true, false}.Unanimous());
-			Assert.IsFalse(new bool[] { }.Unanimous());
+			bool result;
+
+			Assert.IsTrue(new[] {true, true, true}.Unanimous(out result));
+			Assert.IsTrue(result);
+
+			Assert.IsTrue(new[] {false, false, false}.Unanimous(out result));
+			Assert.IsFalse(result);
+
+			Assert.IsFalse(new[] {false, true, false}.Unanimous(out result));
+			Assert.AreEqual(default(bool), result);
+
+			Assert.IsFalse(new bool[] { }.Unanimous(out result));
+			Assert.AreEqual(default(bool), result);
 		}
 
 		[Test]
