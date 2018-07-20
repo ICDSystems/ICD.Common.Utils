@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using ICD.Common.Utils.Extensions;
 using NUnit.Framework;
 
@@ -89,7 +90,8 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void GetAssemblyTest()
 		{
-			Assert.Inconclusive();
+			Assembly assembly = typeof(TypeExtensionsTest).GetAssembly();
+			Assert.IsTrue(assembly.FullName.Contains("ICD.Common.Utils"));
 		}
 
 		[TestCase(typeof(string), typeof(object), true)]
