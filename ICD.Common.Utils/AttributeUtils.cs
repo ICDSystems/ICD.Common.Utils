@@ -232,8 +232,10 @@ namespace ICD.Common.Utils
 
 			CacheType(type);
 
-			return s_TypeToAttributesCache.ContainsKey(type)
-				       ? s_TypeToAttributesCache[type].ToArray()
+			IcdHashSet<Attribute> attributes;
+
+			return s_TypeToAttributesCache.TryGetValue(type, out attributes)
+				       ? attributes.ToArray(attributes.Count)
 				       : Enumerable.Empty<Attribute>();
 		}
 

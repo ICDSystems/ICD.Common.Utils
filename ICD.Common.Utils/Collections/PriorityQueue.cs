@@ -73,10 +73,14 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public void Enqueue(T item, int priority)
 		{
-			if (!m_PriorityToQueue.ContainsKey(priority))
-				m_PriorityToQueue.Add(priority, new List<T>());
+			List<T> queue;
+			if (!m_PriorityToQueue.TryGetValue(priority, out queue))
+			{
+				queue = new List<T>();
+				m_PriorityToQueue[priority] = queue;
+			}
 
-			m_PriorityToQueue[priority].Add(item);
+			queue.Add(item);
 			m_Count++;
 		}
 
@@ -89,10 +93,14 @@ namespace ICD.Common.Utils.Collections
 		{
 			const int priority = int.MinValue;
 
-			if (!m_PriorityToQueue.ContainsKey(priority))
-				m_PriorityToQueue.Add(priority, new List<T>());
+			List<T> queue;
+			if (!m_PriorityToQueue.TryGetValue(priority, out queue))
+			{
+				queue = new List<T>();
+				m_PriorityToQueue[priority] = queue;
+			}
 
-			m_PriorityToQueue[priority].Insert(0, item);
+			queue.Insert(0, item);
 			m_Count++;
 		}
 

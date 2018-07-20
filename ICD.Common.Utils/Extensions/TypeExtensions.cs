@@ -185,18 +185,18 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (!s_TypeAllTypes.ContainsKey(extends))
+			Type[] types;
+			if (!s_TypeAllTypes.TryGetValue(extends, out types))
 			{
-				Type[] types =
-					extends.GetBaseTypes()
-					       .Concat(extends.GetInterfaces())
-					       .Prepend(extends)
-					       .ToArray();
+				types = extends.GetBaseTypes()
+				               .Concat(extends.GetInterfaces())
+				               .Prepend(extends)
+				               .ToArray();
 
-				s_TypeAllTypes.Add(extends, types);
+				s_TypeAllTypes[extends] = types;
 			}
 
-			return s_TypeAllTypes[extends];
+			return types;
 		}
 
 		/// <summary>
@@ -209,13 +209,14 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (!s_TypeBaseTypes.ContainsKey(extends))
+			Type[] types;
+			if (!s_TypeBaseTypes.TryGetValue(extends, out types))
 			{
-				Type[] types = GetBaseTypesIterator(extends).ToArray();
-				s_TypeBaseTypes.Add(extends, types);
+				types = GetBaseTypesIterator(extends).ToArray();
+				s_TypeBaseTypes[extends] = types;
 			}
 
-			return s_TypeBaseTypes[extends];
+			return types;
 		}
 
 		private static IEnumerable<Type> GetBaseTypesIterator(Type type)
@@ -244,7 +245,8 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (!s_TypeImmediateInterfaces.ContainsKey(extends))
+			Type[] immediateInterfaces;
+			if (!s_TypeImmediateInterfaces.TryGetValue(extends, out immediateInterfaces))
 			{
 				IEnumerable<Type> allInterfaces = extends.GetInterfaces();
 
@@ -254,12 +256,12 @@ namespace ICD.Common.Utils.Extensions
 					       .SelectMany(t => t.GetImmediateInterfaces())
 					       .Distinct();
 
-				Type[] immediateInterfaces = allInterfaces.Except(childInterfaces).ToArray();
+				immediateInterfaces = allInterfaces.Except(childInterfaces).ToArray();
 
-				s_TypeImmediateInterfaces.Add(extends, immediateInterfaces);
+				s_TypeImmediateInterfaces[extends] = immediateInterfaces;
 			}
 
-			return s_TypeImmediateInterfaces[extends];
+			return immediateInterfaces;
 		}
 
 		/// <summary>
@@ -272,17 +274,17 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (!s_TypeMinimalInterfaces.ContainsKey(extends))
+			Type[] minimalInterfaces;
+			if (!s_TypeMinimalInterfaces.TryGetValue(extends, out minimalInterfaces))
 			{
 				Type[] allInterfaces = extends.GetInterfaces();
-				Type[] minimalInterfaces =
-					allInterfaces.Except(allInterfaces.SelectMany(t => t.GetInterfaces()))
-					             .ToArray();
+				minimalInterfaces = allInterfaces.Except(allInterfaces.SelectMany(t => t.GetInterfaces()))
+				                                 .ToArray();
 
-				s_TypeMinimalInterfaces.Add(extends, minimalInterfaces);
+				s_TypeMinimalInterfaces[extends] = minimalInterfaces;
 			}
 
-			return s_TypeMinimalInterfaces[extends];
+			return minimalInterfaces;
 		}
 
 		/// <summary>

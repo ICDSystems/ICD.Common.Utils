@@ -345,10 +345,11 @@ namespace ICD.Common.Utils.Services
 			{
 				m_ServicesSection.Enter();
 
-				if (!m_Services.ContainsKey(tService))
+				object stored;
+				if (!m_Services.TryGetValue(tService, out stored))
 					return false;
 
-				return m_Services[tService] == service && m_Services.Remove(tService);
+				return service == stored && m_Services.Remove(tService);
 			}
 			finally
 			{

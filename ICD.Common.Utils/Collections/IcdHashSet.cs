@@ -246,15 +246,7 @@ namespace ICD.Common.Utils.Collections
 				throw new ArgumentNullException("items");
 
 			foreach (T item in items)
-			{
-				// ReSharper disable CompareNonConstrainedGenericWithNull
-				if (item == null)
-					// ReSharper restore CompareNonConstrainedGenericWithNull
-					throw new InvalidOperationException("item");
-
-				if (!m_Dict.ContainsKey(item))
-					m_Dict[item] = null;
-			}
+				Add(item);
 		}
 
 		/// <summary>
