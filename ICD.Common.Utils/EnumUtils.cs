@@ -126,10 +126,14 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("type");
 
 			// Reflection is slow and this method is called a lot, so we cache the results.
-			if (!s_EnumValuesCache.ContainsKey(type))
-				s_EnumValuesCache[type] = GetValuesUncached(type).ToArray();
+			object[] cache;
+			if (!s_EnumValuesCache.TryGetValue(type, out cache))
+			{
+				cache = GetValuesUncached(type).ToArray();
+				s_EnumValuesCache[type] = cache;
+			}
 
-			return s_EnumValuesCache[type];
+			return cache;
 		}
 
 		/// <summary>
@@ -280,13 +284,23 @@ namespace ICD.Common.Utils
 
 			Type type = typeof(T);
 
-			if (!s_EnumFlagsCache.ContainsKey(type))
-				s_EnumFlagsCache.Add(type, new Dictionary<object, object[]>());
+			Dictionary<object, object[]> cache;
+			if (!s_EnumFlagsCache.TryGetValue(type, out cache))
+			{
+				cache = new Dictionary<object, object[]>();
+				s_EnumFlagsCache[type] = cache;
+			}
 
-			if (!s_EnumFlagsCache[type].ContainsKey(value))
-				s_EnumFlagsCache[type][value] = GetValues<T>().Where(e => HasFlag(value, e)).Cast<object>().ToArray();
+			object[] flags;
+			if (!cache.TryGetValue(value, out flags))
+			{
+				flags = GetValues<T>().Where(e => HasFlag(value, e))
+				                      .Cast<object>()
+				                      .ToArray();
+				cache[value] = flags;
+			}
 
-			return s_EnumFlagsCache[type][value].Cast<T>();
+			return flags.Cast<T>();
 		}
 
 		/// <summary>
