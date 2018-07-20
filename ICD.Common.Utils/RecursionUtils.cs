@@ -84,17 +84,14 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		private static IEnumerable<T> GetCliqueIterator<T>(IDictionary<T, IEnumerable<T>> map, IcdHashSet<T> visited, T node)
 		{
-			if (visited.Contains(node))
+			if (!visited.Add(node))
 				yield break;
 
-			if (!map.ContainsKey(node))
+			IEnumerable<T> adjacent;
+			if (!map.TryGetValue(node, out adjacent))
 				yield break;
-
-			visited.Add(node);
 
 			yield return node;
-
-			IEnumerable<T> adjacent = map.GetDefault(node, Enumerable.Empty<T>());
 
 			foreach (T item in adjacent.SelectMany(a => GetClique(map, visited, a)))
 				yield return item;
