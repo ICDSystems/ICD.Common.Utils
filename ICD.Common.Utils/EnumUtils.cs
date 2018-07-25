@@ -13,33 +13,16 @@ namespace ICD.Common.Utils
 {
 	public static class EnumUtils
 	{
-		private static readonly Dictionary<Type, int[]> s_EnumValuesCache;
-		private static readonly Dictionary<Type, Dictionary<int, int[]>> s_EnumFlagsCache;
+		private static readonly Dictionary<Type, object> s_EnumValuesCache;
+		private static readonly Dictionary<Type, Dictionary<int, object>> s_EnumFlagsCache;
 
 		/// <summary>
 		/// Static constructor.
 		/// </summary>
 		static EnumUtils()
 		{
-			s_EnumValuesCache = new Dictionary<Type, int[]>();
-			s_EnumFlagsCache = new Dictionary<Type, Dictionary<int, int[]>>();
-		}
-
-		/// <summary>
-		/// Returns true if the given type is an enum.
-		/// </summary>
-		/// <returns></returns>
-		public static bool IsEnumType(Type type)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			// Type 
-			return type
-#if !SIMPLSHARP
-				.GetTypeInfo()
-#endif
-				.IsEnum || type.IsAssignableTo(typeof(Enum));
+			s_EnumValuesCache = new Dictionary<Type, object>();
+			s_EnumFlagsCache = new Dictionary<Type, Dictionary<int, object>>();
 		}
 
 		/// <summary>
@@ -52,13 +35,29 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Returns true if the given type is an enum.
+		/// </summary>
+		/// <returns></returns>
+		private static bool IsEnumType(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return type
+#if !SIMPLSHARP
+				       .GetTypeInfo()
+#endif
+				       .IsEnum || type.IsAssignableTo(typeof(Enum));
+		}
+
+		/// <summary>
 		/// Returns true if the given value is an enum.
 		/// </summary>
 		/// <returns></returns>
 		public static bool IsEnum<T>(T value)
 		{
 // ReSharper disable once CompareNonConstrainedGenericWithNull
-			return value != null && IsEnumType<T>();
+			return value != null && IsEnumType(value.GetType());
 		}
 
 		/// <summary>
@@ -69,7 +68,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool IsDefined<T>(T value)
 		{
-			if (!IsEnumType(typeof(T)))
+			if (!IsEnumType<T>())
 				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			if (!IsFlagsEnum<T>())
@@ -96,41 +95,28 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static IEnumerable<T> GetValues<T>()
 		{
-			return GetValues(typeof(T)).Cast<T>();
-		}
-
-		/// <summary>
-		/// Gets the values from an enumeration.
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		public static IEnumerable<int> GetValues(Type type)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
+			Type type = typeof(T);
 
 			// Reflection is slow and this method is called a lot, so we cache the results.
-			int[] cache;
+			object cache;
 			if (!s_EnumValuesCache.TryGetValue(type, out cache))
 			{
-				cache = GetValuesUncached(type).Cast<int>().ToArray();
+				cache = GetValuesUncached<T>().ToArray();
 				s_EnumValuesCache[type] = cache;
 			}
 
-			return cache;
+			return cache as T[];
 		}
 
 		/// <summary>
 		/// Gets the values from an enumeration without performing any caching. This is slow because of reflection.
 		/// </summary>
-		/// <param name="type"></param>
 		/// <returns></returns>
-		private static IEnumerable<object> GetValuesUncached(Type type)
+		private static IEnumerable<T> GetValuesUncached<T>()
 		{
-			if (type == null)
-				throw new ArgumentNullException("type");
+			Type type = typeof(T);
 
-			if (!IsEnumType(type))
+			if (!IsEnumType<T>())
 				throw new InvalidOperationException(string.Format("{0} is not an enum", type.Name));
 
 			return type
@@ -140,20 +126,8 @@ namespace ICD.Common.Utils
 				.GetTypeInfo()
 #endif
 				.GetFields(BindingFlags.Static | BindingFlags.Public)
-				.Select(x => x.GetValue(null));
-		}
-
-		/// <summary>
-		/// Gets the 0 value for the given enum type.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
-		public static T GetNoneValue<T>()
-		{
-			if (!IsEnumType(typeof(T)))
-				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
-
-			return (T)(object)0;
+				.Select(x => x.GetValue(null))
+				.Cast<T>();
 		}
 
 		/// <summary>
@@ -163,26 +137,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static IEnumerable<T> GetValuesExceptNone<T>()
 		{
-			if (!IsEnumType(typeof(T)))
-				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
-
-			return GetValuesExceptNone(typeof(T)).Cast<T>();
-		}
-
-		/// <summary>
-		/// Gets the values from an enumeration except the 0 value.
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		public static IEnumerable<int> GetValuesExceptNone(Type type)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			if (!IsEnumType(type))
-				throw new InvalidOperationException(string.Format("{0} is not an enum", type.Name));
-
-			return GetValues(type).Where(v => v != 0);
+			return GetFlagsExceptNone<T>();
 		}
 
 		#endregion
@@ -199,22 +154,7 @@ namespace ICD.Common.Utils
 			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
-			return IsFlagsEnum(typeof(T));
-		}
-
-		/// <summary>
-		/// Returns true if the given enum type has the Flags attribute set.
-		/// </summary>
-		/// <returns></returns>
-		public static bool IsFlagsEnum(Type type)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			if (!IsEnumType(type))
-				throw new InvalidOperationException(string.Format("{0} is not an enum", type.Name));
-
-			return type
+			return typeof(T)
 #if !SIMPLSHARP
                 .GetTypeInfo()
 #endif
@@ -230,7 +170,7 @@ namespace ICD.Common.Utils
 		public static T GetFlagsIntersection<T>(params T[] values)
 		{
 			if (values.Length == 0)
-				return GetNoneValue<T>();
+				return default(T);
 
 			int output = (int)(object)values.First();
 			foreach (T item in values.Skip(1))
@@ -269,23 +209,21 @@ namespace ICD.Common.Utils
 			Type type = typeof(T);
 			int valueInt = (int)(object)value;
 
-			Dictionary<int, int[]> cache;
+			Dictionary<int, object> cache;
 			if (!s_EnumFlagsCache.TryGetValue(type, out cache))
 			{
-				cache = new Dictionary<int, int[]>();
+				cache = new Dictionary<int, object>();
 				s_EnumFlagsCache[type] = cache;
 			}
 
-			int[] flags;
+			object flags;
 			if (!cache.TryGetValue(valueInt, out flags))
 			{
-				flags = GetValues<T>().Where(e => HasFlag(value, e))
-				                      .Cast<int>()
-				                      .ToArray();
+				flags = GetValues<T>().Where(e => HasFlag(value, e)).ToArray();
 				cache[valueInt] = flags;
 			}
 
-			return flags.Cast<T>();
+			return flags as T[];
 		}
 
 		/// <summary>
@@ -314,8 +252,7 @@ namespace ICD.Common.Utils
 // ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
-			T none = GetNoneValue<T>();
-			return GetFlags(value).Except(none);
+			return GetFlags(value).Except(default(T));
 		}
 
 		/// <summary>
@@ -333,7 +270,7 @@ namespace ICD.Common.Utils
 				// ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
-			int maxEnumValue = (GetValues<T>().Max(v => (int)(object)v) * 2) -1 ;
+			int maxEnumValue = (GetValues<T>().Max(v => (int)(object)v) * 2) -1;
 			return Enumerable.Range(1, maxEnumValue).Select(i => (T)(object)i ).Where(v => HasFlags(value, v));
 		}
 

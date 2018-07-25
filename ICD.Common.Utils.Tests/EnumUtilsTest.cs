@@ -38,16 +38,6 @@ namespace ICD.Common.Utils.Tests
 		}
 		
 		[Test]
-		public void IsEnumTypeTest()
-		{
-			Assert.IsTrue(EnumUtils.IsEnumType(typeof(eTestEnum)));
-			Assert.IsTrue(EnumUtils.IsEnumType(typeof(eTestFlagsEnum)));
-			Assert.IsTrue(EnumUtils.IsEnumType(typeof(Enum)));
-			Assert.IsFalse(EnumUtils.IsEnumType(typeof(EnumUtilsTest)));
-			Assert.Throws<ArgumentNullException>(() => EnumUtils.IsEnumType(null));
-		}
-
-		[Test]
 		public void IsEnumTypeGenericTest()
 		{
 			Assert.IsTrue(EnumUtils.IsEnumType<eTestEnum>());
@@ -63,7 +53,7 @@ namespace ICD.Common.Utils.Tests
 			Assert.IsTrue(EnumUtils.IsEnum(eTestFlagsEnum.A));
 			Assert.IsTrue(EnumUtils.IsEnum(eTestEnum.A as object));
 			Assert.IsTrue(EnumUtils.IsEnum(eTestEnum.A as Enum));
-			Assert.IsFalse(EnumUtils.IsEnum(null));
+			Assert.IsFalse(EnumUtils.IsEnum<Enum>(null));
 			Assert.IsFalse(EnumUtils.IsEnum(""));
 		}
 
@@ -92,28 +82,9 @@ namespace ICD.Common.Utils.Tests
 		}
 
 		[Test]
-		public void GetNoneValueGenericTest()
-		{
-			Assert.AreEqual(eTestEnum.None, EnumUtils.GetNoneValue<eTestEnum>());
-			Assert.AreEqual(eTestFlagsEnum.None, EnumUtils.GetNoneValue<eTestFlagsEnum>());
-		}
-
-		[Test]
 		public void GetValuesExceptNoneGenericTest()
 		{
 			eTestEnum[] values = EnumUtils.GetValuesExceptNone<eTestEnum>().ToArray();
-
-			Assert.AreEqual(3, values.Length);
-			Assert.IsFalse(values.Contains(eTestEnum.None));
-			Assert.IsTrue(values.Contains(eTestEnum.A));
-			Assert.IsTrue(values.Contains(eTestEnum.B));
-			Assert.IsTrue(values.Contains(eTestEnum.C));
-		}
-
-		[Test]
-		public void GetValuesExceptNoneTest()
-		{
-			eTestEnum[] values = EnumUtils.GetValuesExceptNone(typeof(eTestEnum)).Cast<eTestEnum>().ToArray();
 
 			Assert.AreEqual(3, values.Length);
 			Assert.IsFalse(values.Contains(eTestEnum.None));
@@ -131,13 +102,6 @@ namespace ICD.Common.Utils.Tests
 		{
 			Assert.IsFalse(EnumUtils.IsFlagsEnum<eTestEnum>());
 			Assert.IsTrue(EnumUtils.IsFlagsEnum<eTestFlagsEnum>());
-		}
-
-		[Test]
-		public void IsFlagsEnumTest()
-		{
-			Assert.IsFalse(EnumUtils.IsFlagsEnum(typeof(eTestEnum)));
-			Assert.IsTrue(EnumUtils.IsFlagsEnum(typeof(eTestFlagsEnum)));
 		}
 
 		[Test]
