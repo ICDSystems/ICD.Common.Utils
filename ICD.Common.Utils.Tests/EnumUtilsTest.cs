@@ -79,15 +79,6 @@ namespace ICD.Common.Utils.Tests
 
         #region Values
 
-        [Test]
-		public void GetUnderlyingValueTest()
-		{
-			Assert.AreEqual(0, EnumUtils.GetUnderlyingValue(eTestEnum.None));
-			Assert.AreEqual(1, EnumUtils.GetUnderlyingValue(eTestEnum.A));
-			Assert.AreEqual(2, EnumUtils.GetUnderlyingValue(eTestEnum.B));
-			Assert.AreEqual(3, EnumUtils.GetUnderlyingValue(eTestEnum.C));
-		}
-
 		[Test]
 		public void GetValuesGenericTest()
 		{
@@ -122,7 +113,7 @@ namespace ICD.Common.Utils.Tests
 		[Test]
 		public void GetValuesExceptNoneTest()
 		{
-			object[] values = EnumUtils.GetValuesExceptNone(typeof(eTestEnum)).ToArray();
+			eTestEnum[] values = EnumUtils.GetValuesExceptNone(typeof(eTestEnum)).Cast<eTestEnum>().ToArray();
 
 			Assert.AreEqual(3, values.Length);
 			Assert.IsFalse(values.Contains(eTestEnum.None));

@@ -14,16 +14,16 @@ namespace ICD.Common.Utils
 {
 	public static class EnumUtils
 	{
-		private static readonly Dictionary<Type, object[]> s_EnumValuesCache;
-		private static readonly Dictionary<Type, Dictionary<object, object[]>> s_EnumFlagsCache;
+		private static readonly Dictionary<Type, int[]> s_EnumValuesCache;
+		private static readonly Dictionary<Type, Dictionary<int, int[]>> s_EnumFlagsCache;
 
 		/// <summary>
 		/// Static constructor.
 		/// </summary>
 		static EnumUtils()
 		{
-			s_EnumValuesCache = new Dictionary<Type, object[]>();
-			s_EnumFlagsCache = new Dictionary<Type, Dictionary<object, object[]>>();
+			s_EnumValuesCache = new Dictionary<Type, int[]>();
+			s_EnumFlagsCache = new Dictionary<Type, Dictionary<int, int[]>>();
 		}
 
 		/// <summary>
@@ -75,12 +75,12 @@ namespace ICD.Common.Utils
 			if (!IsFlagsEnum<T>())
 				return GetValues<T>().Any(v => v.Equals(value));
 
-			int valueInt = (int)GetUnderlyingValue(value);
+			int valueInt = (int)(object)value;
 
 			// Check if all of the flag values are defined
 			foreach (T flag in GetFlags(value))
 			{
-				int flagInt = (int)GetUnderlyingValue(flag);
+				int flagInt = (int)(object)flag;
 				valueInt = valueInt - flagInt;
 			}
 
@@ -88,23 +88,6 @@ namespace ICD.Common.Utils
 		}
 
 		#region Values
-
-		/// <summary>
-		/// Gets the underlying value of the enum.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
-		public static object GetUnderlyingValue<T>(T value)
-		{
-			if (!IsEnumType(typeof(T)))
-				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
-
-#if SIMPLSHARP
-			return Convert.ChangeType(value, ToEnum(value).GetTypeCode(), CultureInfo.InvariantCulture);
-#else
-			return Convert.ChangeType(value, Enum.GetUnderlyingType(value.GetType()));
-#endif
-		}
 
 		/// <summary>
 		/// Gets the values from an enumeration.
@@ -121,16 +104,16 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		public static IEnumerable<object> GetValues(Type type)
+		public static IEnumerable<int> GetValues(Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
 
 			// Reflection is slow and this method is called a lot, so we cache the results.
-			object[] cache;
+			int[] cache;
 			if (!s_EnumValuesCache.TryGetValue(type, out cache))
 			{
-				cache = GetValuesUncached(type).ToArray();
+				cache = GetValuesUncached(type).Cast<int>().ToArray();
 				s_EnumValuesCache[type] = cache;
 			}
 
@@ -191,7 +174,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		public static IEnumerable<object> GetValuesExceptNone(Type type)
+		public static IEnumerable<int> GetValuesExceptNone(Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -199,7 +182,7 @@ namespace ICD.Common.Utils
 			if (!IsEnumType(type))
 				throw new InvalidOperationException(string.Format("{0} is not an enum", type.Name));
 
-			return GetValues(type).Where(v => (int)v != 0);
+			return GetValues(type).Where(v => v != 0);
 		}
 
 		#endregion
@@ -284,21 +267,22 @@ namespace ICD.Common.Utils
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
 			Type type = typeof(T);
+			int valueInt = (int)(object)value;
 
-			Dictionary<object, object[]> cache;
+			Dictionary<int, int[]> cache;
 			if (!s_EnumFlagsCache.TryGetValue(type, out cache))
 			{
-				cache = new Dictionary<object, object[]>();
+				cache = new Dictionary<int, int[]>();
 				s_EnumFlagsCache[type] = cache;
 			}
 
-			object[] flags;
-			if (!cache.TryGetValue(value, out flags))
+			int[] flags;
+			if (!cache.TryGetValue(valueInt, out flags))
 			{
 				flags = GetValues<T>().Where(e => HasFlag(value, e))
-				                      .Cast<object>()
+				                      .Cast<int>()
 				                      .ToArray();
-				cache[value] = flags;
+				cache[valueInt] = flags;
 			}
 
 			return flags.Cast<T>();
