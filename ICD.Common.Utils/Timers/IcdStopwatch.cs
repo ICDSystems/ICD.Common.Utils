@@ -131,6 +131,54 @@ namespace ICD.Common.Utils.Timers
 		}
 
 		/// <summary>
+		/// Executes the action the given number of iterations and prints timing information to the console.
+		/// </summary>
+		/// <param name="action"></param>
+		/// <param name="iterations"></param>
+		/// <param name="name"></param>
+		public static void Profile(Action action, int iterations, string name)
+		{
+			if (action == null)
+				throw new ArgumentNullException("action");
+
+			if (iterations <= 0)
+				throw new ArgumentOutOfRangeException("iterations", "Iterations must be greater than 0");
+
+			name = string.Format("{0} ({1} Iterations)", name, iterations);
+
+			long totalTime = 0;
+			List<long> times = new List<long>(iterations);
+
+			for (int index = 0; index < iterations; index++)
+			{
+				IcdStopwatch stopwatch = StartNew();
+				{
+					action();
+				}
+				long duration = stopwatch.ElapsedMilliseconds;
+				stopwatch.Stop();
+
+				times.AddSorted(duration);
+				totalTime += duration;
+			}
+
+			long averageTime = totalTime / iterations;
+			long medianTime = times[iterations / 2];
+			long shortestTime = times[0];
+			long longestTime = times[iterations - 1];
+
+			TableBuilder builder = new TableBuilder(name, "Duration (ms)");
+
+			builder.AddRow("Total", totalTime.ToString("n0"));
+			builder.AddRow("Average", averageTime.ToString("n0"));
+			builder.AddRow("Median", medianTime.ToString("n0"));
+			builder.AddRow("Shortest", shortestTime.ToString("n0"));
+			builder.AddRow("Longest", longestTime.ToString("n0"));
+
+			IcdConsole.PrintLine(builder.ToString());
+		}
+
+		/// <summary>
 		/// Profiles getting each item from the enumerable.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -139,6 +187,9 @@ namespace ICD.Common.Utils.Timers
 		/// <returns></returns>
 		public static IEnumerable<T> Profile<T>(IEnumerable<T> enumerable, string name)
 		{
+			if (enumerable == null)
+				throw new ArgumentNullException("enumerable");
+
 			// TODO - Print a fancy table with a total duration for the sequence
 
 			using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
@@ -218,7 +269,7 @@ namespace ICD.Common.Utils.Timers
 			if (elapsed >= RED_MILLISECONDS)
 				color = eConsoleColor.Red;
 
-			IcdConsole.Print(color, "{0}ms", elapsed);
+			IcdConsole.Print(color, "{0:n0}ms", elapsed);
 			IcdConsole.PrintLine(" to execute {0}", name);
 		}
 
