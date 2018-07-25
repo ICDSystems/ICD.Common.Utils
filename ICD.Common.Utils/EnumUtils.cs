@@ -35,11 +35,12 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			return type.IsAssignableTo(typeof(Enum)) || type
+			// Type 
+			return type
 #if !SIMPLSHARP
-				                                            .GetTypeInfo()
+				.GetTypeInfo()
 #endif
-				                                            .IsEnum;
+				.IsEnum;
 		}
 
 		/// <summary>
