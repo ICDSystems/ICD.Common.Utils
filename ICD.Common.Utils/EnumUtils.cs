@@ -4,7 +4,6 @@ using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
-using System.Globalization;
 using Crestron.SimplSharp.Reflection;
 #else
 using System.Reflection;
@@ -56,9 +55,10 @@ namespace ICD.Common.Utils
 		/// Returns true if the given value is an enum.
 		/// </summary>
 		/// <returns></returns>
-		public static bool IsEnum(object value)
+		public static bool IsEnum<T>(T value)
 		{
-			return value != null && IsEnumType(value.GetType());
+// ReSharper disable once CompareNonConstrainedGenericWithNull
+			return value != null && IsEnumType<T>();
 		}
 
 		/// <summary>
