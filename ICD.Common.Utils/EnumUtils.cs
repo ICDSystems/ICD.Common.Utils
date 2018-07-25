@@ -40,7 +40,7 @@ namespace ICD.Common.Utils
 #if !SIMPLSHARP
 				.GetTypeInfo()
 #endif
-				.IsEnum;
+				.IsEnum || type.IsAssignableTo(typeof(Enum));
 		}
 
 		/// <summary>
