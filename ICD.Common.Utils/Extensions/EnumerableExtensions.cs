@@ -852,6 +852,28 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns a random item from the given sequence.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static T Random<T>(this IEnumerable<T> extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			IList<T> sequence = extends as IList<T> ?? extends.ToArray();
+
+			if (sequence.Count == 0)
+				throw new InvalidOperationException("Sequence is empty.");
+
+			Random random = new Random(Guid.NewGuid().GetHashCode());
+			int index = random.Next(0, sequence.Count);
+
+			return sequence[index];
+		}
+
+		/// <summary>
 		/// Returns other if the sequence is empty.
 		/// Returns other if the sequence is non-empty and there are two different elements.
 		/// Returns the element of the sequence if it is non-empty and all elements are the same.
