@@ -102,7 +102,7 @@ namespace ICD.Common.Utils
 #if SIMPLSHARP
 			return Convert.ChangeType(value, ToEnum(value).GetTypeCode(), CultureInfo.InvariantCulture);
 #else
-            return Convert.ChangeType(value, Enum.GetUnderlyingType(value.GetType()));
+			return Convert.ChangeType(value, Enum.GetUnderlyingType(value.GetType()));
 #endif
 		}
 
@@ -419,7 +419,7 @@ namespace ICD.Common.Utils
 // ReSharper disable once CompareNonConstrainedGenericWithNull
 				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
 
-			return (int)(object)value != (int)(object)GetNoneValue<T>() && !HasMultipleFlags(value);
+			return HasAnyFlags(value) && !HasMultipleFlags(value);
 		}
 
 		/// <summary>
@@ -444,7 +444,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static bool HasMultipleFlags(int value)
 		{
-			return ((value & (value - 1)) != 0);
+			return (value & (value - 1)) != 0;
 		}
 
 		/// <summary>
@@ -455,7 +455,18 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static bool HasAnyFlags<T>(T value)
 		{
-			return GetFlagsExceptNone(value).Any();
+			return HasAnyFlags((int)(object)value);
+		}
+
+		/// <summary>
+		/// Returns true if the enum has any flags set.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool HasAnyFlags(int value)
+		{
+			return value > 0;
 		}
 
 		/// <summary>

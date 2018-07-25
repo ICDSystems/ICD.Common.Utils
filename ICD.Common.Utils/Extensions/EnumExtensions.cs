@@ -44,7 +44,7 @@ namespace ICD.Common.Utils.Extensions
 			// Not as good as the .NET 4 version of this function, but should be good enough
 			if (extends.GetType() != value.GetType())
 			{
-				string message = string.Format("Enumeration type mismatch.  The flag is of type '{0}', was expecting '{1}'.",
+				string message = string.Format("Enumeration type mismatch. The flag is of type '{0}', was expecting '{1}'.",
 				                               value.GetType(), extends.GetType());
 				throw new ArgumentException(message);
 			}

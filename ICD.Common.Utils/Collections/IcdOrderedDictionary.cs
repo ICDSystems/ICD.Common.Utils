@@ -25,7 +25,7 @@ namespace ICD.Common.Utils.Collections
 			get
 			{
 				return m_OrderedKeys.Select(k => m_Dictionary[k])
-				                    .ToArray(Count);
+				                    .ToArray(m_OrderedKeys.Count);
 			}
 		}
 
