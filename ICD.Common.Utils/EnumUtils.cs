@@ -25,12 +25,13 @@ namespace ICD.Common.Utils
 			s_EnumFlagsCache = new Dictionary<Type, Dictionary<int, object>>();
 		}
 
+		#region Validation
+
 		/// <summary>
 		/// Returns true if the given type is an enum.
 		/// </summary>
 		/// <returns></returns>
 		public static bool IsEnumType<T>()
-			where T : struct, IConvertible
 		{
 			return IsEnumType(typeof(T));
 		}
@@ -56,9 +57,34 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <returns></returns>
 		public static bool IsEnum<T>(T value)
-			where T : struct, IConvertible
 		{
-			return IsEnumType(value.GetType());
+			return value != null && IsEnumType(value.GetType());
+		}
+
+		/// <summary>
+		/// Returns true if the given enum type has the Flags attribute set.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static bool IsFlagsEnum<T>()
+		{
+			return IsFlagsEnum(typeof(T));
+		}
+
+		/// <summary>
+		/// Returns true if the given enum type has the Flags attribute set.
+		/// </summary>
+		/// <returns></returns>
+		public static bool IsFlagsEnum(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return type
+#if !SIMPLSHARP
+                .GetTypeInfo()
+#endif
+				.IsDefined(typeof(FlagsAttribute), false);
 		}
 
 		/// <summary>
@@ -73,20 +99,29 @@ namespace ICD.Common.Utils
 			if (!IsEnumType<T>())
 				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
 
-			if (!IsFlagsEnum<T>())
-				return GetValues<T>().Any(v => v.Equals(value));
-
-			int valueInt = (int)(object)value;
-
-			// Check if all of the flag values are defined
-			foreach (T flag in GetFlags(value))
-			{
-				int flagInt = (int)(object)flag;
-				valueInt = valueInt - flagInt;
-			}
-
-			return valueInt == 0;
+			T all = GetFlagsAllValue<T>();
+			return HasFlags(all, value);
 		}
+
+		/// <summary>
+		/// Returns true if the given value is defined as part of the given enum type.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static bool IsDefined(Type type, int value)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!IsEnumType(type))
+				throw new InvalidOperationException(string.Format("{0} is not an enum", type.Name));
+
+			int all = GetFlagsAllValue(type);
+			return HasFlags(all, value);
+		}
+
+		#endregion
 
 		#region Values
 
@@ -117,7 +152,10 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static IEnumerable<int> GetValues(Type type)
 		{
-			return GetValuesUncached(type).Cast<int>();
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return GetValuesUncached(type);
 		}
 
 		/// <summary>
@@ -134,8 +172,11 @@ namespace ICD.Common.Utils
 		/// Gets the values from an enumeration without performing any caching. This is slow because of reflection.
 		/// </summary>
 		/// <returns></returns>
-		private static IEnumerable<object> GetValuesUncached(Type type)
+		private static IEnumerable<int> GetValuesUncached(Type type)
 		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
 			if (!IsEnumType(type))
 				throw new InvalidOperationException(string.Format("{0} is not an enum", type.Name));
 
@@ -146,7 +187,8 @@ namespace ICD.Common.Utils
 				.GetTypeInfo()
 #endif
 				.GetFields(BindingFlags.Static | BindingFlags.Public)
-				.Select(x => x.GetValue(null));
+				.Select(x => x.GetValue(null))
+				.Cast<int>();
 		}
 
 		/// <summary>
@@ -166,36 +208,15 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static IEnumerable<int> GetValuesExceptNone(Type type)
 		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
 			return GetValues(type).Except(0);
 		}
 
 		#endregion
 
 		#region Flags
-
-		/// <summary>
-		/// Returns true if the given enum type has the Flags attribute set.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
-		public static bool IsFlagsEnum<T>()
-			where T : struct, IConvertible
-		{
-			return IsFlagsEnum(typeof(T));
-		}
-
-		/// <summary>
-		/// Returns true if the given enum type has the Flags attribute set.
-		/// </summary>
-		/// <returns></returns>
-		public static bool IsFlagsEnum(Type type)
-		{
-			return type
-#if !SIMPLSHARP
-                .GetTypeInfo()
-#endif
-				.IsDefined(typeof(FlagsAttribute), false);
-		}
 
 		/// <summary>
 		/// Gets the overlapping values of the given enum flags.
@@ -206,14 +227,32 @@ namespace ICD.Common.Utils
 		public static T GetFlagsIntersection<T>(params T[] values)
 			where T : struct, IConvertible
 		{
+			if (values == null)
+				throw new ArgumentNullException("values");
+
 			if (values.Length == 0)
 				return default(T);
 
-			int output = (int)(object)values.First();
-			foreach (T item in values.Skip(1))
-				output &= (int)(object)item;
+			int output = 0;
+			bool first = true;
 
-			return (T)Enum.ToObject(typeof(T), output);
+			foreach (T value in values)
+			{
+				if (first)
+				{
+					output = (int)(object)value;
+					first = false;
+				}
+				else
+				{
+					output &= (int)(object)value;
+				}
+
+				if (output == 0)
+					return default(T);
+			}
+
+			return (T)(object)output;
 		}
 
 		/// <summary>
@@ -229,7 +268,7 @@ namespace ICD.Common.Utils
 			int aInt = (int)(object)a;
 			int bInt = (int)(object)b;
 
-			return (T)Enum.ToObject(typeof(T), aInt & bInt);
+			return (T)(object)(aInt & bInt);
 		}
 
 		/// <summary>
@@ -329,6 +368,22 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Gets an enum value of the given type with every flag set.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static int GetFlagsAllValue(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!IsEnumType(type))
+				throw new ArgumentException(string.Format("{0} is not an enum", type.Name));
+
+			return GetValuesUncached(type).Aggregate(0, (current, value) => current | value);
+		}
+
+		/// <summary>
 		/// Returns true if the enum contains the given flag.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -344,6 +399,17 @@ namespace ICD.Common.Utils
 			if (!IsEnum(flag))
 				throw new ArgumentException(string.Format("{0} is not an enum", flag.GetType().Name), "flag");
 
+			return HasFlags(value, flag);
+		}
+
+		/// <summary>
+		/// Returns true if the enum contains the given flag.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="flag"></param>
+		/// <returns></returns>
+		public static bool HasFlag(int value, int flag)
+		{
 			return HasFlags(value, flag);
 		}
 
@@ -366,7 +432,18 @@ namespace ICD.Common.Utils
 			int a = (int)(object)value;
 			int b = (int)(object)flags;
 
-			return (a & b) == b;
+			return HasFlags(a, b);
+		}
+
+		/// <summary>
+		/// Returns true if the enum contains the given flag.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="flags"></param>
+		/// <returns></returns>
+		public static bool HasFlags(int value, int flags)
+		{
+			return (value & flags) == flags;
 		}
 
 		/// <summary>
@@ -472,6 +549,29 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Shorthand for parsing string to enum.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="data"></param>
+		/// <param name="ignoreCase"></param>
+		/// <returns></returns>
+		public static int Parse(Type type, string data, bool ignoreCase)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!IsEnumType(type))
+				throw new ArgumentException(string.Format("{0} is not an enum", type.Name));
+
+			int output;
+			if (TryParse(type, data, ignoreCase, out output))
+				return output;
+
+			string message = string.Format("Failed to parse {0} as {1}", StringUtils.ToRepresentation(data), type.Name);
+			throw new FormatException(message);
+		}
+
+		/// <summary>
 		/// Shorthand for parsing a string to enum. Returns false if the parse failed.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -490,6 +590,35 @@ namespace ICD.Common.Utils
 			try
 			{
 				result = (T)Enum.Parse(typeof(T), data, ignoreCase);
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Shorthand for parsing a string to enum. Returns false if the parse failed.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="data"></param>
+		/// <param name="ignoreCase"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		public static bool TryParse(Type type, string data, bool ignoreCase, out int result)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!IsEnumType(type))
+				throw new ArgumentException(string.Format("{0} is not an enum", type.Name));
+
+			result = 0;
+
+			try
+			{
+				result = (int)Enum.Parse(type, data, ignoreCase);
 				return true;
 			}
 			catch (Exception)
@@ -526,6 +655,40 @@ namespace ICD.Common.Utils
 
 			if (!IsDefined(output))
 				throw new ArgumentOutOfRangeException(string.Format("{0} is not a valid {1}", output, typeof(T).Name));
+
+			return output;
+		}
+
+		/// <summary>
+		/// Shorthand for parsing string to enum.
+		/// Will fail if the resulting value is not defined as part of the enum.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="data"></param>
+		/// <param name="ignoreCase"></param>
+		/// <returns></returns>
+		public static int ParseStrict(Type type, string data, bool ignoreCase)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!IsEnumType(type))
+				throw new ArgumentException(string.Format("{0} is not an enum", type.Name));
+
+			int output;
+
+			try
+			{
+				output = Parse(type, data, ignoreCase);
+			}
+			catch (Exception e)
+			{
+				throw new FormatException(
+					string.Format("Failed to parse {0} as {1}", StringUtils.ToRepresentation(data), type.Name), e);
+			}
+
+			if (!IsDefined(type, output))
+				throw new ArgumentOutOfRangeException(string.Format("{0} is not a valid {1}", output, type.Name));
 
 			return output;
 		}

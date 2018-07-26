@@ -273,20 +273,6 @@ namespace ICD.Common.Utils.Tests
             Assert.AreEqual(eTestFlagsEnum.None, outputB);
         }
 
-        [Test]
-		public void ToEnumGenericTest()
-		{
-			Assert.AreEqual(eTestEnum.A, EnumUtils.ToEnum(eTestEnum.A));
-			Assert.AreNotEqual(eTestEnum.B, EnumUtils.ToEnum(eTestEnum.A));
-		}
-
-		[Test]
-		public void ToEnumTest()
-		{
-			Assert.AreEqual(eTestEnum.A, EnumUtils.ToEnum((object)eTestEnum.A));
-			Assert.AreNotEqual(eTestEnum.B, EnumUtils.ToEnum((object)eTestEnum.A));
-		}
-
 		#endregion
 	}
 }

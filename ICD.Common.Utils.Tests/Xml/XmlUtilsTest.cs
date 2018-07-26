@@ -253,6 +253,7 @@ namespace ICD.Common.Utils.Tests.Xml
 		[TestCase("<Test><Child>A</Child></Test>", "Child", true, eTestEnum.A)]
 		[TestCase("<Test><Child>A, B</Child></Test>", "Child", true, eTestEnum.A | eTestEnum.B)]
 		public void ReadChildElementContentAsEnumTest<T>(string xml, string childElement, bool ignoreCase, T expected)
+			where T : struct, IConvertible
 		{
 			Assert.AreEqual(expected, XmlUtils.ReadChildElementContentAsEnum<T>(xml, childElement, ignoreCase));
 		}
