@@ -58,6 +58,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool IsEnum<T>(T value)
 		{
+// ReSharper disable once CompareNonConstrainedGenericWithNull
 			return value != null && IsEnumType(value.GetType());
 		}
 
@@ -165,7 +166,7 @@ namespace ICD.Common.Utils
 		private static IEnumerable<T> GetValuesUncached<T>()
 			where T : struct, IConvertible
 		{
-			return GetValuesUncached(typeof(T)).Cast<T>();
+			return GetValuesUncached(typeof(T)).Select(i => (T)(object)i);
 		}
 
 		/// <summary>
