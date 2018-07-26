@@ -458,7 +458,9 @@ namespace ICD.Common.Utils
 			if (!IsEnum(value))
 				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
 
-			return HasAnyFlags(value) && !HasMultipleFlags(value);
+			int numeric = (int)(object)value;
+
+			return HasAnyFlags(numeric) && !HasMultipleFlags(numeric);
 		}
 
 		/// <summary>
