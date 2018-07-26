@@ -30,6 +30,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <returns></returns>
 		public static bool IsEnumType<T>()
+			where T : struct, IConvertible
 		{
 			return IsEnumType(typeof(T));
 		}
@@ -55,9 +56,9 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <returns></returns>
 		public static bool IsEnum<T>(T value)
+			where T : struct, IConvertible
 		{
-// ReSharper disable once CompareNonConstrainedGenericWithNull
-			return value != null && IsEnumType(value.GetType());
+			return IsEnumType(value.GetType());
 		}
 
 		/// <summary>
@@ -67,6 +68,7 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public static bool IsDefined<T>(T value)
+			where T : struct, IConvertible
 		{
 			if (!IsEnumType<T>())
 				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
@@ -94,6 +96,7 @@ namespace ICD.Common.Utils
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static IEnumerable<T> GetValues<T>()
+			where T : struct, IConvertible
 		{
 			Type type = typeof(T);
 
@@ -122,6 +125,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <returns></returns>
 		private static IEnumerable<T> GetValuesUncached<T>()
+			where T : struct, IConvertible
 		{
 			return GetValuesUncached(typeof(T)).Cast<T>();
 		}
@@ -151,6 +155,7 @@ namespace ICD.Common.Utils
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static IEnumerable<T> GetValuesExceptNone<T>()
+			where T : struct, IConvertible
 		{
 			return GetFlagsExceptNone<T>();
 		}
@@ -174,6 +179,7 @@ namespace ICD.Common.Utils
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static bool IsFlagsEnum<T>()
+			where T : struct, IConvertible
 		{
 			return IsFlagsEnum(typeof(T));
 		}
@@ -198,6 +204,7 @@ namespace ICD.Common.Utils
 		/// <param name="values"></param>
 		/// <returns></returns>
 		public static T GetFlagsIntersection<T>(params T[] values)
+			where T : struct, IConvertible
 		{
 			if (values.Length == 0)
 				return default(T);
@@ -217,6 +224,7 @@ namespace ICD.Common.Utils
 		/// <param name="b"></param>
 		/// <returns></returns>
 		public static T GetFlagsIntersection<T>(T a, T b)
+			where T : struct, IConvertible
 		{
 			int aInt = (int)(object)a;
 			int bInt = (int)(object)b;
@@ -231,10 +239,10 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public static IEnumerable<T> GetFlags<T>(T value)
+			where T : struct, IConvertible
 		{
 			if (!IsEnum(value))
-// ReSharper disable once CompareNonConstrainedGenericWithNull
-				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
+				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
 
 			Type type = typeof(T);
 			int valueInt = (int)(object)value;
@@ -262,6 +270,7 @@ namespace ICD.Common.Utils
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static IEnumerable<T> GetFlagsExceptNone<T>()
+			where T : struct, IConvertible
 		{
 			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
@@ -277,10 +286,10 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public static IEnumerable<T> GetFlagsExceptNone<T>(T value)
+			where T : struct, IConvertible
 		{
 			if (!IsEnum(value))
-// ReSharper disable once CompareNonConstrainedGenericWithNull
-				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
+				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
 
 			return GetFlags(value).Except(default(T));
 		}
@@ -295,10 +304,10 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public static IEnumerable<T> GetAllFlagCombinationsExceptNone<T>(T value)
+			where T : struct, IConvertible
 		{
 			if (!IsEnum(value))
-				// ReSharper disable once CompareNonConstrainedGenericWithNull
-				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
+				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
 
 			int maxEnumValue = (GetValues<T>().Max(v => (int)(object)v) * 2) -1;
 			return Enumerable.Range(1, maxEnumValue).Select(i => (T)(object)i ).Where(v => HasFlags(value, v));
@@ -310,6 +319,7 @@ namespace ICD.Common.Utils
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static T GetFlagsAllValue<T>()
+			where T : struct, IConvertible
 		{
 			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
@@ -326,16 +336,15 @@ namespace ICD.Common.Utils
 		/// <param name="flag"></param>
 		/// <returns></returns>
 		public static bool HasFlag<T>(T value, T flag)
+			where T : struct, IConvertible
 		{
 			if (!IsEnum(value))
-// ReSharper disable once CompareNonConstrainedGenericWithNull
-				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
+				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
 
 			if (!IsEnum(flag))
-// ReSharper disable once CompareNonConstrainedGenericWithNull
-				throw new ArgumentException(string.Format("{0} is not an enum", flag == null ? "NULL" : flag.GetType().Name), "flag");
+				throw new ArgumentException(string.Format("{0} is not an enum", flag.GetType().Name), "flag");
 
-			return ToEnum(value).HasFlag(ToEnum(flag));
+			return HasFlags(value, flag);
 		}
 
 		/// <summary>
@@ -346,16 +355,18 @@ namespace ICD.Common.Utils
 		/// <param name="flags"></param>
 		/// <returns></returns>
 		public static bool HasFlags<T>(T value, T flags)
+			where T : struct, IConvertible
 		{
 			if (!IsEnum(value))
-// ReSharper disable once CompareNonConstrainedGenericWithNull
-				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
+				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
 
 			if (!IsEnum(flags))
-// ReSharper disable once CompareNonConstrainedGenericWithNull
-				throw new ArgumentException(string.Format("{0} is not an enum", flags == null ? "NULL" : flags.GetType().Name), "flags");
+				throw new ArgumentException(string.Format("{0} is not an enum", flags.GetType().Name), "flags");
 
-			return ToEnum(value).HasFlags(ToEnum(flags));
+			int a = (int)(object)value;
+			int b = (int)(object)flags;
+
+			return (a & b) == b;
 		}
 
 		/// <summary>
@@ -365,10 +376,10 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public static bool HasSingleFlag<T>(T value)
+			where T : struct, IConvertible
 		{
 			if (!IsEnum(value))
-// ReSharper disable once CompareNonConstrainedGenericWithNull
-				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
+				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
 
 			return HasAnyFlags(value) && !HasMultipleFlags(value);
 		}
@@ -379,10 +390,10 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public static bool HasMultipleFlags<T>(T value)
+			where T : struct, IConvertible
 		{
 			if (!IsEnum(value))
-// ReSharper disable once CompareNonConstrainedGenericWithNull
-				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
+				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
 
 			return HasMultipleFlags((int)(object)value);
 		}
@@ -405,6 +416,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		[PublicAPI]
 		public static bool HasAnyFlags<T>(T value)
+			where T : struct, IConvertible
 		{
 			return HasAnyFlags((int)(object)value);
 		}
@@ -428,6 +440,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		[PublicAPI]
 		public static bool HasAnyFlags<T>(T value, T other)
+			where T : struct, IConvertible
 		{
 			T intersection = GetFlagsIntersection(value, other);
 			return HasAnyFlags(intersection);
@@ -445,6 +458,7 @@ namespace ICD.Common.Utils
 		/// <param name="ignoreCase"></param>
 		/// <returns></returns>
 		public static T Parse<T>(string data, bool ignoreCase)
+			where T : struct, IConvertible
 		{
 			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
@@ -466,6 +480,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		public static bool TryParse<T>(string data, bool ignoreCase, out T result)
+			where T : struct, IConvertible
 		{
 			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
@@ -492,6 +507,7 @@ namespace ICD.Common.Utils
 		/// <param name="ignoreCase"></param>
 		/// <returns></returns>
 		public static T ParseStrict<T>(string data, bool ignoreCase)
+			where T : struct, IConvertible
 		{
 			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
@@ -524,6 +540,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		public static bool TryParseStrict<T>(string data, bool ignoreCase, out T result)
+			where T : struct, IConvertible
 		{
 			if (!IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
@@ -539,21 +556,6 @@ namespace ICD.Common.Utils
 			{
 				return false;
 			}
-		}
-
-		/// <summary>
-		/// Converts the given enum value to an Enum.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static Enum ToEnum<T>(T value)
-		{
-			if (!IsEnum(value))
-// ReSharper disable once CompareNonConstrainedGenericWithNull
-				throw new ArgumentException(string.Format("{0} is not an enum", value == null ? "NULL" : value.GetType().Name), "value");
-
-			return (Enum)(object)value;
 		}
 
 		#endregion

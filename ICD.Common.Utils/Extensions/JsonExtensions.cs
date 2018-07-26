@@ -155,6 +155,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		[PublicAPI]
 		public static T GetValueAsEnum<T>(this JsonReader extends)
+			where T : struct, IConvertible
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

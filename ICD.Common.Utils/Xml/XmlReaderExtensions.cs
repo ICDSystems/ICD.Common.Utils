@@ -392,6 +392,7 @@ namespace ICD.Common.Utils.Xml
 		/// <returns></returns>
 		[PublicAPI]
 		public static T ReadElementContentAsEnum<T>(this IcdXmlReader extends, bool ignoreCase)
+			where T : struct, IConvertible
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

@@ -422,6 +422,7 @@ namespace ICD.Common.Utils.Xml
 		/// <returns></returns>
 		[PublicAPI]
 		public static T ReadChildElementContentAsEnum<T>(string xml, string childElement, bool ignoreCase)
+			where T : struct, IConvertible
 		{
 			if (!EnumUtils.IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
@@ -608,7 +609,7 @@ namespace ICD.Common.Utils.Xml
 		/// <returns></returns>
 		[PublicAPI]
 		public static T? TryReadChildElementContentAsEnum<T>(string xml, string childElement, bool ignoreCase)
-			where T : struct
+			where T : struct, IConvertible
 		{
 			if (!EnumUtils.IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
@@ -628,6 +629,7 @@ namespace ICD.Common.Utils.Xml
 		/// <returns></returns>
 		[PublicAPI]
 		public static bool TryReadChildElementContentAsEnum<T>(string xml, string childElement, bool ignoreCase, out T output)
+			where T : struct, IConvertible
 		{
 			if (!EnumUtils.IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
@@ -731,6 +733,7 @@ namespace ICD.Common.Utils.Xml
 		/// <returns></returns>
 		[PublicAPI]
 		public static T ReadElementContentAsEnum<T>(string xml, bool ignoreCase)
+			where T : struct, IConvertible
 		{
 			if (!EnumUtils.IsEnumType<T>())
 				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
