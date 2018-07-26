@@ -112,11 +112,27 @@ namespace ICD.Common.Utils
 		/// Gets the values from an enumeration without performing any caching. This is slow because of reflection.
 		/// </summary>
 		/// <returns></returns>
+		public static IEnumerable<int> GetValues(Type type)
+		{
+			return GetValuesUncached(type).Cast<int>();
+		}
+
+		/// <summary>
+		/// Gets the values from an enumeration without performing any caching. This is slow because of reflection.
+		/// </summary>
+		/// <returns></returns>
 		private static IEnumerable<T> GetValuesUncached<T>()
 		{
-			Type type = typeof(T);
+			return GetValuesUncached(typeof(T)).Cast<T>();
+		}
 
-			if (!IsEnumType<T>())
+		/// <summary>
+		/// Gets the values from an enumeration without performing any caching. This is slow because of reflection.
+		/// </summary>
+		/// <returns></returns>
+		private static IEnumerable<object> GetValuesUncached(Type type)
+		{
+			if (!IsEnumType(type))
 				throw new InvalidOperationException(string.Format("{0} is not an enum", type.Name));
 
 			return type
@@ -126,8 +142,7 @@ namespace ICD.Common.Utils
 				.GetTypeInfo()
 #endif
 				.GetFields(BindingFlags.Static | BindingFlags.Public)
-				.Select(x => x.GetValue(null))
-				.Cast<T>();
+				.Select(x => x.GetValue(null));
 		}
 
 		/// <summary>
@@ -138,6 +153,15 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetValuesExceptNone<T>()
 		{
 			return GetFlagsExceptNone<T>();
+		}
+
+		/// <summary>
+		/// Gets the values from an enumeration except the 0 value without performing any caching. This is slow because of reflection.
+		/// </summary>
+		/// <returns></returns>
+		public static IEnumerable<int> GetValuesExceptNone(Type type)
+		{
+			return GetValues(type).Except(0);
 		}
 
 		#endregion
@@ -151,10 +175,16 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool IsFlagsEnum<T>()
 		{
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+			return IsFlagsEnum(typeof(T));
+		}
 
-			return typeof(T)
+		/// <summary>
+		/// Returns true if the given enum type has the Flags attribute set.
+		/// </summary>
+		/// <returns></returns>
+		public static bool IsFlagsEnum(Type type)
+		{
+			return type
 #if !SIMPLSHARP
                 .GetTypeInfo()
 #endif
