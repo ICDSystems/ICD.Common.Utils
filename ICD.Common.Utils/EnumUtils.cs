@@ -220,6 +220,64 @@ namespace ICD.Common.Utils
 		#region Flags
 
 		/// <summary>
+		/// Excludes b from a.
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public static T ExcludeFlags<T>(T a, T b)
+			where T : struct, IConvertible
+		{
+			if (!IsEnumType<T>())
+				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+
+			int aInt = (int)(object)a;
+			int bInt = (int)(object)b;
+
+			return (T)(object)ExcludeFlags(aInt, bInt);
+		}
+
+		/// <summary>
+		/// Excludes b from a.
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public static int ExcludeFlags(int a, int b)
+		{
+			return a & ~b;
+		}
+
+		/// <summary>
+		/// Includes a and b.
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public static T IncludeFlags<T>(T a, T b)
+			where T : struct, IConvertible
+		{
+			if (!IsEnumType<T>())
+				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+
+			int aInt = (int)(object)a;
+			int bInt = (int)(object)b;
+
+			return (T)(object)IncludeFlags(aInt, bInt);
+		}
+
+		/// <summary>
+		/// Includes a and b.
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public static int IncludeFlags(int a, int b)
+		{
+			return a | b;
+		}
+
+		/// <summary>
 		/// Gets the overlapping values of the given enum flags.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -230,6 +288,9 @@ namespace ICD.Common.Utils
 		{
 			if (values == null)
 				throw new ArgumentNullException("values");
+
+			if (!IsEnumType<T>())
+				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			if (values.Length == 0)
 				return default(T);
@@ -266,6 +327,9 @@ namespace ICD.Common.Utils
 		public static T GetFlagsIntersection<T>(T a, T b)
 			where T : struct, IConvertible
 		{
+			if (!IsEnumType<T>())
+				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
+
 			int aInt = (int)(object)a;
 			int bInt = (int)(object)b;
 
