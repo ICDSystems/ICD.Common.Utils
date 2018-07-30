@@ -164,19 +164,19 @@ namespace ICD.Common.Utils.Timers
 				totalTicks += duration;
 			}
 
-			long totalMs = totalTicks / TimeSpan.TicksPerMillisecond;
-			long averageMs = (totalTicks / iterations) / TimeSpan.TicksPerMillisecond;
-			long medianMs = (orderedMs[iterations / 2]) / TimeSpan.TicksPerMillisecond;
-			long shortestMs = orderedMs[0] / TimeSpan.TicksPerMillisecond;
-			long longestMs = orderedMs[iterations - 1] / TimeSpan.TicksPerMillisecond;
+			float totalMs = totalTicks / (float)TimeSpan.TicksPerMillisecond;
+			float averageMs = (totalTicks / (float)iterations) / TimeSpan.TicksPerMillisecond;
+			float medianMs = (orderedMs[iterations / 2]) / (float)TimeSpan.TicksPerMillisecond;
+			float shortestMs = orderedMs[0] / (float)TimeSpan.TicksPerMillisecond;
+			float longestMs = orderedMs[iterations - 1] / (float)TimeSpan.TicksPerMillisecond;
 
 			TableBuilder builder = new TableBuilder(name, "Duration (ms)");
 
-			builder.AddRow("Total", totalMs.ToString("n0"));
-			builder.AddRow("Average", averageMs.ToString("n0"));
-			builder.AddRow("Median", medianMs.ToString("n0"));
-			builder.AddRow("Shortest", shortestMs.ToString("n0"));
-			builder.AddRow("Longest", longestMs.ToString("n0"));
+			builder.AddRow("Total", string.Format("{0:n}", totalMs));
+			builder.AddRow("Average", string.Format("{0:n}", averageMs));
+			builder.AddRow("Median", string.Format("{0:n}", medianMs));
+			builder.AddRow("Shortest", string.Format("{0:n}", shortestMs));
+			builder.AddRow("Longest", string.Format("{0:n}", longestMs));
 
 			IcdConsole.PrintLine(builder.ToString());
 		}
@@ -264,7 +264,7 @@ namespace ICD.Common.Utils.Timers
 
 		private static void PrintProfile(IcdStopwatch stopwatch, string name)
 		{
-			long elapsed = stopwatch.ElapsedMilliseconds;
+			float elapsed = stopwatch.ElapsedTicks / (float)TimeSpan.TicksPerMillisecond;
 
 			eConsoleColor color = eConsoleColor.Green;
 			if (elapsed >= YELLOW_MILLISECONDS)
@@ -272,7 +272,7 @@ namespace ICD.Common.Utils.Timers
 			if (elapsed >= RED_MILLISECONDS)
 				color = eConsoleColor.Red;
 
-			IcdConsole.Print(color, "{0:n0}ms", elapsed);
+			IcdConsole.Print(color, "{0:n}ms", elapsed);
 			IcdConsole.PrintLine(" to execute {0}", name);
 		}
 
