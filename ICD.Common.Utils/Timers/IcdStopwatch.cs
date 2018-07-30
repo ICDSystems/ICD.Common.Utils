@@ -20,6 +20,8 @@ namespace ICD.Common.Utils.Timers
 
 		#region Properties
 
+		public long ElapsedTicks { get { return m_Stopwatch.ElapsedTicks; } }
+
 		public long ElapsedMilliseconds { get { return m_Stopwatch.ElapsedMilliseconds; } }
 
 		public bool IsRunning { get { return m_Stopwatch.IsRunning; } }
@@ -146,8 +148,8 @@ namespace ICD.Common.Utils.Timers
 
 			name = string.Format("{0} ({1} Iterations)", name, iterations);
 
-			long totalTime = 0;
-			List<long> times = new List<long>(iterations);
+			long totalTicks = 0;
+			List<long> orderedMs = new List<long>(iterations);
 
 			for (int index = 0; index < iterations; index++)
 			{
@@ -155,25 +157,26 @@ namespace ICD.Common.Utils.Timers
 				{
 					action();
 				}
-				long duration = stopwatch.ElapsedMilliseconds;
+				long duration = stopwatch.ElapsedTicks;
 				stopwatch.Stop();
 
-				times.AddSorted(duration);
-				totalTime += duration;
+				orderedMs.AddSorted(duration);
+				totalTicks += duration;
 			}
 
-			long averageTime = totalTime / iterations;
-			long medianTime = times[iterations / 2];
-			long shortestTime = times[0];
-			long longestTime = times[iterations - 1];
+			long totalMs = totalTicks / TimeSpan.TicksPerMillisecond;
+			long averageMs = (totalTicks / iterations) / TimeSpan.TicksPerMillisecond;
+			long medianMs = (orderedMs[iterations / 2]) / TimeSpan.TicksPerMillisecond;
+			long shortestMs = orderedMs[0] / TimeSpan.TicksPerMillisecond;
+			long longestMs = orderedMs[iterations - 1] / TimeSpan.TicksPerMillisecond;
 
 			TableBuilder builder = new TableBuilder(name, "Duration (ms)");
 
-			builder.AddRow("Total", totalTime.ToString("n0"));
-			builder.AddRow("Average", averageTime.ToString("n0"));
-			builder.AddRow("Median", medianTime.ToString("n0"));
-			builder.AddRow("Shortest", shortestTime.ToString("n0"));
-			builder.AddRow("Longest", longestTime.ToString("n0"));
+			builder.AddRow("Total", totalMs.ToString("n0"));
+			builder.AddRow("Average", averageMs.ToString("n0"));
+			builder.AddRow("Median", medianMs.ToString("n0"));
+			builder.AddRow("Shortest", shortestMs.ToString("n0"));
+			builder.AddRow("Longest", longestMs.ToString("n0"));
 
 			IcdConsole.PrintLine(builder.ToString());
 		}
