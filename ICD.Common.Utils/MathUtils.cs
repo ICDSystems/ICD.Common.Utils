@@ -138,30 +138,6 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Gets the digit count for the given number.
-		/// </summary>
-		/// <param name="number"></param>
-		/// <returns></returns>
-		public static int GetNumberOfDigits(int number)
-		{
-			int output = number.ToString().Length;
-			if (number < 0)
-				output--;
-
-			return output;
-		}
-
-		/// <summary>
-		/// Gets the digit count for the given number.
-		/// </summary>
-		/// <param name="number"></param>
-		/// <returns></returns>
-		public static int GetNumberOfDigits(uint number)
-		{
-			return number.ToString().Length;
-		}
-
-		/// <summary>
 		/// Takes a sequence of numbers:
 		///		1, 3, 5, 6, 7, 8, 9, 10, 12
 		/// And calculates the continuous ranges:

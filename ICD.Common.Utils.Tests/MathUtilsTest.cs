@@ -36,18 +36,10 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(100, MathUtils.MapRange(0, 10, 0, 100, 10));
 		}
 
-        [UsedImplicitly]
-        [TestCase(-10000, 5)]
-        [TestCase(10000, 5)]
-        public void GetNumberOfDigitsTest(int number, int expected)
-        {
-            Assert.AreEqual(expected, MathUtils.GetNumberOfDigits(number));
-        }
-
         [Test, UsedImplicitly]
 		public void GetRangesTest()
         {
-            IEnumerable<int> values = new int[] { 1, 3, 5, 6, 7, 8, 9, 10, 12 };
+            IEnumerable<int> values = new [] { 1, 3, 5, 6, 7, 8, 9, 10, 12 };
             int[][] ranges = MathUtils.GetRanges(values).ToArray();
 
             Assert.AreEqual(4, ranges.Length);
@@ -68,7 +60,7 @@ namespace ICD.Common.Utils.Tests
         [Test, UsedImplicitly]
         public void RoundToNearestTest()
         {
-            IEnumerable<int> values = new int[] { 0, 15, 30, 45 };
+            IEnumerable<int> values = new [] { 0, 15, 30, 45 };
             Assert.AreEqual(15, MathUtils.RoundToNearest(21, values));
         }
     }
