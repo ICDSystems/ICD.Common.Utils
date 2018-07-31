@@ -47,8 +47,12 @@ namespace ICD.Common.Utils
 			if (input == null)
 				throw new ArgumentNullException("input");
 
-			string[] strings = input.Select(c => ToHexLiteral(c)).ToArray();
-			return string.Join("", strings);
+			StringBuilder builder = new StringBuilder();
+
+			foreach (string literal in input.Select(c => ToHexLiteral(c)))
+				builder.Append(literal);
+
+			return builder.ToString();
 		}
 
 		/// <summary>
@@ -80,7 +84,12 @@ namespace ICD.Common.Utils
 			if (data == null)
 				throw new ArgumentNullException("data");
 
-			return string.Join("", data.Split(4).Select(s => FromHexLiteralCharacter(s).ToString()).ToArray());
+			StringBuilder builder = new StringBuilder();
+
+			foreach (char item in data.Split(4).Select(s => FromHexLiteralCharacter(s)))
+				builder.Append(item);
+
+			return builder.ToString();
 		}
 
 		/// <summary>
@@ -112,8 +121,12 @@ namespace ICD.Common.Utils
 			if (input == null)
 				throw new ArgumentNullException("input");
 
-			string[] strings = input.Select(c => ToMixedReadableHexLiteral(c)).ToArray();
-			return string.Join("", strings);
+			StringBuilder builder = new StringBuilder();
+
+			foreach (string item in input.Select(c => ToMixedReadableHexLiteral(c)))
+				builder.Append(item);
+
+			return builder.ToString();
 		}
 
 		/// <summary>
@@ -424,7 +437,23 @@ namespace ICD.Common.Utils
 			if (items == null)
 				throw new ArgumentNullException("items");
 
-			return string.Format("[{0}]", string.Join(", ", items.Select(i => ToString(i)).ToArray()));
+			StringBuilder builder = new StringBuilder();
+			builder.Append('[');
+
+			bool first = true;
+
+			foreach (T item in items)
+			{
+				if (!first)
+					builder.Append(", ");
+				first = false;
+
+				builder.Append(ToString(item));
+			}
+
+			builder.Append(']');
+
+			return builder.ToString();
 		}
 
 		/// <summary>
