@@ -7,7 +7,7 @@ namespace ICD.Common.Utils.Services.Logging
 	/// <summary>
 	/// Log Entry Item
 	/// </summary>
-	public struct LogItem
+	public struct LogItem : IEquatable<LogItem>
 	{
 		private readonly string m_Message;
 		private readonly eSeverity m_Severity;
@@ -93,7 +93,14 @@ namespace ICD.Common.Utils.Services.Logging
 		/// <returns></returns>
 		public static bool operator !=(LogItem a1, LogItem a2)
 		{
-			return !(a1 == a2);
+			return !a1.Equals(a2);
+		}
+
+		public bool Equals(LogItem other)
+		{
+			return m_Severity == other.m_Severity &&
+			       m_Timestamp == other.m_Timestamp &&
+			       m_Message == other.m_Message;
 		}
 
 		/// <summary>
@@ -103,10 +110,7 @@ namespace ICD.Common.Utils.Services.Logging
 		/// <returns></returns>
 		public override bool Equals(object other)
 		{
-			if (other == null || GetType() != other.GetType())
-				return false;
-
-			return GetHashCode() == ((LogItem)other).GetHashCode();
+			return other is LogItem && Equals((LogItem)other);
 		}
 
 		/// <summary>

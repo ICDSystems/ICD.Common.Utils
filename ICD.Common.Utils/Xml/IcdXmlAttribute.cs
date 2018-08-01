@@ -1,9 +1,11 @@
-﻿namespace ICD.Common.Utils.Xml
+﻿using System;
+
+namespace ICD.Common.Utils.Xml
 {
 	/// <summary>
 	/// IcdXmlAttribute represents an attribute="value" pair from xml.
 	/// </summary>
-	public struct IcdXmlAttribute
+	public struct IcdXmlAttribute : IEquatable<IcdXmlAttribute>
 	{
 		private readonly string m_Name;
 		private readonly string m_Value;
@@ -41,7 +43,13 @@
 		/// <returns></returns>
 		public static bool operator !=(IcdXmlAttribute a1, IcdXmlAttribute a2)
 		{
-			return !(a1 == a2);
+			return !a1.Equals(a2);
+		}
+
+		public bool Equals(IcdXmlAttribute other)
+		{
+			return m_Name == other.m_Name &&
+			       m_Value == other.m_Value;
 		}
 
 		/// <summary>
@@ -51,10 +59,7 @@
 		/// <returns></returns>
 		public override bool Equals(object other)
 		{
-			if (other == null || GetType() != other.GetType())
-				return false;
-
-			return GetHashCode() == ((IcdXmlAttribute)other).GetHashCode();
+			return other is IcdXmlAttribute && Equals((IcdXmlAttribute)other);
 		}
 
 		/// <summary>
