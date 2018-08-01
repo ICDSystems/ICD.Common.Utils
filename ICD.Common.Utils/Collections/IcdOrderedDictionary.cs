@@ -60,13 +60,26 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="comparer"></param>
 		public IcdOrderedDictionary(IComparer<TKey> comparer)
+			: this(comparer, EqualityComparer<TKey>.Default)
+		{
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="comparer"></param>
+		/// <param name="equalityComparer"></param>
+		public IcdOrderedDictionary(IComparer<TKey> comparer, IEqualityComparer<TKey> equalityComparer)
 		{
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
 
+			if (equalityComparer == null)
+				throw new ArgumentNullException("equalityComparer");
+
 			m_Comparer = comparer;
 			m_OrderedKeys = new List<TKey>();
-			m_Dictionary = new Dictionary<TKey, TValue>();
+			m_Dictionary = new Dictionary<TKey, TValue>(equalityComparer);
 		}
 
 		#region Methods
