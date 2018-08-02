@@ -13,7 +13,7 @@ namespace ICD.Common.Utils
 		private readonly object m_Instance;
 
 		private readonly List<string> m_PropertyOrder;
-		private readonly Dictionary<string, object> m_PropertyValues;
+		private readonly Dictionary<string, string> m_PropertyValues;
 
 		/// <summary>
 		/// Constructor.
@@ -24,15 +24,30 @@ namespace ICD.Common.Utils
 			m_Instance = instance;
 
 			m_PropertyOrder = new List<string>();
-			m_PropertyValues = new Dictionary<string, object>();
+			m_PropertyValues = new Dictionary<string, string>();
 		}
 
 		/// <summary>
-		/// Adds the property with the given name and value to the 
+		/// Adds the property with the given name and value to the builder.
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="value"></param>
 		public void AppendProperty(string name, object value)
+		{
+			m_PropertyOrder.Remove(name);
+			m_PropertyOrder.Add(name);
+
+			string valueString = GetValueStringRepresentation(value);
+
+			m_PropertyValues[name] = valueString;
+		}
+
+		/// <summary>
+		/// Adds the property with the given name and value to the builder without any additonal formatting.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		public void AppendPropertyRaw(string name, string value)
 		{
 			m_PropertyOrder.Remove(name);
 			m_PropertyOrder.Add(name);
@@ -60,8 +75,7 @@ namespace ICD.Common.Utils
 				builder.Append(property);
 				builder.Append('=');
 
-				object value = m_PropertyValues[property];
-				string valueString = GetValueStringRepresentation(value);
+				string valueString = m_PropertyValues[property];
 				builder.Append(valueString);
 
 				if (index < m_PropertyOrder.Count - 1)
