@@ -205,8 +205,11 @@ namespace ICD.Common.Utils.Json
 
 			StringBuilder builder = new StringBuilder();
 
-			using (JsonTextWriter writer = new JsonTextWriter(new IcdStringWriter(builder).WrappedStringWriter))
-				serializeMethod(writer);
+			using (IcdStringWriter stringWriter = new IcdStringWriter(builder))
+			{
+				using (JsonTextWriter writer = new JsonTextWriter(stringWriter.WrappedStringWriter))
+					serializeMethod(writer);
+			}
 
 			return builder.ToString();
 		}
@@ -224,8 +227,11 @@ namespace ICD.Common.Utils.Json
 			if (deserializeMethod == null)
 				throw new ArgumentNullException("deserializeMethod");
 
-			using (JsonTextReader reader = new JsonTextReader(new IcdStringReader(json).WrappedStringReader))
-				return deserializeMethod(reader);
+			using (IcdStringReader stringReader = new IcdStringReader(json))
+			{
+				using (JsonTextReader reader = new JsonTextReader(stringReader.WrappedStringReader))
+					return deserializeMethod(reader);
+			}
 		}
 
 		/// <summary>
