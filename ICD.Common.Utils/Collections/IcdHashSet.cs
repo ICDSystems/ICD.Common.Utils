@@ -246,7 +246,7 @@ namespace ICD.Common.Utils.Collections
 				throw new ArgumentNullException("items");
 
 			foreach (T item in items)
-				Add(item);
+				m_Dict[item] = null;
 		}
 
 		/// <summary>
