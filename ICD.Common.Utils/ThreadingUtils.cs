@@ -215,7 +215,11 @@ namespace ICD.Common.Utils
 
 			private string BuildName()
 			{
-				return string.Format("{0}.{1}", MethodInfo.DeclaringType.Name, MethodInfo.GetSignature(true));
+				Type declaring = MethodInfo.DeclaringType;
+
+				return declaring == null
+					       ? MethodInfo.GetSignature(true)
+					       : string.Format("{0}.{1}", declaring.Name, MethodInfo.GetSignature(true));
 			}
 		}
 	}
