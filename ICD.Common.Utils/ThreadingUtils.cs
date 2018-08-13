@@ -11,7 +11,7 @@ using Crestron.SimplSharp;
 using Crestron.SimplSharp.Reflection;
 #else
 using System.Threading.Tasks;
-using System.Reflection;
+using MethodInfo = System.Reflection.MethodInfo;
 #endif
 
 namespace ICD.Common.Utils

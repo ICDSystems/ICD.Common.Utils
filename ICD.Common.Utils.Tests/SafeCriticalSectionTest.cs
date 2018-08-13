@@ -47,14 +47,14 @@ namespace ICD.Common.Utils.Tests
 			section.Enter();
 
 			// ReSharper disable once NotAccessedVariable
-			object handle = ThreadingUtils.SafeInvoke(() => { result = section.TryEnter() ? 0 : 1; });
+			ThreadingUtils.SafeInvoke(() => { result = section.TryEnter() ? 0 : 1; });
 			
 			Assert.IsTrue(ThreadingUtils.Wait(() => result == 1, 1000));
 
 			section.Leave();
 
 			// ReSharper disable once RedundantAssignment
-			handle = ThreadingUtils.SafeInvoke(() =>
+			ThreadingUtils.SafeInvoke(() =>
 			{
 				result = section.TryEnter() ? 2 : 0;
 				section.Leave();
