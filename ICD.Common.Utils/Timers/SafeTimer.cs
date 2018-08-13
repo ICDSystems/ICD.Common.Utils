@@ -171,14 +171,9 @@ namespace ICD.Common.Utils.Timers
 			}
 			catch (Exception e)
 			{
-				LogException(e);
+				string message = string.Format("{0} failed to execute callback - {1}", GetType().Name, e.Message);
+				ServiceProvider.TryGetService<ILoggerService>().AddEntry(eSeverity.Error, e, message);
 			}
-		}
-
-		private void LogException(Exception e)
-		{
-			string message = string.Format("{0} failed to execute callback - {1}", GetType().Name, e.Message);
-			ServiceProvider.TryGetService<ILoggerService>().AddEntry(eSeverity.Error, e, message);
 		}
 
 		#endregion
