@@ -106,24 +106,6 @@ namespace ICD.Common.Utils.Extensions
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
 
-			if (extends.Count == 0)
-			{
-				extends.Add(item);
-				return;
-			}
-
-			if (comparer.Compare(extends[extends.Count - 1], item) <= 0)
-			{
-				extends.Add(item);
-				return;
-			}
-
-			if (comparer.Compare(extends[0], item) >= 0)
-			{
-				extends.Insert(0, item);
-				return;
-			}
-
 			int index = extends.BinarySearch(item, comparer);
 			if (index < 0)
 				index = ~index;
