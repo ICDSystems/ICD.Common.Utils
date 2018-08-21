@@ -82,12 +82,12 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item"></param>
 		[PublicAPI]
-		public static void AddSorted<T>(this List<T> extends, T item)
+		public static int AddSorted<T>(this List<T> extends, T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			extends.AddSorted(item, Comparer<T>.Default);
+			return extends.AddSorted(item, Comparer<T>.Default);
 		}
 
 		/// <summary>
@@ -98,7 +98,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <param name="comparer"></param>
 		[PublicAPI]
-		public static void AddSorted<T>(this List<T> extends, T item, IComparer<T> comparer)
+		public static int AddSorted<T>(this List<T> extends, T item, IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -111,6 +111,8 @@ namespace ICD.Common.Utils.Extensions
 				index = ~index;
 
 			extends.Insert(index, item);
+
+			return index;
 		}
 
 		/// <summary>
@@ -122,7 +124,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <param name="predicate"></param>
 		[PublicAPI]
-		public static void AddSorted<T, TProp>(this List<T> extends, T item, Func<T, TProp> predicate)
+		public static int AddSorted<T, TProp>(this List<T> extends, T item, Func<T, TProp> predicate)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -131,7 +133,7 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("predicate");
 
 			PredicateComparer<T, TProp> comparer = new PredicateComparer<T, TProp>(predicate);
-			extends.AddSorted(item, comparer);
+			return extends.AddSorted(item, comparer);
 		}
 
 		/// <summary>

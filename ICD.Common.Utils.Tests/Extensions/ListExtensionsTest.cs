@@ -13,10 +13,10 @@ namespace ICD.Common.Utils.Tests.Extensions
 		{
 			List<int> testList = new List<int>();
 
-			testList.AddSorted(2);
-			testList.AddSorted(3);
-			testList.AddSorted(1);
-			testList.AddSorted(2);
+			Assert.AreEqual(0, testList.AddSorted(2));
+			Assert.AreEqual(1, testList.AddSorted(3));
+			Assert.AreEqual(0, testList.AddSorted(1));
+			Assert.AreEqual(1, testList.AddSorted(2));
 
 			Assert.AreEqual(4, testList.Count);
 			Assert.AreEqual(1, testList[0]);
@@ -31,10 +31,10 @@ namespace ICD.Common.Utils.Tests.Extensions
 			List<int> testList = new List<int>();
 			IComparer<int> comparer = new InverseComparer();
 
-			testList.AddSorted(2, comparer);
-			testList.AddSorted(3, comparer);
-			testList.AddSorted(1, comparer);
-			testList.AddSorted(2, comparer);
+			Assert.AreEqual(0, testList.AddSorted(2, comparer));
+			Assert.AreEqual(0, testList.AddSorted(3, comparer));
+			Assert.AreEqual(2, testList.AddSorted(1, comparer));
+			Assert.AreEqual(1, testList.AddSorted(2, comparer));
 
 			Assert.AreEqual(4, testList.Count);
 			Assert.AreEqual(3, testList[0]);
