@@ -106,7 +106,7 @@ namespace ICD.Common.Utils.Timers
 
 			IcdStopwatch stopwatch = StartNew();
 			action();
-			PrintProfile(stopwatch, name);
+			PrintProfile(stopwatch.ElapsedTicks, name);
 		}
 
 		/// <summary>
@@ -122,12 +122,9 @@ namespace ICD.Common.Utils.Timers
 			if (func == null)
 				throw new ArgumentNullException("func");
 
-			T output = default(T);
-
-			Profile(() =>
-			        {
-				        output = func();
-			        }, name);
+			IcdStopwatch stopwatch = StartNew();
+			T output = func();
+			PrintProfile(stopwatch.ElapsedTicks, name);
 
 			return output;
 		}
@@ -213,7 +210,7 @@ namespace ICD.Common.Utils.Timers
 		{
 			if (eventHandler == null)
 			{
-				PrintProfile(new IcdStopwatch(), string.Format("{0} - No invocations", name));
+				PrintProfile(0, string.Format("{0} - No invocations", name));
 				return;
 			}
 
@@ -244,7 +241,7 @@ namespace ICD.Common.Utils.Timers
 		{
 			if (eventHandler == null)
 			{
-				PrintProfile(new IcdStopwatch(), string.Format("{0} - No invocations", name));
+				PrintProfile(0, string.Format("{0} - No invocations", name));
 				return;
 			}
 
@@ -262,9 +259,9 @@ namespace ICD.Common.Utils.Timers
 			}
 		}
 
-		private static void PrintProfile(IcdStopwatch stopwatch, string name)
+		private static void PrintProfile(long ticks, string name)
 		{
-			float elapsed = stopwatch.ElapsedTicks / (float)TimeSpan.TicksPerMillisecond;
+			float elapsed = ticks / (float)TimeSpan.TicksPerMillisecond;
 
 			eConsoleColor color = eConsoleColor.Green;
 			if (elapsed >= YELLOW_MILLISECONDS)
