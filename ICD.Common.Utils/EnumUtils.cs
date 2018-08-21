@@ -97,9 +97,6 @@ namespace ICD.Common.Utils
 		public static bool IsDefined<T>(T value)
 			where T : struct, IConvertible
 		{
-			if (!IsEnumType<T>())
-				throw new InvalidOperationException(string.Format("{0} is not an enum", typeof(T).Name));
-
 			T all = GetFlagsAllValue<T>();
 			return HasFlags(all, value);
 		}
@@ -228,9 +225,6 @@ namespace ICD.Common.Utils
 		public static T ExcludeFlags<T>(T a, T b)
 			where T : struct, IConvertible
 		{
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
-
 			int aInt = (int)(object)a;
 			int bInt = (int)(object)b;
 
@@ -257,9 +251,6 @@ namespace ICD.Common.Utils
 		public static T IncludeFlags<T>(T a, T b)
 			where T : struct, IConvertible
 		{
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
-
 			int aInt = (int)(object)a;
 			int bInt = (int)(object)b;
 
@@ -288,9 +279,6 @@ namespace ICD.Common.Utils
 		{
 			if (values == null)
 				throw new ArgumentNullException("values");
-
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
 
 			if (values.Length == 0)
 				return default(T);
@@ -327,9 +315,6 @@ namespace ICD.Common.Utils
 		public static T GetFlagsIntersection<T>(T a, T b)
 			where T : struct, IConvertible
 		{
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
-
 			int aInt = (int)(object)a;
 			int bInt = (int)(object)b;
 
@@ -345,9 +330,6 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetFlags<T>(T value)
 			where T : struct, IConvertible
 		{
-			if (!IsEnum(value))
-				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
-
 			Type type = typeof(T);
 			int valueInt = (int)(object)value;
 
@@ -376,9 +358,6 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetFlagsExceptNone<T>()
 			where T : struct, IConvertible
 		{
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
-
 			T allValue = GetFlagsAllValue<T>();
 			return GetFlagsExceptNone(allValue);
 		}
@@ -392,9 +371,6 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetFlagsExceptNone<T>(T value)
 			where T : struct, IConvertible
 		{
-			if (!IsEnum(value))
-				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
-
 			return GetFlags(value).Except(default(T));
 		}
 
@@ -410,9 +386,6 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetAllFlagCombinationsExceptNone<T>(T value)
 			where T : struct, IConvertible
 		{
-			if (!IsEnum(value))
-				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
-
 			int maxEnumValue = (GetValues<T>().Max(v => (int)(object)v) * 2) -1;
 			return Enumerable.Range(1, maxEnumValue).Select(i => (T)(object)i ).Where(v => HasFlags(value, v));
 		}
@@ -425,9 +398,6 @@ namespace ICD.Common.Utils
 		public static T GetFlagsAllValue<T>()
 			where T : struct, IConvertible
 		{
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
-
 			int output = GetValues<T>().Aggregate(0, (current, value) => current | (int)(object)value);
 			return (T)Enum.ToObject(typeof(T), output);
 		}
@@ -442,9 +412,6 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			if (!IsEnumType(type))
-				throw new ArgumentException(string.Format("{0} is not an enum", type.Name));
-
 			return GetValuesUncached(type).Aggregate(0, (current, value) => current | value);
 		}
 
@@ -458,12 +425,6 @@ namespace ICD.Common.Utils
 		public static bool HasFlag<T>(T value, T flag)
 			where T : struct, IConvertible
 		{
-			if (!IsEnum(value))
-				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
-
-			if (!IsEnum(flag))
-				throw new ArgumentException(string.Format("{0} is not an enum", flag.GetType().Name), "flag");
-
 			return HasFlags(value, flag);
 		}
 
@@ -488,12 +449,6 @@ namespace ICD.Common.Utils
 		public static bool HasFlags<T>(T value, T flags)
 			where T : struct, IConvertible
 		{
-			if (!IsEnum(value))
-				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
-
-			if (!IsEnum(flags))
-				throw new ArgumentException(string.Format("{0} is not an enum", flags.GetType().Name), "flags");
-
 			int a = (int)(object)value;
 			int b = (int)(object)flags;
 
@@ -520,9 +475,6 @@ namespace ICD.Common.Utils
 		public static bool HasSingleFlag<T>(T value)
 			where T : struct, IConvertible
 		{
-			if (!IsEnum(value))
-				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
-
 			int numeric = (int)(object)value;
 
 			return HasAnyFlags(numeric) && !HasMultipleFlags(numeric);
@@ -536,9 +488,6 @@ namespace ICD.Common.Utils
 		public static bool HasMultipleFlags<T>(T value)
 			where T : struct, IConvertible
 		{
-			if (!IsEnum(value))
-				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
-
 			return HasMultipleFlags((int)(object)value);
 		}
 
@@ -604,9 +553,6 @@ namespace ICD.Common.Utils
 		public static T Parse<T>(string data, bool ignoreCase)
 			where T : struct, IConvertible
 		{
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
-
 			T output;
 			if (TryParse(data, ignoreCase, out output))
 				return output;
@@ -627,9 +573,6 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			if (!IsEnumType(type))
-				throw new ArgumentException(string.Format("{0} is not an enum", type.Name));
-
 			int output;
 			if (TryParse(type, data, ignoreCase, out output))
 				return output;
@@ -649,9 +592,6 @@ namespace ICD.Common.Utils
 		public static bool TryParse<T>(string data, bool ignoreCase, out T result)
 			where T : struct, IConvertible
 		{
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
-
 			result = default(T);
 
 			try
@@ -678,9 +618,6 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			if (!IsEnumType(type))
-				throw new ArgumentException(string.Format("{0} is not an enum", type.Name));
-
 			result = 0;
 
 			try
@@ -705,9 +642,6 @@ namespace ICD.Common.Utils
 		public static T ParseStrict<T>(string data, bool ignoreCase)
 			where T : struct, IConvertible
 		{
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
-
 			T output;
 
 			try
@@ -739,9 +673,6 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			if (!IsEnumType(type))
-				throw new ArgumentException(string.Format("{0} is not an enum", type.Name));
-
 			int output;
 
 			try
@@ -772,9 +703,6 @@ namespace ICD.Common.Utils
 		public static bool TryParseStrict<T>(string data, bool ignoreCase, out T result)
 			where T : struct, IConvertible
 		{
-			if (!IsEnumType<T>())
-				throw new ArgumentException(string.Format("{0} is not an enum", typeof(T).Name));
-
 			result = default(T);
 
 			try

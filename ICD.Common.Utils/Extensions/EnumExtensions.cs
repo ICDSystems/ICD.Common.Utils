@@ -15,12 +15,6 @@ namespace ICD.Common.Utils.Extensions
 		public static bool HasFlag<T>(this T extends, T value)
 			where T : struct, IConvertible
 		{
-			if (!EnumUtils.IsEnum(extends))
-				throw new ArgumentException(string.Format("{0} is not an enum", extends.GetType().Name), "extends");
-
-			if (!EnumUtils.IsEnum(value))
-				throw new ArgumentException(string.Format("{0} is not an enum", value.GetType().Name), "value");
-
 			return EnumUtils.HasFlag(extends, value);
 		}
 
@@ -34,12 +28,6 @@ namespace ICD.Common.Utils.Extensions
 		public static bool HasFlags<T>(this T extends, T values)
 			where T : struct, IConvertible
 		{
-			if (!EnumUtils.IsEnum(extends))
-				throw new ArgumentException(string.Format("{0} is not an enum", extends.GetType().Name), "extends");
-
-			if (!EnumUtils.IsEnum(values))
-				throw new ArgumentException(string.Format("{0} is not an enum", values.GetType().Name), "values");
-
 			return EnumUtils.HasFlags(extends, values);
 		}
 
@@ -53,9 +41,6 @@ namespace ICD.Common.Utils.Extensions
 		public static ushort ToUShort<T>(this T extends)
 			where T : struct, IConvertible
 		{
-			if (!EnumUtils.IsEnum(extends))
-				throw new ArgumentException(string.Format("{0} is not an enum", extends.GetType().Name), "extends");
-
 			return (ushort)(object)extends;
 		}
 	}
