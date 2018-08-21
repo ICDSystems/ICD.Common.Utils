@@ -9,6 +9,7 @@ namespace ICD.Common.Utils.Collections
 	public sealed class IcdOrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 	{
 		private readonly List<TKey> m_OrderedKeys;
+		private readonly List<TValue> m_ValuesOrderedByKey; 
 		private readonly Dictionary<TKey, TValue> m_Dictionary;
 		private readonly IComparer<TKey> m_Comparer; 
 
@@ -20,14 +21,7 @@ namespace ICD.Common.Utils.Collections
 
 		public ICollection<TKey> Keys { get { return m_OrderedKeys; } }
 
-		public ICollection<TValue> Values
-		{
-			get
-			{
-				return m_OrderedKeys.Select(k => m_Dictionary[k])
-				                    .ToArray(m_OrderedKeys.Count);
-			}
-		}
+		public ICollection<TValue> Values { get { return m_ValuesOrderedByKey; } }
 
 		public TValue this[TKey key]
 		{
@@ -39,7 +33,10 @@ namespace ICD.Common.Utils.Collections
 					throw new ArgumentNullException("key");
 
 				if (!ContainsKey(key))
-					m_OrderedKeys.AddSorted(key, m_Comparer);
+				{
+					int index = m_OrderedKeys.AddSorted(key, m_Comparer);
+					m_ValuesOrderedByKey.Insert(index, value);
+				}
 
 				m_Dictionary[key] = value;
 			}
@@ -79,6 +76,7 @@ namespace ICD.Common.Utils.Collections
 
 			m_Comparer = comparer;
 			m_OrderedKeys = new List<TKey>();
+			m_ValuesOrderedByKey = new List<TValue>();
 			m_Dictionary = new Dictionary<TKey, TValue>(equalityComparer);
 		}
 
@@ -105,6 +103,7 @@ namespace ICD.Common.Utils.Collections
 		public void Clear()
 		{
 			m_OrderedKeys.Clear();
+			m_ValuesOrderedByKey.Clear();
 			m_Dictionary.Clear();
 		}
 
@@ -122,7 +121,10 @@ namespace ICD.Common.Utils.Collections
 			if (!m_Dictionary.Remove(key))
 				return false;
 
-			m_OrderedKeys.Remove(key);
+			int index = m_OrderedKeys.BinarySearch(key, m_Comparer);
+
+			m_OrderedKeys.RemoveAt(index);
+			m_ValuesOrderedByKey.RemoveAt(index);
 
 			return true;
 		}
