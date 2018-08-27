@@ -8,8 +8,6 @@ namespace ICD.Common.Utils.IO
 {
 	public sealed class IcdMemoryStream : IcdStream
 	{
-		public int Position { get; set; }
-
 		public MemoryStream WrappedMemoryStream { get { return WrappedStream as MemoryStream; } }
 
 		/// <summary>
