@@ -89,5 +89,11 @@ namespace ICD.Common.Utils.IO
 		{
 			return new IcdFileStream(File.Create(path));
 		}
+
+		[PublicAPI]
+		public static IcdStreamWriter AppendText(string path)
+		{
+			return new IcdStreamWriter(File.AppendText(path));
+		}
 	}
 }
