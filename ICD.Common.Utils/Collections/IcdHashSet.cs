@@ -46,8 +46,8 @@ namespace ICD.Common.Utils.Collections
 		/// Constructor.
 		/// </summary>
 		public IcdHashSet()
+			: this(Enumerable.Empty<T>())
 		{
-			m_Dict = new Dictionary<T, object>();
 		}
 
 		/// <summary>
@@ -55,10 +55,33 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="items"></param>
 		public IcdHashSet(IEnumerable<T> items)
-			: this()
+			: this(EqualityComparer<T>.Default, items)
 		{
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="comparer"></param>
+		public IcdHashSet(IEqualityComparer<T> comparer)
+			: this(comparer, Enumerable.Empty<T>())
+		{
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="comparer"></param>
+		/// <param name="items"></param>
+		public IcdHashSet(IEqualityComparer<T> comparer, IEnumerable<T> items)
+		{
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
 			if (items == null)
-				return;
+				throw new ArgumentNullException("items");
+
+			m_Dict = new Dictionary<T, object>(comparer);
 
 			AddRange(items);
 		}
