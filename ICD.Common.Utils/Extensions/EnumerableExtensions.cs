@@ -711,6 +711,24 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns the sequence as a IcdHashSet.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		public static IcdHashSet<T> ToIcdHashSet<T>(this IEnumerable<T> extends, IEqualityComparer<T> comparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			return new IcdHashSet<T>(comparer, extends);
+		}
+
+		/// <summary>
 		/// Optimized ToArray implementation with fewer allocations.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
