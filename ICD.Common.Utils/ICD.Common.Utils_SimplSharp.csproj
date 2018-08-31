@@ -116,6 +116,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecursionUtils.cs" />
+    <Compile Include="RegexUtils.cs" />
     <Compile Include="ReprBuilder.cs" />
     <Compile Include="Services\Scheduler\AbstractScheduledAction.cs" />
     <Compile Include="Services\Scheduler\ActionSchedulerService.cs" />
