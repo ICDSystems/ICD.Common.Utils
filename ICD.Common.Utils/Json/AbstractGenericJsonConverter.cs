@@ -47,6 +47,18 @@ namespace ICD.Common.Utils.Json
 		[PublicAPI]
 		public virtual void WriteJson(JsonWriter writer, T value, JsonSerializer serializer)
 		{
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
+			if (serializer == null)
+				throw new ArgumentNullException("serializer");
+
+			if (value == null)
+			{
+				writer.WriteNull();
+				return;
+			}
+
 			writer.WriteStartObject();
 			{
 				WriteProperties(writer, value, serializer);
@@ -98,6 +110,12 @@ namespace ICD.Common.Utils.Json
 		[PublicAPI]
 		public virtual T ReadJson(JsonReader reader, T existingValue, JsonSerializer serializer)
 		{
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			if (serializer == null)
+				throw new ArgumentNullException("serializer");
+
 			T output = default(T);
 			bool instantiated = false;
 
@@ -120,12 +138,7 @@ namespace ICD.Common.Utils.Json
 				// Read into the value
 				reader.Read();
 
-				switch (property)
-				{
-					default:
-						ReadProperty(property, reader, output, serializer);
-						break;
-				}
+				ReadProperty(property, reader, output, serializer);
 			}
 
 			return output;
