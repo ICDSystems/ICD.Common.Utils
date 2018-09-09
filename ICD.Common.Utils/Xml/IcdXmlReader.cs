@@ -23,6 +23,8 @@ namespace ICD.Common.Utils.Xml
 
 		public XmlNodeType NodeType { get { return m_Reader.NodeType; } }
 
+		public bool IsEmptyElement { get { return m_Reader.IsEmptyElement; } }
+
 		#endregion
 
 		/// <summary>
