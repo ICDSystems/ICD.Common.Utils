@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using ICD.Common.Utils.IO;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronXml;
 #else
@@ -9,6 +11,58 @@ namespace ICD.Common.Utils.Xml
 {
 	public static class IcdXmlConvert
 	{
+		/// <summary>
+		/// Serializes the given instance to an xml string.
+		/// </summary>
+		/// <param name="elementName"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static string SerializeObject(string elementName, object value)
+		{
+			if (value == null)
+				return ToString(null);
+
+			IXmlConverter converter = XmlConverterAttribute.GetConverterForInstance(value);
+
+			StringBuilder builder = new StringBuilder();
+
+			using (IcdStringWriter stringWriter = new IcdStringWriter(builder))
+			{
+				using (IcdXmlTextWriter writer = new IcdXmlTextWriter(stringWriter))
+					converter.WriteXml(writer, elementName, value);
+			}
+
+			return builder.ToString();
+		}
+
+		/// <summary>
+		/// Deserializes the given xml to an instance of the given type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="xml"></param>
+		/// <returns></returns>
+		public static object DeserializeObject<T>(string xml)
+		{
+			return (T)DeserializeObject(typeof(T), xml);
+		}
+
+		/// <summary>
+		/// Deserializes the given xml to an instance of the given type.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="xml"></param>
+		/// <returns></returns>
+		private static object DeserializeObject(Type type, string xml)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			IXmlConverter converter = XmlConverterAttribute.GetConverterForInstance(type);
+
+			using (IcdXmlReader reader = new IcdXmlReader(xml))
+				return converter.ReadXml(reader);
+		}
+
 		public static string ToString(int value)
 		{
 			return XmlConvert.ToString(value);
