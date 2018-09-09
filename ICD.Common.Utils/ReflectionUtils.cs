@@ -8,7 +8,6 @@ using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharp.Reflection;
 using Activator = Crestron.SimplSharp.Reflection.Activator;
 #else
-using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.DependencyModel;
 using System.Runtime.Loader;
@@ -33,18 +32,11 @@ namespace ICD.Common.Utils
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
 
-#if SIMPLSHARP
-			IEnumerable<CType>
-#else
-			IEnumerable<Type>
-#endif
-				parameterTypes = constructor.GetParameters().Select(p => p.ParameterType);
-
-			return ParametersMatchTypes(parameterTypes, parameters);
+			return MatchesMethodParameters(constructor, parameters);
 		}
 
 		/// <summary>
-		/// Returns true if the parameters match the method parameters.
+		/// Returns true if the parameter values match the method signature parameters.
 		/// </summary>
 		/// <param name="method"></param>
 		/// <param name="parameters"></param>
@@ -78,14 +70,7 @@ namespace ICD.Common.Utils
 			if (property == null)
 				throw new ArgumentNullException("property");
 
-#if SIMPLSHARP
-			CType
-#else
-			Type
-#endif
-				propertyType = property.PropertyType;
-
-			return ParametersMatchTypes(new[] {propertyType}, new[] {parameter});
+			return ParameterMatchesType(property.PropertyType, parameter);
 		}
 
 		/// <summary>
@@ -97,7 +82,7 @@ namespace ICD.Common.Utils
 		private static bool ParametersMatchTypes(
 #if SIMPLSHARP
 			IEnumerable<CType>
-#else	
+#else
 			IEnumerable<Type>
 #endif
 				types, IEnumerable<object> parameters)
@@ -109,21 +94,21 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("parameters");
 
 #if SIMPLSHARP
-			CType[]
+			IList<CType>
 #else
-			Type[]
+			IList<Type>
 #endif
 				typesArray = types as
 #if SIMPLSHARP
-				             CType[]
+				             IList<CType>
 #else
-				             Type[]
+							 IList<Type>
 #endif
-				             ?? types.ToArray();
+							 ?? types.ToArray();
 
-			object[] parametersArray = parameters as object[] ?? parameters.ToArray();
+			IList<object> parametersArray = parameters as IList<object> ?? parameters.ToArray();
 
-			if (parametersArray.Length != typesArray.Length)
+			if (parametersArray.Count != typesArray.Count)
 				return false;
 
 			// Compares each pair of items in the two arrays.
@@ -176,26 +161,6 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Returns true if the given type has a public parameterless constructor.
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		public static bool HasPublicParameterlessConstructor(Type type)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			const BindingFlags binding = BindingFlags.Instance | BindingFlags.Public;
-
-#if SIMPLSHARP
-			return ((CType)type).GetConstructor(binding, null, new CType[0], null)
-#else
-			return type.GetConstructor(binding, null, new Type[0], null) 
-#endif
-			       != null;
-		}
-
-		/// <summary>
 		/// Platform independant delegate instantiation.
 		/// </summary>
 		/// <param name="type"></param>
@@ -211,6 +176,18 @@ namespace ICD.Common.Utils
 				Delegate
 #endif
 					.CreateDelegate(type, firstArgument, method);
+		}
+
+		/// <summary>
+		/// Creates an instance of the given type, calling the default constructor.
+		/// </summary>
+		/// <returns></returns>
+		public static T CreateInstance<T>(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return (T)CreateInstance(type);
 		}
 
 		/// <summary>
@@ -238,18 +215,11 @@ namespace ICD.Common.Utils
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
 
-			ConstructorInfo constructor =
-				type
-#if SIMPLSHARP
-					.GetCType()
-#endif
-					.GetConstructors()
-					.FirstOrDefault(c => MatchesConstructorParameters(c, parameters));
+			ConstructorInfo constructor = GetConstructor(type, parameters);
 
 			try
 			{
-				if (constructor != null)
-					return constructor.Invoke(parameters);
+				return constructor.Invoke(parameters);
 			}
 			catch (TypeLoadException e)
 			{
@@ -259,46 +229,29 @@ namespace ICD.Common.Utils
 			{
 				throw e.GetBaseException();
 			}
-
-			string message = string.Format("Unable to find constructor for {0}", type.Name);
-			throw new InvalidOperationException(message);
 		}
 
 		/// <summary>
-		/// Creates an instance of the given type, calling the default constructor.
+		/// Gets the constructor matching the given parameters.
 		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public static T CreateInstance<T>(Type type)
+		public static ConstructorInfo GetConstructor(Type type, params object[] parameters)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			if (!type.IsAssignableTo(typeof(T)))
-				throw new InvalidOperationException("Type is not assignable to T");
+			if (parameters == null)
+				throw new ArgumentNullException("parameters");
 
-			return (T)CreateInstance(type);
-		}
-
-		/// <summary>
-		/// Gets the custom attributes added to the given assembly.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="assembly"></param>
-		/// <returns></returns>
-		public static IEnumerable<T> GetCustomAttributes<T>(Assembly assembly)
-			where T : Attribute
-		{
-			if (assembly == null)
-				throw new ArgumentNullException("assembly");
-
-			try
-			{
-				return assembly.GetCustomAttributes<T>();
-			}
-			catch (FileNotFoundException)
-			{
-				return Enumerable.Empty<T>();
-			}
+			return
+				type
+#if SIMPLSHARP
+					.GetCType()
+#endif
+					.GetConstructors()
+					.First(c => MatchesConstructorParameters(c, parameters));
 		}
 
 		/// <summary>
@@ -338,39 +291,6 @@ namespace ICD.Common.Utils
 				? Assembly.Load(new AssemblyName(fileNameWithOutExtension))
 				: AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
 #endif
-		}
-
-		/// <summary>
-		/// Finds the corresponding property info on the given type.
-		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="property"></param>
-		/// <returns></returns>
-		public static PropertyInfo GetImplementation(Type type, PropertyInfo property)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			if (property == null)
-				throw new ArgumentNullException("property");
-
-			if (type.IsInterface)
-				throw new InvalidOperationException("Type must not be an interface");
-
-			property = type
-#if SIMPLSHARP
-				.GetCType()
-#else
-				.GetTypeInfo()
-#endif
-				.GetProperty(property.Name, property.PropertyType);
-
-			if (property == null)
-				return null;
-
-			return property.DeclaringType == type
-				? property
-				: GetImplementation(property.DeclaringType, property);
 		}
 
 		/// <summary>
