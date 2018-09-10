@@ -85,6 +85,8 @@
     <Compile Include="Comparers\SequenceComparer.cs" />
     <Compile Include="ConsoleColor.cs" />
     <Compile Include="EncodingUtils.cs" />
+    <Compile Include="Csv\CsvWriter.cs" />
+    <Compile Include="Csv\CsvWriterSettings.cs" />
     <Compile Include="EventArguments\BoolEventArgs.cs" />
     <Compile Include="EventArguments\CharEventArgs.cs" />
     <Compile Include="EventArguments\DateTimeEventArgs.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="IO\Compression\IcdZipEntry.cs" />
     <Compile Include="IO\IcdBinaryReader.cs" />
     <Compile Include="IO\eSeekOrigin.cs" />
+    <Compile Include="IO\IcdStreamWriter.cs" />
     <Compile Include="ProcessorUtils.SimplSharp.cs" />
     <Compile Include="ProcessorUtils.Standard.cs" />
     <Compile Include="ProgramUtils.SimplSharp.cs" />
