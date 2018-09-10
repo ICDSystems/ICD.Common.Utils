@@ -41,7 +41,7 @@ namespace ICD.Common.Utils.Xml
 		/// <typeparam name="T"></typeparam>
 		/// <param name="xml"></param>
 		/// <returns></returns>
-		public static object DeserializeObject<T>(string xml)
+		public static T DeserializeObject<T>(string xml)
 		{
 			return (T)DeserializeObject(typeof(T), xml);
 		}
@@ -57,10 +57,41 @@ namespace ICD.Common.Utils.Xml
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			IXmlConverter converter = XmlConverterAttribute.GetConverterForInstance(type);
-
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
-				return converter.ReadXml(reader);
+				return DeserializeObject(type, reader);
+		}
+
+		/// <summary>
+		/// Deserializes the current node to an instance of the given type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="reader"></param>
+		/// <returns></returns>
+		public static T DeserializeObject<T>(IcdXmlReader reader)
+		{
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			return (T)DeserializeObject(typeof(T), reader);
+		}
+
+		/// <summary>
+		/// Deserializes the current node to an instance of the given type.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="reader"></param>
+		/// <returns></returns>
+		public static object DeserializeObject(Type type, IcdXmlReader reader)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			IXmlConverter converter = XmlConverterAttribute.GetConverterForType(type);
+
+			return converter.ReadXml(reader);
 		}
 
 		public static string ToString(int value)
