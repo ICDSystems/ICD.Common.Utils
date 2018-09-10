@@ -198,12 +198,17 @@
     <Compile Include="Timers\SafeTimer.cs" />
     <Compile Include="TryUtils.cs" />
     <Compile Include="UriUtils.cs" />
+    <Compile Include="Xml\AbstractGenericXmlConverter.cs" />
+    <Compile Include="Xml\AbstractXmlConverter.cs" />
+    <Compile Include="Xml\DefaultXmlConverter.cs" />
     <Compile Include="Xml\IcdXmlConvert.cs" />
     <Compile Include="Xml\IcdXmlDocument.cs" />
     <Compile Include="Xml\IcdXmlException.cs" />
     <Compile Include="Xml\IcdXmlReader.cs" />
     <Compile Include="Xml\IcdXmlTextWriter.cs" />
     <Compile Include="Xml\IcdXmlAttribute.cs" />
+    <Compile Include="Xml\IXmlConverter.cs" />
+    <Compile Include="Xml\XmlConverterAttribute.cs" />
     <Compile Include="Xml\XmlReaderExtensions.cs" />
     <Compile Include="Xml\XmlUtils.cs" />
     <None Include="Properties\ControlSystem.cfg" />
