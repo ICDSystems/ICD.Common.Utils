@@ -1,5 +1,9 @@
 ﻿using System;
+#if SIMPLSHARP
+using Crestron.SimplSharp.CrestronXml;
+#else
 using System.Xml;
+#endif
 using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Xml
