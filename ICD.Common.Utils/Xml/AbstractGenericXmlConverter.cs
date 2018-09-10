@@ -101,18 +101,37 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public virtual T ReadXmlTyped(IcdXmlReader reader)
 		{
+			// Read into the first node
+			if (!reader.Read())
+				throw new FormatException();
+
 			T output = default(T);
 			bool instantiated = false;
 
-			while (reader.Read())
+			while (reader.NodeType != XmlNodeType.EndElement)
 			{
-				if (reader.NodeType == XmlNodeType.Element && reader.IsEmptyElement)
-					break;
-
 				if (!instantiated)
 				{
-					instantiated = true;
-					output = Instantiate();
+					switch (reader.NodeType)
+					{
+						case XmlNodeType.Element:
+							if (reader.IsEmptyElement)
+								return default(T);
+
+							output = Instantiate();
+							instantiated = true;
+
+							// Read out of the root element
+							if (!reader.Read())
+								throw new FormatException();
+							continue;
+
+						default:
+							// Keep reading until we reach the root element.
+							if (!reader.Read())
+								throw new FormatException();
+							continue;
+					}
 				}
 
 				switch (reader.NodeType)
@@ -123,6 +142,14 @@ namespace ICD.Common.Utils.Xml
 
 					case XmlNodeType.Element:
 						ReadElement(reader, output);
+						break;
+
+					case XmlNodeType.EndElement:
+						return output;
+
+					default:
+						if (!reader.Read())
+							return output;
 						break;
 				}
 			}
@@ -149,7 +176,7 @@ namespace ICD.Common.Utils.Xml
 		protected virtual void ReadElement(IcdXmlReader reader, T instance)
 		{
 			// Skip the element
-			reader.ReadOuterXml();
+			reader.Skip();
 		}
 	}
 }
