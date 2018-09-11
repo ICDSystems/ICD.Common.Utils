@@ -102,13 +102,13 @@ namespace ICD.Common.Utils.Xml
 		public virtual T ReadXmlTyped(IcdXmlReader reader)
 		{
 			// Read into the first node
-			if (!reader.Read())
+			if (reader.NodeType != XmlNodeType.Element && !reader.ReadToNextElement())
 				throw new FormatException();
 
 			T output = default(T);
 			bool instantiated = false;
 
-			while (reader.NodeType != XmlNodeType.EndElement)
+			while (true)
 			{
 				if (!instantiated)
 				{
@@ -120,6 +120,10 @@ namespace ICD.Common.Utils.Xml
 
 							output = Instantiate();
 							instantiated = true;
+
+							// Read the root attributes
+							while (reader.MoveToNextAttribute())
+								ReadAttribute(reader, output);
 
 							// Read out of the root element
 							if (!reader.Read())
@@ -136,15 +140,13 @@ namespace ICD.Common.Utils.Xml
 
 				switch (reader.NodeType)
 				{
-					case XmlNodeType.Attribute:
-						ReadAttribute(reader, output);
-						break;
-
 					case XmlNodeType.Element:
 						ReadElement(reader, output);
-						break;
+						continue;
 
 					case XmlNodeType.EndElement:
+						// Read out of the end element
+						reader.Read();
 						return output;
 
 					default:
@@ -153,8 +155,6 @@ namespace ICD.Common.Utils.Xml
 						break;
 				}
 			}
-
-			return output;
 		}
 
 		/// <summary>
@@ -164,8 +164,6 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="instance"></param>
 		protected virtual void ReadAttribute(IcdXmlReader reader, T instance)
 		{
-			// Skip the attribute
-			reader.Read();
 		}
 
 		/// <summary>
