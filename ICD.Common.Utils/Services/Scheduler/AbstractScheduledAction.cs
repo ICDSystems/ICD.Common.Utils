@@ -1,5 +1,4 @@
 ﻿using System;
-using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Services.Scheduler

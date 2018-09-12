@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
+#else
+using System.Diagnostics;
 #endif
 
 namespace ICD.Common.Utils
