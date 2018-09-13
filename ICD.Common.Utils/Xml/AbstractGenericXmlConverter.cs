@@ -14,10 +14,7 @@ namespace ICD.Common.Utils.Xml
 		/// Creates a new instance of T.
 		/// </summary>
 		/// <returns></returns>
-		protected virtual T Instantiate()
-		{
-			return ReflectionUtils.CreateInstance<T>();
-		}
+		protected abstract T Instantiate();
 
 		/// <summary>
 		/// Writes the XML representation of the object.
