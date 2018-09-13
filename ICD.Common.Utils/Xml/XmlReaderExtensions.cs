@@ -115,7 +115,7 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="extends"></param>
 		/// <param name="callback"></param>
 		[PublicAPI]
-		public static void Recurse(this IcdXmlReader extends, Action<XmlRecursionEventArgs> callback)
+		public static void Recurse(this IcdXmlReader extends, Func<XmlRecursionEventArgs, bool> callback)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
