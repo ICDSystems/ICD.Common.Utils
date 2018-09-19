@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+ - CsvWriter for creating CSV files + Settings
+ - AppendText method for IcdFile
+ - IcdStreamWriter, a wrapper for a StreamWriter
+ - New XML conversion framework for performance improvements
+### Changed
+ - XmlUtils is now using the improved XML conversion framework 
 
 ## [5.0.0] - 2018-09-14
 ### Added
