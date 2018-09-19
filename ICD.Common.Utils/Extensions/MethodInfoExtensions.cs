@@ -91,10 +91,13 @@ namespace ICD.Common.Utils.Extensions
 						}
 						sigBuilder.Append("this ");
 					}
-#endif
 				}
 				else if (secondParam)
+				{
 					secondParam = false;
+#endif
+				}
+				
 				else
 					sigBuilder.Append(", ");
 

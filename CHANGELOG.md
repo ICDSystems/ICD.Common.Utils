@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.0.0] - 2018-09-14
+### Added
+ - Stopwatch profiling methods
+ - Attempt to interpret old assembly naming convention when parsing types
+ - Added RegexUtils
+
+### Changed
+ - Significant performance improvements across the board
+
 ## [4.0.0] - 2018-07-19
 ### Added
  - Added extension method for getting type name without trailing generic info
