@@ -138,7 +138,7 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="xml"></param>
 		/// <param name="callback"></param>
 		[PublicAPI]
-		public static void Recurse(string xml, Action<XmlRecursionEventArgs> callback)
+		public static void Recurse(string xml, Func<XmlRecursionEventArgs, bool> callback)
 		{
 			if (callback == null)
 				throw new ArgumentNullException("callback");
@@ -152,7 +152,7 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="xml"></param>
 		/// <param name="path"></param>
 		/// <param name="callback"></param>
-		private static void Recurse(string xml, Stack<string> path, Action<XmlRecursionEventArgs> callback)
+		private static void Recurse(string xml, Stack<string> path, Func<XmlRecursionEventArgs, bool> callback)
 		{
 			if (path == null)
 				throw new ArgumentNullException("path");
@@ -168,10 +168,11 @@ namespace ICD.Common.Utils.Xml
 				path.Push(childReader.Name);
 				string[] pathOutput = path.Reverse().ToArray(path.Count);
 
-				callback(new XmlRecursionEventArgs(xml, pathOutput));
-
-				foreach (string child in childReader.GetChildElementsAsString())
-					Recurse(child, path, callback);
+				if (callback(new XmlRecursionEventArgs(xml, pathOutput)))
+				{
+					foreach (string child in childReader.GetChildElementsAsString())
+						Recurse(child, path, callback);
+				}
 
 				path.Pop();
 			}

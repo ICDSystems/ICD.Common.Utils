@@ -90,6 +90,7 @@ namespace ICD.Common.Utils.Tests.Xml
 			                              {
 				                              paths.Add(args.Path);
 				                              nodes.Add(args.Outer);
+				                              return true;
 			                              }
 				);
 

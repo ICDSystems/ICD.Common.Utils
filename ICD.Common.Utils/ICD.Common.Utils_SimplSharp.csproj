@@ -85,6 +85,8 @@
     <Compile Include="Comparers\SequenceComparer.cs" />
     <Compile Include="ConsoleColor.cs" />
     <Compile Include="EncodingUtils.cs" />
+    <Compile Include="Csv\CsvWriter.cs" />
+    <Compile Include="Csv\CsvWriterSettings.cs" />
     <Compile Include="EventArguments\BoolEventArgs.cs" />
     <Compile Include="EventArguments\CharEventArgs.cs" />
     <Compile Include="EventArguments\DateTimeEventArgs.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="IO\Compression\IcdZipEntry.cs" />
     <Compile Include="IO\IcdBinaryReader.cs" />
     <Compile Include="IO\eSeekOrigin.cs" />
+    <Compile Include="IO\IcdStreamWriter.cs" />
     <Compile Include="ProcessorUtils.SimplSharp.cs" />
     <Compile Include="ProcessorUtils.Standard.cs" />
     <Compile Include="ProgramUtils.SimplSharp.cs" />
@@ -195,12 +198,17 @@
     <Compile Include="Timers\SafeTimer.cs" />
     <Compile Include="TryUtils.cs" />
     <Compile Include="UriUtils.cs" />
+    <Compile Include="Xml\AbstractGenericXmlConverter.cs" />
+    <Compile Include="Xml\AbstractXmlConverter.cs" />
+    <Compile Include="Xml\DefaultXmlConverter.cs" />
     <Compile Include="Xml\IcdXmlConvert.cs" />
     <Compile Include="Xml\IcdXmlDocument.cs" />
     <Compile Include="Xml\IcdXmlException.cs" />
     <Compile Include="Xml\IcdXmlReader.cs" />
     <Compile Include="Xml\IcdXmlTextWriter.cs" />
     <Compile Include="Xml\IcdXmlAttribute.cs" />
+    <Compile Include="Xml\IXmlConverter.cs" />
+    <Compile Include="Xml\XmlConverterAttribute.cs" />
     <Compile Include="Xml\XmlReaderExtensions.cs" />
     <Compile Include="Xml\XmlUtils.cs" />
     <None Include="Properties\ControlSystem.cfg" />
