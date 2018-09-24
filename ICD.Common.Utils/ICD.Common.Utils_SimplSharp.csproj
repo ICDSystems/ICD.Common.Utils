@@ -84,6 +84,9 @@
     <Compile Include="Comparers\PredicateComparer.cs" />
     <Compile Include="Comparers\SequenceComparer.cs" />
     <Compile Include="ConsoleColor.cs" />
+    <Compile Include="Email\EmailClient.cs" />
+    <Compile Include="Email\eMailErrorCode.cs" />
+    <Compile Include="Email\EmailStringCollection.cs" />
     <Compile Include="EncodingUtils.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
     <Compile Include="Csv\CsvWriterSettings.cs" />
