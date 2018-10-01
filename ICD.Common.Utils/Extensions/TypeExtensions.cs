@@ -317,45 +317,48 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+			// Nullable
 			Type nullableType = Nullable.GetUnderlyingType(extends);
 			if (nullableType != null)
 				return nullableType.GetSyntaxName() + "?";
 
-			if (!(extends.IsGenericType && extends.Name.Contains('`')))
+			// Generic
+			if (extends.IsGenericType)
 			{
-				switch (extends.Name)
+				StringBuilder sb = new StringBuilder(extends.Name.Substring(0, extends.Name.IndexOf('`')));
+				sb.Append('<');
+
+				bool first = true;
+				foreach (Type t in extends.GetGenericArguments())
 				{
-					case "String":
-						return "string";
-					case "Int32":
-						return "int";
-					case "Decimal":
-						return "decimal";
-					case "Object":
-						return "object";
-					case "Void":
-						return "void";
-
-					default:
-						return string.IsNullOrEmpty(extends.FullName) ? extends.Name : extends.FullName;
+					if (!first)
+						sb.Append(',');
+					sb.Append(t.GetSyntaxName());
+					first = false;
 				}
+
+				sb.Append('>');
+
+				return sb.ToString();
 			}
 
-			StringBuilder sb = new StringBuilder(extends.Name.Substring(0, extends.Name.IndexOf('`')));
-			sb.Append('<');
-
-			bool first = true;
-			foreach (Type t in extends.GetGenericArguments())
+			// Default
+			switch (extends.Name)
 			{
-				if (!first)
-					sb.Append(',');
-				sb.Append(t.GetSyntaxName());
-				first = false;
+				case "String":
+					return "string";
+				case "Int32":
+					return "int";
+				case "Decimal":
+					return "decimal";
+				case "Object":
+					return "object";
+				case "Void":
+					return "void";
+
+				default:
+					return extends.Name;
 			}
-
-			sb.Append('>');
-
-			return sb.ToString();
 		}
 	}
 }
