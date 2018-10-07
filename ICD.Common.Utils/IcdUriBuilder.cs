@@ -70,7 +70,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="uri"></param>
 		public IcdUriBuilder(string uri)
-			: this(new Uri(uri))
+			: this(new Uri(uri, UriKind.RelativeOrAbsolute))
 		{
 		}
 
@@ -80,6 +80,9 @@ namespace ICD.Common.Utils
 		/// <param name="uri"></param>
 		public IcdUriBuilder(Uri uri)
 		{
+			if (!uri.IsAbsoluteUri)
+				uri = new Uri(Uri.UriSchemeHttp + Uri.SchemeDelimiter + uri);
+
 			Fragment = uri.Fragment;
 			Host = uri.Host;
 			Password = uri.GetPassword();
@@ -103,7 +106,7 @@ namespace ICD.Common.Utils
 			StringBuilder builder = new StringBuilder();
 
 			// Scheme
-			string scheme = string.IsNullOrEmpty(Scheme) ? "http" : Scheme;
+			string scheme = string.IsNullOrEmpty(Scheme) ? Uri.UriSchemeHttp : Scheme;
 			builder.Append(scheme);
 			builder.Append(':');
 
