@@ -235,12 +235,16 @@ namespace ICD.Common.Utils
 			return null;
 		}
 
-
-		[NotNull]
-		public static IEnumerable<KeyValuePair<T, IEnumerable<T>>> BreadthFirstSearchManyDestinations<T>(T root,
-		                                                                                  IEnumerable<T> destinations,
-		                                                                                  Func<T, IEnumerable<T>>
-			                                                                                  getChildren)
+		/// <summary>
+		/// Returns the shortest path from root to each destination via breadth-first search.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="root"></param>
+		/// <param name="destinations"></param>
+		/// <param name="getChildren"></param>
+		/// <returns></returns>
+		public static IEnumerable<KeyValuePair<T, IEnumerable<T>>>
+			BreadthFirstSearchPathManyDestinations<T>(T root, IEnumerable<T> destinations, Func<T, IEnumerable<T>> getChildren)
 		{
 			if (destinations == null)
 				throw new ArgumentNullException("destinations");
@@ -251,14 +255,18 @@ namespace ICD.Common.Utils
 			return BreadthFirstSearchPathManyDestinations(root, destinations, getChildren, EqualityComparer<T>.Default);
 		}
 
-		[NotNull]
-		public static IEnumerable<KeyValuePair<T, IEnumerable<T>>> BreadthFirstSearchPathManyDestinations<T>(T root,
-		                                                                                      IEnumerable<T>
-			                                                                                      destinations,
-		                                                                                      Func<T, IEnumerable<T>>
-			                                                                                      getChildren,
-		                                                                                      IEqualityComparer<T>
-			                                                                                      comparer)
+		/// <summary>
+		/// Returns the shortest path from root to each destination via breadth-first search.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="root"></param>
+		/// <param name="destinations"></param>
+		/// <param name="getChildren"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		public static IEnumerable<KeyValuePair<T, IEnumerable<T>>>
+			BreadthFirstSearchPathManyDestinations<T>(T root, IEnumerable<T> destinations, Func<T, IEnumerable<T>> getChildren,
+			                                          IEqualityComparer<T> comparer)
 		{
 			if (destinations == null)
 				throw new ArgumentNullException("destinations");
@@ -270,7 +278,6 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("comparer");
 
 			IcdHashSet<T> destinationsToBeProcessed = new IcdHashSet<T>(destinations);
-			Dictionary<T, IEnumerable<T>> pathsToReturn = new Dictionary<T, IEnumerable<T>>();
 
 			// Edge case, root is the destination
 			foreach (T destination in
@@ -303,7 +310,8 @@ namespace ICD.Common.Utils
 					{
 						destinationsToBeProcessed.Remove(destination);
 
-						yield return new KeyValuePair<T, IEnumerable<T>>(destination, GetPath(destination, root, nodeParents, comparer).Reverse());
+						yield return
+							new KeyValuePair<T, IEnumerable<T>>(destination, GetPath(destination, root, nodeParents, comparer).Reverse());
 					}
 
 					if (destinationsToBeProcessed.Count == 0)

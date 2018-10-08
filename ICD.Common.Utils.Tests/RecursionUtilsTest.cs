@@ -178,12 +178,12 @@ namespace ICD.Common.Utils.Tests
 		[Test]
 		public void BreadthFirstSearchManyDestinationsTest()
 		{
-			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearchManyDestinations(1, new[] { 1 }, null));
-			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearchManyDestinations(1, null, Graph));
-			Assert.AreEqual(0, RecursionUtils.BreadthFirstSearchManyDestinations(1, new[] { 5 }, Graph).Count());
+			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearchPathManyDestinations(1, new[] { 1 }, null));
+			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearchPathManyDestinations(1, null, Graph));
+			Assert.AreEqual(0, RecursionUtils.BreadthFirstSearchPathManyDestinations(1, new[] { 5 }, Graph).Count());
 
 			Dictionary<int, IEnumerable<int>> paths =
-				RecursionUtils.BreadthFirstSearchManyDestinations(1, new[] {21, 22, 31, 43, 62}, WideGraph)
+				RecursionUtils.BreadthFirstSearchPathManyDestinations(1, new[] {21, 22, 31, 43, 62}, WideGraph)
 				              .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
 			//Make sure all paths were found
