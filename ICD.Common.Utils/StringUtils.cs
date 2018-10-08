@@ -423,7 +423,12 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static string Repeat(string input, int count)
 		{
-			return count == 0 ? string.Empty : new StringBuilder().Insert(0, input, count).ToString();
+			if (count < 0)
+				throw new ArgumentOutOfRangeException("count");
+
+			return input == null || count == 0
+				? string.Empty
+				: new StringBuilder().Insert(0, input, count).ToString();
 		}
 
 		/// <summary>
