@@ -315,7 +315,7 @@ namespace ICD.Common.Utils
 					}
 
 					if (destinationsToBeProcessed.Count == 0)
-						break;
+						yield break;
 				}
 			}
 		}
