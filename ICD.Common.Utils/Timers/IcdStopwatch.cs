@@ -308,11 +308,13 @@ namespace ICD.Common.Utils.Timers
 			if (elapsed >= RED_MILLISECONDS)
 				color = eConsoleColor.Red;
 
-			if (s_ProfileIndentCount > 0)
-				IcdConsole.Print(StringUtils.Repeat("  ", s_ProfileIndentCount - 1));
+			string padding = null;
 
-			IcdConsole.Print(color, "{0:n}ms", elapsed);
-			IcdConsole.PrintLine(" to execute {0}", name);
+			if (s_ProfileIndentCount > 0)
+				padding = StringUtils.Repeat("  ", s_ProfileIndentCount - 1);
+
+			IcdConsole.Print(color, "{0}{1:n}ms ", padding, elapsed);
+			IcdConsole.PrintLine("to execute {0}", name);
 		}
 
 		#endregion
