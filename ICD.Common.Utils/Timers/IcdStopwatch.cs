@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
@@ -17,6 +18,8 @@ namespace ICD.Common.Utils.Timers
 		private const long RED_MILLISECONDS = 400;
 
 		private readonly Stopwatch m_Stopwatch;
+
+		private static int s_ProfileIndentCount;
 
 		#region Properties
 
@@ -104,9 +107,18 @@ namespace ICD.Common.Utils.Timers
 			if (action == null)
 				throw new ArgumentNullException("action");
 
-			IcdStopwatch stopwatch = StartNew();
-			action();
-			PrintProfile(stopwatch.ElapsedTicks, name);
+			s_ProfileIndentCount++;
+
+			try
+			{
+				IcdStopwatch stopwatch = StartNew();
+				action();
+				PrintProfile(stopwatch.ElapsedTicks, name);
+			}
+			finally
+			{
+				s_ProfileIndentCount--;
+			}
 		}
 
 		/// <summary>
@@ -122,11 +134,20 @@ namespace ICD.Common.Utils.Timers
 			if (func == null)
 				throw new ArgumentNullException("func");
 
-			IcdStopwatch stopwatch = StartNew();
-			T output = func();
-			PrintProfile(stopwatch.ElapsedTicks, name);
+			s_ProfileIndentCount++;
 
-			return output;
+			try
+			{
+				IcdStopwatch stopwatch = StartNew();
+				T output = func();
+				PrintProfile(stopwatch.ElapsedTicks, name);
+
+				return output;
+			}
+			finally
+			{
+				s_ProfileIndentCount--;
+			}
 		}
 
 		/// <summary>
@@ -192,12 +213,16 @@ namespace ICD.Common.Utils.Timers
 
 			// TODO - Print a fancy table with a total duration for the sequence
 
+			List<T> output = new List<T>();
+
 			using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
 			{
 // ReSharper disable once AccessToDisposedClosure
 				while (Profile(() => enumerator.MoveNext(), name))
-					yield return enumerator.Current;
+					output.Add(enumerator.Current);
 			}
+
+			return output;
 		}
 
 		/// <summary>
@@ -208,20 +233,27 @@ namespace ICD.Common.Utils.Timers
 		/// <param name="name"></param>
 		public static void Profile(EventHandler eventHandler, object sender, string name)
 		{
-			if (eventHandler == null)
+			s_ProfileIndentCount++;
+
+			try
 			{
-				PrintProfile(0, string.Format("{0} - No invocations", name));
-				return;
+				if (eventHandler == null)
+				{
+					PrintProfile(0, string.Format("{0} - No invocations", name));
+					return;
+				}
+			}
+			finally
+			{
+				s_ProfileIndentCount--;
 			}
 
 			// TODO - Print a fancy table with a total duration for the event
 
-// ReSharper disable PossibleInvalidCastExceptionInForeachLoop
-			foreach (EventHandler subscriber in eventHandler.GetInvocationList())
-// ReSharper restore PossibleInvalidCastExceptionInForeachLoop
+			foreach (EventHandler subscriber in eventHandler.GetInvocationList().Cast<EventHandler>())
 			{
 				string subscriberName = string.Format("{0} - {1}.{2}", name, subscriber.Target.GetType().Name,
-													  subscriber.GetMethodInfo().GetSignature(true));
+				                                      subscriber.GetMethodInfo().GetSignature(true));
 
 				EventHandler subscriber1 = subscriber;
 				Profile(() => subscriber1(sender, EventArgs.Empty), subscriberName);
@@ -239,20 +271,27 @@ namespace ICD.Common.Utils.Timers
 		public static void Profile<T>(EventHandler<T> eventHandler, object sender, T eventArgs, string name)
 			where T : EventArgs
 		{
-			if (eventHandler == null)
+			s_ProfileIndentCount++;
+
+			try
 			{
-				PrintProfile(0, string.Format("{0} - No invocations", name));
-				return;
+				if (eventHandler == null)
+				{
+					PrintProfile(0, string.Format("{0} - No invocations", name));
+					return;
+				}
+			}
+			finally
+			{
+				s_ProfileIndentCount--;
 			}
 
 			// TODO - Print a fancy table with a total duration for the event
 
-// ReSharper disable PossibleInvalidCastExceptionInForeachLoop
-			foreach (EventHandler<T> subscriber in eventHandler.GetInvocationList())
-// ReSharper restore PossibleInvalidCastExceptionInForeachLoop
+			foreach (EventHandler<T> subscriber in eventHandler.GetInvocationList().Cast<EventHandler<T>>())
 			{
 				string subscriberName = string.Format("{0} - {1}.{2}", name, subscriber.Target.GetType().Name,
-													  subscriber.GetMethodInfo().GetSignature(true));
+				                                      subscriber.GetMethodInfo().GetSignature(true));
 
 				EventHandler<T> subscriber1 = subscriber;
 				Profile(() => subscriber1(sender, eventArgs), subscriberName);
@@ -268,6 +307,9 @@ namespace ICD.Common.Utils.Timers
 				color = eConsoleColor.Yellow;
 			if (elapsed >= RED_MILLISECONDS)
 				color = eConsoleColor.Red;
+
+			if (s_ProfileIndentCount > 0)
+				IcdConsole.Print(StringUtils.Repeat("  ", s_ProfileIndentCount - 1));
 
 			IcdConsole.Print(color, "{0:n}ms", elapsed);
 			IcdConsole.PrintLine(" to execute {0}", name);
