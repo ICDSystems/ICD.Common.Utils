@@ -235,12 +235,16 @@ namespace ICD.Common.Utils
 			return null;
 		}
 
+
 		[NotNull]
-		public static Dictionary<T, IEnumerable<T>> BreadthFirstSearchManyDestinations<T>(T root,
+		public static IEnumerable<KeyValuePair<T, IEnumerable<T>>> BreadthFirstSearchManyDestinations<T>(T root,
 		                                                                                  IEnumerable<T> destinations,
 		                                                                                  Func<T, IEnumerable<T>>
 			                                                                                  getChildren)
 		{
+			if (destinations == null)
+				throw new ArgumentNullException("destinations");
+
 			if (getChildren == null)
 				throw new ArgumentNullException("getChildren");
 
@@ -248,7 +252,7 @@ namespace ICD.Common.Utils
 		}
 
 		[NotNull]
-		public static Dictionary<T, IEnumerable<T>> BreadthFirstSearchPathManyDestinations<T>(T root,
+		public static IEnumerable<KeyValuePair<T, IEnumerable<T>>> BreadthFirstSearchPathManyDestinations<T>(T root,
 		                                                                                      IEnumerable<T>
 			                                                                                      destinations,
 		                                                                                      Func<T, IEnumerable<T>>
@@ -272,12 +276,12 @@ namespace ICD.Common.Utils
 			foreach (T destination in
 				destinationsToBeProcessed.Where(destination => comparer.Equals(root, destination)).ToArray())
 			{
-				destinationsToBeProcessed.Remove(destination);          
-				pathsToReturn.Add(destination, new[] {root});
+				destinationsToBeProcessed.Remove(destination);
+				yield return new KeyValuePair<T, IEnumerable<T>>(destination, new[] {root});
 			}
 
 			if (destinationsToBeProcessed.Count == 0)
-				return pathsToReturn;
+				yield break;
 
 			Queue<T> queue = new Queue<T>();
 			queue.Enqueue(root);
@@ -298,15 +302,14 @@ namespace ICD.Common.Utils
 						destinationsToBeProcessed.Where(destination => comparer.Equals(closureNode, destination)).ToArray())
 					{
 						destinationsToBeProcessed.Remove(destination);
-						pathsToReturn.Add(destination, GetPath(destination, root, nodeParents, comparer).Reverse());
+
+						yield return new KeyValuePair<T, IEnumerable<T>>(destination, GetPath(destination, root, nodeParents, comparer).Reverse());
 					}
 
 					if (destinationsToBeProcessed.Count == 0)
-						return pathsToReturn;
+						break;
 				}
 			}
-
-			return pathsToReturn;
 		}
 
 		/// <summary>

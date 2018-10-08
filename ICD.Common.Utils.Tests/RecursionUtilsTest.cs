@@ -180,9 +180,11 @@ namespace ICD.Common.Utils.Tests
 		{
 			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearchManyDestinations(1, new[] { 1 }, null));
 			Assert.Throws<ArgumentNullException>(() => RecursionUtils.BreadthFirstSearchManyDestinations(1, null, Graph));
-			Assert.IsEmpty(RecursionUtils.BreadthFirstSearchManyDestinations(1, new[] { 5 }, Graph));
+			Assert.AreEqual(0, RecursionUtils.BreadthFirstSearchManyDestinations(1, new[] { 5 }, Graph).Count());
 
-			Dictionary<int, IEnumerable<int>> paths = RecursionUtils.BreadthFirstSearchManyDestinations(1, new[] { 21, 22, 31, 43, 62 }, WideGraph);
+			Dictionary<int, IEnumerable<int>> paths =
+				RecursionUtils.BreadthFirstSearchManyDestinations(1, new[] {21, 22, 31, 43, 62}, WideGraph)
+				              .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
 			//Make sure all paths were found
 			Assert.IsTrue(paths.Keys.Contains(21));
