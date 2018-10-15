@@ -1,5 +1,6 @@
 ﻿using System;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 #else
@@ -69,16 +70,16 @@ namespace ICD.Common.Utils.IO
 			return Path.ChangeExtension(path, ext);
 		}
 
-        public static string GetRelativePath(string folder, string filespec)
-        {
-            Uri pathUri = new Uri(filespec);
-            // Folders must end in a slash
-            if (!folder.EndsWith(Path.DirectorySeparatorChar.ToString()))
-            {
-                folder += Path.DirectorySeparatorChar;
-            }
-            Uri folderUri = new Uri(folder);
-            return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
-        }
+		public static string GetRelativePath(string folder, string filespec)
+		{
+			Uri pathUri = new Uri(filespec);
+
+			// Folders must end in a slash
+			if (!folder.EndsWith(Path.DirectorySeparatorChar))
+				folder += Path.DirectorySeparatorChar;
+
+			Uri folderUri = new Uri(folder);
+			return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
+		}
 	}
 }

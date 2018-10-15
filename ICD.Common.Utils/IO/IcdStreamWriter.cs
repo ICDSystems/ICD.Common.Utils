@@ -1,5 +1,4 @@
-﻿using System;
-#if SIMPLSHARP
+﻿#if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 #elif STANDARD
 using System.IO;
