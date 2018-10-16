@@ -301,5 +301,29 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(20, ordered[1]);
 			Assert.AreEqual(30, ordered[2]);
 		}
+
+		[Test]
+		public void ToInverseTest()
+		{
+			Dictionary<int, string> forward = new Dictionary<int, string>
+			{
+				{ 1, "testA" },
+				{ 2, "testA" },
+				{ 3, "testB" },
+				{ 4, "testB" }
+			};
+
+			Dictionary<string, List<int>> backwards = new Dictionary<string, List<int>>
+			{
+				{"testA", new List<int> {1, 2}},
+				{"testB", new List<int> {3, 4}}
+			};
+
+			Dictionary<string, List<int>> inverse = forward.ToInverse();
+
+			bool equal = inverse.DictionaryEqual(backwards, (v1, v2) => v1.ScrambledEquals(v2));
+
+			Assert.IsTrue(equal);
+		}
 	}
 }

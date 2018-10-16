@@ -452,12 +452,26 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static Dictionary<TValue, TKey> ToInverse<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> extends)
+		public static Dictionary<TValue, List<TKey>> ToInverse<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
+			Dictionary<TValue, List<TKey>> output = new Dictionary<TValue, List<TKey>>();
+
+			foreach (KeyValuePair<TKey, TValue> kvp in extends)
+			{
+				List<TKey> keys;
+				if (!output.TryGetValue(kvp.Value, out keys))
+				{
+					keys = new List<TKey>();
+					output.Add(kvp.Value, keys);
+				}
+
+				keys.Add(kvp.Key);
+			}
+
+			return output;
 		}
 	}
 }
