@@ -80,6 +80,20 @@ namespace ICD.Common.Utils.Collections
 			m_Dictionary = new Dictionary<TKey, TValue>(equalityComparer);
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="dictionary"></param>
+		public IcdOrderedDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary)
+			: this()
+		{
+			if (dictionary == null)
+				throw new ArgumentNullException("dictionary");
+
+			foreach (KeyValuePair<TKey, TValue> kvp in dictionary)
+				Add(kvp.Key, kvp.Value);
+		}
+
 		#region Methods
 
 		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
