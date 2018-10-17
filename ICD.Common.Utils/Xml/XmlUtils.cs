@@ -858,6 +858,26 @@ namespace ICD.Common.Utils.Xml
 		}
 
 		/// <summary>
+		/// Deserializes the xml to a dictionary.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="xml"></param>
+		/// <param name="rootElement"></param>
+		/// <param name="childElement"></param>
+		/// <param name="keyElement"></param>
+		/// <param name="valueElement"></param>
+		/// <returns></returns>
+		public static IEnumerable<KeyValuePair<TKey, TValue>> ReadDictFromXml<TKey, TValue>(
+			string xml, string rootElement, string childElement, string keyElement, string valueElement)
+		{
+			Func<string, TKey> readKey = IcdXmlConvert.DeserializeObject<TKey>;
+			Func<string, TValue> readValue = IcdXmlConvert.DeserializeObject<TValue>;
+
+			return ReadDictFromXml(xml, rootElement, childElement, keyElement, valueElement, readKey, readValue);
+		}
+
+		/// <summary>
 		/// Calls childElementCallback for each item in the list.
 		/// </summary>
 		/// <param name="xml"></param>
@@ -875,6 +895,20 @@ namespace ICD.Common.Utils.Xml
 
 			foreach (string child in GetChildElementsAsString(xml, childElement))
 				yield return readChild(child);
+		}
+
+
+		/// <summary>
+		/// Deserializes the xml to a list.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="rootElement"></param>
+		/// <param name="childElement"></param>
+		public static IEnumerable<T> ReadListFromXml<T>(string xml, string rootElement, string childElement)
+		{
+			Func<string, T> readChild = IcdXmlConvert.DeserializeObject<T>;
+
+			return ReadListFromXml(xml, rootElement, childElement, readChild);
 		}
 
 		#endregion
