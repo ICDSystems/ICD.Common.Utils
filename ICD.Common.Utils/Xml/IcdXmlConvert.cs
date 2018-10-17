@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using ICD.Common.Utils.IO;
 #if SIMPLSHARP
@@ -52,7 +54,7 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="type"></param>
 		/// <param name="xml"></param>
 		/// <returns></returns>
-		private static object DeserializeObject(Type type, string xml)
+		public static object DeserializeObject(Type type, string xml)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -181,6 +183,50 @@ namespace ICD.Common.Utils.Xml
 				return ToString((ushort)child);
 
 			return child.ToString();
+		}
+
+		public static T FromString<T>(string value)
+		{
+			return (T)FromString(typeof(T), value);
+		}
+
+		public static object FromString(Type type, string value)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (type == typeof(bool))
+				return bool.Parse(value);
+			if (type == typeof(byte))
+				return byte.Parse(value);
+			if (type == typeof(decimal))
+				return decimal.Parse(value);
+			if (type == typeof(char))
+				return value.Single();
+			if (type == typeof(double))
+				return double.Parse(value);
+			if (type == typeof(Guid))
+				return new Guid(value);
+			if (type == typeof(float))
+				return float.Parse(value);
+			if (type == typeof(int))
+				return int.Parse((value));
+			if (type == typeof(long))
+				return long.Parse(value);
+			if (type == typeof(sbyte))
+				return sbyte.Parse(value);
+			if (type == typeof(short))
+				return short.Parse(value);
+			if (type == typeof(TimeSpan))
+				return TimeSpan.Parse(value);
+			if (type == typeof(uint))
+				return uint.Parse(value);
+			if (type == typeof(ulong))
+				return ulong.Parse(value);
+			if (type == typeof(ushort))
+				return ushort.Parse(value);
+
+			return Convert.ChangeType(value, type, CultureInfo.InvariantCulture);
 		}
 	}
 }

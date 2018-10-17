@@ -48,7 +48,9 @@ namespace ICD.Common.Utils.Xml
 		/// </returns>
 		public override object ReadXml(IcdXmlReader reader)
 		{
-			throw new NotSupportedException();
+			string value = reader.ReadElementContentAsString();
+
+			return IcdXmlConvert.FromString(m_SerializeType, value);
 		}
 
 		/// <summary>
