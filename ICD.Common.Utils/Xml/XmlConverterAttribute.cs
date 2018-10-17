@@ -42,7 +42,7 @@ namespace ICD.Common.Utils.Xml
 		/// <returns></returns>
 		public static IXmlConverter GetConverterForInstance(object value)
 		{
-			return value == null ? LazyLoadConverter(typeof(DefaultXmlConverter)) : GetConverterForType(value.GetType());
+			return value == null ? DefaultXmlConverter.Instance(typeof(object)) : GetConverterForType(value.GetType());
 		}
 
 		/// <summary>
@@ -59,9 +59,9 @@ namespace ICD.Common.Utils.Xml
 			if (!s_InstanceTypeToConverter.TryGetValue(type, out converter))
 			{
 				XmlConverterAttribute attribute = AttributeUtils.GetClassAttribute<XmlConverterAttribute>(type);
-				Type converterType = attribute == null ? typeof(DefaultXmlConverter) : attribute.ConverterType;
+				Type converterType = attribute == null ? null : attribute.ConverterType;
 
-				converter = LazyLoadConverter(converterType);
+				converter = converterType == null ? DefaultXmlConverter.Instance(type) : LazyLoadConverter(converterType);
 				s_InstanceTypeToConverter[type] = converter;
 			}
 
