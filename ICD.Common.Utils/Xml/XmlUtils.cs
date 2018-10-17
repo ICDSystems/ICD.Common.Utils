@@ -396,9 +396,8 @@ namespace ICD.Common.Utils.Xml
 		[PublicAPI]
 		public static bool ReadChildElementContentAsBoolean(string xml, string childElement)
 		{
-			// IcdXmlReader.ReadElementContentAsBoolean() is too case sensitive
-			string output = ReadChildElementContentAsString(xml, childElement);
-			return bool.Parse(output);
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
+				return reader.ReadElementContentAsBoolean();
 		}
 
 		/// <summary>

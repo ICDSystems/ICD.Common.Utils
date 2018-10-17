@@ -138,19 +138,6 @@ namespace ICD.Common.Utils.Xml
 			}
 		}
 
-		public string ReadElementContentAsString()
-		{
-			try
-			{
-				return m_Reader.ReadElementContentAsString();
-			}
-			catch (XmlException e)
-			{
-				string message = string.Format("Unable to read element '{0}' content as string", m_Reader.Name);
-				throw new IcdXmlException(message, e, e.LineNumber, e.LinePosition);
-			}
-		}
-
 		public string ReadOuterXml()
 		{
 			try
@@ -172,6 +159,19 @@ namespace ICD.Common.Utils.Xml
 			catch (XmlException e)
 			{
 				throw new IcdXmlException(e);
+			}
+		}
+
+		public string ReadElementContentAsString()
+		{
+			try
+			{
+				return m_Reader.ReadElementContentAsString();
+			}
+			catch (XmlException e)
+			{
+				string message = string.Format("Unable to read element '{0}' content as string", m_Reader.Name);
+				throw new IcdXmlException(message, e, e.LineNumber, e.LinePosition);
 			}
 		}
 
@@ -197,6 +197,13 @@ namespace ICD.Common.Utils.Xml
 			{
 				throw new IcdXmlException(e);
 			}
+		}
+
+		public bool ReadElementContentAsBoolean()
+		{
+			// ReadElementContentAsBoolean() is too case sensitive
+			string value = ReadElementContentAsString();
+			return bool.Parse(value);
 		}
 
 		#endregion
