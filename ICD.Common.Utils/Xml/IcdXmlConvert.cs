@@ -21,20 +21,32 @@ namespace ICD.Common.Utils.Xml
 		/// <returns></returns>
 		public static string SerializeObject(string elementName, object value)
 		{
-			if (value == null)
-				return ToString(null);
-
-			IXmlConverter converter = XmlConverterAttribute.GetConverterForInstance(value);
-
 			StringBuilder builder = new StringBuilder();
 
 			using (IcdStringWriter stringWriter = new IcdStringWriter(builder))
 			{
 				using (IcdXmlTextWriter writer = new IcdXmlTextWriter(stringWriter))
-					converter.WriteXml(writer, elementName, value);
+					SerializeObject(writer, elementName, value);
 			}
 
 			return builder.ToString();
+		}
+
+		/// <summary>
+		/// Serializes the given instance to xml.
+		/// </summary>
+		/// <param name="writer"></param>
+		/// <param name="elementName"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static void SerializeObject(IcdXmlTextWriter writer, string elementName, object value)
+		{
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
+			IXmlConverter converter = XmlConverterAttribute.GetConverterForInstance(value);
+
+			converter.WriteXml(writer, elementName, value);
 		}
 
 		/// <summary>
