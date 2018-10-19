@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronXml;
 #else
@@ -193,14 +194,11 @@ namespace ICD.Common.Utils.Xml
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			try
-			{
-				return extends.GetChildElements(element).First();
-			}
-			catch (InvalidOperationException e)
-			{
-				throw new FormatException("No child element with name " + element, e);
-			}
+			IcdXmlReader output;
+			if (extends.GetChildElements(element).TryFirst(out output))
+				return output;
+
+			throw new FormatException("No child element with name " + element);
 		}
 
 		/// <summary>
@@ -304,20 +302,12 @@ namespace ICD.Common.Utils.Xml
 			}
 		}
 
-
 		public static bool TryGetChildElementAsString(this IcdXmlReader extends, string element, out string output)
 		{
-			output = null;
+			if (extends == null)
+				throw new ArgumentNullException("extends");
 
-			try
-			{
-				output = extends.GetChildElementsAsString(element).First();
-				return true;
-			}
-			catch (InvalidOperationException)
-			{
-				return false;
-			}
+			return extends.GetChildElementsAsString(element).TryFirst(out output);
 		}
 
 		#endregion
