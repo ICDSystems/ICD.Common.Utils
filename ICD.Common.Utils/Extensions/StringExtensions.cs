@@ -54,7 +54,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.StartsWith(character.ToString());
+			return extends.Length > 0 && character == extends[0];
 		}
 
 		/// <summary>
@@ -69,7 +69,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.EndsWith(character.ToString());
+			return extends.Length > 0 && character == extends[extends.Length - 1];
 		}
 
 		/// <summary>
