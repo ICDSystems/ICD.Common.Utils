@@ -101,26 +101,18 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		private static IEnumerable<string> SplitIterator(string value, char delimeter, int count)
 		{
-			if (count < 2)
+			while (count > 1)
 			{
-				yield return value;
-				yield break;
+				int index = value.IndexOf(delimeter);
+				if (index < 0)
+					break;
+
+				yield return value.Substring(0, index);
+				value = value.Substring(index + 1);
+				count--;
 			}
 
-			int index = value.IndexOf(delimeter);
-			if (index < 0)
-			{
-				yield return value;
-				yield break;
-			}
-
-			string first = value.Substring(0, index);
-			string second = value.Substring(index + 1);
-			count--;
-
-			yield return first;
-			foreach (string item in second.Split(delimeter, count))
-				yield return item;
+			yield return value;
 		}
 
 		/// <summary>
