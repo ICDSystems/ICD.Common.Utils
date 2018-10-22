@@ -102,7 +102,7 @@ namespace ICD.Common.Utils
 				return output;
 			}
 
-			foreach (string line in progInfo.Split(new[] {"\n\r", "\r\n", "\n", "\r"}))
+			foreach (string line in progInfo.Split(new[] {'\r', '\n'}))
 			{
 				if (string.IsNullOrEmpty(line))
 					continue;
