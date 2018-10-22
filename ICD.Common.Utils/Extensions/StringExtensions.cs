@@ -163,7 +163,7 @@ namespace ICD.Common.Utils.Extensions
 			if (characters == null)
 				throw new ArgumentNullException("characters");
 
-			return new string(extends.Where(c => !characters.Contains(c)).ToArray());
+			return new string(extends.Except(characters).ToArray());
 		}
 
 		/// <summary>
