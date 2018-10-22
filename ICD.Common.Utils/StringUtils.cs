@@ -571,7 +571,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static string RemoveWhitespace(string text)
 		{
-			return text == null ? null : new string(text.Where(c => !Char.IsWhiteSpace(c)).ToArray());
+			return text == null ? null : text.RemoveWhitespace();
 		}
 
 		/// <summary>
