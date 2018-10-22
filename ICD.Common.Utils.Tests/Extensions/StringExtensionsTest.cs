@@ -51,24 +51,6 @@ namespace ICD.Common.Utils.Tests.Extensions
             Assert.AreEqual("0", split[3]);
         }
 
-        [Test]
-        public void SplitStringDelimiterTest()
-        {
-            string[] split = "1234567890".Split("23").ToArray();
-
-            Assert.AreEqual(2, split.Length);
-            Assert.AreEqual("14567890", string.Join("", split));
-        }
-
-        [Test]
-        public void SplitStringDelimitersTest()
-        {
-            string[] split = "1234567890".Split(new[] { "23", "67" }).ToArray();
-
-            Assert.AreEqual(3, split.Length);
-            Assert.AreEqual("145890", string.Join("", split));
-        }
-
         [TestCase("12345", "   12 3 4  \t 5\n")]
         public void RemoveWhitespaceTest(string expected, string value)
         {
