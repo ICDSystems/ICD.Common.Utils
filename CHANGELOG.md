@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - AppendText method for IcdFile
  - IcdStreamWriter, a wrapper for a StreamWriter
  - New XML conversion framework for performance improvements
+
 ### Changed
  - XmlUtils is now using the improved XML conversion framework 
  - Better implementation of DictionaryExtensions.ToInverse
