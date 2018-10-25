@@ -8,17 +8,11 @@ namespace ICD.Common.Utils
 {
     public static partial class ProgramUtils
     {
-		/// <summary>
-		/// Gets the program number.
-		/// </summary>
-		[PublicAPI]
-		public static uint ProgramNumber
-		{
-			get
-			{
-				return 1;
-			}
-		}
+	    /// <summary>
+	    /// Gets the program number.
+	    /// </summary>
+	    [PublicAPI]
+	    public static uint ProgramNumber { get; set; } = 1;
 
 		/// <summary>
 		/// Gets the compile date of the program.
