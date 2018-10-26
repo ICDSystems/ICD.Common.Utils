@@ -26,10 +26,23 @@ namespace ICD.Common.Utils
 		public static string ProgramPath { get { return IcdDirectory.GetApplicationDirectory(); } }
 
 		/// <summary>
-		/// Gets the path to the NVRAM directory.
+		/// Gets the path to the root config directory,
+		/// which contains common and program-specific config directories.
 		/// </summary>
 		[PublicAPI]
-		public static string NvramPath { get { return Join(RootPath, "NVRAM"); } }
+		public static string RootConfigPath
+		{
+			get
+			{
+#if SIMPLSHARP
+				return Join(RootPath, "USER");
+#elif LINUX
+				return Join(RootPath, "opt", "ICD.Connect");
+#else
+				return Join(RootPath, "ProgramData", "ICD.Connect");
+#endif
+			}
+		}
 
 		/// <summary>
 		/// Returns the absolute path to the configuration directory.
@@ -41,7 +54,7 @@ namespace ICD.Common.Utils
 			get
 			{
 				string directoryName = string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
-				return Join(NvramPath, directoryName);
+				return Join(RootConfigPath, directoryName);
 			}
 		}
 
@@ -49,7 +62,7 @@ namespace ICD.Common.Utils
 		/// Returns the absolute path to the common configuration directory.
 		/// </summary>
 		[PublicAPI]
-		public static string CommonConfigPath { get { return Join(NvramPath, "CommonConfig"); } }
+		public static string CommonConfigPath { get { return Join(RootConfigPath, "CommonConfig"); } }
 
 		/// <summary>
 		/// Returns the absolute path to the common config library directory.
