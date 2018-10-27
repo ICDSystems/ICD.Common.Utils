@@ -3,6 +3,7 @@ using Crestron.SimplSharp.CrestronIO;
 #else
 using System.IO;
 #endif
+using System.Text;
 
 namespace ICD.Common.Utils.IO
 {
@@ -31,6 +32,12 @@ namespace ICD.Common.Utils.IO
 #else
 			WrappedFileStream.Dispose();
 #endif
+		}
+
+		public void Write(string data, Encoding encoding)
+		{
+			byte[] info = encoding.GetBytes(data);
+			WrappedFileStream.Write(info, 0, info.Length);
 		}
 	}
 }
