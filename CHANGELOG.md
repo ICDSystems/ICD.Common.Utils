@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Changed
  - Micro-optimizations in string and XML manipulations
+ - Significant hashset optimizations
 
 ## [6.0.0] - 2018-10-18
 ### Added

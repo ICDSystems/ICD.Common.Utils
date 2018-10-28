@@ -17,12 +17,6 @@ namespace ICD.Common.Utils.Collections
 		#region Properties
 
 		/// <summary>
-		/// Returns a new, empty hashset.
-		/// </summary>
-		[PublicAPI]
-		public static IcdHashSet<T> NullSet { get { return new IcdHashSet<T>(); } }
-
-		/// <summary>
 		/// Gets the number of items contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
 		/// </summary>
 		/// <returns>
@@ -98,11 +92,10 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public IcdHashSet<T> Union(IEnumerable<T> set)
 		{
-			IcdHashSet<T> unionSet = new IcdHashSet<T>(this);
-
 			if (set == null)
-				return unionSet;
+				throw new ArgumentNullException("set");
 
+			IcdHashSet<T> unionSet = new IcdHashSet<T>(this);
 			unionSet.AddRange(set);
 
 			return unionSet;
@@ -116,10 +109,10 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public IcdHashSet<T> Subtract(IEnumerable<T> set)
 		{
-			IcdHashSet<T> subtractSet = new IcdHashSet<T>(this);
-
 			if (set == null)
-				return subtractSet;
+				throw new ArgumentNullException("set");
+
+			IcdHashSet<T> subtractSet = new IcdHashSet<T>(this);
 
 			foreach (T item in set)
 				subtractSet.Remove(item);
@@ -133,17 +126,14 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public IcdHashSet<T> Intersection(IcdHashSet<T> set)
+		public IcdHashSet<T> Intersection(IEnumerable<T> set)
 		{
-			IcdHashSet<T> intersectionSet = NullSet;
-
 			if (set == null)
-				return intersectionSet;
+				throw new ArgumentNullException("set");
 
-			foreach (T item in this.Where(set.Contains))
-				intersectionSet.Add(item);
+			IcdHashSet<T> intersectionSet = new IcdHashSet<T>();
 
-			foreach (T item in set.Where(Contains))
+			foreach (T item in set.Where(item => Contains(item)))
 				intersectionSet.Add(item);
 
 			return intersectionSet;
@@ -155,11 +145,22 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public IcdHashSet<T> NonIntersection(IcdHashSet<T> set)
+		public IcdHashSet<T> NonIntersection(IEnumerable<T> set)
 		{
-			IcdHashSet<T> setToCompare = set ?? NullSet;
+			if (set == null)
+				throw new ArgumentNullException("set");
 
-			return Subtract(set).Union(setToCompare.Subtract(this));
+			IcdHashSet<T> output = new IcdHashSet<T>(this);
+
+			foreach (T item in set)
+			{
+				if (output.Contains(item))
+					output.Remove(item);
+				else
+					output.Add(item);
+			}
+
+			return output;
 		}
 
 		/// <summary>
@@ -170,9 +171,10 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public bool IsSubsetOf(IcdHashSet<T> set)
 		{
-			IcdHashSet<T> setToCompare = set ?? NullSet;
+			if (set == null)
+				throw new ArgumentNullException("set");
 
-			return this.All(setToCompare.Contains);
+			return Count <= set.Count && this.All(set.Contains);
 		}
 
 		/// <summary>
@@ -183,9 +185,10 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public bool IsProperSubsetOf(IcdHashSet<T> set)
 		{
-			IcdHashSet<T> setToCompare = set ?? NullSet;
+			if (set == null)
+				throw new ArgumentNullException("set");
 
-			return IsSubsetOf(setToCompare) && !setToCompare.IsSubsetOf(this);
+			return Count < set.Count && IsSubsetOf(set);
 		}
 
 		/// <summary>
@@ -196,9 +199,10 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public bool IsSupersetOf(IcdHashSet<T> set)
 		{
-			IcdHashSet<T> setToCompare = set ?? NullSet;
+			if (set == null)
+				throw new ArgumentNullException("set");
 
-			return setToCompare.IsSubsetOf(this);
+			return set.IsSubsetOf(this);
 		}
 
 		/// <summary>
@@ -209,9 +213,10 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public bool IsProperSupersetOf(IcdHashSet<T> set)
 		{
-			IcdHashSet<T> setToCompare = set ?? NullSet;
+			if (set == null)
+				throw new ArgumentNullException("set");
 
-			return IsSupersetOf(setToCompare) && !setToCompare.IsSupersetOf(this);
+			return set.IsProperSubsetOf(this);
 		}
 
 		/// <summary>
@@ -222,9 +227,10 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public bool SetEquals(IcdHashSet<T> set)
 		{
-			IcdHashSet<T> setToCompare = set ?? NullSet;
+			if (set == null)
+				return Count == 0;
 
-			return IsSupersetOf(setToCompare) && setToCompare.IsSupersetOf(this);
+			return Count == set.Count && set.All(item => Contains(item));
 		}
 
 		#endregion
@@ -238,9 +244,7 @@ namespace ICD.Common.Utils.Collections
 		/// <returns></returns>
 		public bool Add(T item)
 		{
-			// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (item == null)
-				// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("item");
 
 			if (m_Dict.ContainsKey(item))
@@ -288,6 +292,9 @@ namespace ICD.Common.Utils.Collections
 		/// <returns></returns>
 		public bool Contains(T item)
 		{
+			if (item == null)
+				throw new ArgumentNullException("item");
+
 			return m_Dict.ContainsKey(item);
 		}
 
@@ -309,6 +316,9 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
 		public bool Remove(T item)
 		{
+			if (item == null)
+				throw new ArgumentNullException("item");
+
 			return m_Dict.Remove(item);
 		}
 
