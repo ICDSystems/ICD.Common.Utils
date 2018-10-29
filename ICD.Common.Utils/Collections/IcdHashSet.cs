@@ -133,7 +133,7 @@ namespace ICD.Common.Utils.Collections
 
 			IcdHashSet<T> intersectionSet = new IcdHashSet<T>();
 
-			foreach (T item in set.Where(item => Contains(item)))
+			foreach (T item in set.Where(Contains))
 				intersectionSet.Add(item);
 
 			return intersectionSet;
@@ -230,12 +230,12 @@ namespace ICD.Common.Utils.Collections
 			if (set == null)
 				return Count == 0;
 
-			return Count == set.Count && set.All(item => Contains(item));
+			return Count == set.Count && set.All(Contains);
 		}
 
 		#endregion
 
-		#region ICollection<T> Members
+		#region ICollection<T>
 
 		/// <summary>
 		/// Adds the item to the collection. Returns false if the item already exists.
@@ -244,7 +244,9 @@ namespace ICD.Common.Utils.Collections
 		/// <returns></returns>
 		public bool Add(T item)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (item == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("item");
 
 			if (m_Dict.ContainsKey(item))
@@ -292,7 +294,9 @@ namespace ICD.Common.Utils.Collections
 		/// <returns></returns>
 		public bool Contains(T item)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (item == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("item");
 
 			return m_Dict.ContainsKey(item);
@@ -316,7 +320,9 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
 		public bool Remove(T item)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (item == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("item");
 
 			return m_Dict.Remove(item);
@@ -324,7 +330,7 @@ namespace ICD.Common.Utils.Collections
 
 		#endregion
 
-		#region Implementation of IEnumerable
+		#region IEnumerable<T>
 
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
