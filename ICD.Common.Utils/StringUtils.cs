@@ -565,6 +565,30 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Formats "0xFF" to an IPID.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		public static bool TryFromIpIdString(string value, out byte result)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			result = 0;
+
+			try
+			{
+				result = (byte)Convert.ToInt64(value, 16);
+				return true;
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				return false;
+			}
+		}
+
+		/// <summary>
 		/// Removes all whitespace from the string.
 		/// </summary>
 		/// <param name="text"></param>

@@ -61,10 +61,10 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual("[-3 - 5]", StringUtils.RangeFormat(-3, 5));
 		}
 
-		[Test, UsedImplicitly]
-		public void UppercaseFirstTest()
+		[TestCase("foobar", "Foobar")]
+		public void UppercaseFirstTest(string value, string expected)
 		{
-			Assert.AreEqual("Foobar", StringUtils.UppercaseFirst("foobar"));
+			Assert.AreEqual(expected, StringUtils.UppercaseFirst(value));
 		}
 
 		[TestCase("test", "Test")]
@@ -74,16 +74,24 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(expected, StringUtils.ToTitleCase(input));
 		}
 
-		[Test, UsedImplicitly]
-		public void ToIpIdStringTest()
+		[TestCase((byte)0x67, "0x67")]
+		public void ToIpIdStringTest(byte ipid, string expected)
 		{
-			Assert.AreEqual("0x67", StringUtils.ToIpIdString(0x67));
+			Assert.AreEqual(expected, StringUtils.ToIpIdString(ipid));
 		}
 
-		[Test, UsedImplicitly]
-		public void FromIpIdStringTest()
+		[TestCase("0x67", (byte)0x67)]
+		public void FromIpIdStringTest(string value, byte expected)
 		{
-			Assert.AreEqual(0x67, StringUtils.FromIpIdString("0x67"));
+			Assert.AreEqual(expected, StringUtils.FromIpIdString(value));
+		}
+
+		[TestCase("0x67", true, (byte)0x67)]
+		public void TryFromIpIdStringTest(string value, bool expected, byte expectedOutput)
+		{
+			byte output;
+			Assert.AreEqual(expected, StringUtils.TryFromIpIdString(value, out output));
+			Assert.AreEqual(expectedOutput, output);
 		}
 
 		[UsedImplicitly]
