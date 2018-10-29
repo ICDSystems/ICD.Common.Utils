@@ -177,13 +177,6 @@ namespace ICD.Common.Utils.Tests.Xml
 			}
 		}
 
-		[Test, UsedImplicitly]
-		public void IsValidXmlTest()
-		{
-			Assert.IsFalse(XmlUtils.IsValidXml(@"<Foo></Bar>"));
-			Assert.IsTrue(XmlUtils.IsValidXml(EXAMPLE_XML));
-		}
-
 		[Test]
 		public void FormatTest()
 		{

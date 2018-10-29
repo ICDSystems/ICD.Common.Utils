@@ -1034,25 +1034,7 @@ namespace ICD.Common.Utils.Xml
 
 		#endregion
 
-		/// <summary>
-		/// Returns true if the given xml is valid.
-		/// </summary>
-		/// <param name="xml"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public static bool IsValidXml(string xml)
-		{
-			try
-			{
-				IcdXmlDocument document = new IcdXmlDocument();
-				document.LoadXml(xml);
-				return true;
-			}
-			catch (IcdXmlException)
-			{
-				return false;
-			}
-		}
+		#region Print
 
 		/// <summary>
 		/// Prints the xml document.
@@ -1089,5 +1071,7 @@ namespace ICD.Common.Utils.Xml
 				}
 			}
 		}
+
+		#endregion
 	}
 }
