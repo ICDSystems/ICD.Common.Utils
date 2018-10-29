@@ -9,12 +9,6 @@ namespace ICD.Common.Utils.Tests.Collections
 	public sealed class IcdHashSetTest
 	{
 		[Test, UsedImplicitly]
-		public void NullSetTest()
-		{
-			Assert.AreEqual(0, IcdHashSet<int>.NullSet.Count);
-		}
-
-		[Test, UsedImplicitly]
 		public void CountTest()
 		{
 			Assert.AreEqual(3, new IcdHashSet<int>(new[] {1, 2, 2, 3}).Count);
