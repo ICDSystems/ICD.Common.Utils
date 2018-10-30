@@ -335,9 +335,9 @@ namespace ICD.Common.Utils.Tests.Extensions
 		}
 
 		[Test]
-		public void ToDictionaryIntTest()
+		public void ToIndexedDictionaryTest()
 		{
-			Dictionary<int, int> values = new[] {1, 2, 3}.ToDictionary();
+			Dictionary<int, int> values = new[] {1, 2, 3}.ToIndexedDictionary();
 
 			Assert.AreEqual(3, values.Count);
 			Assert.AreEqual(1, values[0]);
@@ -346,9 +346,9 @@ namespace ICD.Common.Utils.Tests.Extensions
 		}
 
 		[Test]
-		public void ToDictionaryUIntTest()
+		public void ToIndexedDictionaryUIntTest()
 		{
-			Dictionary<uint, int> values = new[] {1, 2, 3}.ToDictionaryUInt();
+			Dictionary<uint, int> values = new[] {1, 2, 3}.ToIndexedDictionaryUInt();
 
 			Assert.AreEqual(3, values.Count);
 			Assert.AreEqual(1, values[0]);

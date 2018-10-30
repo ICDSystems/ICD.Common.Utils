@@ -79,6 +79,15 @@ namespace ICD.Common.Utils.Extensions
 
 			item = default(T);
 
+			IList<T> list = extends as IList<T>;
+			if (list != null)
+			{
+				if (list.Count <= 0)
+					return false;
+				item = list[0];
+				return true;
+			}
+
 			using (IEnumerator<T> iterator = extends.GetEnumerator())
 			{
 				while (iterator.MoveNext())
@@ -126,6 +135,16 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("predicate");
 
 			item = default(T);
+
+			IList<T> list = extends as IList<T>;
+			if (list != null)
+			{
+				if (list.Count <= 0)
+					return false;
+				item = list[list.Count - 1];
+				return true;
+			}
+
 			bool output = false;
 
 			using (IEnumerator<T> iterator = extends.GetEnumerator())
@@ -156,17 +175,32 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+			if (index < 0)
+				throw new ArgumentOutOfRangeException("index");
+
 			item = default(T);
 
-			try
+			IList<T> list = extends as IList<T>;
+			if (list != null)
 			{
-				item = extends.ElementAt(index);
+				if (index >= list.Count)
+					return false;
+				item = list[index];
 				return true;
 			}
-			catch (ArgumentOutOfRangeException)
+
+			int current = 0;
+			foreach (T value in extends)
 			{
-				return false;
+				if (current == index)
+				{
+					item = value;
+					return true;
+				}
+				current++;
 			}
+
+			return false;
 		}
 
 		/// <summary>
@@ -395,7 +429,11 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			extends.ForEach(item => { });
+// ReSharper disable UnusedVariable
+			foreach (T item in extends)
+// ReSharper restore UnusedVariable
+			{
+			}
 		}
 
 		/// <summary>
@@ -628,7 +666,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		public static IOrderedEnumerable<T> OrderBy<T>(this IEnumerable<T> extends, IComparer<T> comparer)
+		public static IOrderedEnumerable<T> Order<T>(this IEnumerable<T> extends, IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -646,7 +684,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		public static IOrderedEnumerable<T> OrderByDescending<T>(this IEnumerable<T> extends, IComparer<T> comparer)
+		public static IOrderedEnumerable<T> OrderDescending<T>(this IEnumerable<T> extends, IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -704,8 +742,22 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			ICollection<T> collection = extends as ICollection<T> ?? extends.ToArray();
-			collection.CopyTo(array, index);
+			if (array == null)
+				throw new ArgumentNullException("array");
+
+			ICollection<T> collection = extends as ICollection<T>;
+			if (collection != null)
+			{
+				collection.CopyTo(array, index);
+				return;
+			}
+
+			int current = 0;
+			foreach (T item in extends)
+			{
+				array[index + current] = item;
+				current++;
+			}
 		}
 
 		/// <summary>
@@ -719,7 +771,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return new IcdHashSet<T>(extends);
+			return extends.ToIcdHashSet(EqualityComparer<T>.Default);
 		}
 
 		/// <summary>
@@ -790,7 +842,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static Dictionary<int, T> ToDictionary<T>(this IEnumerable<T> extends)
+		public static Dictionary<int, T> ToIndexedDictionary<T>(this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -807,7 +859,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static Dictionary<uint, T> ToDictionaryUInt<T>(this IEnumerable<T> extends)
+		public static Dictionary<uint, T> ToIndexedDictionaryUInt<T>(this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
