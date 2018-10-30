@@ -37,6 +37,9 @@ namespace ICD.Common.Utils.Extensions
 
 				index = thisIndex;
 				first = item;
+
+				if (index == 0)
+					break;
 			}
 
 			return index;
