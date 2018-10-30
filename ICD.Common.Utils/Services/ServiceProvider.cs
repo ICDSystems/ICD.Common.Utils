@@ -228,18 +228,7 @@ namespace ICD.Common.Utils.Services
 			if (tService == null)
 				throw new ArgumentNullException("tService");
 
-			try
-			{
-				m_ServicesSection.Enter();
-
-				object service;
-				m_Services.TryGetValue(tService, out service);
-				return service;
-			}
-			finally
-			{
-				m_ServicesSection.Leave();
-			}
+			return m_ServicesSection.Execute(() => m_Services.GetDefault(tService));
 		}
 
 		/// <summary>
@@ -265,7 +254,7 @@ namespace ICD.Common.Utils.Services
 		/// <returns></returns>
 		private IEnumerable<object> GetServicesInstance()
 		{
-			return m_ServicesSection.Execute(() => m_Services.Values.ToList());
+			return m_ServicesSection.Execute(() => m_Services.Values.ToArray(m_Services.Count));
 		}
 
 		/// <summary>
