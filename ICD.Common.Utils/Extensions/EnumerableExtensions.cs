@@ -227,6 +227,12 @@ namespace ICD.Common.Utils.Extensions
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
 
+			// Simple count check
+			ICollection<T> a = extends as ICollection<T>;
+			ICollection<T> b = other as ICollection<T>;
+			if (a != null && b != null && a.Count != b.Count)
+				return false;
+
 			using (IEnumerator<T> firstPos = extends.GetEnumerator())
 			{
 				using (IEnumerator<T> secondPos = other.GetEnumerator())
@@ -284,6 +290,12 @@ namespace ICD.Common.Utils.Extensions
 
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
+
+			// Simple count check
+			ICollection<T> a = extends as ICollection<T>;
+			ICollection<T> b = other as ICollection<T>;
+			if (a != null && b != null && a.Count != b.Count)
+				return false;
 
 			Dictionary<T, int> count = new Dictionary<T, int>(comparer);
 
