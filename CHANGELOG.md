@@ -5,9 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [7.0.0] - 2018-10-30
 ### Changed
  - Micro-optimizations in string and XML manipulations
  - Significant hashset optimizations
+ - Deprecated NVRAM in favor of USER directory
 
 ## [6.0.0] - 2018-10-18
 ### Added
