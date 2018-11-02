@@ -228,7 +228,7 @@ namespace ICD.Common.Utils.Collections
 		public bool SetEquals(IcdHashSet<T> set)
 		{
 			if (set == null)
-				return Count == 0;
+				throw new ArgumentNullException("set");
 
 			return Count == set.Count && set.All(Contains);
 		}
