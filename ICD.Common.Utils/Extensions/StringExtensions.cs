@@ -165,8 +165,9 @@ namespace ICD.Common.Utils.Extensions
 
 			if (characters == null)
 				throw new ArgumentNullException("characters");
+			var cSet = characters.ToIcdHashSet();
 
-			return new string(extends.Except(characters).ToArray());
+			return new string(extends.Where(c => !cSet.Contains(c)).ToArray());
 		}
 
 		/// <summary>
