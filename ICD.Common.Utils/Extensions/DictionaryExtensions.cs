@@ -66,6 +66,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="key"></param>
 		/// <returns></returns>
+		[CanBeNull]
 		[PublicAPI]
 		public static TValue GetDefault<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key)
 		{
@@ -88,6 +89,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="key"></param>
 		/// <param name="defaultValue"></param>
 		/// <returns></returns>
+		[CanBeNull]
 		[PublicAPI]
 		public static TValue GetDefault<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key, TValue defaultValue)
 		{
@@ -111,6 +113,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="key"></param>
 		/// <param name="defaultValue"></param>
 		/// <returns></returns>
+		[CanBeNull]
 		[PublicAPI]
 		public static TValue GetOrAddDefault<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key,
 		                                                   TValue defaultValue)
