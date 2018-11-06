@@ -125,8 +125,10 @@ namespace ICD.Common.Utils.Extensions
 			if (key == null)
 				throw new ArgumentNullException("key");
 
-			extends[key] = extends.GetDefault(key, defaultValue);
-			return extends[key];
+			TValue value = extends.GetDefault(key, defaultValue);
+			extends[key] = value;
+
+			return value;
 		}
 
 		/// <summary>
