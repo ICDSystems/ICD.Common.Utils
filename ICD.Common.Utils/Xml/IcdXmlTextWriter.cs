@@ -70,6 +70,16 @@ namespace ICD.Common.Utils.Xml
 
 		#region Methods
 
+		public void WriteStartDocument()
+		{
+			m_Writer.WriteStartDocument();
+		}
+
+		public void WriteEndDocument()
+		{
+			m_Writer.WriteEndDocument();
+		}
+
 		public void WriteStartElement(string elementName)
 		{
 			m_Writer.WriteStartElement(elementName);
