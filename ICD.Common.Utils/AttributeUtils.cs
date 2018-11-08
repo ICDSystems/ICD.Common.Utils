@@ -148,7 +148,6 @@ namespace ICD.Common.Utils
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static IEnumerable<T> GetClassAttributes<T>()
-			where T : Attribute
 		{
 			return s_AttributeToTypeCache.Select(kvp => kvp.Key)
 			                             .OfType<T>();
@@ -162,7 +161,6 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		[CanBeNull]
 		public static T GetClassAttribute<T>(Type type)
-			where T : Attribute
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -177,7 +175,6 @@ namespace ICD.Common.Utils
 		/// <param name="type"></param>
 		/// <returns></returns>
 		public static IEnumerable<T> GetClassAttributes<T>(Type type)
-			where T : Attribute
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
