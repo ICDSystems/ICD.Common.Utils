@@ -5,8 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [7.1.0] - 2018-11-08
 ### Added
  - IcdXmlTextWriter exposes WriteStartDocument and WriteEndDocument
+ - AttributeUtils method for getting properties with the given attribute type
+
+### Changed
+ - EnumerableExtensions performance improvements
+ - Fixed bug in StringExtensions when removing a sequence of characters from a string
 
 ## [7.0.0] - 2018-10-30
 ### Changed
