@@ -60,7 +60,7 @@ namespace ICD.Common.Utils.Xml
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
 				reader.ReadToNextElement();
-				return reader.GetAttributes();
+				return reader.GetAttributes().ToArray();
 			}
 		}
 
