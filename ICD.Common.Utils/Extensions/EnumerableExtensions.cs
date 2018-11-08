@@ -79,15 +79,6 @@ namespace ICD.Common.Utils.Extensions
 
 			item = default(T);
 
-			IList<T> list = extends as IList<T>;
-			if (list != null)
-			{
-				if (list.Count <= 0)
-					return false;
-				item = list[0];
-				return true;
-			}
-
 			using (IEnumerator<T> iterator = extends.GetEnumerator())
 			{
 				while (iterator.MoveNext())
@@ -135,16 +126,6 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("predicate");
 
 			item = default(T);
-
-			IList<T> list = extends as IList<T>;
-			if (list != null)
-			{
-				if (list.Count <= 0)
-					return false;
-				item = list[list.Count - 1];
-				return true;
-			}
-
 			bool output = false;
 
 			using (IEnumerator<T> iterator = extends.GetEnumerator())
