@@ -119,7 +119,7 @@ namespace ICD.Common.Utils
 
 			if (s_CachedTypes.Contains(type))
 				return;
-			
+
 			s_CachedTypes.Add(type);
 
 			try
@@ -212,6 +212,28 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("attribute");
 
 			return s_AttributeToTypeCache[attribute];
+		}
+
+		/// <summary>
+		/// Returns the properties on the given instance with property attributes of the given type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="instance"></param>
+		/// <param name="inherit"></param>
+		/// <returns></returns>
+		public static IEnumerable<PropertyInfo> GetProperties<T>(object instance, bool inherit)
+		{
+			if (instance == null)
+				throw new ArgumentNullException("instance");
+
+			return instance.GetType()
+#if SIMPLSHARP
+			               .GetCType()
+#else
+			               .GetTypeInfo()
+#endif
+			               .GetProperties()
+			               .Where(p => ReflectionExtensions.GetCustomAttributes<T>(p, inherit).Any());
 		}
 
 		#endregion
