@@ -58,7 +58,18 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.TryFirst(i => true, out item);
+			IList<T> list = extends as IList<T>;
+			if (list == null)
+				return extends.TryFirst(i => true, out item);
+
+			item = default(T);
+
+			if (list.Count <= 0)
+				return false;
+
+			item = list[0];
+
+			return true;
 		}
 
 		/// <summary>
@@ -106,7 +117,18 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.TryLast(i => true, out item);
+			IList<T> list = extends as IList<T>;
+			if (list == null)
+				return extends.TryLast(i => true, out item);
+
+			item = default(T);
+
+			if (list.Count <= 0)
+				return false;
+
+			item = list[list.Count - 1];
+
+			return true;
 		}
 
 		/// <summary>
