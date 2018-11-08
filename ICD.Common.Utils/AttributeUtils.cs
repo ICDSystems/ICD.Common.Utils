@@ -24,7 +24,6 @@ namespace ICD.Common.Utils
 		private static readonly IcdHashSet<Assembly> s_CachedAssemblies;
 		private static readonly IcdHashSet<Type> s_CachedTypes;
 
-		private static readonly Dictionary<Attribute, MethodInfo> s_AttributeToMethodCache;
 		private static readonly Dictionary<Attribute, Type> s_AttributeToTypeCache;
 		private static readonly Dictionary<Type, IcdHashSet<Attribute>> s_TypeToAttributesCache;
 
@@ -38,25 +37,11 @@ namespace ICD.Common.Utils
 			s_CachedAssemblies = new IcdHashSet<Assembly>();
 			s_CachedTypes = new IcdHashSet<Type>();
 
-			s_AttributeToMethodCache = new Dictionary<Attribute, MethodInfo>();
 			s_AttributeToTypeCache = new Dictionary<Attribute, Type>();
 			s_TypeToAttributesCache = new Dictionary<Type, IcdHashSet<Attribute>>();
 		}
 
 		#region Caching
-
-		/// <summary>
-		/// Pre-emptively caches the given assemblies for lookup.
-		/// </summary>
-		/// <param name="assemblies"></param>
-		public static void CacheAssemblies(IEnumerable<Assembly> assemblies)
-		{
-			if (assemblies == null)
-				throw new ArgumentNullException("assemblies");
-
-			foreach (Assembly assembly in assemblies)
-				CacheAssembly(assembly);
-		}
 
 		/// <summary>
 		/// Pre-emptively caches the given assembly for lookup.
@@ -69,6 +54,8 @@ namespace ICD.Common.Utils
 
 			if (s_CachedAssemblies.Contains(assembly))
 				return true;
+
+			s_CachedAssemblies.Add(assembly);
 
 #if SIMPLSHARP
 			CType[] types;
@@ -114,7 +101,6 @@ namespace ICD.Common.Utils
 			foreach (var type in types)
 				CacheType(type);
 
-			s_CachedAssemblies.Add(assembly);
 			return true;
 		}
 
@@ -133,44 +119,23 @@ namespace ICD.Common.Utils
 
 			if (s_CachedTypes.Contains(type))
 				return;
+			
 			s_CachedTypes.Add(type);
-
-			MethodInfo[] methods;
 
 			try
 			{
 				s_TypeToAttributesCache[type] = new IcdHashSet<Attribute>(type.GetCustomAttributes<Attribute>(false));
 				foreach (Attribute attribute in s_TypeToAttributesCache[type])
 					s_AttributeToTypeCache[attribute] = type;
-
-				methods = type.GetMethods();
 			}
 			// GetMethods for Open Generic Types is not supported.
 			catch (NotSupportedException)
 			{
-				return;
 			}
 			// Not sure why this happens :/
 			catch (InvalidProgramException)
 			{
-				return;
 			}
-
-			foreach (MethodInfo method in methods)
-				CacheMethod(method);
-		}
-
-		/// <summary>
-		/// Caches the method.
-		/// </summary>
-		/// <param name="method"></param>
-		private static void CacheMethod(MethodInfo method)
-		{
-			if (method == null)
-				throw new ArgumentNullException("method");
-
-			foreach (Attribute attribute in ReflectionExtensions.GetCustomAttributes<Attribute>(method, false))
-				s_AttributeToMethodCache[attribute] = method;
 		}
 
 		#endregion
@@ -250,32 +215,6 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("attribute");
 
 			return s_AttributeToTypeCache[attribute];
-		}
-
-		/// <summary>
-		/// Gets all of the cached method attributes of the given type.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
-		public static IEnumerable<T> GetMethodAttributes<T>()
-			where T : Attribute
-		{
-			return s_AttributeToMethodCache.Select(p => p.Key)
-			                               .OfType<T>()
-			                               .ToArray();
-		}
-
-		/// <summary>
-		/// Gets the cached method for the given attribute.
-		/// </summary>
-		/// <param name="attribute"></param>
-		/// <returns></returns>
-		public static MethodInfo GetMethod(Attribute attribute)
-		{
-			if (attribute == null)
-				throw new ArgumentNullException("attribute");
-
-			return s_AttributeToMethodCache[attribute];
 		}
 
 		#endregion
