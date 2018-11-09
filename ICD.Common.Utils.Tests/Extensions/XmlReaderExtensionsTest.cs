@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Utils.Xml;
 using NUnit.Framework;
@@ -49,10 +50,10 @@ namespace ICD.Common.Utils.Tests.Extensions
 
 			reader.ReadToNextElement();
 
-			IcdXmlAttribute[] attributes = reader.GetAttributes().ToArray();
+			KeyValuePair<string, string>[] attributes = reader.GetAttributes().ToArray();
 			Assert.AreEqual(2, attributes.Length);
-			Assert.AreEqual("attr1", attributes[0].Name);
-			Assert.AreEqual("attr2", attributes[1].Name);
+			Assert.AreEqual("attr1", attributes[0].Key);
+			Assert.AreEqual("attr2", attributes[1].Key);
 		}
 
 	    [Test]

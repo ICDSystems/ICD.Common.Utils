@@ -55,7 +55,7 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="xml"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<IcdXmlAttribute> GetAttributes(string xml)
+		public static IEnumerable<KeyValuePair<string, string>> GetAttributes(string xml)
 		{
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
 			{
@@ -71,13 +71,30 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="name"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IcdXmlAttribute GetAttribute(string xml, string name)
+		public static string GetAttribute(string xml, string name)
 		{
-			IcdXmlAttribute output;
-			if (GetAttributes(xml).TryFirst(a => a.Name == name, out output))
-				return output;
+			using (IcdXmlReader reader = new IcdXmlReader(xml))
+			{
+				reader.ReadToNextElement();
+				return reader.GetAttribute(name);
+			}
+		}
 
-			throw new FormatException(string.Format("No attribute with name {0}", name));
+		/// <summary>
+		/// Convenience method for getting attribute by name.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryGetAttribute(string xml, string name, out string value)
+		{
+			using (IcdXmlReader reader = new IcdXmlReader(xml))
+			{
+				reader.ReadToNextElement();
+				return reader.TryGetAttribute(name, out value);
+			}
 		}
 
 		/// <summary>

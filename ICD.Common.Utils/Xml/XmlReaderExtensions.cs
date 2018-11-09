@@ -28,7 +28,21 @@ namespace ICD.Common.Utils.Xml
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.GetAttribute(name) != null;
+			string unused;
+			return extends.TryGetAttribute(name, out unused);
+		}
+
+		/// <summary>
+		/// Returns true if the attribute exists.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryGetAttribute(this IcdXmlReader extends, string name, out string value)
+		{
+			return (value = extends.GetAttribute(name)) != null;
 		}
 
 		/// <summary>
@@ -37,13 +51,13 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<IcdXmlAttribute> GetAttributes(this IcdXmlReader extends)
+		public static IEnumerable<KeyValuePair<string, string>> GetAttributes(this IcdXmlReader extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
 			while (extends.MoveToNextAttribute())
-				yield return new IcdXmlAttribute(extends.Name, extends.Value);
+				yield return new KeyValuePair<string, string>(extends.Name, extends.Value);
 
 			// Move back to element.
 			extends.MoveToElement();
