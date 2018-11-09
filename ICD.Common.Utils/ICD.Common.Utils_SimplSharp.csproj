@@ -210,7 +210,6 @@
     <Compile Include="Xml\IcdXmlException.cs" />
     <Compile Include="Xml\IcdXmlReader.cs" />
     <Compile Include="Xml\IcdXmlTextWriter.cs" />
-    <Compile Include="Xml\IcdXmlAttribute.cs" />
     <Compile Include="Xml\IXmlConverter.cs" />
     <Compile Include="Xml\XmlConverterAttribute.cs" />
     <Compile Include="Xml\XmlReaderExtensions.cs" />
