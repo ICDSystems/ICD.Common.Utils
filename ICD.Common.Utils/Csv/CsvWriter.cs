@@ -79,6 +79,8 @@ namespace ICD.Common.Utils.Csv
 		[PublicAPI]
 		public void AppendValue(string value)
 		{
+			value = value ?? string.Empty;
+
 			if (!m_NewLine)
 				m_Writer.WrappedTextWriter.Write(m_Seperator);
 
