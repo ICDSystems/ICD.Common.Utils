@@ -152,7 +152,31 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Removes the given characters from the string.
+		/// Removes all occurances of the given string.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		public static string Remove(this string extends, string other)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (other == null)
+				throw new ArgumentNullException("other");
+
+			if (string.IsNullOrEmpty(other))
+				return extends;
+
+			int index;
+			while ((index = extends.IndexOf(other, StringComparison.Ordinal)) >= 0)
+				extends = extends.Remove(index, other.Length);
+
+			return extends;
+		}
+
+		/// <summary>
+		/// Removes all occurances the given characters from the string.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <param name="characters"></param>

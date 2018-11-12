@@ -58,6 +58,13 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(expected, value.RemoveWhitespace());
 		}
 
+		[TestCase("1234567890", "12345", "67890")]
+		[TestCase("foobarfoobar", "bar", "foofoo")]
+		public void RemoveStringTest(string value, string other, string expected)
+		{
+			Assert.AreEqual(expected, value.Remove(other));
+		}
+
 		[TestCase("1234567890", new[] {'2', '6'}, "13457890")]
 		[TestCase("912529434324", new[] {'-', '(', ')', '.', '+'}, "912529434324")]
 		public void RemoveCharactersTest(string value, IEnumerable<char> characters, string expected)
