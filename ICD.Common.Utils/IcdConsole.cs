@@ -50,7 +50,7 @@ namespace ICD.Common.Utils
 				Print(message);
 			}
 #else
-			Print(message, args);
+			Print(message);
 #endif
 		}
 
