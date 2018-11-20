@@ -5,12 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [8.0.0] - 2018-11-20
 ### Added
  - XML TryGetAttribute methods
 
 ### Changed
  - Performance improvements when working with xml attributes
  - Fixed NullReferenceException when writing null strings to CSV
+ - Fixed bug with string formatting console input on Net Standard
 
 ### Removed
  - Removed IcdXmlAttribute
