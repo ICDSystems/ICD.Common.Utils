@@ -383,6 +383,21 @@ namespace ICD.Common.Utils.Xml
 		}
 
 		/// <summary>
+		/// Parses the element content as a short.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static short ReadElementContentAsShort(this IcdXmlReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string content = extends.ReadElementContentAsString();
+			return short.Parse(content);
+		}
+
+		/// <summary>
 		/// Parses the element content as an enum.
 		/// </summary>
 		/// <param name="extends"></param>

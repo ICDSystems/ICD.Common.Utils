@@ -413,6 +413,19 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="childElement"></param>
 		/// <returns></returns>
 		[PublicAPI]
+		public static short ReadChildElementContentAsShort(string xml, string childElement)
+		{
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
+				return reader.ReadElementContentAsShort();
+		}
+
+		/// <summary>
+		/// Gets the content of an immediate child.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="childElement"></param>
+		/// <returns></returns>
+		[PublicAPI]
 		public static float ReadChildElementContentAsFloat(string xml, string childElement)
 		{
 			using (IcdXmlReader reader = GetChildElement(xml, childElement))
@@ -559,6 +572,25 @@ namespace ICD.Common.Utils.Xml
 			try
 			{
 				return ReadChildElementContentAsUShort(xml, childElement);
+			}
+			catch (FormatException)
+			{
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the content of the immediate child. Returns null if the child element was not found.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="childElement"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static short? TryReadChildElementContentAsShort(string xml, string childElement)
+		{
+			try
+			{
+				return ReadChildElementContentAsShort(xml, childElement);
 			}
 			catch (FormatException)
 			{
