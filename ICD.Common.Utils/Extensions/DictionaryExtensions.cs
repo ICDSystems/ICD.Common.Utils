@@ -89,7 +89,6 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="key"></param>
 		/// <param name="defaultValue"></param>
 		/// <returns></returns>
-		[CanBeNull]
 		[PublicAPI]
 		public static TValue GetDefault<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key, TValue defaultValue)
 		{
