@@ -145,6 +145,21 @@ namespace ICD.Common.Utils.Xml
 			}
 		}
 
+		/// <summary>
+		/// Gets the value of the attribute with the given name and returns as a bool.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="name"></param>
+		/// <param name="ignoreCase"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static T GetAttributeAsEnum<T>(string xml, string name, bool ignoreCase)
+			where T : struct, IConvertible
+		{
+			string attribute = GetAttributeAsString(xml, name);
+			return EnumUtils.Parse<T>(attribute, ignoreCase);
+		}
+
 		#endregion
 
 		#region Recurse
