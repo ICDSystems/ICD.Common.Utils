@@ -62,6 +62,7 @@ namespace ICD.Common.Utils
 		/// Constructor.
 		/// </summary>
 		public IcdUriBuilder()
+			: this((Uri)null)
 		{
 		}
 
@@ -80,6 +81,9 @@ namespace ICD.Common.Utils
 		/// <param name="uri"></param>
 		public IcdUriBuilder(Uri uri)
 		{
+			if (uri == null)
+				return;
+
 			if (!uri.IsAbsoluteUri)
 				uri = new Uri(Uri.UriSchemeHttp + Uri.SchemeDelimiter + uri);
 
