@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
 #if SIMPLSHARP
@@ -237,6 +238,7 @@ namespace ICD.Common.Utils
 		/// <param name="type"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static ConstructorInfo GetConstructor(Type type, params object[] parameters)
 		{
 			if (type == null)
@@ -245,13 +247,18 @@ namespace ICD.Common.Utils
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
 
-			return
-				type
+			ConstructorInfo info;
+			
+			if(!type
 #if SIMPLSHARP
-					.GetCType()
+				.GetCType()
 #endif
-					.GetConstructors()
-					.First(c => MatchesConstructorParameters(c, parameters));
+				.GetConstructors()
+				.Where(c => MatchesConstructorParameters(c, parameters))
+				.TryFirst(out info))
+				throw new ArgumentException("Couldn't find a constructor matching the given parameters.");
+
+			return info;
 		}
 
 		/// <summary>
