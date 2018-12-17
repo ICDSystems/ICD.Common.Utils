@@ -40,7 +40,7 @@ namespace ICD.Common.Utils
 		/// Returns true if the given type is an enum.
 		/// </summary>
 		/// <returns></returns>
-		private static bool IsEnumType(Type type)
+		public static bool IsEnumType(Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
