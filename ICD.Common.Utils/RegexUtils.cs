@@ -44,7 +44,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static string ReplaceGroup(string input, string pattern, string groupName, string replacement)
 		{
-			return ReplaceGroup(input, pattern, groupName, match => replacement);
+			return ReplaceGroup(input, pattern, groupName, replacement, RegexOptions.None);
 		}
 
 		/// <summary>
@@ -56,6 +56,34 @@ namespace ICD.Common.Utils
 		/// <param name="replacement"></param>
 		/// <returns></returns>
 		public static string ReplaceGroup(string input, string pattern, string groupName, Func<Match, string> replacement)
+		{
+			return ReplaceGroup(input, pattern, groupName, replacement, RegexOptions.None);
+		}
+
+		/// <summary>
+		/// Uses the pattern to replace the specified group with the provided replacement string.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <param name="pattern"></param>
+		/// <param name="groupName"></param>
+		/// <param name="replacement"></param>
+		/// <param name="options"></param>
+		/// <returns></returns>
+		public static string ReplaceGroup(string input, string pattern, string groupName, string replacement, RegexOptions options)
+		{
+			return ReplaceGroup(input, pattern, groupName, match => replacement, options);
+		}
+
+		/// <summary>
+		/// Uses the pattern to replace the specified group with the provided replacement string.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <param name="pattern"></param>
+		/// <param name="groupName"></param>
+		/// <param name="replacement"></param>
+		/// <param name="options"></param>
+		/// <returns></returns>
+		public static string ReplaceGroup(string input, string pattern, string groupName, Func<Match, string> replacement, RegexOptions options)
 		{
 			MatchEvaluator evaluator =
 				m =>
@@ -81,7 +109,7 @@ namespace ICD.Common.Utils
 					return sb.ToString();
 				};
 
-			return Regex.Replace(input, pattern, evaluator);
+			return Regex.Replace(input, pattern, evaluator, options);
 		}
 	}
 }
