@@ -1,4 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ICD.Common.Utils
 {
@@ -29,6 +32,56 @@ namespace ICD.Common.Utils
 		{
 			match = Regex.Match(input, pattern, options);
 			return match.Success;
+		}
+
+		/// <summary>
+		/// Uses the pattern to replace the specified group with the provided replacement string.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <param name="pattern"></param>
+		/// <param name="groupName"></param>
+		/// <param name="replacement"></param>
+		/// <returns></returns>
+		public static string ReplaceGroup(string input, string pattern, string groupName, string replacement)
+		{
+			return ReplaceGroup(input, pattern, groupName, match => replacement);
+		}
+
+		/// <summary>
+		/// Uses the pattern to replace the specified group with the provided replacement string.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <param name="pattern"></param>
+		/// <param name="groupName"></param>
+		/// <param name="replacement"></param>
+		/// <returns></returns>
+		public static string ReplaceGroup(string input, string pattern, string groupName, Func<Match, string> replacement)
+		{
+			MatchEvaluator evaluator =
+				m =>
+				{
+					string replacementString = replacement(m);
+
+					Group group = m.Groups[groupName];
+					StringBuilder sb = new StringBuilder();
+
+					int previousCaptureEnd = 0;
+					foreach (Capture capture in group.Captures.Cast<Capture>())
+					{
+						int currentCaptureEnd = capture.Index + capture.Length - m.Index;
+						int currentCaptureLength = capture.Index - m.Index - previousCaptureEnd;
+
+						sb.Append(m.Value.Substring(previousCaptureEnd, currentCaptureLength));
+						sb.Append(replacementString);
+
+						previousCaptureEnd = currentCaptureEnd;
+					}
+					sb.Append(m.Value.Substring(previousCaptureEnd));
+
+					return sb.ToString();
+				};
+
+			return Regex.Replace(input, pattern, evaluator);
 		}
 	}
 }

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added GetAttributeAsEnum xml utils method
  - Adding short parsing methods to XML utils
  - Added methods to IcdUriBuilder for appending path
+ - Added RegexUtils method for replacing a single group in a match
 
 ## [8.0.0] - 2018-11-20
 ### Added
