@@ -1101,17 +1101,6 @@ namespace ICD.Common.Utils.Xml
 		#region Print
 
 		/// <summary>
-		/// Prints the xml document.
-		/// </summary>
-		/// <param name="xml"></param>
-		[PublicAPI]
-		public static void Print(string xml)
-		{
-			string result = Format(xml);
-			IcdConsole.PrintLine(result);
-		}
-
-		/// <summary>
 		/// Formats the given xml string into a human readable structure with indentations.
 		/// </summary>
 		/// <param name="xml"></param>
@@ -1128,12 +1117,10 @@ namespace ICD.Common.Utils.Xml
 					IcdXmlDocument document = new IcdXmlDocument();
 					document.LoadXml(xml);
 					document.WriteContentTo(writer);
-
-					writer.Flush();
-
-					return builder.ToString();
 				}
 			}
+
+			return builder.ToString();
 		}
 
 		#endregion
