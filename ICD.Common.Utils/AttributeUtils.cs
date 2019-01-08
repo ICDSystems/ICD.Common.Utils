@@ -233,7 +233,9 @@ namespace ICD.Common.Utils
 			               .GetTypeInfo()
 #endif
 			               .GetProperties()
+// ReSharper disable InvokeAsExtensionMethod
 			               .Where(p => ReflectionExtensions.GetCustomAttributes<T>(p, inherit).Any());
+// ReSharper restore InvokeAsExtensionMethod
 		}
 
 		#endregion
