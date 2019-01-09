@@ -159,7 +159,8 @@ namespace ICD.Common.Utils.Xml
 		{
 			return new XmlWriterSettings
 			{
-				Indent = true
+				Indent = true,
+				ConformanceLevel = ConformanceLevel.Auto
 			};
 		}
 #endif
