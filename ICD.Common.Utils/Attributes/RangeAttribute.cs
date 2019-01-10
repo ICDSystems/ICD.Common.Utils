@@ -1,4 +1,5 @@
 ﻿using System;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Attributes
 {
@@ -11,10 +12,22 @@ namespace ICD.Common.Utils.Attributes
 					AttributeTargets.ReturnValue,
 					AllowMultiple = false,
 					Inherited = true)]
-	public class RangeAttribute : AbstractIcdAttribute
+	public sealed class RangeAttribute : AbstractIcdAttribute
 	{
+		#region Properties
+
+		[NotNull]
 		public object Min { get; private set; }
+
+		[NotNull]
 		public object Max { get; private set; }
+
+		[NotNull]
+		private Type Type { get { return Min.GetType(); } }
+
+		#endregion
+
+		#region Constructors
 
 		public RangeAttribute(ushort min, ushort max)
 		{
@@ -82,13 +95,25 @@ namespace ICD.Common.Utils.Attributes
 			Max = max;
 		}
 
+		#endregion
+
+		#region Methods
+
+		/// <summary>
+		/// Returns true if the given value is within the range of Min to Max.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public bool IsInRange(object value)
 		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (value.GetType() != Type)
+				throw new ArgumentException("the type of value does not match the type of min / max");
+
 			if (value is ushort)
 			{
-				if (!(Min is ushort))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (ushort)Min;
 				var castMax = (ushort)Max;
 				var castVal = (ushort)value;
@@ -97,9 +122,6 @@ namespace ICD.Common.Utils.Attributes
 
 			if (value is short)
 			{
-				if (!(Min is short))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (short)Min;
 				var castMax = (short)Max;
 				var castVal = (short)value;
@@ -108,9 +130,6 @@ namespace ICD.Common.Utils.Attributes
 
 			if (value is uint)
 			{
-				if (!(Min is uint))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (uint)Min;
 				var castMax = (uint)Max;
 				var castVal = (uint)value;
@@ -119,9 +138,6 @@ namespace ICD.Common.Utils.Attributes
 
 			if (value is int)
 			{
-				if (!(Min is int))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (int)Min;
 				var castMax = (int)Max;
 				var castVal = (int)value;
@@ -130,9 +146,6 @@ namespace ICD.Common.Utils.Attributes
 
 			if (value is ulong)
 			{
-				if (!(Min is ulong))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (ulong)Min;
 				var castMax = (ulong)Max;
 				var castVal = (ulong)value;
@@ -141,9 +154,6 @@ namespace ICD.Common.Utils.Attributes
 
 			if (value is long)
 			{
-				if (!(Min is long))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (long)Min;
 				var castMax = (long)Max;
 				var castVal = (long)value;
@@ -152,9 +162,6 @@ namespace ICD.Common.Utils.Attributes
 
 			if (value is float)
 			{
-				if (!(Min is float))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (float)Min;
 				var castMax = (float)Max;
 				var castVal = (float)value;
@@ -163,9 +170,6 @@ namespace ICD.Common.Utils.Attributes
 
 			if (value is double)
 			{
-				if (!(Min is double))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (double)Min;
 				var castMax = (double)Max;
 				var castVal = (double)value;
@@ -174,9 +178,6 @@ namespace ICD.Common.Utils.Attributes
 
 			if (value is decimal)
 			{
-				if (!(Min is decimal))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (decimal)Min;
 				var castMax = (decimal)Max;
 				var castVal = (decimal)value;
@@ -185,9 +186,6 @@ namespace ICD.Common.Utils.Attributes
 
 			if (value is byte)
 			{
-				if (!(Min is byte))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (byte)Min;
 				var castMax = (byte)Max;
 				var castVal = (byte)value;
@@ -196,9 +194,6 @@ namespace ICD.Common.Utils.Attributes
 
 			if (value is sbyte)
 			{
-				if (!(Min is sbyte))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
 				var castMin = (sbyte)Min;
 				var castMax = (sbyte)Max;
 				var castVal = (sbyte)value;
@@ -208,24 +203,26 @@ namespace ICD.Common.Utils.Attributes
 			throw new ArgumentException("the type of value is not a numeric type.");
 		}
 
-		public ushort RemapRangeToUshort(double value)
+		public ushort RemapRangeToUShort(double value)
 		{
 			return (ushort)MathUtils.MapRange((double)Min, (double)Max, ushort.MinValue, ushort.MaxValue, value);
 		}
 
-		public ushort RemapRangeToUshort(float value)
+		public ushort RemapRangeToUShort(float value)
 		{
 			return (ushort)MathUtils.MapRange((float)Min, (float)Max, ushort.MinValue, ushort.MaxValue, value);
 		}
 
-		public ushort RemapRangeToUshort(int value)
+		public ushort RemapRangeToUShort(int value)
 		{
 			return (ushort)MathUtils.MapRange((int)Min, (int)Max, ushort.MinValue, ushort.MaxValue, value);
 		}
 
-		public ushort RemapRangeToUshort(ushort value)
+		public ushort RemapRangeToUShort(ushort value)
 		{
 			return MathUtils.MapRange((ushort)Min, (ushort)Max, ushort.MinValue, ushort.MaxValue, value);
 		}
+
+		#endregion
 	}
 }
