@@ -4,6 +4,8 @@ using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
+using ICD.Common.Utils.Services;
+using ICD.Common.Utils.Services.Logging;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharp.Reflection;
@@ -216,7 +218,28 @@ namespace ICD.Common.Utils
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
 
-			ConstructorInfo constructor = GetConstructor(type, parameters);
+			ConstructorInfo constructor = null;
+
+			try
+			{
+				constructor = GetConstructor(type, parameters);
+			}
+			catch (ArgumentException e)
+			{
+				var logger = ServiceProvider.GetService<ILoggerService>();
+
+				logger.AddEntry(eSeverity.Error, "Could not find constructor while attempting to create instance.");
+				logger.AddEntry(eSeverity.Error, "Attempted to create an instance of type {0}", type.ToString());
+				logger.AddEntry(eSeverity.Error, "With the following parameters:");
+				foreach (var param in parameters)
+				{
+					logger.AddEntry(eSeverity.Error, "Type:{0}, Value:{1}", param.GetType().ToString(), param.ToString());
+				}
+				logger.AddEntry(eSeverity.Error, "No valid constructor exists for this set of parameters.");
+			}
+
+			if (constructor == null)
+				return null;
 
 			try
 			{
