@@ -95,7 +95,7 @@ namespace ICD.Common.Utils.Collections
 			if (set == null)
 				throw new ArgumentNullException("set");
 
-			IcdHashSet<T> unionSet = new IcdHashSet<T>(this);
+			IcdHashSet<T> unionSet = new IcdHashSet<T>(m_Dict.Comparer, this);
 			unionSet.AddRange(set);
 
 			return unionSet;
@@ -112,7 +112,7 @@ namespace ICD.Common.Utils.Collections
 			if (set == null)
 				throw new ArgumentNullException("set");
 
-			IcdHashSet<T> subtractSet = new IcdHashSet<T>(this);
+			IcdHashSet<T> subtractSet = new IcdHashSet<T>(m_Dict.Comparer, this);
 
 			foreach (T item in set)
 				subtractSet.Remove(item);
@@ -131,7 +131,7 @@ namespace ICD.Common.Utils.Collections
 			if (set == null)
 				throw new ArgumentNullException("set");
 
-			IcdHashSet<T> intersectionSet = new IcdHashSet<T>();
+			IcdHashSet<T> intersectionSet = new IcdHashSet<T>(m_Dict.Comparer);
 
 			foreach (T item in set.Where(Contains))
 				intersectionSet.Add(item);
@@ -150,7 +150,7 @@ namespace ICD.Common.Utils.Collections
 			if (set == null)
 				throw new ArgumentNullException("set");
 
-			IcdHashSet<T> output = new IcdHashSet<T>(this);
+			IcdHashSet<T> output = new IcdHashSet<T>(m_Dict.Comparer, this);
 
 			foreach (T item in set)
 			{

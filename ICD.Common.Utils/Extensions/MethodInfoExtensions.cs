@@ -71,7 +71,10 @@ namespace ICD.Common.Utils.Extensions
 			sigBuilder.Append("(");
 
 			firstParam = true;
+
+#if !SIMPLSHARP
 			bool secondParam = false;
+#endif
 
 			foreach (ParameterInfo param in method.GetParameters())
 			{
