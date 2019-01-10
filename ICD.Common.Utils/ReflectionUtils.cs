@@ -4,8 +4,6 @@ using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
-using ICD.Common.Utils.Services;
-using ICD.Common.Utils.Services.Logging;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharp.Reflection;
@@ -170,6 +168,7 @@ namespace ICD.Common.Utils
 		/// <param name="firstArgument"></param>
 		/// <param name="method"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static Delegate CreateDelegate(Type type, object firstArgument, MethodInfo method)
 		{
 			return
@@ -185,6 +184,7 @@ namespace ICD.Common.Utils
 		/// Creates an instance of the given type, calling the default constructor.
 		/// </summary>
 		/// <returns></returns>
+		[NotNull]
 		public static T CreateInstance<T>(Type type)
 		{
 			if (type == null)
@@ -198,6 +198,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
+		[NotNull]
 		public static T CreateInstance<T>(params object[] parameters)
 		{
 			if (parameters == null)
@@ -210,6 +211,7 @@ namespace ICD.Common.Utils
 		/// Creates an instance of the given type, calling the default constructor.
 		/// </summary>
 		/// <returns></returns>
+		[NotNull]
 		public static object CreateInstance(Type type, params object[] parameters)
 		{
 			if (type == null)
@@ -218,28 +220,7 @@ namespace ICD.Common.Utils
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
 
-			ConstructorInfo constructor = null;
-
-			try
-			{
-				constructor = GetConstructor(type, parameters);
-			}
-			catch (ArgumentException e)
-			{
-				var logger = ServiceProvider.GetService<ILoggerService>();
-
-				logger.AddEntry(eSeverity.Error, "Could not find constructor while attempting to create instance.");
-				logger.AddEntry(eSeverity.Error, "Attempted to create an instance of type {0}", type.ToString());
-				logger.AddEntry(eSeverity.Error, "With the following parameters:");
-				foreach (var param in parameters)
-				{
-					logger.AddEntry(eSeverity.Error, "Type:{0}, Value:{1}", param.GetType().ToString(), param.ToString());
-				}
-				logger.AddEntry(eSeverity.Error, "No valid constructor exists for this set of parameters.");
-			}
-
-			if (constructor == null)
-				return null;
+			ConstructorInfo constructor = GetConstructor(type, parameters);
 
 			try
 			{
@@ -289,6 +270,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static Assembly LoadAssemblyFromPath(string path)
 		{
 			if (path == null)
@@ -377,6 +359,7 @@ namespace ICD.Common.Utils
 		/// <param name="handler">The instance with the callback MethodInfo. Null for static types.</param>
 		/// <param name="callback">The MethodInfo for the callback method.</param>
 		/// <returns></returns>
+		[NotNull]
 		public static Delegate SubscribeEvent(object instance, EventInfo eventInfo, object handler, MethodInfo callback)
 		{
 			if (eventInfo == null)
