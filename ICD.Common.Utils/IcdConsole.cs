@@ -123,6 +123,10 @@ namespace ICD.Common.Utils
 		public static bool SendControlSystemCommand(string command, ref string result)
 		{
 #if SIMPLSHARP
+			// No console on VC4
+			if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+				return false;
+
 			return CrestronConsole.SendControlSystemCommand(command, ref result);
 #else
 			return false;
