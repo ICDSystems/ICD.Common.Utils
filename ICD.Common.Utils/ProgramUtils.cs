@@ -33,6 +33,10 @@ namespace ICD.Common.Utils
 					name = name.Substring(0, proLength).PadRight(26);
 					break;
 
+				case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+					// No console
+					return;
+
 				case IcdEnvironment.eRuntimeEnvironment.Standard:
 					name += ' ';
 					break;
