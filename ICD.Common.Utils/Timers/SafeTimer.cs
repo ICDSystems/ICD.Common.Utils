@@ -20,7 +20,7 @@ namespace ICD.Common.Utils.Timers
         private readonly Timer m_Timer;
         private int m_RepeatPeriod;
 #endif
-		private readonly Action m_Callback;
+		private Action m_Callback;
 
 		/// <summary>
 		/// Returns true if this instance has been disposed.
@@ -87,6 +87,8 @@ namespace ICD.Common.Utils.Timers
 
 			Stop();
 			m_Timer.Dispose();
+
+			m_Callback = null;
 
 			IsDisposed = true;
 		}
