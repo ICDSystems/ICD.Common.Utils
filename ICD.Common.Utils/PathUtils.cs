@@ -3,9 +3,6 @@ using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
-#if SIMPLSHARP
-using Crestron.SimplSharp;
-#endif
 
 namespace ICD.Common.Utils
 {
@@ -65,12 +62,9 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-#if SIMPLSHARP
-				if (CrestronEnvironment.DevicePlatform == eDevicePlatform.Server)
-				{
+				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
 					return Join(RootConfigPath, "ProgramConfig");
-				}
-#endif
+
 				string directoryName = string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
 				return Join(RootConfigPath, directoryName);
 			}
