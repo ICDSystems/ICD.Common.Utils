@@ -19,17 +19,18 @@ namespace ICD.Common.Utils.IO
 #endif
 		}
 
-
-#if SIMPLSHARP
 		/// <summary>
 		/// This gets the application root directory for Crestron systems
 		/// </summary>
 		/// <returns></returns>
 		public static string GetApplicationRootDirectory()
 		{
+#if SIMPLSHARP
 			return Directory.GetApplicationRootDirectory();
-		}
+#else
+			return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
 #endif
+		}
 
 		public static bool Exists(string path)
 		{

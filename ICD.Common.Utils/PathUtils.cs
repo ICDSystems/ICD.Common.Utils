@@ -20,10 +20,9 @@ namespace ICD.Common.Utils
 		public static string RootPath {
 			get
 			{
-#if SIMPLSHARP
 				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
 					return IcdDirectory.GetApplicationRootDirectory();
-#endif
+
 				return IcdDirectory.GetDirectoryRoot(IcdPath.DirectorySeparatorChar.ToString());
 			}
 		}
