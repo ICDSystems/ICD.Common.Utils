@@ -1,4 +1,5 @@
 ﻿using System;
+using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 #else
@@ -16,6 +17,19 @@ namespace ICD.Common.Utils.IO
 			return Directory.GetApplicationDirectory();
 #else
 			return ApplicationEnvironment.ApplicationBasePath;
+#endif
+		}
+
+		/// <summary>
+		/// This gets the application root directory for Crestron systems
+		/// </summary>
+		/// <returns></returns>
+		public static string GetApplicationRootDirectory()
+		{
+#if SIMPLSHARP
+			return Directory.GetApplicationRootDirectory();
+#else
+			return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetPath());
 #endif
 		}
 
