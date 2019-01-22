@@ -1,4 +1,5 @@
 ﻿using System;
+using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 #else
@@ -28,7 +29,7 @@ namespace ICD.Common.Utils.IO
 #if SIMPLSHARP
 			return Directory.GetApplicationRootDirectory();
 #else
-			return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+			return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetPath());
 #endif
 		}
 
