@@ -80,12 +80,7 @@ namespace ICD.Common.Utils
 		/// Returns the absolute path to the common configuration directory.
 		/// </summary>
 		[PublicAPI]
-		public static string CommonConfigPath {
-			get
-			{
-				return Join(RootConfigPath, "CommonConfig");
-			}
-		}
+		public static string CommonConfigPath { get { return Join(RootConfigPath, "CommonConfig"); } }
 
 		/// <summary>
 		/// Returns the absolute path to the common config library directory.
