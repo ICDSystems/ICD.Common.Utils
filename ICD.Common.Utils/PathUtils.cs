@@ -3,6 +3,9 @@ using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
+#if SIMPLSHARP
+using Crestron.SimplSharp;
+#endif
 
 namespace ICD.Common.Utils
 {
@@ -17,7 +20,16 @@ namespace ICD.Common.Utils
 		/// Gets the path to the root directory of the processor.
 		/// </summary>
 		[PublicAPI]
-		public static string RootPath { get { return IcdDirectory.GetDirectoryRoot("\\"); } }
+		public static string RootPath {
+			get
+			{
+#if SIMPLSHARP
+				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+					return IcdDirectory.GetApplicationRootDirectory();
+#endif
+				return IcdDirectory.GetDirectoryRoot(IcdPath.DirectorySeparatorChar.ToString());
+			}
+		}
 
 		/// <summary>
 		/// Gets the path to the program directory
@@ -35,7 +47,7 @@ namespace ICD.Common.Utils
 			get
 			{
 #if SIMPLSHARP
-				return Join(RootPath, "USER");
+				return Join(RootPath, "User");
 #elif LINUX
 				return Join(RootPath, "opt", "ICD.Connect");
 #else
@@ -53,6 +65,12 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
+#if SIMPLSHARP
+				if (CrestronEnvironment.DevicePlatform == eDevicePlatform.Server)
+				{
+					return Join(RootConfigPath, "ProgramConfig");
+				}
+#endif
 				string directoryName = string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
 				return Join(RootConfigPath, directoryName);
 			}
@@ -62,7 +80,12 @@ namespace ICD.Common.Utils
 		/// Returns the absolute path to the common configuration directory.
 		/// </summary>
 		[PublicAPI]
-		public static string CommonConfigPath { get { return Join(RootConfigPath, "CommonConfig"); } }
+		public static string CommonConfigPath {
+			get
+			{
+				return Join(RootConfigPath, "CommonConfig");
+			}
+		}
 
 		/// <summary>
 		/// Returns the absolute path to the common config library directory.
