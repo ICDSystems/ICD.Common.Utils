@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Added SimplSharpProMono to eRuntimeEnvironment enum
  - Added path support for SimplSharpProMono environment
+ - Added GetApplicationRootDirectory for all platforms
 
 ### Changed
  - Small fixes for better VC4 support
