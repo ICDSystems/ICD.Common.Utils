@@ -1,8 +1,8 @@
 ﻿using System;
-using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 #else
+using ICD.Common.Utils.Extensions;
 using System.IO;
 using Microsoft.DotNet.PlatformAbstractions;
 #endif
