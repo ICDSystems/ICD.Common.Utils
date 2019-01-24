@@ -194,6 +194,22 @@ namespace ICD.Common.Utils.Json
 		/// Becomes
 		/// { m = "Test", d = { a = 1 } }
 		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="messageName"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static string SerializeMessage(object value, string messageName)
+		{
+			return SerializeMessage(w => new JsonSerializer().Serialize(w, value), messageName);
+		}
+
+		/// <summary>
+		/// Serializes to json, wrapping the object with a message property to differentiate between messages.
+		/// E.g.
+		/// { a = 1 }
+		/// Becomes
+		/// { m = "Test", d = { a = 1 } }
+		/// </summary>
 		/// <param name="serializeMethod"></param>
 		/// <param name="messageName"></param>
 		/// <returns></returns>
