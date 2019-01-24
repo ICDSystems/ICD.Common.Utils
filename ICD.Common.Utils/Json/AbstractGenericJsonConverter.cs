@@ -10,7 +10,10 @@ namespace ICD.Common.Utils.Json
 		/// Creates a new instance of T.
 		/// </summary>
 		/// <returns></returns>
-		protected abstract T Instantiate();
+		protected virtual T Instantiate()
+		{
+			return ReflectionUtils.CreateInstance<T>();
+		}
 
 		/// <summary>
 		/// Writes the JSON representation of the object.
