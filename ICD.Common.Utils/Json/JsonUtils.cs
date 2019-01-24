@@ -23,28 +23,6 @@ namespace ICD.Common.Utils.Json
 		private const string MESSAGE_DATA_PROPERTY = "d";
 
 		/// <summary>
-		/// Forces Newtonsoft to cache the given type for faster subsequent usage.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		public static void CacheType<T>()
-			where T : new()
-		{
-			CacheType(typeof(T));
-		}
-
-		/// <summary>
-		/// Forces Newtonsoft to cache the given type for faster subsequent usage.
-		/// </summary>
-		public static void CacheType(Type type)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			string serialized = JsonConvert.SerializeObject(ReflectionUtils.CreateInstance(type));
-			JsonConvert.DeserializeObject(serialized, type);
-		}
-
-		/// <summary>
 		/// Gets the token as a DateTime value.
 		/// </summary>
 		/// <param name="token"></param>
@@ -85,31 +63,6 @@ namespace ICD.Common.Utils.Json
 			{
 				return false;
 			}
-		}
-
-		/// <summary>
-		/// Pretty-prints the JSON document.
-		/// </summary>
-		/// <param name="json"></param>
-		[PublicAPI]
-		public static void Print(string json)
-		{
-			if (json == null)
-				throw new ArgumentNullException("json");
-
-			string formatted = Format(json);
-			IcdConsole.PrintLine(formatted);
-		}
-
-		/// <summary>
-		/// Serializes the given item and pretty-prints to JSON.
-		/// </summary>
-		/// <param name="value"></param>
-		[PublicAPI]
-		public static void Print(object value)
-		{
-			string formatted = Format(value);
-			IcdConsole.PrintLine(formatted);
 		}
 
 		/// <summary>
@@ -316,45 +269,6 @@ namespace ICD.Common.Utils.Json
 				                   return output;
 			                   },
 			                   json);
-		}
-
-		/// <summary>
-		/// Deserializes the given token based on the known type.
-		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="token"></param>
-		/// <returns></returns>
-		public static object Deserialize(Type type, JToken token)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			if (token == null)
-				throw new ArgumentNullException("token");
-
-			return Deserialize(type, token, new JsonSerializer());
-		}
-
-		/// <summary>
-		/// Deserializes the given token based on the known type.
-		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="token"></param>
-		/// <param name="serializer"></param>
-		/// <returns></returns>
-		public static object Deserialize(Type type, JToken token, JsonSerializer serializer)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			if (token == null)
-				throw new ArgumentNullException("token");
-
-			if (serializer == null)
-				throw new ArgumentNullException("serializer");
-
-			using (JTokenReader jsonReader = new JTokenReader(token))
-				return serializer.Deserialize(jsonReader, type);
 		}
 	}
 }
