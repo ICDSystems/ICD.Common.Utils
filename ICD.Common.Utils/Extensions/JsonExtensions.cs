@@ -56,6 +56,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
+		/// <param name="serializer"></param>
 		/// <returns></returns>
 		public static T ReadAsObject<T>(this JsonReader extends, JsonSerializer serializer)
 		{
