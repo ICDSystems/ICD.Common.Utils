@@ -9,5 +9,14 @@
 		public StringEventArgs(string data) : base(data)
 		{
 		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="eventArgs"></param>
+		public StringEventArgs(StringEventArgs eventArgs)
+			: base(eventArgs.Data)
+		{
+		}
 	}
 }
