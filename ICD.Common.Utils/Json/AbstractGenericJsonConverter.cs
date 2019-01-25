@@ -29,12 +29,6 @@ namespace ICD.Common.Utils.Json
 			if (serializer == null)
 				throw new ArgumentNullException("serializer");
 
-			if (value == null)
-			{
-				writer.WriteNull();
-				return;
-			}
-
 			WriteJson(writer, (T)value, serializer);
 		}
 
