@@ -3,39 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ICD.Common.Utils.Extensions
 {
 	/// <summary>
 	/// Extension methods for working with JSON.
 	/// </summary>
-	public static class JsonExtensions
+	public static class JsonReaderExtensions
 	{
-		/// <summary>
-		/// Writes the object value.
-		/// </summary>
-		/// <param name="extends"></param>
-		/// <param name="value"></param>
-		/// <param name="serializer"></param>
-		/// <param name="converter"></param>
-		[PublicAPI]
-		public static void WriteObject(this JsonWriter extends, object value, JsonSerializer serializer,
-		                               JsonConverter converter)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (serializer == null)
-				throw new ArgumentNullException("serializer");
-
-			if (converter == null)
-				throw new ArgumentNullException("converter");
-
-			JObject jObject = JObject.FromObject(value, serializer);
-			jObject.WriteTo(extends, converter);
-		}
-
 		/// <summary>
 		/// Reads the current token in the reader and deserializes to the given type.
 		/// </summary>
@@ -108,31 +83,6 @@ namespace ICD.Common.Utils.Extensions
 
 				readPropertyValue(property, extends, serializer);
 			}
-		}
-
-		/// <summary>
-		/// Writes the type value.
-		/// </summary>
-		/// <param name="extends"></param>
-		/// <param name="type"></param>
-		[PublicAPI]
-		public static void WriteType(this JsonWriter extends, Type type)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (type == null)
-			{
-				extends.WriteNull();
-				return;
-			}
-
-			// Find the smallest possible name representation for the type that will still resolve
-			string name = Type.GetType(type.FullName) == null
-				              ? type.AssemblyQualifiedName
-				              : type.FullName;
-
-			extends.WriteValue(name);
 		}
 
 		/// <summary>
@@ -238,58 +188,6 @@ namespace ICD.Common.Utils.Extensions
 				return EnumUtils.Parse<T>(extends.GetValueAsString(), true);
 
 			return (T)(object)extends.GetValueAsInt();
-		}
-
-		/// <summary>
-		/// Serializes the given sequence of items to the writer.
-		/// </summary>
-		/// <typeparam name="TItem"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="writer"></param>
-		/// <param name="items"></param>
-		public static void SerializeArray<TItem>(this JsonSerializer extends, JsonWriter writer, IEnumerable<TItem> items)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (writer == null)
-				throw new ArgumentNullException("writer");
-
-			if (items == null)
-				throw new ArgumentNullException("items");
-
-			extends.SerializeArray(writer, items, (s, w, item) => s.Serialize(w, item));
-		}
-
-		/// <summary>
-		/// Serializes the given sequence of items to the writer.
-		/// </summary>
-		/// <typeparam name="TItem"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="writer"></param>
-		/// <param name="items"></param>
-		/// <param name="write"></param>
-		public static void SerializeArray<TItem>(this JsonSerializer extends, JsonWriter writer, IEnumerable<TItem> items,
-												 Action<JsonSerializer, JsonWriter, TItem> write)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (writer == null)
-				throw new ArgumentNullException("writer");
-
-			if (items == null)
-				throw new ArgumentNullException("items");
-
-			if (write == null)
-				throw new ArgumentNullException("write");
-
-			writer.WriteStartArray();
-			{
-				foreach (TItem item in items)
-					write(extends, writer, item);
-			}
-			writer.WriteEndArray();
 		}
 
 		/// <summary>
