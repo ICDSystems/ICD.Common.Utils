@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ICD.Common.Utils.Extensions;
+using ICD.Common.Utils.IO;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -15,6 +16,36 @@ namespace ICD.Common.Utils.Tests.Extensions
 		public void WriteObjectTest()
 		{
 			Assert.Inconclusive();
+		}
+
+		[Test]
+		public void ReadObjectTest()
+		{
+			const string json =
+				"{\"name\":\"Test\",\"help\":\"Test test.\",\"type\":\"System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e\",\"value\":\"Test\"}";
+
+			Dictionary<string, string> expected = new Dictionary<string, string>
+			{
+				{"name", "Test"},
+				{"help", "Test test."},
+				{"type", "System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"},
+				{"value", "Test"}
+			};
+
+			Dictionary<string, string> deserialized = new Dictionary<string, string>();
+
+			using (IcdStringReader textReader = new IcdStringReader(json))
+			{
+				using (JsonReader reader = new JsonTextReader(textReader.WrappedTextReader))
+				{
+					JsonSerializer serializer = new JsonSerializer();
+
+					reader.Read();
+					reader.ReadObject(serializer, (p, r, s) => deserialized.Add(p, (string)r.Value));
+				}
+			}
+
+			Assert.IsTrue(deserialized.DictionaryEqual(expected));
 		}
 
 		[Test]

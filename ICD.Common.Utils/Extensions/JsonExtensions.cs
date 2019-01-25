@@ -70,6 +70,47 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Reads through the current object token and calls the callback for each property value.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="serializer"></param>
+		/// <param name="readPropertyValue"></param>
+		public static void ReadObject(this JsonReader extends, JsonSerializer serializer,
+		                              Action<string, JsonReader, JsonSerializer> readPropertyValue)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (serializer == null)
+				throw new ArgumentNullException("serializer");
+
+			if (readPropertyValue == null)
+				throw new ArgumentNullException("readPropertyValue");
+
+			if (extends.TokenType == JsonToken.Null)
+				return;
+
+			if (extends.TokenType != JsonToken.StartObject)
+				throw new FormatException(string.Format("Expected {0} got {1}", JsonToken.StartObject, extends.TokenType));
+
+			while (extends.Read())
+			{
+				if (extends.TokenType == JsonToken.EndObject)
+					break;
+
+				// Get the property
+				if (extends.TokenType != JsonToken.PropertyName)
+					continue;
+				string property = (string)extends.Value;
+
+				// Read into the value
+				extends.Read();
+
+				readPropertyValue(property, extends, serializer);
+			}
+		}
+
+		/// <summary>
 		/// Writes the type value.
 		/// </summary>
 		/// <param name="extends"></param>
