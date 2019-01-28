@@ -32,7 +32,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="value"></param>
-		public void AppendProperty(string name, object value)
+		public ReprBuilder AppendProperty(string name, object value)
 		{
 			m_PropertyOrder.Remove(name);
 			m_PropertyOrder.Add(name);
@@ -40,6 +40,8 @@ namespace ICD.Common.Utils
 			string valueString = GetValueStringRepresentation(value);
 
 			m_PropertyValues[name] = valueString;
+
+			return this;
 		}
 
 		/// <summary>
@@ -47,12 +49,14 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="value"></param>
-		public void AppendPropertyRaw(string name, string value)
+		public ReprBuilder AppendPropertyRaw(string name, string value)
 		{
 			m_PropertyOrder.Remove(name);
 			m_PropertyOrder.Add(name);
 
 			m_PropertyValues[name] = value;
+
+			return this;
 		}
 
 		/// <summary>
