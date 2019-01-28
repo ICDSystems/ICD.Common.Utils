@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using ICD.Common.Properties;
+using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
 #else
@@ -17,6 +19,8 @@ namespace ICD.Common.Utils
 			Programmer = 1,
 			Administrator = 2
 		}
+
+		public static event EventHandler<StringEventArgs> OnConsolePrint;
 
 		/// <summary>
 		/// Wraps CrestronConsole.ConsoleCommandResponse for S+ compatibility.
@@ -41,17 +45,23 @@ namespace ICD.Common.Utils
 				message = string.Format(message, args);
 
 #if SIMPLSHARP
-			try
+			if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpPro)
 			{
-				CrestronConsole.ConsoleCommandResponse(message);
+				try
+				{
+
+					CrestronConsole.ConsoleCommandResponse(message);
+
+				}
+				catch (NotSupportedException)
+				{
+					Print(message);
+				}
+				return;
 			}
-			catch (NotSupportedException)
-			{
-				Print(message);
-			}
-#else
-			Print(message);
 #endif
+
+			Print(message);
 		}
 
 		public static void PrintLine(string message)
@@ -90,10 +100,12 @@ namespace ICD.Common.Utils
 		public static void Print(string message)
 		{
 #if SIMPLSHARP
-			CrestronConsole.Print(message);
+			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+				CrestronConsole.Print(message);
 #else
             Console.Write(message);
 #endif
+			OnConsolePrint.Raise(null, new StringEventArgs(message));
 		}
 
 		public static void Print(string message, params object[] args)
