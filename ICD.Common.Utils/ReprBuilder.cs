@@ -34,14 +34,8 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		public ReprBuilder AppendProperty(string name, object value)
 		{
-			m_PropertyOrder.Remove(name);
-			m_PropertyOrder.Add(name);
-
 			string valueString = GetValueStringRepresentation(value);
-
-			m_PropertyValues[name] = valueString;
-
-			return this;
+			return AppendPropertyRaw(name, valueString);
 		}
 
 		/// <summary>
