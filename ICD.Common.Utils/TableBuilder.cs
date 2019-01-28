@@ -17,7 +17,6 @@ namespace ICD.Common.Utils
 		private const char INTERSECT = '+';
 
 		private readonly List<string[]> m_Rows;
-		private readonly SafeCriticalSection m_RowsSection;
 		private readonly string[] m_Columns;
 
 		/// <summary>
@@ -39,7 +38,6 @@ namespace ICD.Common.Utils
 		public TableBuilder(params string[] columns)
 		{
 			m_Rows = new List<string[]>();
-			m_RowsSection = new SafeCriticalSection();
 			m_Columns = columns;
 		}
 
@@ -49,9 +47,10 @@ namespace ICD.Common.Utils
 		/// Clears all of the rows.
 		/// </summary>
 		[PublicAPI]
-		public void ClearRows()
+		public TableBuilder ClearRows()
 		{
-			m_RowsSection.Execute(() => m_Rows.Clear());
+			m_Rows.Clear();
+			return this;
 		}
 
 		/// <summary>
@@ -59,11 +58,11 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="row"></param>
 		[PublicAPI]
-		public void AddRow(params object[] row)
+		public TableBuilder AddRow(params object[] row)
 		{
 			string[] stringRow = row.Select(o => string.Format("{0}", o))
 			                        .ToArray();
-			AddRow(stringRow);
+			return AddRow(stringRow);
 		}
 
 		/// <summary>
@@ -71,31 +70,33 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="row"></param>
 		[PublicAPI]
-		public void AddRow(params string[] row)
+		public TableBuilder AddRow(params string[] row)
 		{
 			if (row != null && row.Length != m_Columns.Length)
 				throw new ArgumentException("Row must match columns length.");
 
-			m_RowsSection.Execute(() => m_Rows.Add(row));
+			m_Rows.Add(row);
+
+			return this;
 		}
 
 		/// <summary>
 		/// Adds an empty row to the builder.
 		/// </summary>
 		[PublicAPI]
-		public void AddEmptyRow()
+		public TableBuilder AddEmptyRow()
 		{
-			AddRow(new string[m_Columns.Length]);
+			return AddRow(new string[m_Columns.Length]);
 		}
 
 		[PublicAPI]
-		public void AddSeparator()
+		public TableBuilder AddSeparator()
 		{
-			AddRow(null);
+			return AddRow(null);
 		}
 
 		[PublicAPI]
-		public void AddHeader(params string[] row)
+		public TableBuilder AddHeader(params string[] row)
 		{
 			if (row.Length != m_Columns.Length)
 				throw new ArgumentException("Row must match columns length.");
@@ -103,6 +104,8 @@ namespace ICD.Common.Utils
 			AddSeparator();
 			AddRow(row);
 			AddSeparator();
+
+			return this;
 		}
 
 		/// <summary>
@@ -112,29 +115,20 @@ namespace ICD.Common.Utils
 		{
 			StringBuilder sb = new StringBuilder();
 
-			m_RowsSection.Enter();
+			int[] columnWidths = GetColumnWidths();
 
-			try
+			AppendRow(sb, m_Columns, columnWidths);
+			AppendSeparator(sb, columnWidths);
+
+			foreach (string[] row in m_Rows)
 			{
-				int[] columnWidths = GetColumnWidths();
-
-				AppendRow(sb, m_Columns, columnWidths);
-				AppendSeparator(sb, columnWidths);
-
-				foreach (string[] row in m_Rows)
-				{
-					if (row == null)
-						AppendSeparator(sb, columnWidths);
-					else
-						AppendRow(sb, row, columnWidths);
-				}
-
-				AppendSeparator(sb, columnWidths);
+				if (row == null)
+					AppendSeparator(sb, columnWidths);
+				else
+					AppendRow(sb, row, columnWidths);
 			}
-			finally
-			{
-				m_RowsSection.Leave();
-			}
+
+			AppendSeparator(sb, columnWidths);
 
 			return sb.ToString();
 		}
