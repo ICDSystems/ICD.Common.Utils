@@ -3,25 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ICD.Common.Utils.Extensions
 {
 	/// <summary>
 	/// Extension methods for working with JSON.
 	/// </summary>
-	public static class JsonExtensions
+	public static class JsonReaderExtensions
 	{
 		/// <summary>
-		/// Writes the object value.
+		/// Reads the current token in the reader and deserializes to the given type.
 		/// </summary>
+		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
-		/// <param name="value"></param>
+		/// <returns></returns>
+		public static T ReadAsObject<T>(this JsonReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			JsonSerializer serializer = new JsonSerializer();
+			return extends.ReadAsObject<T>(serializer);
+		}
+
+		/// <summary>
+		/// Reads the current token in the reader and deserializes to the given type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
 		/// <param name="serializer"></param>
-		/// <param name="converter"></param>
-		[PublicAPI]
-		public static void WriteObject(this JsonWriter extends, object value, JsonSerializer serializer,
-		                               JsonConverter converter)
+		/// <returns></returns>
+		public static T ReadAsObject<T>(this JsonReader extends, JsonSerializer serializer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -29,36 +41,48 @@ namespace ICD.Common.Utils.Extensions
 			if (serializer == null)
 				throw new ArgumentNullException("serializer");
 
-			if (converter == null)
-				throw new ArgumentNullException("converter");
-
-			JObject jObject = JObject.FromObject(value, serializer);
-			jObject.WriteTo(extends, converter);
+			return serializer.Deserialize<T>(extends);
 		}
 
 		/// <summary>
-		/// Writes the type value.
+		/// Reads through the current object token and calls the callback for each property value.
 		/// </summary>
 		/// <param name="extends"></param>
-		/// <param name="type"></param>
-		[PublicAPI]
-		public static void WriteType(this JsonWriter extends, Type type)
+		/// <param name="serializer"></param>
+		/// <param name="readPropertyValue"></param>
+		public static void ReadObject(this JsonReader extends, JsonSerializer serializer,
+		                              Action<string, JsonReader, JsonSerializer> readPropertyValue)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (type == null)
-			{
-				extends.WriteNull();
+			if (serializer == null)
+				throw new ArgumentNullException("serializer");
+
+			if (readPropertyValue == null)
+				throw new ArgumentNullException("readPropertyValue");
+
+			if (extends.TokenType == JsonToken.Null)
 				return;
+
+			if (extends.TokenType != JsonToken.StartObject)
+				throw new FormatException(string.Format("Expected {0} got {1}", JsonToken.StartObject, extends.TokenType));
+
+			while (extends.Read())
+			{
+				if (extends.TokenType == JsonToken.EndObject)
+					break;
+
+				// Get the property
+				if (extends.TokenType != JsonToken.PropertyName)
+					continue;
+				string property = (string)extends.Value;
+
+				// Read into the value
+				extends.Read();
+
+				readPropertyValue(property, extends, serializer);
 			}
-
-			// Find the smallest possible name representation for the type that will still resolve
-			string name = Type.GetType(type.FullName) == null
-				              ? type.AssemblyQualifiedName
-				              : type.FullName;
-
-			extends.WriteValue(name);
 		}
 
 		/// <summary>
@@ -167,58 +191,6 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Serializes the given sequence of items to the writer.
-		/// </summary>
-		/// <typeparam name="TItem"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="writer"></param>
-		/// <param name="items"></param>
-		public static void SerializeArray<TItem>(this JsonSerializer extends, JsonWriter writer, IEnumerable<TItem> items)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (writer == null)
-				throw new ArgumentNullException("writer");
-
-			if (items == null)
-				throw new ArgumentNullException("items");
-
-			extends.SerializeArray(writer, items, (s, w, item) => s.Serialize(w, item));
-		}
-
-		/// <summary>
-		/// Serializes the given sequence of items to the writer.
-		/// </summary>
-		/// <typeparam name="TItem"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="writer"></param>
-		/// <param name="items"></param>
-		/// <param name="write"></param>
-		public static void SerializeArray<TItem>(this JsonSerializer extends, JsonWriter writer, IEnumerable<TItem> items,
-												 Action<JsonSerializer, JsonWriter, TItem> write)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (writer == null)
-				throw new ArgumentNullException("writer");
-
-			if (items == null)
-				throw new ArgumentNullException("items");
-
-			if (write == null)
-				throw new ArgumentNullException("write");
-
-			writer.WriteStartArray();
-			{
-				foreach (TItem item in items)
-					write(extends, writer, item);
-			}
-			writer.WriteEndArray();
-		}
-
-		/// <summary>
 		/// Deserializes an array of items from the reader's current value.
 		/// </summary>
 		/// <typeparam name="TItem"></typeparam>
@@ -280,91 +252,6 @@ namespace ICD.Common.Utils.Extensions
 			{
 				TItem output = read(serializer, reader);
 				yield return output;
-
-				// Read out of the last value
-				reader.Read();
-			}
-		}
-
-		/// <summary>
-		/// Serializes the given sequence of key-value-pairs to the writer.
-		/// </summary>
-		/// <typeparam name="TKey"></typeparam>
-		/// <typeparam name="TValue"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="writer"></param>
-		/// <param name="items"></param>
-		public static void SerializeDictionary<TKey, TValue>(this JsonSerializer extends, JsonWriter writer,
-		                                                     IEnumerable<KeyValuePair<TKey, TValue>> items)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (writer == null)
-				throw new ArgumentNullException("writer");
-
-			if (items == null)
-				throw new ArgumentNullException("items");
-
-			writer.WriteStartObject();
-			{
-				foreach (KeyValuePair<TKey, TValue> kvp in items)
-				{
-					writer.WritePropertyName(kvp.Key.ToString());
-					extends.Serialize(writer, kvp.Value);
-				}
-			}
-			writer.WriteEndObject();
-		}
-
-		/// <summary>
-		/// Deserializes a dictionary of items from the reader's current value.
-		/// </summary>
-		/// <typeparam name="TKey"></typeparam>
-		/// <typeparam name="TValue"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="reader"></param>
-		public static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDictionary<TKey, TValue>(this JsonSerializer extends,
-		                                                                                          JsonReader reader)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (reader == null)
-				throw new ArgumentNullException("reader");
-
-			if (reader.TokenType == JsonToken.Null)
-				return Enumerable.Empty<KeyValuePair<TKey, TValue>>();
-
-			if (reader.TokenType != JsonToken.StartObject)
-				throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.StartObject, reader.TokenType));
-
-			return DeserializeDictionaryIterator<TKey, TValue>(extends, reader);
-		}
-
-		/// <summary>
-		/// Deserializes a dictionary of items from the reader's current value.
-		/// </summary>
-		/// <typeparam name="TKey"></typeparam>
-		/// <typeparam name="TValue"></typeparam>
-		/// <param name="serializer"></param>
-		/// <param name="reader"></param>
-		private static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDictionaryIterator<TKey, TValue>(
-			JsonSerializer serializer, JsonReader reader)
-		{
-			// Step into the first key
-			reader.Read();
-
-			while (reader.TokenType != JsonToken.EndObject)
-			{
-				TKey key = (TKey)Convert.ChangeType(reader.Value, typeof(TKey), null);
-
-				// Step into the value
-				reader.Read();
-
-				TValue value = serializer.Deserialize<TValue>(reader);
-
-				yield return new KeyValuePair<TKey, TValue>(key, value);
 
 				// Read out of the last value
 				reader.Read();

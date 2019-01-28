@@ -106,6 +106,7 @@
     <Compile Include="Extensions\BoolExtensions.cs" />
     <Compile Include="Extensions\ByteExtensions.cs" />
     <Compile Include="Extensions\DayOfWeekExtensions.cs" />
+    <Compile Include="Extensions\JsonWriterExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Comparers\PredicateEqualityComparer.cs" />
     <Compile Include="Extensions\MethodInfoExtensions.cs" />
@@ -154,7 +155,7 @@
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\EventHandlerExtensions.cs" />
-    <Compile Include="Extensions\JsonExtensions.cs" />
+    <Compile Include="Extensions\JsonReaderExtensions.cs" />
     <Compile Include="Extensions\QueueExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Extensions\StringBuilderExtensions.cs" />
