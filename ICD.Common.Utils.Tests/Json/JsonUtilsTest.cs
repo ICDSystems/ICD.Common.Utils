@@ -2,7 +2,6 @@
 using ICD.Common.Utils.IO;
 using ICD.Common.Utils.Json;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests.Json
@@ -139,32 +138,6 @@ namespace ICD.Common.Utils.Tests.Json
 
 			Assert.AreEqual(100, serializable.Test);
 			Assert.AreEqual("test message", messageName);
-		}
-
-		[Test]
-		public void DeserializeTypeTest()
-		{
-			const string json = "{\"test\":10}";
-
-			JObject root = JObject.Parse(json);
-			JToken token = root["test"];
-
-			int value = (int)JsonUtils.Deserialize(typeof(int), token);
-
-			Assert.AreEqual(10, value);
-		}
-
-		[Test]
-		public void DeserializeTestSerializerTest()
-		{
-			const string json = "{\"test\":10}";
-
-			JObject root = JObject.Parse(json);
-			JToken token = root["test"];
-
-			int value = (int)JsonUtils.Deserialize(typeof(int), token, new JsonSerializer());
-
-			Assert.AreEqual(10, value);
 		}
 
 		public sealed class TestSerializable

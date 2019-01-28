@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
  - Better VC-4 support for IcdConsole
+ - JSON refactoring for simpler deserialization
 
 ## [8.3.0] - 2019-01-25
 ### Added

@@ -1,5 +1,6 @@
 ﻿using System;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 using Newtonsoft.Json;
 
 namespace ICD.Common.Utils.Json
@@ -10,7 +11,10 @@ namespace ICD.Common.Utils.Json
 		/// Creates a new instance of T.
 		/// </summary>
 		/// <returns></returns>
-		protected abstract T Instantiate();
+		protected virtual T Instantiate()
+		{
+			return ReflectionUtils.CreateInstance<T>();
+		}
 
 		/// <summary>
 		/// Writes the JSON representation of the object.
@@ -25,12 +29,6 @@ namespace ICD.Common.Utils.Json
 
 			if (serializer == null)
 				throw new ArgumentNullException("serializer");
-
-			if (value == null)
-			{
-				writer.WriteNull();
-				return;
-			}
 
 			WriteJson(writer, (T)value, serializer);
 		}
@@ -113,30 +111,15 @@ namespace ICD.Common.Utils.Json
 			if (serializer == null)
 				throw new ArgumentNullException("serializer");
 
-			T output = default(T);
-			bool instantiated = false;
+			if (reader.TokenType == JsonToken.Null)
+				return default(T);
 
-			while (reader.Read())
-			{
-				if (reader.TokenType == JsonToken.Null || reader.TokenType == JsonToken.EndObject)
-					break;
+			if (reader.TokenType != JsonToken.StartObject)
+				throw new FormatException(string.Format("Expected {0} got {1}", JsonToken.StartObject, reader.TokenType));
 
-				if (!instantiated)
-				{
-					instantiated = true;
-					output = Instantiate();
-				}
+			T output = Instantiate();
 
-				// Get the property
-				if (reader.TokenType != JsonToken.PropertyName)
-					continue;
-				string property = (string)reader.Value;
-
-				// Read into the value
-				reader.Read();
-
-				ReadProperty(property, reader, output, serializer);
-			}
+			reader.ReadObject(serializer, (p, r, s) => ReadProperty(p, r, output, s));
 
 			return output;
 		}

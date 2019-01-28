@@ -109,7 +109,7 @@ namespace ICD.Common.Utils
 			if (getChildren == null)
 				throw new ArgumentNullException("getChildren");
 
-			return BreadthFirstSearchPath(root, child, getChildren) != null;
+			return BreadthFirstSearch(root, child, getChildren, EqualityComparer<T>.Default);
 		}
 
 		/// <summary>
