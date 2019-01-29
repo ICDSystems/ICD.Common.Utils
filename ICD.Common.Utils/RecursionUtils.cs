@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Collections;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils
 {
@@ -97,23 +98,23 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Returns true if there is a path from the given root to the given child node.
+		/// Returns true if there is a path from the given root to the given destination node.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="root"></param>
-		/// <param name="child"></param>
+		/// <param name="destination"></param>
 		/// <param name="getChildren"></param>
 		/// <returns></returns>
-		public static bool BreadthFirstSearch<T>(T root, T child, Func<T, IEnumerable<T>> getChildren)
+		public static bool BreadthFirstSearch<T>(T root, T destination, Func<T, IEnumerable<T>> getChildren)
 		{
 			if (getChildren == null)
 				throw new ArgumentNullException("getChildren");
 
-			return BreadthFirstSearch(root, child, getChildren, EqualityComparer<T>.Default);
+			return BreadthFirstSearch(root, destination, getChildren, EqualityComparer<T>.Default);
 		}
 
 		/// <summary>
-		/// Returns true if there is a path from the given root to the given child node.
+		/// Returns true if there is a path from the given root to the given destination node.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="root"></param>
@@ -159,9 +160,9 @@ namespace ICD.Common.Utils
 			Queue<T> process = new Queue<T>();
 			process.Enqueue(root);
 
-			while (process.Count > 0)
+			T current;
+			while (process.Dequeue(out current))
 			{
-				T current = process.Dequeue();
 				yield return current;
 
 				foreach (T child in getChildren(current))
@@ -214,10 +215,9 @@ namespace ICD.Common.Utils
 
 			Dictionary<T, T> nodeParents = new Dictionary<T, T>(comparer);
 
-			while (queue.Count > 0)
+			T current;
+			while (queue.Dequeue(out current))
 			{
-				T current = queue.Dequeue();
-
 				foreach (T node in getChildren(current))
 				{
 					if (nodeParents.ContainsKey(node))
