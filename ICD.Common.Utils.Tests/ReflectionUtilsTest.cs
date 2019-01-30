@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using ICD.Common.Properties;
+using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
 #else
@@ -149,5 +151,75 @@ namespace ICD.Common.Utils.Tests
 			// Everything else
 			Assert.AreEqual(10, ReflectionUtils.ChangeType("10", typeof(int)));
 		}
+
+		#region Subscription Tests
+
+		[Test]
+		public void SubscribeEventTest()
+		{
+			EventInfo eventInfo = GetType().GetEvent("OnIncrementCount", BindingFlags.Instance | BindingFlags.Public);
+
+			Delegate del = ReflectionUtils.SubscribeEvent<IntEventArgs>(this, eventInfo, IncrementCount);
+
+			Assert.NotNull(del);
+
+			m_Count = 0;
+			OnIncrementCount.Raise(this, new IntEventArgs(10));
+
+			Assert.AreEqual(10, m_Count);
+
+			OnIncrementCount = null;
+		}
+
+		[Test]
+		public void SubscribeEventMethodInfoTest()
+		{
+			EventInfo eventInfo = GetType().GetEvent("OnIncrementCount", BindingFlags.Instance | BindingFlags.Public);
+			MethodInfo methodInfo =
+				GetType().GetMethod("IncrementCount", BindingFlags.Instance | BindingFlags.NonPublic);
+
+			Delegate del = ReflectionUtils.SubscribeEvent(this, eventInfo, this, methodInfo);
+
+			Assert.NotNull(del);
+
+			m_Count = 0;
+			OnIncrementCount.Raise(this, new IntEventArgs(10));
+
+			Assert.AreEqual(10, m_Count);
+
+			OnIncrementCount = null;
+		}
+
+		[Test]
+		public void UnsubscribeEventTest()
+		{
+			EventInfo eventInfo = GetType().GetEvent("OnIncrementCount", BindingFlags.Instance | BindingFlags.Public);
+			MethodInfo methodInfo =
+				GetType().GetMethod("IncrementCount", BindingFlags.Instance | BindingFlags.NonPublic);
+
+			Delegate del = ReflectionUtils.SubscribeEvent(this, eventInfo, this, methodInfo);
+
+			Assert.NotNull(del);
+
+			m_Count = 0;
+
+			ReflectionUtils.UnsubscribeEvent(this, eventInfo, del);
+
+			OnIncrementCount.Raise(this, new IntEventArgs(10));
+
+			Assert.AreEqual(0, m_Count);
+		}
+
+		// Event has to be public
+		public event EventHandler<IntEventArgs> OnIncrementCount;
+
+		private int m_Count;
+
+		private void IncrementCount(object sender, IntEventArgs args)
+		{
+			m_Count += args.Data;
+		}
+
+		#endregion
 	}
 }

@@ -337,8 +337,9 @@ namespace ICD.Common.Utils
 					if (valueType.IsIntegerNumeric())
 						return Enum.ToObject(type, value);
 
-					if (value is string)
-						return Enum.Parse(type, value as string, false);
+					string valueAsString = value as string;
+					if (valueAsString != null)
+						return Enum.Parse(type, valueAsString, false);
 				}
 
 				return Convert.ChangeType(value, type, null);
@@ -352,12 +353,56 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Subscribes to the event on the given instance using the handler and callback method.
+		/// Subscribes to the event on the given instance using the event handler.
 		/// </summary>
 		/// <param name="instance">The instance with the event. Null for static types.</param>
 		/// <param name="eventInfo">The EventInfo for the event.</param>
-		/// <param name="handler">The instance with the callback MethodInfo. Null for static types.</param>
-		/// <param name="callback">The MethodInfo for the callback method.</param>
+		/// <param name="eventHandler">The EventHandler for the callback.</param>
+		/// <returns></returns>
+		[NotNull]
+		public static Delegate SubscribeEvent(object instance, EventInfo eventInfo, Action<object> eventHandler)
+		{
+			if (eventInfo == null)
+				throw new ArgumentNullException("eventInfo");
+
+			if (eventHandler == null)
+				throw new ArgumentNullException("eventHandler");
+
+			object handler = eventHandler.Target;
+			MethodInfo callback = EventHandlerExtensions.GetMethodInfo(eventHandler);
+
+			return SubscribeEvent(instance, eventInfo, handler, callback);
+		}
+
+		/// <summary>
+		/// Subscribes to the event on the given instance using the event handler.
+		/// </summary>
+		/// <param name="instance">The instance with the event. Null for static types.</param>
+		/// <param name="eventInfo">The EventInfo for the event.</param>
+		/// <param name="eventHandler">The EventHandler for the callback.</param>
+		/// <returns></returns>
+		[NotNull]
+		public static Delegate SubscribeEvent<T>(object instance, EventInfo eventInfo, Action<object, T> eventHandler)
+		{
+			if (eventInfo == null)
+				throw new ArgumentNullException("eventInfo");
+
+			if (eventHandler == null)
+				throw new ArgumentNullException("eventHandler");
+
+			object handler = eventHandler.Target;
+			MethodInfo callback = EventHandlerExtensions.GetMethodInfo(eventHandler);
+
+			return SubscribeEvent(instance, eventInfo, handler, callback);
+		}
+
+		/// <summary>
+		/// Subscribes to the event on the given instance using the handler and eventHandler method.
+		/// </summary>
+		/// <param name="instance">The instance with the event. Null for static types.</param>
+		/// <param name="eventInfo">The EventInfo for the event.</param>
+		/// <param name="handler">The instance with the eventHandler MethodInfo. Null for static types.</param>
+		/// <param name="callback">The MethodInfo for the eventHandler method.</param>
 		/// <returns></returns>
 		[NotNull]
 		public static Delegate SubscribeEvent(object instance, EventInfo eventInfo, object handler, MethodInfo callback)
