@@ -191,6 +191,21 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Gets the current value as a guid.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static Guid GetValueAsGuid(this JsonReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string stringValue = extends.GetValueAsString();
+			return new Guid(stringValue);
+		}
+
+		/// <summary>
 		/// Deserializes an array of items from the reader's current value.
 		/// </summary>
 		/// <typeparam name="TItem"></typeparam>
