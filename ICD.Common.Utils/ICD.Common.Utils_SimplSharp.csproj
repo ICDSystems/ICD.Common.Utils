@@ -118,6 +118,7 @@
     <Compile Include="IO\IcdBinaryReader.cs" />
     <Compile Include="IO\eSeekOrigin.cs" />
     <Compile Include="IO\IcdStreamWriter.cs" />
+    <Compile Include="Json\ToStringJsonConverter.cs" />
     <Compile Include="ProcessorUtils.SimplSharp.cs" />
     <Compile Include="ProcessorUtils.Standard.cs" />
     <Compile Include="ProgramUtils.SimplSharp.cs" />
