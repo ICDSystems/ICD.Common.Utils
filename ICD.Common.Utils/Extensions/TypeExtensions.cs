@@ -62,6 +62,7 @@ namespace ICD.Common.Utils.Extensions
 		private static readonly Dictionary<Type, Type[]> s_TypeBaseTypes;
 		private static readonly Dictionary<Type, Type[]> s_TypeImmediateInterfaces;
 		private static readonly Dictionary<Type, Type[]> s_TypeMinimalInterfaces;
+		private static readonly Dictionary<Type, string> s_TypeToNameWithoutAssemblyDetails;
 
 		/// <summary>
 		/// Static constructor.
@@ -72,6 +73,7 @@ namespace ICD.Common.Utils.Extensions
 			s_TypeBaseTypes = new Dictionary<Type, Type[]>();
 			s_TypeImmediateInterfaces = new Dictionary<Type, Type[]>();
 			s_TypeMinimalInterfaces = new Dictionary<Type, Type[]>();
+			s_TypeToNameWithoutAssemblyDetails = new Dictionary<Type, string>();
 		}
 
 		/// <summary>
@@ -305,6 +307,77 @@ namespace ICD.Common.Utils.Extensions
 			string name = extends.Name;
 			int index = name.IndexOf('`');
 			return index == -1 ? name : name.Substring(0, index);
+		}
+
+		/// <summary>
+		/// Gets the string representation for the type.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static string GetNameWithoutAssemblyDetails(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string name;
+			if (!s_TypeToNameWithoutAssemblyDetails.TryGetValue(extends, out name))
+			{
+				name = RemoveAssemblyDetails(extends.AssemblyQualifiedName);
+				s_TypeToNameWithoutAssemblyDetails.Add(extends, name);
+			}
+
+			return name;
+		}
+
+		/// <summary>
+		/// Taken from Newtonsoft.Json.Utilities.ReflectionUtils
+		/// Removes the assembly details from a type assembly qualified name.
+		/// </summary>
+		/// <param name="fullyQualifiedTypeName"></param>
+		/// <returns></returns>
+		private static string RemoveAssemblyDetails(string fullyQualifiedTypeName)
+		{
+			StringBuilder builder = new StringBuilder();
+
+			// loop through the type name and filter out qualified assembly details from nested type names
+			bool writingAssemblyName = false;
+			bool skippingAssemblyDetails = false;
+			for (int i = 0; i < fullyQualifiedTypeName.Length; i++)
+			{
+				char current = fullyQualifiedTypeName[i];
+				switch (current)
+				{
+					case '[':
+						writingAssemblyName = false;
+						skippingAssemblyDetails = false;
+						builder.Append(current);
+						break;
+					case ']':
+						writingAssemblyName = false;
+						skippingAssemblyDetails = false;
+						builder.Append(current);
+						break;
+					case ',':
+						if (!writingAssemblyName)
+						{
+							writingAssemblyName = true;
+							builder.Append(current);
+						}
+						else
+						{
+							skippingAssemblyDetails = true;
+						}
+						break;
+					default:
+						if (!skippingAssemblyDetails)
+						{
+							builder.Append(current);
+						}
+						break;
+				}
+			}
+
+			return builder.ToString();
 		}
 
 		/// <summary>

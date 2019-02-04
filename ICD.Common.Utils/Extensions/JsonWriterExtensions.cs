@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using ICD.Common.Properties;
 using Newtonsoft.Json;
 
@@ -8,16 +7,6 @@ namespace ICD.Common.Utils.Extensions
 {
 	public static class JsonWriterExtensions
 	{
-		private static readonly Dictionary<Type, string> s_TypeToName;
-
-		/// <summary>
-		/// Static constructor.
-		/// </summary>
-		static JsonWriterExtensions()
-		{
-			s_TypeToName = new Dictionary<Type, string>();
-		}
-
 		/// <summary>
 		/// Writes the type value.
 		/// </summary>
@@ -35,7 +24,7 @@ namespace ICD.Common.Utils.Extensions
 				return;
 			}
 
-			string name = GetTypeName(type);
+			string name = type.GetNameWithoutAssemblyDetails();
 			extends.WriteValue(name);
 		}
 
@@ -89,77 +78,6 @@ namespace ICD.Common.Utils.Extensions
 					write(extends, writer, item);
 			}
 			writer.WriteEndArray();
-		}
-
-		/// <summary>
-		/// Gets the string representation foe the given type.
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		private static string GetTypeName(Type type)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			string name;
-			if (!s_TypeToName.TryGetValue(type, out name))
-			{
-				name = RemoveAssemblyDetails(type.AssemblyQualifiedName);
-				s_TypeToName.Add(type, name);
-			}
-
-			return name;
-		}
-
-		/// <summary>
-		/// Taken from Newtonsoft.Json.Utilities.ReflectionUtils
-		/// Removes the assembly details from a type assembly qualified name.
-		/// </summary>
-		/// <param name="fullyQualifiedTypeName"></param>
-		/// <returns></returns>
-		private static string RemoveAssemblyDetails(string fullyQualifiedTypeName)
-		{
-			StringBuilder builder = new StringBuilder();
-
-			// loop through the type name and filter out qualified assembly details from nested type names
-			bool writingAssemblyName = false;
-			bool skippingAssemblyDetails = false;
-			for (int i = 0; i < fullyQualifiedTypeName.Length; i++)
-			{
-				char current = fullyQualifiedTypeName[i];
-				switch (current)
-				{
-					case '[':
-						writingAssemblyName = false;
-						skippingAssemblyDetails = false;
-						builder.Append(current);
-						break;
-					case ']':
-						writingAssemblyName = false;
-						skippingAssemblyDetails = false;
-						builder.Append(current);
-						break;
-					case ',':
-						if (!writingAssemblyName)
-						{
-							writingAssemblyName = true;
-							builder.Append(current);
-						}
-						else
-						{
-							skippingAssemblyDetails = true;
-						}
-						break;
-					default:
-						if (!skippingAssemblyDetails)
-						{
-							builder.Append(current);
-						}
-						break;
-				}
-			}
-
-			return builder.ToString();
 		}
 	}
 }
