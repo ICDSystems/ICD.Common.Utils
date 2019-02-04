@@ -24,7 +24,10 @@ namespace ICD.Common.Utils.Extensions
 				return;
 			}
 
-			string name = type.GetNameWithoutAssemblyDetails();
+			string name = Type.GetType(type.FullName) == null
+				              ? type.GetNameWithoutAssemblyDetails()
+				              : type.FullName;
+
 			extends.WriteValue(name);
 		}
 
