@@ -155,6 +155,13 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(expected, type.GetNameWithoutGenericArity());
 		}
 
+		[TestCase(typeof(int), "System.Int32, System.Private.CoreLib")]
+		[TestCase(typeof(int?), "System.Nullable`1[[System.Int32, System.Private.CoreLib]], System.Private.CoreLib")]
+		public void GetNameWithoutAssemblyDetailsTest(Type type, string expected)
+		{
+			Assert.AreEqual(expected, type.GetNameWithoutAssemblyDetails());
+		}
+
 		[TestCase(typeof(string), "string")]
 		[TestCase(typeof(int?), "int?")]
 		[TestCase(typeof(List<int?>), "List<int?>")]
