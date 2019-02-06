@@ -12,8 +12,7 @@ namespace ICD.Common.Utils
 	{
 		private readonly object m_Instance;
 
-		private readonly List<string> m_PropertyOrder;
-		private readonly Dictionary<string, string> m_PropertyValues;
+		private readonly List<KeyValuePair<string, string>> m_PropertyOrder;
 
 		/// <summary>
 		/// Constructor.
@@ -23,8 +22,7 @@ namespace ICD.Common.Utils
 		{
 			m_Instance = instance;
 
-			m_PropertyOrder = new List<string>();
-			m_PropertyValues = new Dictionary<string, string>();
+			m_PropertyOrder = new List<KeyValuePair<string, string>>();
 		}
 
 		/// <summary>
@@ -45,11 +43,7 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		public ReprBuilder AppendPropertyRaw(string name, string value)
 		{
-			m_PropertyOrder.Remove(name);
-			m_PropertyOrder.Add(name);
-
-			m_PropertyValues[name] = value;
-
+			m_PropertyOrder.Add(new KeyValuePair<string, string>(name, value));
 			return this;
 		}
 
@@ -60,7 +54,7 @@ namespace ICD.Common.Utils
 		public override string ToString()
 		{
 			if (m_Instance == null)
-				return GetValueStringRepresentation(m_Instance);
+				return GetValueStringRepresentation(null);
 
 			StringBuilder builder = new StringBuilder();
 
@@ -69,12 +63,11 @@ namespace ICD.Common.Utils
 
 			for (int index = 0; index < m_PropertyOrder.Count; index++)
 			{
-				string property = m_PropertyOrder[index];
-				builder.Append(property);
-				builder.Append('=');
+				KeyValuePair<string, string> pair = m_PropertyOrder[index];
 
-				string valueString = m_PropertyValues[property];
-				builder.Append(valueString);
+				builder.Append(pair.Key);
+				builder.Append('=');
+				builder.Append(pair.Value);
 
 				if (index < m_PropertyOrder.Count - 1)
 					builder.Append(", ");
