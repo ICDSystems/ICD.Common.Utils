@@ -62,6 +62,7 @@ namespace ICD.Common.Utils.Extensions
 		private static readonly Dictionary<Type, Type[]> s_TypeBaseTypes;
 		private static readonly Dictionary<Type, Type[]> s_TypeImmediateInterfaces;
 		private static readonly Dictionary<Type, Type[]> s_TypeMinimalInterfaces;
+		private static readonly Dictionary<Type, string> s_TypeToMinimalName;
 		private static readonly Dictionary<Type, string> s_TypeToNameWithoutAssemblyDetails;
 
 		/// <summary>
@@ -73,6 +74,7 @@ namespace ICD.Common.Utils.Extensions
 			s_TypeBaseTypes = new Dictionary<Type, Type[]>();
 			s_TypeImmediateInterfaces = new Dictionary<Type, Type[]>();
 			s_TypeMinimalInterfaces = new Dictionary<Type, Type[]>();
+			s_TypeToMinimalName = new Dictionary<Type, string>();
 			s_TypeToNameWithoutAssemblyDetails = new Dictionary<Type, string>();
 		}
 
@@ -307,6 +309,57 @@ namespace ICD.Common.Utils.Extensions
 			string name = extends.Name;
 			int index = name.IndexOf('`');
 			return index == -1 ? name : name.Substring(0, index);
+		}
+
+		/// <summary>
+		/// Gets the smallest possible string representation for the given type that
+		/// can be converted back to a Type via Type.GetType(string).
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static string GetMinimalName(this Type extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string name;
+			if (!s_TypeToMinimalName.TryGetValue(extends, out name))
+			{
+				// Generics are a pain
+				if (extends.IsGenericType)
+				{
+					string nameWithoutAssemblyDetails = Type.GetType(extends.FullName) == null
+						                                    ? extends.GetNameWithoutAssemblyDetails()
+						                                    : extends.FullName;
+					int genericStart = nameWithoutAssemblyDetails.IndexOf('[');
+					if (genericStart < 0)
+					{
+						name = nameWithoutAssemblyDetails;
+					}
+					else
+					{
+						string genericParameterNames =
+							string.Join("],[", extends.GetGenericArguments().Select(t => t.GetMinimalName()).ToArray());
+						int genericEnd = nameWithoutAssemblyDetails.LastIndexOf(']');
+
+						name = new StringBuilder().Append(nameWithoutAssemblyDetails, 0, genericStart + 2)
+						                          .Append(genericParameterNames)
+						                          .Append(nameWithoutAssemblyDetails, genericEnd - 1,
+						                                  nameWithoutAssemblyDetails.Length - genericEnd + 1)
+						                          .ToString();
+					}
+				}
+				else
+				{
+					name = Type.GetType(extends.FullName) == null
+						? extends.GetNameWithoutAssemblyDetails()
+						: extends.FullName;
+				}
+
+				s_TypeToMinimalName.Add(extends, name);
+			}
+
+			return name;
 		}
 
 		/// <summary>

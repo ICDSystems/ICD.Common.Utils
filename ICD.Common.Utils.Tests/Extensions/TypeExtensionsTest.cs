@@ -155,6 +155,15 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(expected, type.GetNameWithoutGenericArity());
 		}
 
+		[TestCase(typeof(int), "System.Int32")]
+		[TestCase(typeof(int?), "System.Nullable`1[[System.Int32]]")]
+		[TestCase(typeof(KeyValuePair<int, string>), "System.Collections.Generic.KeyValuePair`2[[System.Int32],[System.String]]")]
+		[TestCase(typeof(List<>), "System.Collections.Generic.List`1")]
+		public void GetMinimalNameTest(Type type, string expected)
+		{
+			Assert.AreEqual(expected, type.GetMinimalName());
+		}
+
 		[TestCase(typeof(int), "System.Int32, System.Private.CoreLib")]
 		[TestCase(typeof(int?), "System.Nullable`1[[System.Int32, System.Private.CoreLib]], System.Private.CoreLib")]
 		public void GetNameWithoutAssemblyDetailsTest(Type type, string expected)

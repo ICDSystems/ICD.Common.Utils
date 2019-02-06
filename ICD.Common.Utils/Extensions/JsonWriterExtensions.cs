@@ -7,16 +7,6 @@ namespace ICD.Common.Utils.Extensions
 {
 	public static class JsonWriterExtensions
 	{
-		private static readonly Dictionary<Type, string> s_TypeToString;
-
-		/// <summary>
-		/// Static constructor.
-		/// </summary>
-		static JsonWriterExtensions()
-		{
-			s_TypeToString = new Dictionary<Type, string>();
-		}
-
 		/// <summary>
 		/// Writes the type value.
 		/// </summary>
@@ -34,23 +24,7 @@ namespace ICD.Common.Utils.Extensions
 				return;
 			}
 
-			string name;
-			if (!s_TypeToString.TryGetValue(type, out name))
-			{
-				// We'll use the full name if it can be deserialized.
-				// Full name ends up longer than name without assembly details when
-				// using nullables, so we do a length check to get the smallest possible
-				// string representation for the type.
-				string fullName = Type.GetType(type.FullName) == null ? null : type.FullName;
-				string nameWithoutAssembly = type.GetNameWithoutAssemblyDetails();
-
-				name = fullName == null || fullName.Length > nameWithoutAssembly.Length
-					       ? nameWithoutAssembly
-					       : fullName;
-
-				s_TypeToString.Add(type, name);
-			}
-
+			string name = type.GetMinimalName();
 			extends.WriteValue(name);
 		}
 
