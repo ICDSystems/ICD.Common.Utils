@@ -27,7 +27,17 @@ namespace ICD.Common.Utils
 					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_CURRENT_IP_ADDRESS;
 				const EthernetAdapterType type = EthernetAdapterType.EthernetLANAdapter;
 				short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
-				yield return CrestronEthernetHelper.GetEthernetParameter(param, id);
+				var address1 = CrestronEthernetHelper.GetEthernetParameter(param, id);
+
+				if (!string.IsNullOrEmpty(address1))
+					yield return address1;
+
+				const EthernetAdapterType secondaryType = EthernetAdapterType.EthernetLAN2Adapter;
+				short adapter2Type = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(secondaryType);
+				var address2 = CrestronEthernetHelper.GetEthernetParameter(param, adapter2Type);
+
+				if (!string.IsNullOrEmpty(address2))
+					yield return address2;
 			}
 		}
 
@@ -44,6 +54,48 @@ namespace ICD.Common.Utils
 				const EthernetAdapterType type = EthernetAdapterType.EthernetLANAdapter;
 				short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
 				yield return CrestronEthernetHelper.GetEthernetParameter(param, id);
+			}
+		}
+
+		/// <summary>
+		/// Gets the dhcp status of the processor.
+		/// </summary>
+		[PublicAPI]
+		public static string DhcpStatus
+		{
+			get
+			{
+				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
+					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_CURRENT_DHCP_STATE;
+				const EthernetAdapterType type = EthernetAdapterType.EthernetLANAdapter;
+				short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+				return CrestronEthernetHelper.GetEthernetParameter(param, id);
+			}
+		}
+
+		/// <summary>
+		/// Gets the hostname of the processor.
+		/// </summary>
+		[PublicAPI]
+		public static IEnumerable<string> Hostname
+		{
+			get
+			{
+				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
+					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_HOSTNAME;
+				const EthernetAdapterType type = EthernetAdapterType.EthernetLANAdapter;
+				short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+				var address1 = CrestronEthernetHelper.GetEthernetParameter(param, id);
+
+				if (!string.IsNullOrEmpty(address1))
+					yield return address1;
+
+				const EthernetAdapterType secondaryType = EthernetAdapterType.EthernetLAN2Adapter;
+				short adapter2Type = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(secondaryType);
+				var address2 = CrestronEthernetHelper.GetEthernetParameter(param, adapter2Type);
+
+				if (!string.IsNullOrEmpty(address2))
+					yield return address2;
 			}
 		}
 
