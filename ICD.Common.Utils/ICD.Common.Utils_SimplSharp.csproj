@@ -77,7 +77,6 @@
     <Compile Include="Attributes\AbstractIcdAttribute.cs" />
     <Compile Include="Attributes\RangeAttribute.cs" />
     <Compile Include="Collections\BiDictionary.cs" />
-    <Compile Include="Collections\AsyncEventQueue.cs" />
     <Compile Include="Collections\IcdOrderedDictionary.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Collections\RateLimitedEventQueue.cs" />
