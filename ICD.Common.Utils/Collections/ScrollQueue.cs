@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using ICD.Common.Properties;
-using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Collections
 {
@@ -15,8 +14,6 @@ namespace ICD.Common.Utils.Collections
 	{
 		private readonly LinkedList<TContents> m_Collection;
 		private int m_MaxSize;
-
-		private readonly SafeCriticalSection m_CollectionLock;
 
 		#region Properties
 
@@ -41,13 +38,13 @@ namespace ICD.Common.Utils.Collections
 		/// <summary>
 		/// Gets the number of items in the collection.
 		/// </summary>
-		public int Count { get { return m_CollectionLock.Execute(() => m_Collection.Count); } }
+		public int Count { get { return m_Collection.Count; } }
 
 		/// <summary>
 		/// The IsSynchronized Boolean property returns True if the 
 		/// collection is designed to be thread safe; otherwise, it returns False.
 		/// </summary>
-		public bool IsSynchronized { get { return true; } }
+		public bool IsSynchronized { get { return false; } }
 
 		/// <summary>
 		/// The SyncRoot property returns an object, which is used for synchronizing 
@@ -64,7 +61,6 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="maxSize"></param>
 		public ScrollQueue(int maxSize)
 		{
-			m_CollectionLock = new SafeCriticalSection();
 			m_Collection = new LinkedList<TContents>();
 			MaxSize = maxSize;
 		}
@@ -76,7 +72,7 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		public void Clear()
 		{
-			m_CollectionLock.Execute(() => m_Collection.Clear());
+			m_Collection.Clear();
 		}
 
 		/// <summary>
@@ -86,17 +82,8 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public void Enqueue(TContents item)
 		{
-			m_CollectionLock.Enter();
-
-			try
-			{
-				m_Collection.AddLast(item);
-				Trim();
-			}
-			finally
-			{
-				m_CollectionLock.Leave();
-			}
+			m_Collection.AddLast(item);
+			Trim();
 		}
 
 		/// <summary>
@@ -106,18 +93,9 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public TContents Dequeue()
 		{
-			m_CollectionLock.Enter();
-
-			try
-			{
-				TContents output = m_Collection.First.Value;
-				m_Collection.RemoveFirst();
-				return output;
-			}
-			finally
-			{
-				m_CollectionLock.Leave();
-			}
+			TContents output = Peek();
+			m_Collection.RemoveFirst();
+			return output;
 		}
 
 		/// <summary>
@@ -127,7 +105,7 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public TContents Peek()
 		{
-			return m_CollectionLock.Execute(() => m_Collection.First.Value);
+			return m_Collection.First.Value;
 		}
 
 		#endregion
@@ -141,24 +119,15 @@ namespace ICD.Common.Utils.Collections
 
 		public IEnumerator<TContents> GetEnumerator()
 		{
-			return m_CollectionLock.Execute(() => m_Collection.ToList(Count).GetEnumerator());
+			return m_Collection.GetEnumerator();
 		}
 
 		void ICollection.CopyTo(Array myArr, int index)
 		{
-			m_CollectionLock.Enter();
-
-			try
+			foreach (TContents item in m_Collection)
 			{
-				foreach (TContents item in m_Collection)
-				{
-					myArr.SetValue(item, index);
-					index++;
-				}
-			}
-			finally
-			{
-				m_CollectionLock.Leave();
+				myArr.SetValue(item, index);
+				index++;
 			}
 		}
 
@@ -171,17 +140,8 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		private void Trim()
 		{
-			m_CollectionLock.Enter();
-
-			try
-			{
-				while (Count > MaxSize)
-					m_Collection.RemoveFirst();
-			}
-			finally
-			{
-				m_CollectionLock.Leave();
-			}
+			while (Count > MaxSize)
+				m_Collection.RemoveFirst();
 		}
 
 		#endregion
