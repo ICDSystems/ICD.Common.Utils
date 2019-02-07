@@ -85,12 +85,12 @@ namespace ICD.Common.Utils.Timers
 			if (IsDisposed)
 				return;
 
+			IsDisposed = true;
+
 			Stop();
 			m_Timer.Dispose();
 
 			m_Callback = null;
-
-			IsDisposed = true;
 		}
 
 		/// <summary>
@@ -160,7 +160,8 @@ namespace ICD.Common.Utils.Timers
 			// Essentially the meat of this class. There's some weirdness with the garbage collector where
 			// the reference to the timer will be cleared, and eventually the CTimer will call the callback
 			// despite being stopped/disposed.
-			if (m_Timer == null
+			if (IsDisposed ||
+				m_Timer == null
 #if SIMPLSHARP
 			    || m_Timer.Disposed
 #endif

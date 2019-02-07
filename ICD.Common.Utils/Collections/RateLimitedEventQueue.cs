@@ -56,7 +56,16 @@ namespace ICD.Common.Utils.Collections
 		{
 			OnItemDequeued = null;
 
-			m_DequeueTimer.Dispose();
+			m_QueueSection.Enter();
+
+			try
+			{
+				m_DequeueTimer.Dispose();
+			}
+			finally
+			{
+				m_QueueSection.Leave();
+			}
 		}
 
 		/// <summary>
