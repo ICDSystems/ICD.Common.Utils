@@ -48,7 +48,9 @@ namespace ICD.Common.Utils.Json
 			if (serializer == null)
 				throw new ArgumentNullException("serializer");
 
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (value == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 			{
 				writer.WriteNull();
 				return;
