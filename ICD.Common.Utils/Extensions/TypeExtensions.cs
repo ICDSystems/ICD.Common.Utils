@@ -166,6 +166,19 @@ namespace ICD.Common.Utils.Extensions
 		/// Returns true if the type is assignable to the given type.
 		/// </summary>
 		/// <param name="from"></param>
+		/// <returns></returns>
+		public static bool IsAssignableTo<T>(this Type from)
+		{
+			if (from == null)
+				throw new ArgumentNullException("from");
+
+			return from.IsAssignableTo(typeof(T));
+		}
+
+		/// <summary>
+		/// Returns true if the type is assignable to the given type.
+		/// </summary>
+		/// <param name="from"></param>
 		/// <param name="to"></param>
 		/// <returns></returns>
 		public static bool IsAssignableTo(this Type from, Type to)
