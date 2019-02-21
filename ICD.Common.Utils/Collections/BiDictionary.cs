@@ -30,9 +30,24 @@ namespace ICD.Common.Utils.Collections
 		/// Constructor.
 		/// </summary>
 		public BiDictionary()
+			: this(null)
+		{
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="dict"></param>
+		public BiDictionary(Dictionary<TKey, TValue> dict)
 		{
 			m_KeyToValue = new Dictionary<TKey, TValue>();
 			m_ValueToKey = new Dictionary<TValue, TKey>();
+
+			if (dict == null)
+				return;
+
+			foreach (KeyValuePair<TKey, TValue> kvp in dict)
+				Add(kvp.Key, kvp.Value);
 		}
 
 		#region Methods
