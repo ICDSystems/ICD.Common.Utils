@@ -55,22 +55,24 @@ namespace ICD.Common.Utils
 				}
 				catch (NotSupportedException)
 				{
-					Print(message);
+					PrintLine(message);
 				}
 				return;
 			}
 #endif
 
-			Print(message);
+			PrintLine(message);
 		}
 
 		public static void PrintLine(string message)
 		{
 #if SIMPLSHARP
-			CrestronConsole.PrintLine(message);
+			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+				CrestronConsole.PrintLine(message);
 #else
 			Console.WriteLine(message);
 #endif
+			OnConsolePrint.Raise(null, new StringEventArgs(message + IcdEnvironment.NewLine));
 		}
 
 		public static void PrintLine(string message, params object[] args)
