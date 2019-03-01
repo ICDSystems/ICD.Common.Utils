@@ -72,7 +72,12 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("type");
 
 			using (IcdXmlReader reader = new IcdXmlReader(xml))
-				return DeserializeObject(type, reader);
+			{
+				if (reader.ReadToNextElement())
+					return DeserializeObject(type, reader);
+
+				throw new FormatException("Expected element in XML");
+			}
 		}
 
 		/// <summary>
