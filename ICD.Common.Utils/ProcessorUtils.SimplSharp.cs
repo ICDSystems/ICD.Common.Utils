@@ -48,11 +48,15 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				Regex regex = new Regex(MODEL_NAME_REGEX);
-				Match match = regex.Match(VersionResult);
+				string versionResult = VersionResult;
+				if (!String.IsNullOrEmpty(versionResult))
+				{
+					Regex regex = new Regex(MODEL_NAME_REGEX);
+					Match match = regex.Match(versionResult);
 
-				if (match.Success)
-					return match.Groups[1].Value;
+					if (match.Success)
+						return match.Groups[1].Value;
+				}
 
 				ServiceProvider.TryGetService<ILoggerService>()
 				               .AddEntry(eSeverity.Warning, "Unable to get model name from \"{0}\"", VersionResult);
@@ -68,11 +72,15 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				Regex regex = new Regex(MODEL_VERSION_REGEX);
-				Match match = regex.Match(VersionResult);
+				string versionResult = VersionResult;
+				if (!String.IsNullOrEmpty(versionResult))
+				{
+					Regex regex = new Regex(MODEL_VERSION_REGEX);
+					Match match = regex.Match(VersionResult);
 
-				if (match.Success)
-					return new Version(match.Groups[1].Value);
+					if (match.Success)
+						return new Version(match.Groups[1].Value);
+				}
 
 				ServiceProvider.TryGetService<ILoggerService>()
 				               .AddEntry(eSeverity.Warning, "Unable to get model version from \"{0}\"", VersionResult);
