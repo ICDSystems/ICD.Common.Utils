@@ -6,7 +6,17 @@
 		/// Constructor.
 		/// </summary>
 		/// <param name="data"></param>
-		public BoolEventArgs(bool data) : base(data)
+		public BoolEventArgs(bool data)
+			: base(data)
+		{
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="eventArgs"></param>
+		public BoolEventArgs(BoolEventArgs eventArgs)
+			: this(eventArgs.Data)
 		{
 		}
 	}

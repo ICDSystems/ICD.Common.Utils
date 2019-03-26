@@ -11,6 +11,7 @@ namespace ICD.Common.Utils
 		{
 			SimplSharp,
 			SimplSharpPro,
+			SimplSharpProMono,
 			Standard
 		}
 

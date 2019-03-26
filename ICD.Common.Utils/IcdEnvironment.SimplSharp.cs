@@ -12,7 +12,12 @@ namespace ICD.Common.Utils
 
 		public static eRuntimeEnvironment RuntimeEnvironment
 		{
-			get { return GetRuntimeEnvironment(CrestronEnvironment.RuntimeEnvironment); }
+			get
+			{
+				return CrestronEnvironment.DevicePlatform == eDevicePlatform.Server
+					       ? eRuntimeEnvironment.SimplSharpProMono
+					       : GetRuntimeEnvironment(CrestronEnvironment.RuntimeEnvironment);
+			}
 		}
 
 		/// <summary>

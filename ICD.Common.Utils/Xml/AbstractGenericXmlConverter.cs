@@ -48,7 +48,9 @@ namespace ICD.Common.Utils.Xml
 			if (writer == null)
 				throw new ArgumentNullException("writer");
 
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (value == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 			{
 				writer.WriteElementString(elementName, null);
 				return;

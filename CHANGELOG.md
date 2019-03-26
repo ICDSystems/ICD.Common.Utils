@@ -5,8 +5,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [8.3.0] - 2019-01-25
+### Added
+ - Added SimplSharpProMono to eRuntimeEnvironment enum
+ - Added path support for SimplSharpProMono environment
+ - Added GetApplicationRootDirectory for all platforms
+
+### Changed
+ - Small fixes for better VC4 support
+
+## [8.2.0] - 2019-01-10
+### Added
+ - Added TryGetPortForScheme method to UriExtensions
+ - Added range attribute for clarifying numeric fields, properties and parameters
+
 ### Changed
  - IcdHashSet preserves comparer when an operation creates a new IcdHashSet
+ - Fixed bug where XML fragments on Net Standard were being prepended with a document header
 
 ## [8.1.0] - 2019-01-02
 ### Added

@@ -17,7 +17,15 @@ namespace ICD.Common.Utils
 		/// Gets the path to the root directory of the processor.
 		/// </summary>
 		[PublicAPI]
-		public static string RootPath { get { return IcdDirectory.GetDirectoryRoot("\\"); } }
+		public static string RootPath {
+			get
+			{
+				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+					return IcdDirectory.GetApplicationRootDirectory();
+
+				return IcdDirectory.GetDirectoryRoot(IcdPath.DirectorySeparatorChar.ToString());
+			}
+		}
 
 		/// <summary>
 		/// Gets the path to the program directory
@@ -35,7 +43,7 @@ namespace ICD.Common.Utils
 			get
 			{
 #if SIMPLSHARP
-				return Join(RootPath, "USER");
+				return Join(RootPath, "User");
 #elif LINUX
 				return Join(RootPath, "opt", "ICD.Connect");
 #else
@@ -53,6 +61,9 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
+				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+					return Join(RootConfigPath, "ProgramConfig");
+
 				string directoryName = string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
 				return Join(RootConfigPath, directoryName);
 			}

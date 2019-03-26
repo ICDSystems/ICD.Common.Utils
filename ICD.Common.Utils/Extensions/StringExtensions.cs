@@ -221,5 +221,29 @@ namespace ICD.Common.Utils.Extensions
 
 			return extends.Contains(character.ToString());
 		}
+
+		/// <summary>
+		/// Generates a hashcode that is consistent between program executions.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static int GetStableHashCode(this string extends)
+		{
+			unchecked
+			{
+				int hash1 = 5381;
+				int hash2 = hash1;
+
+				for (int i = 0; i < extends.Length && extends[i] != '\0'; i += 2)
+				{
+					hash1 = ((hash1 << 5) + hash1) ^ extends[i];
+					if (i == extends.Length - 1 || extends[i + 1] == '\0')
+						break;
+					hash2 = ((hash2 << 5) + hash2) ^ extends[i + 1];
+				}
+
+				return hash1 + (hash2 * 1566083941);
+			}
+		}
 	}
 }
