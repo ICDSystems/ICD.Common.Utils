@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added GUID utils for generating seeded GUIDs
+ - Added extension method for getting stable hashcodes from strings
+ - Added environment and processor utilities for determining DNS status and hostname
+
+### Changed
+ - RangeAttribute improvements for better type safety
+
 ## [8.3.0] - 2019-01-25
 ### Added
  - Added SimplSharpProMono to eRuntimeEnvironment enum
