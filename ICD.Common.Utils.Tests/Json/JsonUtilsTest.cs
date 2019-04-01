@@ -18,7 +18,11 @@ namespace ICD.Common.Utils.Tests.Json
 		[Test]
 		public void ParseDateTimeTest()
 		{
-			Assert.Inconclusive();
+			const string dataA = "2016-02-26T19:24:59";
+			const string dataB = "2019-04-01T12:41:15-04:00";
+
+			Assert.DoesNotThrow(() => JsonUtils.ParseDateTime(dataA));
+			Assert.DoesNotThrow(() => JsonUtils.ParseDateTime(dataB));
 		}
 
 		[Test]
