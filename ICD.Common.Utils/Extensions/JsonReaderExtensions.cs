@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Json;
 using Newtonsoft.Json;
 
 namespace ICD.Common.Utils.Extensions
@@ -203,6 +204,20 @@ namespace ICD.Common.Utils.Extensions
 
 			string stringValue = extends.GetValueAsString();
 			return new Guid(stringValue);
+		}
+
+		/// <summary>
+		/// Gets the current value as a date.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static DateTime GetValueAsDateTime(this JsonReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string stringValue = extends.GetValueAsString();
+			return JsonUtils.ParseDateTime(stringValue);
 		}
 
 		/// <summary>

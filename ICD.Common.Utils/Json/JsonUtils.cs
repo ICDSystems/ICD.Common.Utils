@@ -23,6 +23,16 @@ namespace ICD.Common.Utils.Json
 		private const string MESSAGE_DATA_PROPERTY = "d";
 
 		/// <summary>
+		/// Gets the data as a DateTime value.
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public static DateTime ParseDateTime(string data)
+		{
+			return DateTime.ParseExact(data, DATE_FORMAT, CultureInfo.CurrentCulture);
+		}
+
+		/// <summary>
 		/// Gets the token as a DateTime value.
 		/// </summary>
 		/// <param name="token"></param>
@@ -34,7 +44,7 @@ namespace ICD.Common.Utils.Json
 				throw new ArgumentNullException("token");
 
 #if SIMPLSHARP
-			return DateTime.ParseExact((string)token, DATE_FORMAT, CultureInfo.CurrentCulture);
+			return ParseDateTime((string)token);
 #else
 			return (DateTime)token;
 #endif
