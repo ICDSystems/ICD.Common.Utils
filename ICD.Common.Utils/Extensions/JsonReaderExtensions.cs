@@ -148,11 +148,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (extends.TokenType == JsonToken.String || extends.TokenType == JsonToken.Null)
-				return extends.Value as string;
-
-			string message = string.Format("Token {0} {1} is not {2}", extends.TokenType, extends.Value, JsonToken.String);
-			throw new InvalidCastException(message);
+			return extends.Value as string;
 		}
 
 		/// <summary>
