@@ -220,6 +220,9 @@ namespace ICD.Common.Utils
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
 
+			if (parameters.Length == 0)
+				return Activator.CreateInstance(type);
+
 			ConstructorInfo constructor = GetConstructor(type, parameters);
 
 			try
