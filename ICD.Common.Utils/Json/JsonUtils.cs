@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using ICD.Common.Properties;
@@ -16,9 +15,6 @@ namespace ICD.Common.Utils.Json
 	[PublicAPI]
 	public static class JsonUtils
 	{
-		// 2016-02-26T19:24:59
-		private const string DATE_FORMAT = @"yyyy-MM-dd\THH:mm:ss";
-
 		private const string MESSAGE_NAME_PROPERTY = "m";
 		private const string MESSAGE_DATA_PROPERTY = "d";
 
@@ -45,6 +41,16 @@ namespace ICD.Common.Utils.Json
 		}
 
 		/// <summary>
+		/// Gets the data as a DateTime value.
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public static DateTime ParseDateTime(string data)
+		{
+			return DateTime.Parse(data);
+		}
+
+		/// <summary>
 		/// Gets the token as a DateTime value.
 		/// </summary>
 		/// <param name="token"></param>
@@ -55,11 +61,7 @@ namespace ICD.Common.Utils.Json
 			if (token == null)
 				throw new ArgumentNullException("token");
 
-#if SIMPLSHARP
-			return DateTime.ParseExact((string)token, DATE_FORMAT, CultureInfo.CurrentCulture);
-#else
-			return (DateTime)token;
-#endif
+			return ParseDateTime((string)token);
 		}
 
 		/// <summary>
@@ -80,6 +82,10 @@ namespace ICD.Common.Utils.Json
 			{
 				output = ParseDateTime(token);
 				return true;
+			}
+			catch (FormatException)
+			{
+				return false;
 			}
 			catch (InvalidCastException)
 			{
