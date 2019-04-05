@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - RangeAttribute improvements for better type safety
 
+## [8.3.1] - 2019-04-05
+### Changed
+ - Fixed FormatException when parsing some JSON DateTimes
+
 ## [8.3.0] - 2019-01-25
 ### Added
  - Added SimplSharpProMono to eRuntimeEnvironment enum
