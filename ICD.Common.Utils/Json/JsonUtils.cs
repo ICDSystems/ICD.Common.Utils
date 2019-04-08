@@ -29,6 +29,16 @@ namespace ICD.Common.Utils.Json
 		}
 
 		/// <summary>
+		/// Gets the data as a DateTime value.
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public static DateTime ParseDateTime(string data)
+		{
+			return DateTime.Parse(data);
+		}
+
+		/// <summary>
 		/// Gets the token as a DateTime value.
 		/// </summary>
 		/// <param name="token"></param>
@@ -60,6 +70,10 @@ namespace ICD.Common.Utils.Json
 			{
 				output = ParseDateTime(token);
 				return true;
+			}
+			catch (FormatException)
+			{
+				return false;
 			}
 			catch (InvalidCastException)
 			{
