@@ -93,6 +93,29 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static string ProgramLibPath { get { return Join(ProgramConfigPath, "Lib"); } }
 
+		/// <summary>
+		/// Returns the absolute path to the logs directory.
+		/// </summary>
+		/// <value></value>
+		[PublicAPI]
+		public static string ProgramLogsPath
+		{
+			get
+			{
+				string directoryName = "Logs";
+
+				switch (IcdEnvironment.RuntimeEnvironment)
+				{
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+						directoryName = string.Format("Program{0:D2}Logs", ProgramUtils.ProgramNumber);
+						break;
+				}
+
+				return Join(RootConfigPath, directoryName);
+			}
+		}
+
 		#endregion
 
 		#region Methods
