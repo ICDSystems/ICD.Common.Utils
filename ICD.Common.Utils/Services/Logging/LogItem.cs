@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Services.Logging
@@ -20,11 +19,6 @@ namespace ICD.Common.Utils.Services.Logging
 		/// </summary>
 		[PublicAPI]
 		public DateTime Timestamp { get { return m_Timestamp; } }
-
-		/// <summary>
-		/// Gets the log time in local time.
-		/// </summary>
-		public DateTime LocalTimestamp { get { return Timestamp.ToLocalTime(); } }
 
 		/// <summary>
 		/// Get/Set for severity level.
@@ -55,24 +49,6 @@ namespace ICD.Common.Utils.Services.Logging
 		#endregion
 
 		#region Methods
-
-		/// <summary>
-		/// Return the text format to send to Fusion
-		/// </summary>
-		/// <returns>text format for fusion, including timestamp, severity, and message</returns>
-		[PublicAPI]
-		public string GetFusionLogText()
-		{
-			StringBuilder s = new StringBuilder();
-
-			s.Append(Timestamp.ToString("yyyyMMddHHmmss"));
-			s.Append("||");
-			s.Append((int)Severity);
-			s.Append("||");
-			s.Append(Message);
-
-			return s.ToString();
-		}
 
 		/// <summary>
 		/// Implementing default equality.
