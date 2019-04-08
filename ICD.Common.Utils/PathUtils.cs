@@ -61,10 +61,16 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
-					return Join(RootConfigPath, "ProgramConfig");
+				string directoryName = "Config";
 
-				string directoryName = string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
+				switch (IcdEnvironment.RuntimeEnvironment)
+				{
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+						directoryName = string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
+						break;
+				}
+
 				return Join(RootConfigPath, directoryName);
 			}
 		}
