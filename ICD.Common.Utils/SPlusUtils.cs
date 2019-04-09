@@ -2,6 +2,9 @@
 
 namespace ICD.Common.Utils
 {
+	/// <summary>
+	/// Static class containing useful utilities for use in S+ programs
+	/// </summary>
 	[PublicAPI("S+")]
 	public static class SPlusUtils
 	{
