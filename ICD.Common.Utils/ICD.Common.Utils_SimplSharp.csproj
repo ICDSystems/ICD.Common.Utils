@@ -186,6 +186,7 @@
     <Compile Include="SafeCriticalSection.SimplSharp.cs" />
     <Compile Include="SafeCriticalSection.Standard.cs" />
     <Compile Include="SafeMutex.cs" />
+    <Compile Include="SPlusUtils.cs" />
     <Compile Include="Sqlite\eDbType.cs" />
     <Compile Include="Sqlite\IcdDbDataReader.cs" />
     <Compile Include="Sqlite\IcdSqliteCommand.cs" />
