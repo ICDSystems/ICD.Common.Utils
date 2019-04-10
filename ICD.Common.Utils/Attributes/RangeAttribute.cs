@@ -206,6 +206,8 @@ namespace ICD.Common.Utils.Attributes
 			throw new ArgumentException("the type of value is not a numeric type.");
 		}
 
+		#region Range -> UShort
+
 		public ushort RemapRangeToUshort(double value)
 		{
 			return (ushort)MathUtils.MapRange(GetMin<double>(), GetMax<double>(), ushort.MinValue, ushort.MaxValue, value);
@@ -225,6 +227,76 @@ namespace ICD.Common.Utils.Attributes
 		{
 			return MathUtils.MapRange(GetMin<ushort>(), GetMax<ushort>(), ushort.MinValue, ushort.MaxValue, value);
 		}
+
+		#endregion
+
+		#region UShort -> Range
+
+		public object RemapUshortToRange(ushort value)
+		{
+			if (Min is ushort)
+			{
+				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<ushort>(), GetMax<ushort>(), value);
+			}
+
+			if (Min is short)
+			{
+				var castVal = (short)value;
+				return (short)MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<short>(), GetMax<short>(), castVal);
+			}
+
+			if (Min is uint)
+			{
+				var castVal = (uint)value;
+				return (uint)MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<uint>(), GetMax<uint>(), castVal);
+			}
+
+			if (Min is int)
+			{
+				var castVal = (int)value;
+				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<int>(), GetMax<int>(), castVal);
+			}
+
+			if (Min is ulong)
+			{
+				var castVal = (ulong)value;
+				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<ulong>(), GetMax<ulong>(), castVal);
+			}
+
+			if (Min is long)
+			{
+				var castVal = (long)value;
+				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<long>(), GetMax<long>(), castVal);
+			}
+
+			if (Min is float)
+			{
+				var castVal = (float)value;
+				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<float>(), GetMax<float>(), castVal);
+			}
+
+			if (Min is double)
+			{
+				var castVal = (double)value;
+				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<double>(), GetMax<double>(), castVal);
+			}
+
+			if (Min is decimal)
+			{
+				var castVal = (decimal)value;
+				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<decimal>(), GetMax<decimal>(), castVal);
+			}
+
+			if (Min is byte)
+			{
+				var castVal = (byte)value;
+				return (byte)MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<byte>(), GetMax<byte>(), castVal);
+			}
+
+			throw new NotSupportedException("Value type of range attribute is not supported.");
+		}
+
+		#endregion
 
 		#endregion
 	}
