@@ -5,8 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [9.3.0] - 2019-04-16
 ### Added
  - Added SPlusUtils with ConvertToInt method taking LowWord/HighWord ushorts
+ - Added JsonReader extension methods for reading DateTimes
+ - Added JsonReader extension methods for writing properties
+ - IcdStreamWriter exposes WriteLine(string)
+ - Added ProgramLogsPath to PathUtils
+
+### Changed
+ - Fixes for VC4 compatibility
+ - Fixed JSON DateTime parsing for timezone information
+ - Small reflection optimizations
 
 ## [9.2.0] - 2019-03-01
 ### Added
