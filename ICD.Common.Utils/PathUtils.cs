@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
@@ -61,10 +62,24 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
-					return Join(RootConfigPath, "ProgramConfig");
+				string directoryName;
 
-				string directoryName = string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
+				switch (IcdEnvironment.RuntimeEnvironment)
+				{
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+					case IcdEnvironment.eRuntimeEnvironment.Standard:
+						directoryName = string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
+						break;
+
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+						directoryName = "ProgramConfig";
+						break;
+
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+
 				return Join(RootConfigPath, directoryName);
 			}
 		}
@@ -86,6 +101,37 @@ namespace ICD.Common.Utils
 		/// </summary>
 		[PublicAPI]
 		public static string ProgramLibPath { get { return Join(ProgramConfigPath, "Lib"); } }
+
+		/// <summary>
+		/// Returns the absolute path to the logs directory.
+		/// </summary>
+		/// <value></value>
+		[PublicAPI]
+		public static string ProgramLogsPath
+		{
+			get
+			{
+				string directoryName;
+
+				switch (IcdEnvironment.RuntimeEnvironment)
+				{
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+					case IcdEnvironment.eRuntimeEnvironment.Standard:
+						directoryName = string.Format("Program{0:D2}Logs", ProgramUtils.ProgramNumber);
+						break;
+
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+						directoryName = "ProgramLogs";
+						break;
+
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+
+				return Join(RootConfigPath, directoryName);
+			}
+		}
 
 		#endregion
 

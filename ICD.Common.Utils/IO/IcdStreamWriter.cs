@@ -17,5 +17,10 @@ namespace ICD.Common.Utils.IO
 		public IcdStreamWriter(StreamWriter baseStreamWriter) : base(baseStreamWriter)
 		{
 		}
+
+		public void WriteLine(string value)
+		{
+			WrappedStreamWriter.WriteLine(value);
+		}
 	}
 }
