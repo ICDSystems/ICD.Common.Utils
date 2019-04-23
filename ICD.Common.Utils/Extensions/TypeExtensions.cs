@@ -408,9 +408,8 @@ namespace ICD.Common.Utils.Extensions
 			// loop through the type name and filter out qualified assembly details from nested type names
 			bool writingAssemblyName = false;
 			bool skippingAssemblyDetails = false;
-			for (int i = 0; i < fullyQualifiedTypeName.Length; i++)
+			foreach (char current in fullyQualifiedTypeName)
 			{
-				char current = fullyQualifiedTypeName[i];
 				switch (current)
 				{
 					case '[':
