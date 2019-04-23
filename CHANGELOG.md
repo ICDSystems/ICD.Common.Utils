@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added extension method for peeking queues
+
 ## [9.3.0] - 2019-04-16
 ### Added
  - Added SPlusUtils with ConvertToInt method taking LowWord/HighWord ushorts
