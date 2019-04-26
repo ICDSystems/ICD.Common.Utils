@@ -112,7 +112,6 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="key"></param>
 		/// <param name="defaultValue"></param>
 		/// <returns></returns>
-		[CanBeNull]
 		[PublicAPI]
 		public static TValue GetOrAddDefault<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key,
 		                                                   TValue defaultValue)
@@ -126,6 +125,35 @@ namespace ICD.Common.Utils.Extensions
 
 			TValue value = extends.GetDefault(key, defaultValue);
 			extends[key] = value;
+
+			return value;
+		}
+
+		/// <summary>
+		/// If the key is present in the dictionary return the value, otherwise add a new value to the dictionary and return it.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static TValue GetOrAddNew<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key)
+			where TValue : new()
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			// ReSharper disable once CompareNonConstrainedGenericWithNull
+			if (key == null)
+				throw new ArgumentNullException("key");
+
+			TValue value;
+			if (!extends.TryGetValue(key, out value))
+			{
+				value = ReflectionUtils.CreateInstance<TValue>();
+				extends.Add(key, value);
+			}
 
 			return value;
 		}
