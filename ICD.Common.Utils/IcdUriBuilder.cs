@@ -66,7 +66,7 @@ namespace ICD.Common.Utils
 		/// Constructor.
 		/// </summary>
 		public IcdUriBuilder()
-			: this((Uri)null)
+			: this(new Uri("http://localhost/"))
 		{
 		}
 
@@ -86,7 +86,7 @@ namespace ICD.Common.Utils
 		public IcdUriBuilder(Uri uri)
 		{
 			if (uri == null)
-				return;
+				throw new ArgumentNullException("uri");
 
 			if (!uri.IsAbsoluteUri)
 				uri = new Uri(Uri.UriSchemeHttp + Uri.SchemeDelimiter + uri);
@@ -134,8 +134,7 @@ namespace ICD.Common.Utils
 				builder.Append('@');
 			}
 
-			string host = string.IsNullOrEmpty(Host) ? "localhost" : Host;
-			builder.Append(host);
+			builder.Append(Host);
 
 			if (Port != 0)
 			{

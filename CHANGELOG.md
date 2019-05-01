@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
  - Added extension method for peeking queues
+ 
+### Changed
+ - IcdUriBuilder constructors behave closer to UriBuilder, Host defaults to "localhost"
 
 ## [9.3.0] - 2019-04-16
 ### Added
