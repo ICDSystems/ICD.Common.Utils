@@ -107,20 +107,20 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public override string ToString()
 		{
-			// URI = scheme:[//authority]path[?query][#fragment]
+			// URI = [scheme://][authority]path[?query][#fragment]
 			// authority = [userinfo@]host[:port]
 			// userinfo = username[:password]
 
 			StringBuilder builder = new StringBuilder();
 
 			// Scheme
-			string scheme = string.IsNullOrEmpty(Scheme) ? Uri.UriSchemeHttp : Scheme;
-			builder.Append(scheme);
-			builder.Append(':');
+			if (!string.IsNullOrEmpty(Scheme))
+			{
+				builder.Append(Scheme);
+				builder.Append("://");
+			}
 
 			// Authority
-			builder.Append("//");
-
 			if (!string.IsNullOrEmpty(UserName))
 			{
 				builder.Append(UserName);

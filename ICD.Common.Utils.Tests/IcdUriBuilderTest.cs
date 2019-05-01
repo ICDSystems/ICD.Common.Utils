@@ -63,14 +63,15 @@ namespace ICD.Common.Utils.Tests
 
 		#endregion
 
-		[TestCase("http:///", null, null, null, null, (ushort)0, null, null, null)]
-		[TestCase("http://localhost:80/", null, "localhost", null, null, (ushort)80, null, null, null)]
-		[TestCase("http://username@localhost/", null, "localhost", null, null, (ushort)0, null, null, "username")]
-		[TestCase("http://localhost/", null, "localhost", "password", null, (ushort)0, null, null, null)]
+		[TestCase("/", null, null, null, null, (ushort)0, null, null, null)]
+		[TestCase("http:///", null, null, null, null, (ushort)0, null, "http", null)]
+		[TestCase("http://localhost:80/", null, "localhost", null, null, (ushort)80, null, "http", null)]
+		[TestCase("http://username@localhost/", null, "localhost", null, null, (ushort)0, null, "http", "username")]
+		[TestCase("http://localhost/", null, "localhost", "password", null, (ushort)0, null, "http", null)]
 		[TestCase("https://localhost/", null, "localhost", null, null, (ushort)0, null, "https", null)]
-		[TestCase("http://localhost/test", null, "localhost", null, "test", (ushort)0, null, null, null)]
-		[TestCase("http://localhost/test", null, "localhost", null, "/test", (ushort)0, null, null, null)]
-		[TestCase("http://localhost//test", null, "localhost", null, "//test", (ushort)0, null, null, null)]
+		[TestCase("http://localhost/test", null, "localhost", null, "test", (ushort)0, null, "http", null)]
+		[TestCase("http://localhost/test", null, "localhost", null, "/test", (ushort)0, null, "http", null)]
+		[TestCase("http://localhost//test", null, "localhost", null, "//test", (ushort)0, null, "http", null)]
 		public void ToStringTest(string expected, string fragment, string address, string password, string path, ushort port,
 		                         string query, string scheme, string userName)
 		{
