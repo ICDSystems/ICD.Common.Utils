@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+ - Fixed PriorityQueue IndexOutOfRange exception when an inner queue becomes depleted
+
 ## [8.3.1] - 2019-04-05
 ### Changed
  - Fixed FormatException when parsing some JSON DateTimes
