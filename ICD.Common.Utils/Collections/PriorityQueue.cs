@@ -77,7 +77,7 @@ namespace ICD.Common.Utils.Collections
 			if (!m_PriorityToQueue.TryGetValue(priority, out queue))
 			{
 				queue = new List<T>();
-				m_PriorityToQueue[priority] = queue;
+				m_PriorityToQueue.Add(priority, queue);
 			}
 
 			queue.Add(item);
@@ -97,7 +97,7 @@ namespace ICD.Common.Utils.Collections
 			if (!m_PriorityToQueue.TryGetValue(priority, out queue))
 			{
 				queue = new List<T>();
-				m_PriorityToQueue[priority] = queue;
+				m_PriorityToQueue.Add(priority, queue);
 			}
 
 			queue.Insert(0, item);
@@ -136,7 +136,7 @@ namespace ICD.Common.Utils.Collections
 
 			bool inserted = false;
 
-			foreach (KeyValuePair<int, List<T>> kvp in m_PriorityToQueue)
+			foreach (KeyValuePair<int, List<T>> kvp in m_PriorityToQueue.ToArray())
 			{
 				int[] removeIndices =
 					kvp.Value
@@ -166,6 +166,9 @@ namespace ICD.Common.Utils.Collections
 
 					inserted = true;
 				}
+
+				if (kvp.Value.Count == 0)
+					m_PriorityToQueue.Remove(kvp.Key);
 			}
 
 			if (!inserted)
@@ -194,24 +197,30 @@ namespace ICD.Common.Utils.Collections
 		[PublicAPI]
 		public bool TryDequeue(out T output)
 		{
-			output = default(T);
+			while (true)
+			{
+				output = default(T);
 
-			KeyValuePair<int, List<T>> kvp;
-			if (!m_PriorityToQueue.TryFirst(out kvp))
-				return false;
+				KeyValuePair<int, List<T>> kvp;
+				if (!m_PriorityToQueue.TryFirst(out kvp))
+					return false;
 
-			int priority = kvp.Key;
-			List<T> queue = kvp.Value;
+				int priority = kvp.Key;
+				List<T> queue = kvp.Value;
 
-			output = queue[0];
-			queue.RemoveAt(0);
+				bool found = queue.TryFirst(out output);
+				if (found)
+				{
+					queue.RemoveAt(0);
+					m_Count--;
+				}
 
-			if (queue.Count == 0)
-				m_PriorityToQueue.Remove(priority);
+				if (queue.Count == 0)
+					m_PriorityToQueue.Remove(priority);
 
-			m_Count--;
-
-			return true;
+				if (found)
+					return true;
+			}
 		}
 
 		/// <summary>
@@ -233,10 +242,7 @@ namespace ICD.Common.Utils.Collections
 		public void CopyTo(Array array, int index)
 		{
 			foreach (T item in this)
-			{
-				array.SetValue(item, index);
-				index++;
-			}
+				array.SetValue(item, index++);
 		}
 
 		#endregion

@@ -169,6 +169,29 @@ namespace ICD.Common.Utils.Tests.Collections
 		}
 
 		[Test]
+		public void TryDequeueTest()
+		{
+			PriorityQueue<int> queue = new PriorityQueue<int>();
+			queue.Enqueue(10, 1);
+			queue.Enqueue(20, 2);
+			queue.Enqueue(30, 3);
+
+			int output;
+
+			Assert.IsTrue(queue.TryDequeue(out output));
+			Assert.AreEqual(10, output);
+
+			Assert.IsTrue(queue.TryDequeue(out output));
+			Assert.AreEqual(20, output);
+
+			Assert.IsTrue(queue.TryDequeue(out output));
+			Assert.AreEqual(30, output);
+
+			Assert.IsFalse(queue.TryDequeue(out output));
+			Assert.AreEqual(0, output);
+		}
+
+		[Test]
 		public void GetEnumeratorTest()
 		{
 			Assert.Inconclusive();
