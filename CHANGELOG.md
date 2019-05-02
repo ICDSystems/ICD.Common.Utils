@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.3.2] - 2019-05-02
 ### Changed
  - Fixed PriorityQueue IndexOutOfRange exception when an inner queue becomes depleted
 
