@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
  - RangeAttribute improvements for better type safety
+ - PathUtils breaking out ProgramConfigDirectory and CommonConfigDirectory from the full paths
 
 ## [8.3.1] - 2019-04-05
 ### Changed
