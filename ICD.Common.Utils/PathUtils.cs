@@ -61,11 +61,19 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
-					return Join(RootConfigPath, "ProgramConfig");
+				return Join(RootConfigPath, ProgramConfigDirectory);
+			}
+		}
 
-				string directoryName = string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
-				return Join(RootConfigPath, directoryName);
+		[PublicAPI]
+		public static string ProgramConfigDirectory
+		{
+			get
+			{
+				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+					return "ProgramConfig";
+
+				return string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
 			}
 		}
 
@@ -73,7 +81,10 @@ namespace ICD.Common.Utils
 		/// Returns the absolute path to the common configuration directory.
 		/// </summary>
 		[PublicAPI]
-		public static string CommonConfigPath { get { return Join(RootConfigPath, "CommonConfig"); } }
+		public static string CommonConfigPath { get { return Join(RootConfigPath, CommonConfigDirectory); } }
+
+		[PublicAPI]
+		public static string CommonConfigDirectory { get { return "CommonConfig"; }}
 
 		/// <summary>
 		/// Returns the absolute path to the common config library directory.
