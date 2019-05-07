@@ -112,6 +112,7 @@
     <Compile Include="Extensions\ParameterInfoExtensions.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Extensions\UShortExtensions.cs" />
+    <Compile Include="Globalization\IcdCultureInfo.cs" />
     <Compile Include="IcdUriBuilder.cs" />
     <Compile Include="IO\Compression\IcdZipEntry.cs" />
     <Compile Include="IO\IcdBinaryReader.cs" />
@@ -218,6 +219,9 @@
     <Compile Include="Xml\XmlReaderExtensions.cs" />
     <Compile Include="Xml\XmlUtils.cs" />
     <None Include="Properties\ControlSystem.cfg" />
+    <None Include="Resources\CultureInfo.sqlite">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <PropertyGroup>
