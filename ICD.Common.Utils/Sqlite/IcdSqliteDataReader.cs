@@ -34,5 +34,30 @@ namespace ICD.Common.Utils.Sqlite
 		{
 			return m_Reader.Read();
 		}
+
+		public int GetInt32(int ordinal)
+		{
+			return m_Reader.GetInt32(ordinal);
+		}
+
+		public bool GetBoolean(int ordinal)
+		{
+			return m_Reader.GetBoolean(ordinal);
+		}
+
+		public string GetString(int ordinal)
+		{
+			return m_Reader.GetString(ordinal);
+		}
+
+		public int GetOrdinal(string name)
+		{
+			return m_Reader.GetOrdinal(name);
+		}
+
+		public void Close()
+		{
+			m_Reader.Close();
+		}
 	}
 }

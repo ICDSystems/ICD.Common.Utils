@@ -6,22 +6,27 @@ using Microsoft.Data.Sqlite;
 
 namespace ICD.Common.Utils.Sqlite
 {
-    public sealed class IcdSqliteParameterCollection
-    {
-	    private readonly SqliteParameterCollection m_Parameters;
+	public sealed class IcdSqliteParameterCollection
+	{
+		private readonly SqliteParameterCollection m_Parameters;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="commandParameters"></param>
-	    public IcdSqliteParameterCollection(SqliteParameterCollection commandParameters)
+		public IcdSqliteParameterCollection(SqliteParameterCollection commandParameters)
 		{
 			m_Parameters = commandParameters;
 		}
 
 		public IcdSqliteParameter Add(string name, eDbType type)
-	    {
+		{
 			return new IcdSqliteParameter(m_Parameters.Add(name, type.ToParamType()));
-	    }
-    }
+		}
+
+		public void AddWithValue(string parameterName, object value)
+		{
+			m_Parameters.AddWithValue(parameterName, value);
+		}
+	}
 }
