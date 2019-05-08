@@ -101,6 +101,9 @@
     <Compile Include="EventArguments\StringEventArgs.cs" />
     <Compile Include="EventArguments\UShortEventArgs.cs" />
     <Compile Include="EventArguments\XmlRecursionEventArgs.cs" />
+    <None Include="CultureInfo.sqlite">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="ObfuscationSettings.cs" />
     <Compile Include="Extensions\BoolExtensions.cs" />
     <Compile Include="Extensions\ByteExtensions.cs" />
@@ -219,9 +222,6 @@
     <Compile Include="Xml\XmlReaderExtensions.cs" />
     <Compile Include="Xml\XmlUtils.cs" />
     <None Include="Properties\ControlSystem.cfg" />
-    <None Include="Resources\CultureInfo.sqlite">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <PropertyGroup>
