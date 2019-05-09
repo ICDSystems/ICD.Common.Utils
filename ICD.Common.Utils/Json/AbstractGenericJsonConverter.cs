@@ -56,6 +56,17 @@ namespace ICD.Common.Utils.Json
 				return;
 			}
 
+			WriteObject(writer, value, serializer);
+		}
+
+		/// <summary>
+		/// Override to write the object value to the writer.
+		/// </summary>
+		/// <param name="writer"></param>
+		/// <param name="value"></param>
+		/// <param name="serializer"></param>
+		protected virtual void WriteObject(JsonWriter writer, T value, JsonSerializer serializer)
+		{
 			writer.WriteStartObject();
 			{
 				WriteProperties(writer, value, serializer);
@@ -119,6 +130,17 @@ namespace ICD.Common.Utils.Json
 			if (reader.TokenType != JsonToken.StartObject)
 				throw new FormatException(string.Format("Expected {0} got {1}", JsonToken.StartObject, reader.TokenType));
 
+			return ReadObject(reader, serializer);
+		}
+
+		/// <summary>
+		/// Override to handle deserialization of the current StartObject token.
+		/// </summary>
+		/// <param name="reader"></param>
+		/// <param name="serializer"></param>
+		/// <returns></returns>
+		protected virtual T ReadObject(JsonReader reader, JsonSerializer serializer)
+		{
 			T output = Instantiate();
 
 			reader.ReadObject(serializer, (p, r, s) => ReadProperty(p, r, output, s));
