@@ -28,19 +28,6 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Writes a Type value.
-		/// </summary>
-		/// <param name="extends"></param>
-		/// <param name="value"></param>
-		public static void WriteValue(this JsonWriter extends, Type value)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			extends.WriteType(value);
-		}
-
-		/// <summary>
 		/// Writes the property name and value to the writer.
 		/// </summary>
 		/// <param name="extends"></param>
@@ -142,7 +129,7 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("extends");
 
 			extends.WritePropertyName(propertyName);
-			extends.WriteValue(value);
+			extends.WriteType(value);
 		}
 	}
 }
