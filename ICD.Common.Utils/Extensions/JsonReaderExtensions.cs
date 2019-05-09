@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Json;
 using Newtonsoft.Json;
@@ -214,74 +212,6 @@ namespace ICD.Common.Utils.Extensions
 
 			string stringValue = extends.GetValueAsString();
 			return JsonUtils.ParseDateTime(stringValue);
-		}
-
-		/// <summary>
-		/// Deserializes an array of items from the reader's current value.
-		/// </summary>
-		/// <typeparam name="TItem"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="reader"></param>
-		public static IEnumerable<TItem> DeserializeArray<TItem>(this JsonSerializer extends, JsonReader reader)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (reader == null)
-				throw new ArgumentNullException("reader");
-
-			return extends.DeserializeArray(reader, (s, r) => extends.Deserialize<TItem>(reader));
-		}
-
-		/// <summary>
-		/// Deserializes an array of items from the reader's current value.
-		/// </summary>
-		/// <typeparam name="TItem"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="reader"></param>
-		/// <param name="read"></param>
-		public static IEnumerable<TItem> DeserializeArray<TItem>(this JsonSerializer extends, JsonReader reader,
-																 Func<JsonSerializer, JsonReader, TItem> read)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (reader == null)
-				throw new ArgumentNullException("reader");
-
-			if (read == null)
-				throw new ArgumentNullException("read");
-
-			if (reader.TokenType == JsonToken.Null)
-				return Enumerable.Empty<TItem>();
-
-			if (reader.TokenType != JsonToken.StartArray)
-				throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.StartArray, reader.TokenType));
-
-			return DeserializeArrayIterator(extends, reader, read);
-		}
-
-		/// <summary>
-		/// Deserializes an array of items from the reader's current value.
-		/// </summary>
-		/// <typeparam name="TItem"></typeparam>
-		/// <param name="serializer"></param>
-		/// <param name="reader"></param>
-		/// <param name="read"></param>
-		private static IEnumerable<TItem> DeserializeArrayIterator<TItem>(JsonSerializer serializer, JsonReader reader,
-		                                                                  Func<JsonSerializer, JsonReader, TItem> read)
-		{
-			// Step into the first value
-			reader.Read();
-
-			while (reader.TokenType != JsonToken.EndArray)
-			{
-				TItem output = read(serializer, reader);
-				yield return output;
-
-				// Read out of the last value
-				reader.Read();
-			}
 		}
 	}
 }
