@@ -6,9 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.4.0] - 2019-05-10
 ### Added
  - Added extension method for peeking queues
- 
+ - Added extension method for getting or adding a new item to a dictionary
+ - Added methods for serializing additional types, arrays and dictionaries to JSON
+ - AbstractGenericJsonConverter exposes virtual methods for overriding object serialization/deserialization
+ - Added RemoveRange method to IcdHashSet
+ - Added IcdCultureInfo and CultureInfo database for localization
+
 ### Changed
  - IcdUriBuilder constructors behave closer to UriBuilder, Host defaults to "localhost"
 
