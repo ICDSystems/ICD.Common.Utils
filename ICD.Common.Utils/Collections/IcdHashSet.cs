@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Collections
 {
@@ -326,6 +327,18 @@ namespace ICD.Common.Utils.Collections
 				throw new ArgumentNullException("item");
 
 			return m_Dict.Remove(item);
+		}
+
+		/// <summary>
+		/// Removes each of the items in the sequence from the collection.
+		/// </summary>
+		/// <param name="items"></param>
+		public void RemoveRange(IEnumerable<T> items)
+		{
+			if (items == null)
+				throw new ArgumentNullException("items");
+
+			m_Dict.RemoveAll(items);
 		}
 
 		#endregion

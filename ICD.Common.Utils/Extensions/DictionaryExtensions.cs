@@ -19,6 +19,9 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+			if (keys == null)
+				throw new ArgumentNullException("keys");
+
 			foreach (TKey key in keys)
 				extends.Remove(key);
 		}
