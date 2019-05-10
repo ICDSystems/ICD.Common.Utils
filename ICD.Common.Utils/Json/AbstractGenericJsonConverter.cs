@@ -103,7 +103,10 @@ namespace ICD.Common.Utils.Json
 			if (serializer == null)
 				throw new ArgumentNullException("serializer");
 
-			return ReadJson(reader, (T)existingValue, serializer);
+			// Casting null blows up struct casts
+			T cast = (T)(existingValue ?? default(T));
+
+			return ReadJson(reader, cast, serializer);
 		}
 
 		/// <summary>
