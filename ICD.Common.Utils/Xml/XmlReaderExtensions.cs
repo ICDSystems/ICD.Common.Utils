@@ -409,6 +409,17 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("extends");
 
 			string content = extends.ReadElementContentAsString();
+
+			try
+			{
+				// 00:00:00 format
+				return TimeSpan.Parse(content);
+			}
+			catch (FormatException)
+			{
+			}
+
+			// PT0S format
 			return IcdXmlConvert.ToTimeSpan(content);
 		}
 
