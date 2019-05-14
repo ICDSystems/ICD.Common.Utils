@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using ICD.Common.Utils.IO;
 #if SIMPLSHARP
@@ -213,37 +212,127 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("type");
 
 			if (type == typeof(bool))
-				return bool.Parse(value);
+				return ToBool(value);
 			if (type == typeof(byte))
-				return byte.Parse(value);
+				return ToByte(value);
 			if (type == typeof(decimal))
-				return decimal.Parse(value);
+				return ToDecimal(value);
 			if (type == typeof(char))
-				return value.Single();
+				return ToChar(value);
 			if (type == typeof(double))
-				return double.Parse(value);
+				return ToDouble(value);
 			if (type == typeof(Guid))
-				return new Guid(value);
+				return ToGuid(value);
 			if (type == typeof(float))
-				return float.Parse(value);
+				return ToSingle(value);
 			if (type == typeof(int))
-				return int.Parse((value));
+				return ToInt32(value);
 			if (type == typeof(long))
-				return long.Parse(value);
+				return ToInt64(value);
 			if (type == typeof(sbyte))
-				return sbyte.Parse(value);
+				return ToSByte(value);
 			if (type == typeof(short))
-				return short.Parse(value);
+				return ToInt16(value);
 			if (type == typeof(TimeSpan))
-				return TimeSpan.Parse(value);
+				return ToTimeSpan(value);
 			if (type == typeof(uint))
-				return uint.Parse(value);
+				return ToUInt32(value);
 			if (type == typeof(ulong))
-				return ulong.Parse(value);
+				return ToUInt64(value);
 			if (type == typeof(ushort))
-				return ushort.Parse(value);
+				return ToUInt16(value);
 
 			return Convert.ChangeType(value, type, CultureInfo.InvariantCulture);
+		}
+
+		public static bool ToBool(string data)
+		{
+			return XmlConvert.ToBoolean(data);
+		}
+
+		public static byte ToByte(string data)
+		{
+			return XmlConvert.ToByte(data);
+		}
+
+		public static char ToChar(string data)
+		{
+			return XmlConvert.ToChar(data);
+		}
+
+		public static DateTime ToDateTime(string data, string format)
+		{
+			return XmlConvert.ToDateTime(data, format);
+		}
+
+		public static DateTime ToDateTime(string data, string[] formats)
+		{
+			return XmlConvert.ToDateTime(data, formats);
+		}
+
+		public static DateTime ToDateTime(string data, XmlDateTimeSerializationMode dateTimeOption)
+		{
+			return XmlConvert.ToDateTime(data, dateTimeOption);
+		}
+
+		public static decimal ToDecimal(string data)
+		{
+			return XmlConvert.ToDecimal(data);
+		}
+
+		public static double ToDouble(string data)
+		{
+			return XmlConvert.ToDouble(data);
+		}
+
+		public static Guid ToGuid(string data)
+		{
+			return XmlConvert.ToGuid(data);
+		}
+
+		public static short ToInt16(string data)
+		{
+			return XmlConvert.ToInt16(data);
+		}
+
+		public static int ToInt32(string data)
+		{
+			return XmlConvert.ToInt32(data);
+		}
+
+		public static long ToInt64(string data)
+		{
+			return XmlConvert.ToInt64(data);
+		}
+
+		public static sbyte ToSByte(string data)
+		{
+			return XmlConvert.ToSByte(data);
+		}
+
+		public static float ToSingle(string data)
+		{
+			return XmlConvert.ToSingle(data);
+		}
+
+		public static TimeSpan ToTimeSpan(string data)
+		{
+			return XmlConvert.ToTimeSpan(data);
+		}
+
+		public static ushort ToUInt16(string data)
+		{
+			return XmlConvert.ToUInt16(data);
+		}
+
+		public static uint ToUInt32(string data)
+		{
+			return XmlConvert.ToUInt32(data);
+		}
+
+		public static ulong ToUInt64(string data)
+		{
+			return XmlConvert.ToUInt64(data);
 		}
 	}
 }

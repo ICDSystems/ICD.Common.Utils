@@ -349,7 +349,7 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("extends");
 
 			string content = extends.ReadElementContentAsString();
-			return uint.Parse(content);
+			return IcdXmlConvert.ToUInt32(content);
 		}
 
 		/// <summary>
@@ -364,7 +364,7 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("extends");
 
 			string content = extends.ReadElementContentAsString();
-			return int.Parse(content);
+			return IcdXmlConvert.ToInt32(content);
 		}
 
 		/// <summary>
@@ -379,7 +379,7 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("extends");
 
 			string content = extends.ReadElementContentAsString();
-			return ushort.Parse(content);
+			return IcdXmlConvert.ToUInt16(content);
 		}
 
 		/// <summary>
@@ -394,7 +394,22 @@ namespace ICD.Common.Utils.Xml
 				throw new ArgumentNullException("extends");
 
 			string content = extends.ReadElementContentAsString();
-			return short.Parse(content);
+			return IcdXmlConvert.ToInt16(content);
+		}
+
+		/// <summary>
+		/// Parses the element content as a short.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static TimeSpan ReadElementContentAsTimeSpan(this IcdXmlReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string content = extends.ReadElementContentAsString();
+			return IcdXmlConvert.ToTimeSpan(content);
 		}
 
 		/// <summary>
