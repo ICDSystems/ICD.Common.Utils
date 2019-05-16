@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
@@ -12,11 +13,6 @@ namespace ICD.Common.Utils
 	public static partial class IcdEnvironment
 	{
 		public static string NewLine { get { return Environment.NewLine; } }
-
-		public static DateTime GetLocalTime()
-		{
-			return DateTime.Now;
-		}
 
 		public static eRuntimeEnvironment RuntimeEnvironment { get { return eRuntimeEnvironment.Standard; } }
 
@@ -51,6 +47,36 @@ namespace ICD.Common.Utils
 				                       .Select(ni => ni.GetPhysicalAddress().ToString())
 									   .Select(FormatMacAddress);
 			}
+		}
+
+		/// <summary>
+		/// Gets the dhcp status of the processor.
+		/// </summary>
+		[PublicAPI]
+		public static string DhcpStatus
+		{
+			get
+			{
+				bool enabled =
+					NetworkInterface.GetAllNetworkInterfaces()
+					                .Where(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 ||
+					                             ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+					                .Select(ni => ni.GetIPProperties().GetIPv4Properties().IsDhcpEnabled)
+									.FirstOrDefault();
+
+				return enabled.ToString();
+			}
+		}
+
+		/// <summary>
+		/// Gets the hostname of the processor.
+		/// </summary>
+		[PublicAPI]
+		public static IEnumerable<string> Hostname { get { yield return Dns.GetHostName(); } }
+
+		public static DateTime GetLocalTime()
+		{
+			return DateTime.Now;
 		}
 
 		/// <summary>

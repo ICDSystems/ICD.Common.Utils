@@ -28,6 +28,32 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Gets the date that the firmware was updated.
+		/// </summary>
+		[PublicAPI]
+		public static string ModelVersionDate
+		{
+			get
+			{
+				// TODO
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the serial number of the processor
+		/// </summary>
+		[PublicAPI]
+		public static string ProcessorSerialNumber
+		{
+			get
+			{
+				// TODO
+				return null;
+			}
+		}
+
+		/// <summary>
 		/// Gets the ram usage in the range 0 - 1.
 		/// </summary>
 		public static float RamUsagePercent
@@ -107,6 +133,29 @@ namespace ICD.Common.Utils
 		public static void Reboot()
 		{
 			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Gets the uptime for the system
+		/// </summary>
+		/// <returns></returns>
+		[PublicAPI]
+		public static string GetSystemUptime()
+		{
+			// TODO
+			return null;
+		}
+
+		/// <summary>
+		/// Gets the uptime 
+		/// </summary>
+		/// <param name="progslot"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static string GetProgramUptime(int progslot)
+		{
+			// TODO
+			return null;
 		}
 
 		#endregion

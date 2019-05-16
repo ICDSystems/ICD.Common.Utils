@@ -59,6 +59,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Better VC-4 support for IcdConsole
  - JSON refactoring for simpler deserialization
 
+## [8.4.0] - 2019-05-15
+### Added
+ - Added GUID utils for generating seeded GUIDs
+ - Added extension method for getting stable hashcodes from strings
+ - Added environment and processor utilities for determining DNS status and hostname
+
+### Changed
+ - RangeAttribute improvements for better type safety
+ - PathUtils breaking out ProgramConfigDirectory and CommonConfigDirectory from the full paths
+
 ## [8.3.2] - 2019-05-02
 ### Changed
  - Fixed PriorityQueue IndexOutOfRange exception when an inner queue becomes depleted

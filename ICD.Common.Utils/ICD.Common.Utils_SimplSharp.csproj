@@ -117,6 +117,7 @@
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Extensions\UShortExtensions.cs" />
     <Compile Include="Globalization\IcdCultureInfo.cs" />
+    <Compile Include="GuidUtils.cs" />
     <Compile Include="IcdUriBuilder.cs" />
     <Compile Include="IO\Compression\IcdZipEntry.cs" />
     <Compile Include="IO\IcdBinaryReader.cs" />

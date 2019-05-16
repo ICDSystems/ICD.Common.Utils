@@ -9,8 +9,12 @@ namespace ICD.Common.Utils
 {
 	public static partial class ProcessorUtils
 	{
-		private const string MODEL_NAME_REGEX = @"^(\S*)";
-		private const string MODEL_VERSION_REGEX = @" [[]v(\S*)";
+		private const string VER_REGEX =
+			@"(?'model'\S+) (?'type'\S+) (?'lang'\S+) \[v(?'version'\d+.\d+.\d+.\d+) \((?'date'\S+ \d+ \d+)\), #(?'serial'[A-F0-9]+)\] @E-(?'mac'[a-z0-9]+)";
+
+		private const string UPTIME_COMMAND = "uptime";
+		private const string PROGUPTIME_COMMAND_ROOT = "proguptime:{0}";
+		private const string UPTIME_REGEX = @".*(?'uptime'\d+ days \d{2}:\d{2}:\d{2}\.\d+)";
 
 		private const string RAMFREE_COMMAND = "ramfree";
 		private const string RAMFREE_DIGITS_REGEX = @"^(\d*)";
@@ -51,11 +55,11 @@ namespace ICD.Common.Utils
 				string versionResult = VersionResult;
 				if (!String.IsNullOrEmpty(versionResult))
 				{
-					Regex regex = new Regex(MODEL_NAME_REGEX);
+					Regex regex = new Regex(VER_REGEX);
 					Match match = regex.Match(versionResult);
 
 					if (match.Success)
-						return match.Groups[1].Value;
+						return match.Groups["model"].Value;
 				}
 
 				ServiceProvider.TryGetService<ILoggerService>()
@@ -75,16 +79,61 @@ namespace ICD.Common.Utils
 				string versionResult = VersionResult;
 				if (!String.IsNullOrEmpty(versionResult))
 				{
-					Regex regex = new Regex(MODEL_VERSION_REGEX);
+					Regex regex = new Regex(VER_REGEX);
 					Match match = regex.Match(VersionResult);
 
 					if (match.Success)
-						return new Version(match.Groups[1].Value);
+						return new Version(match.Groups["version"].Value);
 				}
 
 				ServiceProvider.TryGetService<ILoggerService>()
 				               .AddEntry(eSeverity.Warning, "Unable to get model version from \"{0}\"", VersionResult);
 				return new Version(0, 0);
+			}
+		}
+
+		/// <summary>
+		/// Gets the date that the firmware was updated.
+		/// </summary>
+		[PublicAPI]
+		public static string ModelVersionDate
+		{
+			get
+			{
+				Regex regex = new Regex(VER_REGEX);
+				Match match = regex.Match(VersionResult);
+
+				if (match.Success)
+					return match.Groups["date"].Value;
+
+				ServiceProvider.TryGetService<ILoggerService>()
+							   .AddEntry(eSeverity.Warning, "Unable to get model version date from \"{0}\"", VersionResult);
+				
+				return string.Empty;
+			}
+		}
+
+		/// <summary>
+		/// Gets the serial number of the processor
+		/// </summary>
+		[PublicAPI]
+		public static string ProcessorSerialNumber
+		{
+			get
+			{
+				Regex regex = new Regex(VER_REGEX);
+				Match match = regex.Match(VersionResult);
+
+				if (!match.Success)
+				{
+					ServiceProvider.TryGetService<ILoggerService>()
+					               .AddEntry(eSeverity.Warning, "Unable to get serial number from \"{0}\"", VersionResult);
+
+					return string.Empty;
+				}
+
+				int decValue = int.Parse(match.Groups["serial"].Value, System.Globalization.NumberStyles.HexNumber);
+				return decValue.ToString();
 			}
 		}
 
@@ -178,6 +227,31 @@ namespace ICD.Common.Utils
 			IcdConsole.SendControlSystemCommand("reboot", ref consoleResult);
 		}
 
+		/// <summary>
+		/// Gets the uptime for the system
+		/// </summary>
+		/// <returns></returns>
+		[PublicAPI]
+		public static string GetSystemUptime()
+		{
+			string uptime = GetUptime();
+			Match match = Regex.Match(uptime, UPTIME_REGEX);
+			return match.Groups["uptime"].Value;
+		}
+
+		/// <summary>
+		/// Gets the uptime 
+		/// </summary>
+		/// <param name="progslot"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static string GetProgramUptime(int progslot)
+		{
+			string uptime = GetUptime(progslot);
+			Match match = Regex.Match(uptime, UPTIME_REGEX);
+			return match.Groups["uptime"].Value;
+		}
+
 		#endregion
 
 		/// <summary>
@@ -194,6 +268,30 @@ namespace ICD.Common.Utils
 				                         typeof(ProcessorUtils).Name, RAMFREE_COMMAND);
 			}
 			return ramfree;
+		}
+
+		private static string GetUptime()
+		{
+			string uptime = null;
+			if (!IcdConsole.SendControlSystemCommand(UPTIME_COMMAND, ref uptime))
+			{
+				ServiceProvider.TryGetService<ILoggerService>()
+							   .AddEntry(eSeverity.Warning, "{0} - Failed to send console command \"{1}\"",
+										 typeof(ProcessorUtils).Name, UPTIME_COMMAND);
+			}
+			return uptime;
+		}
+
+		private static string GetUptime(int programSlot)
+		{
+			string uptime = null;
+			if (!IcdConsole.SendControlSystemCommand(string.Format(PROGUPTIME_COMMAND_ROOT, programSlot), ref uptime))
+			{
+				ServiceProvider.TryGetService<ILoggerService>()
+							   .AddEntry(eSeverity.Warning, "{0} - Failed to send console command \"{1}\"",
+										 typeof(ProcessorUtils).Name, UPTIME_COMMAND);
+			}
+			return uptime;
 		}
 	}
 }
