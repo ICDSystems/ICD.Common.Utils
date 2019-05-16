@@ -201,7 +201,9 @@ namespace ICD.Common.Utils.Globalization
 			{
 				if (m_IsResident)
 					return base.DateTimeFormat;
-				CheckNeutral(this);
+
+				ThrowIfNeutralCulture(this);
+
 				if (m_DatetimeFormat == null)
 				{
 					DateTimeFormatInfo dateTimeFormatInfo = GetDateTimeFormat(m_DatetimeFormatId);
@@ -218,7 +220,7 @@ namespace ICD.Common.Utils.Globalization
 					base.DateTimeFormat = value;
 					return;
 				}
-				VerifyWritable();
+				ThrowIfReadOnly();
 				if (value == null)
 					throw new ArgumentException("value");
 				m_DatetimeFormat = value;
@@ -241,7 +243,9 @@ namespace ICD.Common.Utils.Globalization
 			{
 				if (m_IsResident)
 					return base.NumberFormat;
-				CheckNeutral(this);
+
+				ThrowIfNeutralCulture(this);
+
 				if (m_NumberFormat == null)
 				{
 					NumberFormatInfo numberFormatInfo = GetNumberFormat(m_NumberFormatId);
@@ -258,7 +262,7 @@ namespace ICD.Common.Utils.Globalization
 					base.NumberFormat = value;
 					return;
 				}
-				VerifyWritable();
+				ThrowIfReadOnly();
 				if (value == null)
 					throw new ArgumentException("value");
 				m_NumberFormat = value;
@@ -985,16 +989,16 @@ namespace ICD.Common.Utils.Globalization
 
 		#endregion
 
-		private void VerifyWritable()
+		private void ThrowIfReadOnly()
 		{
 			if (IsReadOnly)
 				throw new InvalidOperationException();
 		}
 
-		private static void CheckNeutral(CultureInfo culture)
+		private static void ThrowIfNeutralCulture(CultureInfo culture)
 		{
 			if (culture.IsNeutralCulture)
-				throw new NotSupportedException();
+				throw new NotSupportedException("A neutral culture does not provide enough information to display the correct numeric format");
 		}
 
 		private static bool IsResident(string name)
