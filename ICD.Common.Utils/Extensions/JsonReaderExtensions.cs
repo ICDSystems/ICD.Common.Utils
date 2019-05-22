@@ -145,8 +145,8 @@ namespace ICD.Common.Utils.Extensions
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
-
-			return extends.Value as string;
+			
+			return extends.Value == null ? null : extends.Value.ToString();
 		}
 
 		/// <summary>
