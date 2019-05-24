@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - RangeAttribute improvements for better type safety
  - PathUtils breaking out ProgramConfigDirectory and CommonConfigDirectory from the full paths
 
+## [8.3.3] - 2019-05-24
+### Added
+ - Added empty, placeholder interface for ICD Attributes
+
 ## [8.3.2] - 2019-05-02
 ### Changed
  - Fixed PriorityQueue IndexOutOfRange exception when an inner queue becomes depleted
