@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+ - Fixed JSON DateTime parsing in .Net Standard
+
 ## [9.4.0] - 2019-05-10
 ### Added
  - Added extension method for peeking queues
