@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Adding features to IcdEnvironment for tracking program initialization state
+
 ## [8.4.0] - 2019-05-15
 ### Added
  - Added GUID utils for generating seeded GUIDs
