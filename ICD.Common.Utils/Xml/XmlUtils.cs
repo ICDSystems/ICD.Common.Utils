@@ -979,6 +979,22 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="rootElement"></param>
 		/// <param name="childElement"></param>
 		/// <param name="readChild"></param>
+		public static IEnumerable<T> ReadListFromXml<T>(string xml, string childElement, Func<string, T> readChild)
+		{
+			if (readChild == null)
+				throw new ArgumentNullException("readChild");
+
+			foreach (string child in GetChildElementsAsString(xml, childElement))
+				yield return readChild(child);
+		}
+
+		/// <summary>
+		/// Calls childElementCallback for each item in the list.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="rootElement"></param>
+		/// <param name="childElement"></param>
+		/// <param name="readChild"></param>
 		public static IEnumerable<T> ReadListFromXml<T>(string xml, string rootElement, string childElement,
 		                                                Func<string, T> readChild)
 		{
@@ -988,10 +1004,22 @@ namespace ICD.Common.Utils.Xml
 			if (!TryGetChildElementAsString(xml, rootElement, out xml))
 				yield break;
 
-			foreach (string child in GetChildElementsAsString(xml, childElement))
-				yield return readChild(child);
+			foreach (T child in ReadListFromXml(xml, childElement, readChild))
+				yield return child;
 		}
 
+		/// <summary>
+		/// Deserializes the xml to a list.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="rootElement"></param>
+		/// <param name="childElement"></param>
+		public static IEnumerable<T> ReadListFromXml<T>(string xml, string childElement)
+		{
+			Func<string, T> readChild = IcdXmlConvert.DeserializeObject<T>;
+
+			return ReadListFromXml(xml, childElement, readChild);
+		}
 
 		/// <summary>
 		/// Deserializes the xml to a list.
