@@ -369,7 +369,7 @@ namespace ICD.Common.Utils.Extensions
 						: extends.FullName;
 				}
 
-				s_TypeToMinimalName.Add(extends, name);
+				s_TypeToMinimalName[extends] = name;
 			}
 
 			return name;
@@ -389,7 +389,7 @@ namespace ICD.Common.Utils.Extensions
 			if (!s_TypeToNameWithoutAssemblyDetails.TryGetValue(extends, out name))
 			{
 				name = RemoveAssemblyDetails(extends.AssemblyQualifiedName);
-				s_TypeToNameWithoutAssemblyDetails.Add(extends, name);
+				s_TypeToNameWithoutAssemblyDetails[extends] = name;
 			}
 
 			return name;
