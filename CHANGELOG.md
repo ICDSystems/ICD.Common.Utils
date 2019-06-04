@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
  - Added Shim to read a list from xml with no root element
+ - Added a URI query builder
 
 ### Changed
  - Fixed JSON DateTime parsing in .Net Standard
