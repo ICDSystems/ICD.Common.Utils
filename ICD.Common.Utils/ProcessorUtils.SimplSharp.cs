@@ -254,7 +254,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <returns></returns>
 		[PublicAPI]
-		public static TimeSpan GetProgramUptimeFeedback()
+		public static TimeSpan GetProgramUptime()
 		{
 			if (s_ProgramUptimeStartTime == null)
 			{
