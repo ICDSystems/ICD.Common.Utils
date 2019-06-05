@@ -152,7 +152,7 @@ namespace ICD.Common.Utils
 		/// <param name="progslot"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string GetProgramUptime(int progslot)
+		public static string GetProgramUptimeFeedback(int progslot)
 		{
 			// TODO
 			return null;
