@@ -6,7 +6,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-
 ### Added
  - Added Shim to read a list from xml with no root element
  - Added a URI query builder
@@ -14,7 +13,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Fixed JSON DateTime parsing in .Net Standard
  - Fixed threading exception in TypeExtensions
-
 
 ## [9.4.0] - 2019-05-10
 ### Added
@@ -68,6 +66,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Better VC-4 support for IcdConsole
  - JSON refactoring for simpler deserialization
+
+## [8.4.1] - 2019-06-05
+### Changed
+ - Caching the program/processor start time and calculating the uptime from those values instead of polling the crestron processor
 
 ## [8.4.0] - 2019-05-15
 ### Added

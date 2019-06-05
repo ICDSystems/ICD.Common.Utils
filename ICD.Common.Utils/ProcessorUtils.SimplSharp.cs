@@ -14,12 +14,15 @@ namespace ICD.Common.Utils
 
 		private const string UPTIME_COMMAND = "uptime";
 		private const string PROGUPTIME_COMMAND_ROOT = "proguptime:{0}";
-		private const string UPTIME_REGEX = @".*(?'uptime'\d+ days \d{2}:\d{2}:\d{2}\.\d+)";
+		private const string UPTIME_REGEX = @".*(?'uptime'(?'days'\d+) days (?'hours'\d{2}):(?'minutes'\d{2}):(?'seconds'\d{2})\.(?'milliseconds'\d+))";
 
 		private const string RAMFREE_COMMAND = "ramfree";
 		private const string RAMFREE_DIGITS_REGEX = @"^(\d*)";
 
 		private static string s_VersionResult;
+
+		private static DateTime? s_SystemUptimeStartTime;
+		private static DateTime? s_ProgramUptimeStartTime;
 
 		#region Properties
 
@@ -232,24 +235,53 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string GetSystemUptime()
+		public static TimeSpan GetSystemUptime()
 		{
-			string uptime = GetUptime();
-			Match match = Regex.Match(uptime, UPTIME_REGEX);
-			return match.Groups["uptime"].Value;
+			if (s_SystemUptimeStartTime == null)
+			{
+				string uptime = GetSystemUptimeFeedback();
+				Match match = Regex.Match(uptime, UPTIME_REGEX);
+				if (!match.Success)
+					return default(TimeSpan);
+
+				int days = int.Parse(match.Groups["days"].Value);
+				int hours = int.Parse(match.Groups["hours"].Value);
+				int minutes = int.Parse(match.Groups["minutes"].Value);
+				int seconds = int.Parse(match.Groups["seconds"].Value);
+				int milliseconds = int.Parse(match.Groups["milliseconds"].Value);
+
+				TimeSpan span = new TimeSpan(days, hours, minutes, seconds, milliseconds);
+				s_SystemUptimeStartTime = IcdEnvironment.GetLocalTime() - span;
+			}
+
+			return IcdEnvironment.GetLocalTime() - s_SystemUptimeStartTime.Value;
 		}
 
 		/// <summary>
-		/// Gets the uptime 
+		/// Gets the uptime of the current program.
 		/// </summary>
-		/// <param name="progslot"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string GetProgramUptime(int progslot)
+		public static TimeSpan GetProgramUptime()
 		{
-			string uptime = GetUptime(progslot);
-			Match match = Regex.Match(uptime, UPTIME_REGEX);
-			return match.Groups["uptime"].Value;
+			if (s_ProgramUptimeStartTime == null)
+			{
+				string uptime = GetProgramUptimeFeedback((int)ProgramUtils.ProgramNumber);
+				Match match = Regex.Match(uptime, UPTIME_REGEX);
+				if (!match.Success)
+					return default(TimeSpan);
+
+				int days = int.Parse(match.Groups["days"].Value);
+				int hours = int.Parse(match.Groups["hours"].Value);
+				int minutes = int.Parse(match.Groups["minutes"].Value);
+				int seconds = int.Parse(match.Groups["seconds"].Value);
+				int milliseconds = int.Parse(match.Groups["milliseconds"].Value);
+
+				TimeSpan span = new TimeSpan(days, hours, minutes, seconds, milliseconds);
+				s_ProgramUptimeStartTime = IcdEnvironment.GetLocalTime() - span;
+			}
+
+			return IcdEnvironment.GetLocalTime() - s_ProgramUptimeStartTime.Value;
 		}
 
 		#endregion
@@ -270,7 +302,7 @@ namespace ICD.Common.Utils
 			return ramfree;
 		}
 
-		private static string GetUptime()
+		private static string GetSystemUptimeFeedback()
 		{
 			string uptime = null;
 			if (!IcdConsole.SendControlSystemCommand(UPTIME_COMMAND, ref uptime))
@@ -282,7 +314,7 @@ namespace ICD.Common.Utils
 			return uptime;
 		}
 
-		private static string GetUptime(int programSlot)
+		private static string GetProgramUptimeFeedback(int programSlot)
 		{
 			string uptime = null;
 			if (!IcdConsole.SendControlSystemCommand(string.Format(PROGUPTIME_COMMAND_ROOT, programSlot), ref uptime))

@@ -140,22 +140,21 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string GetSystemUptime()
+		public static TimeSpan GetSystemUptime()
 		{
 			// TODO
-			return null;
+			return default(TimeSpan);
 		}
 
 		/// <summary>
 		/// Gets the uptime 
 		/// </summary>
-		/// <param name="progslot"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string GetProgramUptime(int progslot)
+		public static TimeSpan GetProgramUptime()
 		{
 			// TODO
-			return null;
+			return default(TimeSpan);
 		}
 
 		#endregion
