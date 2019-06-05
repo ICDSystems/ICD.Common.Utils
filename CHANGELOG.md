@@ -5,8 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [8.4.1] - 2019-06-05
 ### Changed
- - fixed cached the uptime values and calculate the uptime from those values instead of polling the crestron processor each time its needed
+ - Caching the program/processor start time and calculating the uptime from those values instead of polling the crestron processor
 
 ## [8.4.0] - 2019-05-15
 ### Added
