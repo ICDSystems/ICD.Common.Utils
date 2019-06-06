@@ -1,4 +1,6 @@
 ﻿using System;
+using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils
 {
@@ -54,5 +56,41 @@ namespace ICD.Common.Utils
 		public static event ProgramStatusCallback OnProgramStatusEvent;
 
 		public static event EthernetEventCallback OnEthernetEvent;
+
+		/// <summary>
+		/// Raised when the program has completed initialization.
+		/// </summary>
+		public static event EventHandler OnProgramInitializationComplete;
+
+		private static readonly SafeCriticalSection s_ProgramInitializationSection = new SafeCriticalSection();
+		private static bool s_ProgramInitializationComplete;
+
+		/// <summary>
+		/// Returns true if the program has been flagged as completely initialized.
+		/// </summary>
+		public static bool ProgramIsInitialized { get { return s_ProgramInitializationSection.Execute(() => s_ProgramInitializationComplete); } }
+
+		/// <summary>
+		/// Called by the program entry point to signify that the program initialization is complete.
+		/// </summary>
+		[PublicAPI]
+		public static void SetProgramInitializationComplete()
+		{
+			s_ProgramInitializationSection.Enter();
+
+			try
+			{
+				if (s_ProgramInitializationComplete)
+					return;
+
+				s_ProgramInitializationComplete = true;
+			}
+			finally
+			{
+				s_ProgramInitializationSection.Leave();
+			}
+
+			OnProgramInitializationComplete.Raise(null);
+		}
 	}
 }
