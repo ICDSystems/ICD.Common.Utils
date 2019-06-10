@@ -330,7 +330,9 @@ namespace ICD.Common.Utils.Globalization
 			s_LockCacheByLcid = new SafeCriticalSection();
 			s_DictNumberFormatInfos = new Dictionary<int, NumberFormatInfo>();
 			s_DictDatetimeFormatInfos = new Dictionary<int, DateTimeFormatInfo>();
+
 			string[] builtinCultures =
+#if SIMPLSHARP
 			{
 				"",
 				"af",
@@ -405,6 +407,11 @@ namespace ICD.Common.Utils.Globalization
 				"zh-CHS",
 				"zh-CHT"
 			};
+#else
+				CultureInfo.GetCultures(CultureTypes.AllCultures)
+				           .Select(c => c.Name)
+				           .ToArray();
+#endif
 
 			string databasePath = IcdPath.Combine(PathUtils.ProgramPath, SQL_LOCAL_DATABASE_FILE);
 			if (!IcdFile.Exists(databasePath))
