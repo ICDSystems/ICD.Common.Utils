@@ -181,13 +181,13 @@ namespace ICD.Common.Utils.Globalization
 				if ((calendar = m_Calendar) == null)
 				{
 					calendar =
-						(m_Calendar =
-						 ((m_CalendarType == typeof(GregorianCalendar) && m_GregorianCalendarType.HasValue)
-							  ? (ReflectionUtils.CreateInstance<Calendar>(m_CalendarType, new object[]
-							  {
-								  m_GregorianCalendarType
-							  }))
-							  : ReflectionUtils.CreateInstance<Calendar>(m_CalendarType)));
+						m_Calendar =
+							m_CalendarType == typeof(GregorianCalendar) && m_GregorianCalendarType.HasValue
+								? ReflectionUtils.CreateInstance<Calendar>(m_CalendarType, new object[]
+								{
+									m_GregorianCalendarType
+								})
+								: ReflectionUtils.CreateInstance<Calendar>(m_CalendarType);
 				}
 				return calendar;
 			}
@@ -302,7 +302,7 @@ namespace ICD.Common.Utils.Globalization
 			{
 				CultureInfo cultureInfo;
 				if ((cultureInfo = m_Parent) == null)
-					cultureInfo = (m_Parent = new IcdCultureInfo(m_ParentId, 0));
+					cultureInfo = m_Parent = new IcdCultureInfo(m_ParentId, 0);
 				return cultureInfo;
 			}
 		}
@@ -438,12 +438,13 @@ namespace ICD.Common.Utils.Globalization
 						int @int = sQLiteDataReader.GetInt32(0);
 						bool boolean = sQLiteDataReader.GetBoolean(3);
 						string @string = sQLiteDataReader.GetString(1);
-						s_DictAvailableCulturesByName[@string] = (boolean ? CultureTypes.NeutralCultures : CultureTypes.SpecificCultures);
+						s_DictAvailableCulturesByName[@string] = boolean ? CultureTypes.NeutralCultures : CultureTypes.SpecificCultures;
 						int int2 = sQLiteDataReader.GetInt32(2);
-						s_DictAvailableCulturesByLcid[int2] = (boolean ? CultureTypes.NeutralCultures : CultureTypes.SpecificCultures);
+						s_DictAvailableCulturesByLcid[int2] = boolean ? CultureTypes.NeutralCultures : CultureTypes.SpecificCultures;
 						s_AvailableCultureNames[@int] = @string;
 					}
 				}
+
 				sQLiteCommand2 = new IcdSqliteCommand("select id, specificculture from specificcultureinfo", sQLiteConnection);
 				using (IcdSqliteDataReader sQLiteDataReader2 = sQLiteCommand2.ExecuteReader())
 				{
@@ -455,6 +456,7 @@ namespace ICD.Common.Utils.Globalization
 					}
 				}
 			}
+
 			string[] array = builtinCultures;
 			for (int i = 0; i < array.Length; i++)
 			{
@@ -462,14 +464,16 @@ namespace ICD.Common.Utils.Globalization
 				try
 				{
 					CultureInfo cultureInfo = CultureInfo.GetCultureInfo(name);
+
 					Dictionary<string, CultureTypes> dictAvailableCulturesByName;
 					string name2;
 					(dictAvailableCulturesByName = s_DictAvailableCulturesByName)[name2 = cultureInfo.Name] =
-						(dictAvailableCulturesByName[name2] | CultureTypes.InstalledWin32Cultures);
+						dictAvailableCulturesByName[name2] | CultureTypes.InstalledWin32Cultures;
+
 					Dictionary<int, CultureTypes> dictAvailableCulturesByLcid;
 					int lCid;
 					(dictAvailableCulturesByLcid = s_DictAvailableCulturesByLcid)[lCid = cultureInfo.LCID] =
-						(dictAvailableCulturesByLcid[lCid] | CultureTypes.InstalledWin32Cultures);
+						dictAvailableCulturesByLcid[lCid] | CultureTypes.InstalledWin32Cultures;
 				}
 				catch (Exception)
 				{
@@ -487,14 +491,17 @@ namespace ICD.Common.Utils.Globalization
 		{
 			if (culture < 0)
 				throw new ArgumentOutOfRangeException("culture", "must be >= 0");
+
 			CultureTypes cultureTypes;
 			if (!s_DictAvailableCulturesByLcid.TryGetValue(culture, out cultureTypes))
 				throw new ArgumentException("not supported");
+
 			if (!s_IsDatabasePresent || (cultureTypes & CultureTypes.InstalledWin32Cultures) != 0)
 			{
 				BuildCultureInfoEx(CultureInfo.GetCultureInfo(culture));
 				return;
 			}
+
 			CultureInfo ci;
 			bool flag;
 			s_LockCacheByLcid.Enter();
@@ -502,11 +509,13 @@ namespace ICD.Common.Utils.Globalization
 				flag = s_DictCacheByLcid.TryGetValue(culture, out ci);
 			}
 			s_LockCacheByLcid.Leave();
+
 			if (flag)
 			{
 				BuildCultureInfoEx(ci);
 				return;
 			}
+
 			using (IcdSqliteConnection sQLiteConnection = new IcdSqliteConnection(s_SqlConnectionString))
 			{
 				sQLiteConnection.Open();
@@ -527,14 +536,17 @@ namespace ICD.Common.Utils.Globalization
 		{
 			if (name == null)
 				throw new ArgumentNullException("name");
+
 			CultureTypes cultureTypes;
 			if (!s_DictAvailableCulturesByName.TryGetValue(name, out cultureTypes))
 				throw new ArgumentException("not supported");
+
 			if (!s_IsDatabasePresent || (cultureTypes & CultureTypes.InstalledWin32Cultures) != 0)
 			{
 				BuildCultureInfoEx(CultureInfo.GetCultureInfo(name));
 				return;
 			}
+
 			CultureInfo ci;
 			bool flag;
 			s_LockCacheByName.Enter();
@@ -594,6 +606,7 @@ namespace ICD.Common.Utils.Globalization
 		{
 			if (!rdr.Read())
 				throw new InvalidOperationException("failure reading database");
+
 			int ordinal = rdr.GetOrdinal("calendar");
 			string text = rdr.GetString(ordinal);
 			if (text.EndsWith(")"))
@@ -603,6 +616,7 @@ namespace ICD.Common.Utils.Globalization
 				text = text.Substring(0, num);
 				m_GregorianCalendarType = (GregorianCalendarTypes)Enum.Parse(typeof(GregorianCalendarTypes), value, true);
 			}
+
 			m_CalendarType = Type.GetType("System.Globalization." + text);
 			ordinal = rdr.GetOrdinal("englishname");
 			m_EnglishName = rdr.GetString(ordinal);
@@ -615,10 +629,7 @@ namespace ICD.Common.Utils.Globalization
 			ordinal = rdr.GetOrdinal("nativename");
 			m_NativeName = rdr.GetString(ordinal);
 			ordinal = rdr.GetOrdinal("optionalcalendars");
-			string[] array = rdr.GetString(ordinal).Split(new[]
-			{
-				'|'
-			});
+			string[] array = rdr.GetString(ordinal).Split('|');
 			m_OptionalGregorianCalendarTypes = new GregorianCalendarTypes?[array.Length];
 			m_OptionalCalendarTypes = new Type[array.Length];
 			for (int i = 0; i < array.Length; i++)
@@ -705,15 +716,15 @@ namespace ICD.Common.Utils.Globalization
 					CurrencyDecimalDigits = sQLiteDataReader.GetInt32(ordinal),
 					CurrencyDecimalSeparator = sQLiteDataReader.GetString(ordinal2),
 					CurrencyGroupSizes = sQLiteDataReader.GetString(ordinal3)
-					                                     .Split(new[] {','})
+					                                     .Split(',')
 					                                     .Select(s => int.Parse(s))
 					                                     .ToArray(),
 					NumberGroupSizes = sQLiteDataReader.GetString(ordinal4)
-					                                   .Split(new[] {','})
+					                                   .Split(',')
 					                                   .Select(s => int.Parse(s))
 					                                   .ToArray(),
 					PercentGroupSizes = sQLiteDataReader.GetString(ordinal5)
-					                                    .Split(new[] {','})
+					                                    .Split(',')
 					                                    .Select(s => int.Parse(s))
 					                                    .ToArray(),
 					CurrencyGroupSeparator = sQLiteDataReader.GetString(ordinal6),
@@ -802,34 +813,13 @@ namespace ICD.Common.Utils.Globalization
 					ShortTimePattern = sQLiteDataReader.GetString(ordinal11),
 					TimeSeparator = sQLiteDataReader.GetString(ordinal12),
 					YearMonthPattern = sQLiteDataReader.GetString(ordinal13),
-					AbbreviatedDayNames = sQLiteDataReader.GetString(ordinal14).Split(new[]
-					{
-						'|'
-					}),
-					ShortestDayNames = sQLiteDataReader.GetString(ordinal15).Split(new[]
-					{
-						'|'
-					}),
-					DayNames = sQLiteDataReader.GetString(ordinal16).Split(new[]
-					{
-						'|'
-					}),
-					AbbreviatedMonthNames = sQLiteDataReader.GetString(ordinal17).Split(new[]
-					{
-						'|'
-					}),
-					MonthNames = sQLiteDataReader.GetString(ordinal18).Split(new[]
-					{
-						'|'
-					}),
-					AbbreviatedMonthGenitiveNames = sQLiteDataReader.GetString(ordinal19).Split(new[]
-					{
-						'|'
-					}),
-					MonthGenitiveNames = sQLiteDataReader.GetString(ordinal20).Split(new[]
-					{
-						'|'
-					})
+					AbbreviatedDayNames = sQLiteDataReader.GetString(ordinal14).Split('|'),
+					ShortestDayNames = sQLiteDataReader.GetString(ordinal15).Split('|'),
+					DayNames = sQLiteDataReader.GetString(ordinal16).Split('|'),
+					AbbreviatedMonthNames = sQLiteDataReader.GetString(ordinal17).Split('|'),
+					MonthNames = sQLiteDataReader.GetString(ordinal18).Split('|'),
+					AbbreviatedMonthGenitiveNames = sQLiteDataReader.GetString(ordinal19).Split('|'),
+					MonthGenitiveNames = sQLiteDataReader.GetString(ordinal20).Split('|')
 				};
 			}
 			s_DictDatetimeFormatInfos[id] = dateTimeFormatInfo;
@@ -934,9 +924,9 @@ namespace ICD.Common.Utils.Globalization
 			return cultureInfo;
 		}
 
-		public static CultureInfo[] GetCultures(CultureTypes types)
+		public new static CultureInfo[] GetCultures(CultureTypes types)
 		{
-			return s_DictAvailableCulturesByName.Where(de => (de.Value & types) != (CultureTypes)0)
+			return s_DictAvailableCulturesByName.Where(de => (de.Value & types) != 0)
 			                                    .Select(de => new IcdCultureInfo(de.Key))
 			                                    .Cast<CultureInfo>()
 			                                    .ToArray();
