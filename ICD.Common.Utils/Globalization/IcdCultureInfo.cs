@@ -95,7 +95,12 @@ namespace ICD.Common.Utils.Globalization
 	public sealed class IcdCultureInfo : CultureInfo
 	{
 		private const string SQL_LOCAL_DATABASE_FILE = "CultureInfo.sqlite";
-		private const string SQL_CONNECTION_STRING_FORMAT = "Data Source = {0}; Version = 3; ReadOnly = True";
+		private const string SQL_CONNECTION_STRING_FORMAT =
+#if SIMPLSHARP
+			"Data Source = {0}; Version = 3; ReadOnly = True";
+#else
+			"Data Source = {0}";
+#endif
 		private const string SQL_CMD_SELECT_BY_NAME = "select * from cultureinfo where name = @name collate nocase";
 		private const string SQL_CMD_SELECT_BY_LCID = "select * from cultureinfo where lcid = @lcid";
 		private const string SQL_CMD_SELECT_BY_ID = "select * from cultureinfo where id = @id";
