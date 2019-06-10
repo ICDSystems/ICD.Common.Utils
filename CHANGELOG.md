@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.5.0] - 2019-06-10
 ### Added
  - Added Shim to read a list from xml with no root element
  - Added a URI query builder
