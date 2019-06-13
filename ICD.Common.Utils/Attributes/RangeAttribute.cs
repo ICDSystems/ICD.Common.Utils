@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Attributes
@@ -13,6 +14,29 @@ namespace ICD.Common.Utils.Attributes
 					AttributeTargets.ReturnValue)]
 	public sealed class RangeAttribute : AbstractIcdAttribute
 	{
+		/// <summary>
+		/// Remaps from the source numeric min/max to double min/max.
+		/// </summary>
+		private static readonly Dictionary<Type, Func<double, double>> s_Clamp =
+			new Dictionary<Type, Func<double, double>>
+			{
+				// Duh
+				{typeof(double), o => o},
+
+				// Signed
+				{typeof(short), o => o < short.MinValue ? short.MinValue : o > short.MaxValue ? short.MaxValue : o},
+				{typeof(int), o => o < int.MinValue ? int.MinValue : o > int.MaxValue ? int.MaxValue : o},
+				{typeof(long), o => o < long.MinValue ? long.MinValue : o > long.MaxValue ? long.MaxValue : o},
+				{typeof(float),o => o < float.MinValue ? float.MinValue : o > float.MaxValue ? float.MaxValue : o},
+				{typeof(decimal), o => o < (double)decimal.MinValue ? (double)decimal.MinValue : o > (double)decimal.MaxValue ? (double)decimal.MaxValue : o},
+
+				// Unsigned
+				{typeof(ushort), o => o < ushort.MinValue ? ushort.MinValue : o > ushort.MaxValue ? ushort.MaxValue : o},
+				{typeof(uint), o => o < uint.MinValue ? uint.MinValue : o > uint.MaxValue ? uint.MaxValue : o},
+				{typeof(ulong), o => o < ulong.MinValue ? ulong.MinValue : o > ulong.MaxValue ? ulong.MaxValue : o},
+				{typeof(byte), o => o < byte.MinValue ? byte.MinValue : o > byte.MaxValue ? byte.MaxValue : o}
+			};
+
 		/// <summary>
 		/// Remaps from the source numeric min/max to double min/max.
 		/// </summary>
@@ -57,6 +81,52 @@ namespace ICD.Common.Utils.Attributes
 				{typeof(uint), v => (uint)((v / double.MaxValue + 1) / 2 * uint.MaxValue)},
 				{typeof(ulong), v => (ulong)((v / double.MaxValue + 1) / 2 * ulong.MaxValue)},
 				{typeof(byte), v => (byte)((v / double.MaxValue + 1) / 2 * byte.MaxValue)}
+			};
+
+		/// <summary>
+		/// Gets the min value of a given numeric type as a double.
+		/// </summary>
+		private static readonly Dictionary<Type, double> s_MinAsDouble =
+			new Dictionary<Type, double>
+			{
+				// Duh
+				{typeof(double), double.MinValue},
+
+				// Signed
+				{typeof(short), Convert.ToDouble(short.MinValue)},
+				{typeof(int), Convert.ToDouble(int.MinValue)},
+				{typeof(long), Convert.ToDouble(long.MinValue)},
+				{typeof(float), Convert.ToDouble(float.MinValue)},
+				{typeof(decimal), Convert.ToDouble(decimal.MinValue)},
+
+				// Unsigned
+				{typeof(ushort), Convert.ToDouble(ushort.MinValue)},
+				{typeof(uint), Convert.ToDouble(uint.MinValue)},
+				{typeof(ulong), Convert.ToDouble(ulong.MinValue)},
+				{typeof(byte), Convert.ToDouble(byte.MinValue)}
+			};
+
+		/// <summary>
+		/// Gets the min value of a given numeric type as a double.
+		/// </summary>
+		private static readonly Dictionary<Type, double> s_MaxAsDouble =
+			new Dictionary<Type, double>
+			{
+				// Duh
+				{typeof(double), double.MaxValue},
+
+				// Signed
+				{typeof(short), Convert.ToDouble(short.MaxValue)},
+				{typeof(int), Convert.ToDouble(int.MaxValue)},
+				{typeof(long), Convert.ToDouble(long.MaxValue)},
+				{typeof(float), Convert.ToDouble(float.MaxValue)},
+				{typeof(decimal), Convert.ToDouble(decimal.MaxValue)},
+
+				// Unsigned
+				{typeof(ushort), Convert.ToDouble(ushort.MaxValue)},
+				{typeof(uint), Convert.ToDouble(uint.MaxValue)},
+				{typeof(ulong), Convert.ToDouble(ulong.MaxValue)},
+				{typeof(byte), Convert.ToDouble(byte.MaxValue)}
 			};
 
 		private readonly object m_Min;
@@ -215,8 +285,6 @@ namespace ICD.Common.Utils.Attributes
 
 		#region Methods
 
-		#region Remap To
-
 		/// <summary>
 		/// Remaps the given numeric value from its min/max range into double min/max range.
 		/// </summary>
@@ -233,20 +301,6 @@ namespace ICD.Common.Utils.Attributes
 
 			return remap(value);
 		}
-
-		/// <summary>
-		/// Remaps the given numeric value from its min/max range into ushort min/max range.
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static ushort RemapToUShort(object value)
-		{
-			return (ushort)(ushort.MaxValue * (RemapToDouble(value) / double.MaxValue + 1) / 2);
-		}
-
-		#endregion
-
-		#region Remap From
 
 		/// <summary>
 		/// Remaps the given double value from its min/max range into the target type min/max range.
@@ -267,81 +321,174 @@ namespace ICD.Common.Utils.Attributes
 		}
 
 		/// <summary>
-		/// Remaps the given ushort value from its min/max range into the target type min/max range.
+		/// Clamps the given numeric value into the valid ranges of the target numeric type.
 		/// </summary>
 		/// <param name="value"></param>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		public static object RemapFromUShort(ushort value, Type type)
+		public static object Clamp(object value, Type type)
 		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
+
+			double doubleValue = Convert.ToDouble(value);
+			double clamped = Clamp(doubleValue, type);
+
+			return Convert.ChangeType(clamped, value.GetType(), CultureInfo.InvariantCulture);
+		}
+
+		/// <summary>
+		/// Clamps the given double value into the valid ranges of the target numeric type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static double Clamp(double value, Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			Func<double, double> clamp;
+			if (!s_Clamp.TryGetValue(type, out clamp))
+				throw new NotSupportedException("Value type is not supported.");
+
+			return clamp(value);
+		}
+
+		/// <summary>
+		/// Remaps the numeric value into the min-max range of the target numeric type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static object Remap(object value, Type type)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
+
 			double intermediate = RemapToDouble(value);
-			return RemapFromDouble(intermediate, type);
+			object remapped = RemapFromDouble(intermediate, type);
+
+			return Convert.ChangeType(remapped, value.GetType(), CultureInfo.InvariantCulture);
+		}
+
+		/// <summary>
+		/// Clamps the given numeric value to the defined min/max then remaps to the target numeric type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public object ClampMinMaxThenRemap(object value, Type type)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
+
+			double min = Convert.ToDouble(Min);
+			double max = Convert.ToDouble(Max);
+			double doubleValue = Convert.ToDouble(value);
+
+			double clamped = MathUtils.Clamp(doubleValue, min, max);
+			object remapped = Remap(clamped, type);
+
+			return Convert.ChangeType(remapped, value.GetType(), CultureInfo.InvariantCulture);
+		}
+
+		/// <summary>
+		/// Remaps the given numeric value to the defined min/max.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public object RemapMinMax(object value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
+
+			double sourceMin = GetMinAsDouble(value.GetType());
+			double sourceMax = GetMaxAsDouble(value.GetType());
+
+			double targetMin = Convert.ToDouble(Min);
+			double targetMax = Convert.ToDouble(Max);
+
+			double doubleValue = Convert.ToDouble(value);
+
+			double remapped = MathUtils.MapRange(sourceMin, sourceMax, targetMin, targetMax, doubleValue);
+
+			return Convert.ChangeType(remapped, Min.GetType(), CultureInfo.InvariantCulture);
 		}
 
 		#endregion
 
-		#region Remap To Attribute And Clamp
+		#region Private Methods
 
 		/// <summary>
-		/// Remaps the given numeric value from its min/max range into the min/max range of this attribute,
-		/// clamps, and then remaps the result to double.
+		/// Gets the min value for the given numeric type as a double.
 		/// </summary>
-		/// <param name="value"></param>
+		/// <param name="type"></param>
 		/// <returns></returns>
-		public double RemapAndClampToDouble(object value)
+		private static double GetMinAsDouble(Type type)
 		{
-			double intermediate = RemapToDouble(value);
-			double min = RemapToDouble(Min);
-			double max = RemapToDouble(Max);
+			if (type == null)
+				throw new ArgumentNullException("type");
 
-			return MathUtils.Clamp(intermediate, min, max);
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			double min;
+			if (!s_MinAsDouble.TryGetValue(type, out min))
+				throw new NotSupportedException("Type is not supported.");
+
+			return min;
 		}
 
 		/// <summary>
-		/// Remaps the given numeric value from its min/max range into the min/max range of this attribute,
-		/// clamps, and then remaps the result to ushort.
+		/// Gets the max value for the given numeric type as a double.
 		/// </summary>
-		/// <param name="value"></param>
+		/// <param name="type"></param>
 		/// <returns></returns>
-		public ushort RemapAndClampToUShort(object value)
+		private static double GetMaxAsDouble(Type type)
 		{
-			double intermediate = RemapAndClampToDouble(value);
-			return RemapToUShort(intermediate);
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			double max;
+			if (!s_MaxAsDouble.TryGetValue(type, out max))
+				throw new NotSupportedException("Type is not supported.");
+
+			return max;
 		}
-
-		#endregion
-
-		#region Remap And Clamp
-
-		/// <summary>
-		/// Remaps the ushort value from its min/max range into the min/max range of this attribute,
-		/// clamps and returns the result.
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public object RemapAndClamp(double value)
-		{
-			double min = RemapToDouble(Min);
-			double max = RemapToDouble(Max);
-
-			double clamp = MathUtils.Clamp(value, min, max);
-
-			return RemapFromDouble(clamp, m_Min.GetType());
-		}
-
-		/// <summary>
-		/// Remaps the ushort value from its min/max range into the min/max range of this attribute,
-		/// clamps and returns the result.
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public object RemapAndClamp(ushort value)
-		{
-			double intermediate = RemapToDouble(value);
-			return RemapAndClamp(intermediate);
-		}
-
-		#endregion
 
 		#endregion
 	}
