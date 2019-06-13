@@ -385,9 +385,7 @@ namespace ICD.Common.Utils.Attributes
 				throw new ArgumentException("Source value is not numeric");
 
 			double intermediate = RemapToDouble(value);
-			object remapped = RemapFromDouble(intermediate, type);
-
-			return Convert.ChangeType(remapped, value.GetType(), CultureInfo.InvariantCulture);
+			return RemapFromDouble(intermediate, type);
 		}
 
 		/// <summary>
