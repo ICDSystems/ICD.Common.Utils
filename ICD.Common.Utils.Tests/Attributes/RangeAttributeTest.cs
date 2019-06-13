@@ -67,11 +67,15 @@ namespace ICD.Common.Utils.Tests.Attributes
 			Assert.AreEqual(expected, RangeAttribute.Remap(value, type));
 		}
 
+		[TestCase(0, 100, ushort.MaxValue, typeof(ushort), ushort.MaxValue)]
+		[TestCase(0, 100, ushort.MaxValue, typeof(short), short.MaxValue)]
 		public void ClampMinMaxThenRemapTest(object min, object max, object value, Type type, object expected)
 		{
 			Assert.AreEqual(expected, new RangeAttribute(min, max).ClampMinMaxThenRemap(value, type));
 		}
 
+		[TestCase(0, 100, ushort.MaxValue, 100)]
+		[TestCase(0, 100, ushort.MinValue, 0)]
 		public void RemapMinMaxTest(object min, object max, object value, object expected)
 		{
 			Assert.AreEqual(expected, new RangeAttribute(min, max).RemapMinMax(value));

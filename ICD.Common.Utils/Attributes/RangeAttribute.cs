@@ -413,7 +413,7 @@ namespace ICD.Common.Utils.Attributes
 			double doubleValue = Convert.ToDouble(value);
 
 			double clamped = MathUtils.Clamp(doubleValue, min, max);
-			object remapped = Remap(clamped, type);
+			object remapped = RemapMinMax(clamped, type);
 
 			return Convert.ChangeType(remapped, value.GetType(), CultureInfo.InvariantCulture);
 		}
@@ -441,7 +441,34 @@ namespace ICD.Common.Utils.Attributes
 
 			double remapped = MathUtils.MapRange(sourceMin, sourceMax, targetMin, targetMax, doubleValue);
 
-			return Convert.ChangeType(remapped, Min.GetType(), CultureInfo.InvariantCulture);
+			return Convert.ChangeType(remapped, value.GetType(), CultureInfo.InvariantCulture);
+		}
+
+		private object RemapMinMax(object value, Type type)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
+
+			double sourceMin = Convert.ToDouble(Min);
+			double sourceMax = Convert.ToDouble(Max);
+
+			double targetMin = GetMinAsDouble(type);
+			double targetMax = GetMaxAsDouble(type);
+
+			double doubleValue = Convert.ToDouble(value);
+
+			double remapped = MathUtils.MapRange(sourceMin, sourceMax, targetMin, targetMax, doubleValue);
+
+			return Convert.ChangeType(remapped, type, CultureInfo.InvariantCulture);
 		}
 
 		#endregion
