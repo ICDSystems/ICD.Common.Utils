@@ -19,16 +19,21 @@ namespace ICD.Common.Utils.Attributes
 		private static readonly Dictionary<Type, Func<object, double>> s_RemapToDouble =
 			new Dictionary<Type, Func<object, double>>
 			{
+				// Duh
 				{ typeof(double), o => (double)o},
-				{ typeof(ushort), o => MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, double.MinValue, double.MaxValue, (double)o)},
-				{ typeof(short), o => MathUtils.MapRange(short.MinValue, short.MaxValue, double.MinValue, double.MaxValue, (double)o)},
-				{ typeof(uint), o =>  MathUtils.MapRange(uint.MinValue, uint.MaxValue, double.MinValue, double.MaxValue, (double)o)},
-				{ typeof(int), o =>  MathUtils.MapRange(int.MinValue, int.MaxValue, double.MinValue, double.MaxValue, (double)o)},
-				{ typeof(ulong), o =>  MathUtils.MapRange(ulong.MinValue, ulong.MaxValue, double.MinValue, double.MaxValue, (double)o)},
-				{ typeof(long), o =>  MathUtils.MapRange(long.MinValue, long.MaxValue, double.MinValue, double.MaxValue, (double)o)},
-				{ typeof(float), o => MathUtils.MapRange(float.MinValue, float.MaxValue, double.MinValue, double.MaxValue, (double)o)},
-				{ typeof(decimal), o =>  MathUtils.MapRange((double)decimal.MinValue, (double)decimal.MaxValue, double.MinValue, double.MaxValue, (double)o)},
-				{ typeof(byte), o =>  MathUtils.MapRange(byte.MinValue, byte.MaxValue, double.MinValue, double.MaxValue, (double)o)},
+
+				// Signed - Clamping prevents an overflow due to loss of precision
+				{ typeof(short), o => MathUtils.Clamp(Convert.ToDouble(o) / short.MaxValue, -1, 1) * double.MaxValue},
+				{ typeof(int), o => MathUtils.Clamp(Convert.ToDouble(o) / int.MaxValue, -1, 1) * double.MaxValue},
+				{ typeof(long), o => MathUtils.Clamp(Convert.ToDouble(o) / long.MaxValue, -1, 1) * double.MaxValue},
+				{ typeof(float),  o => MathUtils.Clamp(Convert.ToDouble(o) / float.MaxValue, -1, 1) * double.MaxValue},
+				{ typeof(decimal),  o => MathUtils.Clamp(Convert.ToDouble(o) / (double)decimal.MaxValue, -1, 1) * double.MaxValue},
+
+				// Unsigned
+				{ typeof(ushort), o => MathUtils.Clamp((Convert.ToDouble(o) / ushort.MaxValue - 0.5) * 2, -1, 1) * double.MaxValue},
+				{ typeof(uint), o => MathUtils.Clamp((Convert.ToDouble(o) / uint.MaxValue - 0.5) * 2, -1, 1) * double.MaxValue},
+				{ typeof(ulong), o => MathUtils.Clamp((Convert.ToDouble(o) / ulong.MaxValue - 0.5) * 2, -1, 1) * double.MaxValue},
+				{ typeof(byte), o => MathUtils.Clamp((Convert.ToDouble(o) / byte.MaxValue - 0.5) * 2, -1, 1) * double.MaxValue}
 			};
 
 		/// <summary>
@@ -37,16 +42,21 @@ namespace ICD.Common.Utils.Attributes
 		private static readonly Dictionary<Type, Func<double, object>> s_RemapFromDouble =
 			new Dictionary<Type, Func<double, object>>
 			{
-				{ typeof(double), v => v},
-				{ typeof(ushort), v => (ushort)(MathUtils.MapRange(double.MinValue, double.MaxValue, 0, 1, v) * ushort.MaxValue)},
-				{ typeof(short), v => (short)(MathUtils.MapRange(double.MinValue, double.MaxValue, -1, 1, v) * short.MaxValue)},
-				{ typeof(uint), v => (uint)(MathUtils.MapRange(double.MinValue, double.MaxValue, 0, 1, v) * uint.MaxValue)},
-				{ typeof(int), v =>(int)(MathUtils.MapRange(double.MinValue, double.MaxValue, -1, 1, v) * int.MaxValue)},
-				{ typeof(ulong), v => (ulong)(MathUtils.MapRange(double.MinValue, double.MaxValue, 0, 1, v) * ulong.MaxValue)},
-				{ typeof(long), v => (long)(MathUtils.MapRange(double.MinValue, double.MaxValue, -1, 1, v) * long.MaxValue)},
-				{ typeof(float), v => (float)(MathUtils.MapRange(double.MinValue, double.MaxValue, -1, 1, v) * float.MaxValue)},
-				{ typeof(decimal), v => (decimal)MathUtils.MapRange(double.MinValue, double.MaxValue, -1, 1, v) * decimal.MaxValue},
-				{ typeof(byte), v => (byte)(MathUtils.MapRange(double.MinValue, double.MaxValue, 0, 1, v) * byte.MaxValue)},
+				// Duh
+				{typeof(double), v => v},
+
+				// Signed
+				{typeof(short), v => (short)(v / double.MaxValue * short.MaxValue)},
+				{typeof(int), v => (int)(v / double.MaxValue * int.MaxValue)},
+				{typeof(long), v => (long)(v / double.MaxValue * long.MaxValue)},
+				{typeof(float), v => (float)(v / double.MaxValue * float.MaxValue)},
+				{typeof(decimal), v => (decimal)(v / double.MaxValue) * decimal.MaxValue},
+
+				// Unsigned
+				{typeof(ushort), v => (ushort)((v / double.MaxValue + 1) / 2 * ushort.MaxValue)},
+				{typeof(uint), v => (uint)((v / double.MaxValue + 1) / 2 * uint.MaxValue)},
+				{typeof(ulong), v => (ulong)((v / double.MaxValue + 1) / 2 * ulong.MaxValue)},
+				{typeof(byte), v => (byte)((v / double.MaxValue + 1) / 2 * byte.MaxValue)}
 			};
 
 		private readonly object m_Min;
@@ -231,7 +241,7 @@ namespace ICD.Common.Utils.Attributes
 		/// <returns></returns>
 		public static ushort RemapToUShort(object value)
 		{
-			return (ushort)(ushort.MaxValue * RemapToDouble(value));
+			return (ushort)(ushort.MaxValue * (RemapToDouble(value) / double.MaxValue + 1) / 2);
 		}
 
 		#endregion

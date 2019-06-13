@@ -31,8 +31,8 @@ namespace ICD.Common.Utils.Tests.Attributes
 
 		#region Remap To
 
-		[TestCase(0, 0)]
-		[TestCase(1.0, 1.0)]
+		[TestCase((double)0, (double)0)]
+		[TestCase((double)1, (double)1)]
 		[TestCase(ushort.MaxValue, double.MaxValue)]
 		[TestCase(short.MinValue, double.MinValue)]
 		public void RemapToDoubleTest(object value, double expected)
@@ -40,8 +40,7 @@ namespace ICD.Common.Utils.Tests.Attributes
 			Assert.AreEqual(expected, RangeAttribute.RemapToDouble(value));
 		}
 
-		[TestCase(0, (ushort)0)]
-		[TestCase(1.0, (ushort)1)]
+		[TestCase((double)0, (ushort)32767)]
 		[TestCase(double.MaxValue, ushort.MaxValue)]
 		[TestCase(double.MinValue, ushort.MinValue)]
 		public void RemapToUShortTest(object value, ushort expected)
@@ -53,7 +52,7 @@ namespace ICD.Common.Utils.Tests.Attributes
 
 		#region Remap From
 
-		[TestCase(0, typeof(ushort), (ushort)0)]
+		[TestCase((double)0, typeof(ushort), (ushort)32767)]
 		[TestCase(double.MinValue, typeof(ushort), ushort.MinValue)]
 		[TestCase(double.MaxValue, typeof(ushort), ushort.MaxValue)]
 		public void RemapFromDoubleTest(double value, Type type, object expected)
@@ -61,7 +60,7 @@ namespace ICD.Common.Utils.Tests.Attributes
 			Assert.AreEqual(expected, RangeAttribute.RemapFromDouble(value, type));
 		}
 
-		[TestCase((ushort)0, typeof(double), 0)]
+		[TestCase((ushort)0, typeof(double), double.MinValue)]
 		[TestCase(ushort.MinValue, typeof(double), double.MinValue)]
 		[TestCase(ushort.MaxValue, typeof(double), double.MaxValue)]
 		public void RemapFromUShortTest(ushort value, Type type, object expected)

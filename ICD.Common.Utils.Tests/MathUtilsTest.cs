@@ -40,12 +40,6 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(100, MathUtils.MapRange(0, 10, 0, 100, 10));
 		}
 
-		[TestCase(double.MinValue, double.MaxValue, 0.0, 1.0, double.MaxValue, 1.0)]
-		public void MapRangeTest(double inputStart, double inputEnd, double outputStart, double outputEnd, double value, double expected)
-		{
-			Assert.AreEqual(expected, MathUtils.MapRange(inputStart, inputEnd, outputStart, outputEnd, value));
-		}
-
 		[Test, UsedImplicitly]
 		public void GetRangesTest()
         {
