@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Attributes
 {
@@ -8,292 +10,325 @@ namespace ICD.Common.Utils.Attributes
 	[AttributeUsage(AttributeTargets.Property | 
 					AttributeTargets.Field | 
 					AttributeTargets.Parameter | 
-					AttributeTargets.ReturnValue,
-					AllowMultiple = false,
-					Inherited = true)]
+					AttributeTargets.ReturnValue)]
 	public sealed class RangeAttribute : AbstractIcdAttribute
 	{
+		/// <summary>
+		/// Remaps from the source numeric min/max to double min/max.
+		/// </summary>
+		private static readonly Dictionary<Type, Func<object, double>> s_RemapToDouble =
+			new Dictionary<Type, Func<object, double>>
+			{
+				{ typeof(double), o => (double)o},
+				{ typeof(ushort), o => MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, double.MinValue, double.MaxValue, (double)o)},
+				{ typeof(short), o => MathUtils.MapRange(short.MinValue, short.MaxValue, double.MinValue, double.MaxValue, (double)o)},
+				{ typeof(uint), o =>  MathUtils.MapRange(uint.MinValue, uint.MaxValue, double.MinValue, double.MaxValue, (double)o)},
+				{ typeof(int), o =>  MathUtils.MapRange(int.MinValue, int.MaxValue, double.MinValue, double.MaxValue, (double)o)},
+				{ typeof(ulong), o =>  MathUtils.MapRange(ulong.MinValue, ulong.MaxValue, double.MinValue, double.MaxValue, (double)o)},
+				{ typeof(long), o =>  MathUtils.MapRange(long.MinValue, long.MaxValue, double.MinValue, double.MaxValue, (double)o)},
+				{ typeof(float), o => MathUtils.MapRange(float.MinValue, float.MaxValue, double.MinValue, double.MaxValue, (double)o)},
+				{ typeof(decimal), o =>  MathUtils.MapRange((double)decimal.MinValue, (double)decimal.MaxValue, double.MinValue, double.MaxValue, (double)o)},
+				{ typeof(byte), o =>  MathUtils.MapRange(byte.MinValue, byte.MaxValue, double.MinValue, double.MaxValue, (double)o)},
+			};
+
+		/// <summary>
+		/// Remaps from the double min/max to target numeric min/max.
+		/// </summary>
+		private static readonly Dictionary<Type, Func<double, object>> s_RemapFromDouble =
+			new Dictionary<Type, Func<double, object>>
+			{
+				{ typeof(double), v => v},
+				{ typeof(ushort), v => (ushort)(MathUtils.MapRange(double.MinValue, double.MaxValue, 0, 1, v) * ushort.MaxValue)},
+				{ typeof(short), v => (short)(MathUtils.MapRange(double.MinValue, double.MaxValue, -1, 1, v) * short.MaxValue)},
+				{ typeof(uint), v => (uint)(MathUtils.MapRange(double.MinValue, double.MaxValue, 0, 1, v) * uint.MaxValue)},
+				{ typeof(int), v =>(int)(MathUtils.MapRange(double.MinValue, double.MaxValue, -1, 1, v) * int.MaxValue)},
+				{ typeof(ulong), v => (ulong)(MathUtils.MapRange(double.MinValue, double.MaxValue, 0, 1, v) * ulong.MaxValue)},
+				{ typeof(long), v => (long)(MathUtils.MapRange(double.MinValue, double.MaxValue, -1, 1, v) * long.MaxValue)},
+				{ typeof(float), v => (float)(MathUtils.MapRange(double.MinValue, double.MaxValue, -1, 1, v) * float.MaxValue)},
+				{ typeof(decimal), v => (decimal)MathUtils.MapRange(double.MinValue, double.MaxValue, -1, 1, v) * decimal.MaxValue},
+				{ typeof(byte), v => (byte)(MathUtils.MapRange(double.MinValue, double.MaxValue, 0, 1, v) * byte.MaxValue)},
+			};
+
+		private readonly object m_Min;
+		private readonly object m_Max;
+
 		#region Properties
 
-		public object Min { get; private set; }
-		public object Max { get; private set; }
+		/// <summary>
+		/// Gets the min value for this range.
+		/// </summary>
+		public object Min { get { return m_Min; } }
+
+		/// <summary>
+		/// Gets the max value for this range.
+		/// </summary>
+		public object Max { get { return m_Max; } }
 
 		#endregion
 
 		#region Constructors
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(ushort min, ushort max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(short min, short max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(uint min, uint max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(int min, int max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(ulong min, ulong max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(long min, long max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(float min, float max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(double min, double max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(byte min, byte max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(sbyte min, sbyte max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(decimal min, decimal max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		public RangeAttribute(object min, object max)
+		{
+			if (min == null)
+				throw new ArgumentNullException("min");
+
+			if (max == null)
+				throw new ArgumentNullException("max");
+
+			if (min.GetType() != max.GetType())
+				throw new ArgumentException("Min and Max types do not match");
+
+			if (!min.GetType().IsNumeric())
+				throw new ArgumentException("Given types are not numeric");
+
+			m_Min = min;
+			m_Max = max;
 		}
 
 		#endregion
 
 		#region Methods
 
-		public T GetMin<T>()
+		#region Remap To
+
+		/// <summary>
+		/// Remaps the given numeric value from its min/max range into double min/max range.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static double RemapToDouble(object value)
 		{
-			return (T)Convert.ChangeType(Min, typeof(T), null);
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			Func<object, double> remap;
+			if (!s_RemapToDouble.TryGetValue(value.GetType(), out remap))
+				throw new NotSupportedException("Value type is not supported.");
+
+			return remap(value);
 		}
 
-		public T GetMax<T>()
+		/// <summary>
+		/// Remaps the given numeric value from its min/max range into ushort min/max range.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static ushort RemapToUShort(object value)
 		{
-			return (T)Convert.ChangeType(Max, typeof(T), null);
-		}
-
-		public bool IsInRange(object value)
-		{
-			if (value is ushort)
-			{
-				if (!(Min is ushort))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (ushort)value;
-				return (castVal >= GetMin<ushort>() && castVal <= GetMax<ushort>());
-			}
-
-			if (value is short)
-			{
-				if (!(Min is short))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (short)value;
-				return (castVal >= GetMin<short>() && castVal <= GetMax<short>());
-			}
-
-			if (value is uint)
-			{
-				if (!(Min is uint))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (uint)value;
-				return (castVal >= GetMin<uint>() && castVal <= GetMax<uint>());
-			}
-
-			if (value is int)
-			{
-				if (!(Min is int))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (int)value;
-				return (castVal >= GetMin<int>() && castVal <= GetMax<int>());
-			}
-
-			if (value is ulong)
-			{
-				if (!(Min is ulong))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (ulong)value;
-				return (castVal >= GetMin<ulong>() && castVal <= GetMax<ulong>());
-			}
-
-			if (value is long)
-			{
-				if (!(Min is long))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (long)value;
-				return (castVal >= GetMin<long>() && castVal <= GetMax<long>());
-			}
-
-			if (value is float)
-			{
-				if (!(Min is float))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (float)value;
-				return (castVal >= GetMin<float>() && castVal <= GetMax<float>());
-			}
-
-			if (value is double)
-			{
-				if (!(Min is double))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (double)value;
-				return (castVal >= GetMin<double>() && castVal <= GetMax<double>());
-			}
-
-			if (value is decimal)
-			{
-				if (!(Min is decimal))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (decimal)value;
-				return (castVal >= GetMin<decimal>() && castVal <= GetMax<decimal>());
-			}
-
-			if (value is byte)
-			{
-				if (!(Min is byte))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (byte)value;
-				return (castVal >= GetMin<byte>() && castVal <= GetMax<byte>());
-			}
-
-			if (value is sbyte)
-			{
-				if (!(Min is sbyte))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (sbyte)value;
-				return (castVal >= GetMin<sbyte>() && castVal <= GetMax<sbyte>());
-			}
-
-			throw new ArgumentException("the type of value is not a numeric type.");
-		}
-
-		#region Range -> UShort
-
-		public ushort RemapRangeToUshort(double value)
-		{
-			return (ushort)MathUtils.MapRange(GetMin<double>(), GetMax<double>(), ushort.MinValue, ushort.MaxValue, value);
-		}
-
-		public ushort RemapRangeToUshort(float value)
-		{
-			return (ushort)MathUtils.MapRange(GetMin<float>(), GetMax<float>(), ushort.MinValue, ushort.MaxValue, value);
-		}
-
-		public ushort RemapRangeToUshort(int value)
-		{
-			return (ushort)MathUtils.MapRange(GetMin<int>(), GetMax<int>(), ushort.MinValue, ushort.MaxValue, value);
-		}
-
-		public ushort RemapRangeToUshort(ushort value)
-		{
-			return MathUtils.MapRange(GetMin<ushort>(), GetMax<ushort>(), ushort.MinValue, ushort.MaxValue, value);
+			return (ushort)(ushort.MaxValue * RemapToDouble(value));
 		}
 
 		#endregion
 
-		#region UShort -> Range
+		#region Remap From
 
-		public object RemapUshortToRange(ushort value)
+		/// <summary>
+		/// Remaps the given double value from its min/max range into the target type min/max range.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static object RemapFromDouble(double value, Type type)
 		{
-			if (Min is ushort)
-			{
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<ushort>(), GetMax<ushort>(), value);
-			}
+			if (type == null)
+				throw new ArgumentNullException("type");
 
-			if (Min is short)
-			{
-				var castVal = (short)value;
-				return (short)MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<short>(), GetMax<short>(), castVal);
-			}
+			Func<double, object> remap;
+			if (!s_RemapFromDouble.TryGetValue(type, out remap))
+				throw new NotSupportedException("Value type is not supported.");
 
-			if (Min is uint)
-			{
-				var castVal = (uint)value;
-				return (uint)MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<uint>(), GetMax<uint>(), castVal);
-			}
+			return remap(value);
+		}
 
-			if (Min is int)
-			{
-				var castVal = (int)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<int>(), GetMax<int>(), castVal);
-			}
+		/// <summary>
+		/// Remaps the given ushort value from its min/max range into the target type min/max range.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static object RemapFromUShort(ushort value, Type type)
+		{
+			double intermediate = RemapToDouble(value);
+			return RemapFromDouble(intermediate, type);
+		}
 
-			if (Min is ulong)
-			{
-				var castVal = (ulong)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<ulong>(), GetMax<ulong>(), castVal);
-			}
+		#endregion
 
-			if (Min is long)
-			{
-				var castVal = (long)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<long>(), GetMax<long>(), castVal);
-			}
+		#region Remap To Attribute And Clamp
 
-			if (Min is float)
-			{
-				var castVal = (float)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<float>(), GetMax<float>(), castVal);
-			}
+		/// <summary>
+		/// Remaps the given numeric value from its min/max range into the min/max range of this attribute,
+		/// clamps, and then remaps the result to double.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public double RemapAndClampToDouble(object value)
+		{
+			double intermediate = RemapToDouble(value);
+			double min = RemapToDouble(Min);
+			double max = RemapToDouble(Max);
 
-			if (Min is double)
-			{
-				var castVal = (double)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<double>(), GetMax<double>(), castVal);
-			}
+			return MathUtils.Clamp(intermediate, min, max);
+		}
 
-			if (Min is decimal)
-			{
-				var castVal = (decimal)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<decimal>(), GetMax<decimal>(), castVal);
-			}
+		/// <summary>
+		/// Remaps the given numeric value from its min/max range into the min/max range of this attribute,
+		/// clamps, and then remaps the result to ushort.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public ushort RemapAndClampToUShort(object value)
+		{
+			double intermediate = RemapAndClampToDouble(value);
+			return RemapToUShort(intermediate);
+		}
 
-			if (Min is byte)
-			{
-				var castVal = (byte)value;
-				return (byte)MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<byte>(), GetMax<byte>(), castVal);
-			}
+		#endregion
 
-			throw new NotSupportedException("Value type of range attribute is not supported.");
+		#region Remap And Clamp
+
+		/// <summary>
+		/// Remaps the ushort value from its min/max range into the min/max range of this attribute,
+		/// clamps and returns the result.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public object RemapAndClamp(double value)
+		{
+			double min = RemapToDouble(Min);
+			double max = RemapToDouble(Max);
+
+			double clamp = MathUtils.Clamp(value, min, max);
+
+			return RemapFromDouble(clamp, m_Min.GetType());
+		}
+
+		/// <summary>
+		/// Remaps the ushort value from its min/max range into the min/max range of this attribute,
+		/// clamps and returns the result.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public object RemapAndClamp(ushort value)
+		{
+			double intermediate = RemapToDouble(value);
+			return RemapAndClamp(intermediate);
 		}
 
 		#endregion

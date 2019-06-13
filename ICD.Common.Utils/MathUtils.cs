@@ -139,42 +139,6 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Returns the value after the input range has been mapped to a new range
-		/// </summary>
-		/// <param name="inputStart">Input start.</param>
-		/// <param name="inputEnd">Input end.</param>
-		/// <param name="outputStart">Output start.</param>
-		/// <param name="outputEnd">Output end.</param>
-		/// <param name="value">Value.</param>
-		/// <returns>The newly mapped value</returns>
-		public static ulong MapRange(ulong inputStart, ulong inputEnd, ulong outputStart, ulong outputEnd, ulong value)
-		{
-			if (inputStart.Equals(inputEnd))
-				throw new DivideByZeroException();
-
-			ulong slope = (outputEnd - outputStart) / (inputEnd - inputStart);
-			return outputStart + slope * (value - inputStart);
-		}
-
-		/// <summary>
-		/// Returns the value after the input range has been mapped to a new range
-		/// </summary>
-		/// <param name="inputStart">Input start.</param>
-		/// <param name="inputEnd">Input end.</param>
-		/// <param name="outputStart">Output start.</param>
-		/// <param name="outputEnd">Output end.</param>
-		/// <param name="value">Value.</param>
-		/// <returns>The newly mapped value</returns>
-		public static long MapRange(long inputStart, long inputEnd, long outputStart, long outputEnd, long value)
-		{
-			if (inputStart.Equals(inputEnd))
-				throw new DivideByZeroException();
-
-			long slope = (outputEnd - outputStart) / (inputEnd - inputStart);
-			return outputStart + slope * (value - inputStart);
-		}
-
-		/// <summary>
 		/// Maps the date in the given range to the float range 0.0f to 1.0f.
 		/// 0.5f - The date is half way between the end points.
 		/// less than 0.0f - the date is before the start.
