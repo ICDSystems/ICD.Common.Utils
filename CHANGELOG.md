@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.6.1] - 2019-06-14
+### Changed
+ - Fixed a bug where stopped timers on NetStandard would still have a periodic callback duration
+
 ## [8.6.0] - 2019-06-14
 ### Changed
  - Overhaul of RangeAttribute remap methods to better avoid overflows
