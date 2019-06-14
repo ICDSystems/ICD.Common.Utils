@@ -67,8 +67,8 @@ namespace ICD.Common.Utils.Timers
 		/// <returns></returns>
 		public static SafeTimer Stopped(Action callback)
 		{
-			// Some arbitrarily large number that shouldn't timeout before we call stop.
-			SafeTimer output = new SafeTimer(callback, 100 * 1000, 100 * 1000);
+			//No due time or repeat period on a stopped timer
+			SafeTimer output = new SafeTimer(callback, -1, -1);
 			output.Stop();
 			return output;
 		}
