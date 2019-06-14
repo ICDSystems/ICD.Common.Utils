@@ -69,6 +69,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Better VC-4 support for IcdConsole
  - JSON refactoring for simpler deserialization
 
+## [8.6.0] - 2019-06-14
+### Changed
+ - Overhaul of RangeAttribute remap methods to better avoid overflows
+
 ## [8.5.0] - 2019-06-06
 ### Added
  - Adding features to IcdEnvironment for tracking program initialization state

@@ -27,6 +27,10 @@ namespace ICD.Common.Utils.Tests
 		[Test, UsedImplicitly]
 		public void MapRangeTest()
 		{
+			Assert.AreEqual(5, MathUtils.MapRange(-100, 100, 0, 10, 0));
+			Assert.AreEqual(7, MathUtils.MapRange(-100, 100, 0, 10, 50));
+			Assert.AreEqual(10, MathUtils.MapRange(-100, 100, 0, 10, 100));
+
 			Assert.AreEqual(0, MathUtils.MapRange(0, 100, 0, 10, 0));
 			Assert.AreEqual(5, MathUtils.MapRange(0, 100, 0, 10, 50));
 			Assert.AreEqual(10, MathUtils.MapRange(0, 100, 0, 10, 100));
@@ -36,7 +40,7 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(100, MathUtils.MapRange(0, 10, 0, 100, 10));
 		}
 
-        [Test, UsedImplicitly]
+		[Test, UsedImplicitly]
 		public void GetRangesTest()
         {
             IEnumerable<int> values = new [] { 1, 3, 5, 6, 7, 8, 9, 10, 12 };

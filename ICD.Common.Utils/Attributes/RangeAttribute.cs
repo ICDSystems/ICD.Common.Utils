@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Attributes
 {
@@ -8,295 +11,509 @@ namespace ICD.Common.Utils.Attributes
 	[AttributeUsage(AttributeTargets.Property | 
 					AttributeTargets.Field | 
 					AttributeTargets.Parameter | 
-					AttributeTargets.ReturnValue,
-					AllowMultiple = false,
-					Inherited = true)]
+					AttributeTargets.ReturnValue)]
 	public sealed class RangeAttribute : AbstractIcdAttribute
 	{
+		/// <summary>
+		/// Remaps from the source numeric min/max to double min/max.
+		/// </summary>
+		private static readonly Dictionary<Type, Func<double, double>> s_Clamp =
+			new Dictionary<Type, Func<double, double>>
+			{
+				// Duh
+				{typeof(double), o => o},
+
+				// Signed
+				{typeof(short), o => o < short.MinValue ? short.MinValue : o > short.MaxValue ? short.MaxValue : o},
+				{typeof(int), o => o < int.MinValue ? int.MinValue : o > int.MaxValue ? int.MaxValue : o},
+				{typeof(long), o => o < long.MinValue ? long.MinValue : o > long.MaxValue ? long.MaxValue : o},
+				{typeof(float),o => o < float.MinValue ? float.MinValue : o > float.MaxValue ? float.MaxValue : o},
+				{typeof(decimal), o => o < (double)decimal.MinValue ? (double)decimal.MinValue : o > (double)decimal.MaxValue ? (double)decimal.MaxValue : o},
+
+				// Unsigned
+				{typeof(ushort), o => o < ushort.MinValue ? ushort.MinValue : o > ushort.MaxValue ? ushort.MaxValue : o},
+				{typeof(uint), o => o < uint.MinValue ? uint.MinValue : o > uint.MaxValue ? uint.MaxValue : o},
+				{typeof(ulong), o => o < ulong.MinValue ? ulong.MinValue : o > ulong.MaxValue ? ulong.MaxValue : o},
+				{typeof(byte), o => o < byte.MinValue ? byte.MinValue : o > byte.MaxValue ? byte.MaxValue : o}
+			};
+
+		/// <summary>
+		/// Remaps from the source numeric min/max to double min/max.
+		/// </summary>
+		private static readonly Dictionary<Type, Func<object, double>> s_RemapToDouble =
+			new Dictionary<Type, Func<object, double>>
+			{
+				// Duh
+				{ typeof(double), o => (double)o},
+
+				// Signed - Clamping prevents an overflow due to loss of precision
+				{ typeof(short), o => MathUtils.Clamp(Convert.ToDouble(o) / short.MaxValue, -1, 1) * double.MaxValue},
+				{ typeof(int), o => MathUtils.Clamp(Convert.ToDouble(o) / int.MaxValue, -1, 1) * double.MaxValue},
+				{ typeof(long), o => MathUtils.Clamp(Convert.ToDouble(o) / long.MaxValue, -1, 1) * double.MaxValue},
+				{ typeof(float),  o => MathUtils.Clamp(Convert.ToDouble(o) / float.MaxValue, -1, 1) * double.MaxValue},
+				{ typeof(decimal),  o => MathUtils.Clamp(Convert.ToDouble(o) / (double)decimal.MaxValue, -1, 1) * double.MaxValue},
+
+				// Unsigned
+				{ typeof(ushort), o => MathUtils.Clamp((Convert.ToDouble(o) / ushort.MaxValue - 0.5) * 2, -1, 1) * double.MaxValue},
+				{ typeof(uint), o => MathUtils.Clamp((Convert.ToDouble(o) / uint.MaxValue - 0.5) * 2, -1, 1) * double.MaxValue},
+				{ typeof(ulong), o => MathUtils.Clamp((Convert.ToDouble(o) / ulong.MaxValue - 0.5) * 2, -1, 1) * double.MaxValue},
+				{ typeof(byte), o => MathUtils.Clamp((Convert.ToDouble(o) / byte.MaxValue - 0.5) * 2, -1, 1) * double.MaxValue}
+			};
+
+		/// <summary>
+		/// Remaps from the double min/max to target numeric min/max.
+		/// </summary>
+		private static readonly Dictionary<Type, Func<double, object>> s_RemapFromDouble =
+			new Dictionary<Type, Func<double, object>>
+			{
+				// Duh
+				{typeof(double), v => v},
+
+				// Signed
+				{typeof(short), v => (short)(v / double.MaxValue * short.MaxValue)},
+				{typeof(int), v => (int)(v / double.MaxValue * int.MaxValue)},
+				{typeof(long), v => (long)(v / double.MaxValue * long.MaxValue)},
+				{typeof(float), v => (float)(v / double.MaxValue * float.MaxValue)},
+				{typeof(decimal), v => (decimal)(v / double.MaxValue) * decimal.MaxValue},
+
+				// Unsigned
+				{typeof(ushort), v => (ushort)((v / double.MaxValue + 1) / 2 * ushort.MaxValue)},
+				{typeof(uint), v => (uint)((v / double.MaxValue + 1) / 2 * uint.MaxValue)},
+				{typeof(ulong), v => (ulong)((v / double.MaxValue + 1) / 2 * ulong.MaxValue)},
+				{typeof(byte), v => (byte)((v / double.MaxValue + 1) / 2 * byte.MaxValue)}
+			};
+
+		/// <summary>
+		/// Gets the min value of a given numeric type as a double.
+		/// </summary>
+		private static readonly Dictionary<Type, double> s_MinAsDouble =
+			new Dictionary<Type, double>
+			{
+				// Duh
+				{typeof(double), double.MinValue},
+
+				// Signed
+				{typeof(short), Convert.ToDouble(short.MinValue)},
+				{typeof(int), Convert.ToDouble(int.MinValue)},
+				{typeof(long), Convert.ToDouble(long.MinValue)},
+				{typeof(float), Convert.ToDouble(float.MinValue)},
+				{typeof(decimal), Convert.ToDouble(decimal.MinValue)},
+
+				// Unsigned
+				{typeof(ushort), Convert.ToDouble(ushort.MinValue)},
+				{typeof(uint), Convert.ToDouble(uint.MinValue)},
+				{typeof(ulong), Convert.ToDouble(ulong.MinValue)},
+				{typeof(byte), Convert.ToDouble(byte.MinValue)}
+			};
+
+		/// <summary>
+		/// Gets the min value of a given numeric type as a double.
+		/// </summary>
+		private static readonly Dictionary<Type, double> s_MaxAsDouble =
+			new Dictionary<Type, double>
+			{
+				// Duh
+				{typeof(double), double.MaxValue},
+
+				// Signed
+				{typeof(short), Convert.ToDouble(short.MaxValue)},
+				{typeof(int), Convert.ToDouble(int.MaxValue)},
+				{typeof(long), Convert.ToDouble(long.MaxValue)},
+				{typeof(float), Convert.ToDouble(float.MaxValue)},
+				{typeof(decimal), Convert.ToDouble(decimal.MaxValue)},
+
+				// Unsigned
+				{typeof(ushort), Convert.ToDouble(ushort.MaxValue)},
+				{typeof(uint), Convert.ToDouble(uint.MaxValue)},
+				{typeof(ulong), Convert.ToDouble(ulong.MaxValue)},
+				{typeof(byte), Convert.ToDouble(byte.MaxValue)}
+			};
+
+		private readonly object m_Min;
+		private readonly object m_Max;
+
 		#region Properties
 
-		public object Min { get; private set; }
-		public object Max { get; private set; }
+		/// <summary>
+		/// Gets the min value for this range.
+		/// </summary>
+		public object Min { get { return m_Min; } }
+
+		/// <summary>
+		/// Gets the max value for this range.
+		/// </summary>
+		public object Max { get { return m_Max; } }
 
 		#endregion
 
 		#region Constructors
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(ushort min, ushort max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(short min, short max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(uint min, uint max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(int min, int max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(ulong min, ulong max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(long min, long max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(float min, float max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(double min, double max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(byte min, byte max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(sbyte min, sbyte max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		public RangeAttribute(decimal min, decimal max)
+			: this((object)min, (object)max)
 		{
-			Min = min;
-			Max = max;
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		public RangeAttribute(object min, object max)
+		{
+			if (min == null)
+				throw new ArgumentNullException("min");
+
+			if (max == null)
+				throw new ArgumentNullException("max");
+
+			if (min.GetType() != max.GetType())
+				throw new ArgumentException("Min and Max types do not match");
+
+			if (!min.GetType().IsNumeric())
+				throw new ArgumentException("Given types are not numeric");
+
+			m_Min = min;
+			m_Max = max;
 		}
 
 		#endregion
 
 		#region Methods
 
-		public T GetMin<T>()
+		/// <summary>
+		/// Remaps the given numeric value from its min/max range into double min/max range.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static double RemapToDouble(object value)
 		{
-			return (T)Convert.ChangeType(Min, typeof(T), null);
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			Func<object, double> remap;
+			if (!s_RemapToDouble.TryGetValue(value.GetType(), out remap))
+				throw new NotSupportedException("Value type is not supported.");
+
+			return remap(value);
 		}
 
-		public T GetMax<T>()
+		/// <summary>
+		/// Remaps the given double value from its min/max range into the target type min/max range.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static object RemapFromDouble(double value, Type type)
 		{
-			return (T)Convert.ChangeType(Max, typeof(T), null);
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			Func<double, object> remap;
+			if (!s_RemapFromDouble.TryGetValue(type, out remap))
+				throw new NotSupportedException("Value type is not supported.");
+
+			return remap(value);
 		}
 
-		public bool IsInRange(object value)
+		/// <summary>
+		/// Clamps the given numeric value into the valid ranges of the target numeric type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static object Clamp(object value, Type type)
 		{
-			if (value is ushort)
-			{
-				if (!(Min is ushort))
-					throw new ArgumentException("the type of value does not match the type of min / max");
+			if (value == null)
+				throw new ArgumentNullException("value");
 
-				var castVal = (ushort)value;
-				return (castVal >= GetMin<ushort>() && castVal <= GetMax<ushort>());
-			}
+			if (type == null)
+				throw new ArgumentNullException("type");
 
-			if (value is short)
-			{
-				if (!(Min is short))
-					throw new ArgumentException("the type of value does not match the type of min / max");
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
 
-				var castVal = (short)value;
-				return (castVal >= GetMin<short>() && castVal <= GetMax<short>());
-			}
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
 
-			if (value is uint)
-			{
-				if (!(Min is uint))
-					throw new ArgumentException("the type of value does not match the type of min / max");
+			double doubleValue = Convert.ToDouble(value);
+			double clamped = Clamp(doubleValue, type);
 
-				var castVal = (uint)value;
-				return (castVal >= GetMin<uint>() && castVal <= GetMax<uint>());
-			}
-
-			if (value is int)
-			{
-				if (!(Min is int))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (int)value;
-				return (castVal >= GetMin<int>() && castVal <= GetMax<int>());
-			}
-
-			if (value is ulong)
-			{
-				if (!(Min is ulong))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (ulong)value;
-				return (castVal >= GetMin<ulong>() && castVal <= GetMax<ulong>());
-			}
-
-			if (value is long)
-			{
-				if (!(Min is long))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (long)value;
-				return (castVal >= GetMin<long>() && castVal <= GetMax<long>());
-			}
-
-			if (value is float)
-			{
-				if (!(Min is float))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (float)value;
-				return (castVal >= GetMin<float>() && castVal <= GetMax<float>());
-			}
-
-			if (value is double)
-			{
-				if (!(Min is double))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (double)value;
-				return (castVal >= GetMin<double>() && castVal <= GetMax<double>());
-			}
-
-			if (value is decimal)
-			{
-				if (!(Min is decimal))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (decimal)value;
-				return (castVal >= GetMin<decimal>() && castVal <= GetMax<decimal>());
-			}
-
-			if (value is byte)
-			{
-				if (!(Min is byte))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (byte)value;
-				return (castVal >= GetMin<byte>() && castVal <= GetMax<byte>());
-			}
-
-			if (value is sbyte)
-			{
-				if (!(Min is sbyte))
-					throw new ArgumentException("the type of value does not match the type of min / max");
-
-				var castVal = (sbyte)value;
-				return (castVal >= GetMin<sbyte>() && castVal <= GetMax<sbyte>());
-			}
-
-			throw new ArgumentException("the type of value is not a numeric type.");
+			return Convert.ChangeType(clamped, value.GetType(), CultureInfo.InvariantCulture);
 		}
 
-		#region Range -> UShort
-
-		public ushort RemapRangeToUshort(double value)
+		/// <summary>
+		/// Clamps the given double value into the valid ranges of the target numeric type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static double Clamp(double value, Type type)
 		{
-			return (ushort)MathUtils.MapRange(GetMin<double>(), GetMax<double>(), ushort.MinValue, ushort.MaxValue, value);
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			Func<double, double> clamp;
+			if (!s_Clamp.TryGetValue(type, out clamp))
+				throw new NotSupportedException("Value type is not supported.");
+
+			return clamp(value);
 		}
 
-		public ushort RemapRangeToUshort(float value)
+		/// <summary>
+		/// Remaps the numeric value into the min-max range of the target numeric type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static object Remap(object value, Type type)
 		{
-			return (ushort)MathUtils.MapRange(GetMin<float>(), GetMax<float>(), ushort.MinValue, ushort.MaxValue, value);
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
+
+			double intermediate = RemapToDouble(value);
+			return RemapFromDouble(intermediate, type);
 		}
 
-		public ushort RemapRangeToUshort(int value)
+		/// <summary>
+		/// Clamps the given numeric value to the defined min/max then remaps to the target numeric type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public object ClampMinMaxThenRemap(object value, Type type)
 		{
-			return (ushort)MathUtils.MapRange(GetMin<int>(), GetMax<int>(), ushort.MinValue, ushort.MaxValue, value);
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
+
+			double min = Convert.ToDouble(Min);
+			double max = Convert.ToDouble(Max);
+			double doubleValue = Convert.ToDouble(value);
+
+			double clamped = MathUtils.Clamp(doubleValue, min, max);
+			object remapped = RemapMinMax(clamped, type);
+
+			return Convert.ChangeType(remapped, value.GetType(), CultureInfo.InvariantCulture);
 		}
 
-		public ushort RemapRangeToUshort(ushort value)
+		/// <summary>
+		/// Remaps the given numeric value to the defined min/max.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public object RemapMinMax(object value)
 		{
-			return MathUtils.MapRange(GetMin<ushort>(), GetMax<ushort>(), ushort.MinValue, ushort.MaxValue, value);
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
+
+			double sourceMin = GetMinAsDouble(value.GetType());
+			double sourceMax = GetMaxAsDouble(value.GetType());
+
+			double targetMin = Convert.ToDouble(Min);
+			double targetMax = Convert.ToDouble(Max);
+
+			double doubleValue = Convert.ToDouble(value);
+
+			double remapped = MathUtils.MapRange(sourceMin, sourceMax, targetMin, targetMax, doubleValue);
+
+			return Convert.ChangeType(remapped, value.GetType(), CultureInfo.InvariantCulture);
 		}
 
-		#endregion
-
-		#region UShort -> Range
-
-		public object RemapUshortToRange(ushort value)
+		private object RemapMinMax(object value, Type type)
 		{
-			if (Min is ushort)
-			{
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<ushort>(), GetMax<ushort>(), value);
-			}
+			if (value == null)
+				throw new ArgumentNullException("value");
 
-			if (Min is short)
-			{
-				var castVal = (short)value;
-				return (short)MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<short>(), GetMax<short>(), castVal);
-			}
+			if (type == null)
+				throw new ArgumentNullException("type");
 
-			if (Min is uint)
-			{
-				var castVal = (uint)value;
-				return (uint)MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<uint>(), GetMax<uint>(), castVal);
-			}
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
 
-			if (Min is int)
-			{
-				var castVal = (int)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<int>(), GetMax<int>(), castVal);
-			}
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
 
-			if (Min is ulong)
-			{
-				var castVal = (ulong)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<ulong>(), GetMax<ulong>(), castVal);
-			}
+			double sourceMin = Convert.ToDouble(Min);
+			double sourceMax = Convert.ToDouble(Max);
 
-			if (Min is long)
-			{
-				var castVal = (long)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<long>(), GetMax<long>(), castVal);
-			}
+			double targetMin = GetMinAsDouble(type);
+			double targetMax = GetMaxAsDouble(type);
 
-			if (Min is float)
-			{
-				var castVal = (float)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<float>(), GetMax<float>(), castVal);
-			}
+			double doubleValue = Convert.ToDouble(value);
 
-			if (Min is double)
-			{
-				var castVal = (double)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<double>(), GetMax<double>(), castVal);
-			}
+			double remapped = MathUtils.MapRange(sourceMin, sourceMax, targetMin, targetMax, doubleValue);
 
-			if (Min is decimal)
-			{
-				var castVal = (decimal)value;
-				return MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<decimal>(), GetMax<decimal>(), castVal);
-			}
-
-			if (Min is byte)
-			{
-				var castVal = (byte)value;
-				return (byte)MathUtils.MapRange(ushort.MinValue, ushort.MaxValue, GetMin<byte>(), GetMax<byte>(), castVal);
-			}
-
-			throw new NotSupportedException("Value type of range attribute is not supported.");
+			return Convert.ChangeType(remapped, type, CultureInfo.InvariantCulture);
 		}
 
 		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Gets the min value for the given numeric type as a double.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		private static double GetMinAsDouble(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			double min;
+			if (!s_MinAsDouble.TryGetValue(type, out min))
+				throw new NotSupportedException("Type is not supported.");
+
+			return min;
+		}
+
+		/// <summary>
+		/// Gets the max value for the given numeric type as a double.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		private static double GetMaxAsDouble(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			double max;
+			if (!s_MaxAsDouble.TryGetValue(type, out max))
+				throw new NotSupportedException("Type is not supported.");
+
+			return max;
+		}
 
 		#endregion
 	}
