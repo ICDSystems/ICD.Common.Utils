@@ -37,10 +37,11 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(port, new IcdUriBuilder {Port = port}.Port);
 		}
 
-		[TestCase("test")]
-		public void QueryTest(string query)
+		[TestCase("?test", "test")]
+		[TestCase("??test", "?test")]
+		public void QueryTest(string expected, string query)
 		{
-			Assert.AreEqual(query, new IcdUriBuilder {Query = query}.Query);
+			Assert.AreEqual(expected, new IcdUriBuilder {Query = query}.Query);
 		}
 
 		[TestCase("test")]
@@ -72,6 +73,8 @@ namespace ICD.Common.Utils.Tests
 		[TestCase("http://localhost/test", null, "localhost", null, "test", (ushort)0, null, "http", null)]
 		[TestCase("http://localhost/test", null, "localhost", null, "/test", (ushort)0, null, "http", null)]
 		[TestCase("http://localhost//test", null, "localhost", null, "//test", (ushort)0, null, "http", null)]
+		[TestCase("http://localhost/test?a=b", null, "localhost", null, "/test", (ushort)0, "a=b", "http", null)]
+		[TestCase("http://localhost/test??a=b", null, "localhost", null, "/test", (ushort)0, "?a=b", "http", null)]
 		public void ToStringTest(string expected, string fragment, string address, string password, string path, ushort port,
 		                         string query, string scheme, string userName)
 		{

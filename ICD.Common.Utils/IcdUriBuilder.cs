@@ -13,6 +13,8 @@ namespace ICD.Common.Utils
 	/// </summary>
 	public sealed class IcdUriBuilder
 	{
+		private string m_Query;
+
 		#region Properties
 
 		/// <summary>
@@ -43,7 +45,7 @@ namespace ICD.Common.Utils
 		/// <summary>
 		/// Gets or sets any query information included in the URI. 
 		/// </summary>
-		public string Query { get; set; }
+		public string Query { get { return m_Query == null ? null : "?" + m_Query; } set { m_Query = value; } }
 
 		/// <summary>
 		/// Gets or sets the scheme name of the URI.
@@ -96,7 +98,7 @@ namespace ICD.Common.Utils
 			Password = uri.GetPassword();
 			Path = uri.AbsolutePath;
 			Port = (ushort)uri.Port;
-			Query = uri.Query;
+			Query = uri.Query == null ? null : uri.Query.TrimStart('?');
 			Scheme = uri.Scheme;
 			UserName = uri.GetUserName();
 		}
@@ -149,10 +151,7 @@ namespace ICD.Common.Utils
 
 			// Query
 			if (!string.IsNullOrEmpty(Query))
-			{
-				builder.Append('?');
 				builder.Append(Query);
-			}
 
 			// Fragment
 			if (!string.IsNullOrEmpty(Fragment))
