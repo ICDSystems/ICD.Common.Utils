@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.7.0] - 2019-06-24
+### Added
+ - IcdXmlException exposes line number and position properties
+
 ## [8.6.1] - 2019-06-14
 ### Changed
  - Fixed a bug where stopped timers on NetStandard would still have a periodic callback duration
