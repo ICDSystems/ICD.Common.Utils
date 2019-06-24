@@ -9,8 +9,12 @@ namespace ICD.Common.Utils.Xml
 {
 	public sealed class IcdXmlException : Exception
 	{
-		private int m_LineNumber;
-		private int m_LinePosition;
+		private readonly int m_LineNumber;
+		private readonly int m_LinePosition;
+
+		public int LineNumber { get { return m_LineNumber; } }
+
+		public int LinePosition { get { return m_LinePosition; } }
 
 		/// <summary>
 		/// Constructor.
