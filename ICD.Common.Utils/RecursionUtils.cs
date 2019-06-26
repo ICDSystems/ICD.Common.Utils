@@ -36,6 +36,20 @@ namespace ICD.Common.Utils
 		/// Gets the clique containing the given node.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
+		/// <param name="nodes"></param>
+		/// <param name="node"></param>
+		/// <param name="getAdjacent"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> GetClique<T>(IEnumerable<T> nodes, T node, Func<T, IEnumerable<T>> getAdjacent)
+		{
+			Dictionary<T, IEnumerable<T>> map = nodes.ToDictionary(n => n, getAdjacent);
+			return GetClique(map, node);
+		}
+
+		/// <summary>
+		/// Gets the clique containing the given node.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
 		/// <param name="map"></param>
 		/// <param name="node"></param>
 		/// <returns></returns>

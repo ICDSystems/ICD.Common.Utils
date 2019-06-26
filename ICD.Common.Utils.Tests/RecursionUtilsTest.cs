@@ -128,6 +128,24 @@ namespace ICD.Common.Utils.Tests
 		}
 
 		[Test]
+		public void GetCliqueSingleNodeTest()
+		{
+			int[] clique = RecursionUtils.GetClique(s_CliqueGraph.Keys, 1, n => s_CliqueGraph[n]).ToArray();
+
+			Assert.AreEqual(4, clique.Length);
+			Assert.IsTrue(clique.Contains(1));
+			Assert.IsTrue(clique.Contains(2));
+			Assert.IsTrue(clique.Contains(3));
+			Assert.IsTrue(clique.Contains(4));
+
+			clique = RecursionUtils.GetClique(s_CliqueGraph.Keys, 5, n => s_CliqueGraph[n]).ToArray();
+
+			Assert.AreEqual(2, clique.Length);
+			Assert.IsTrue(clique.Contains(5));
+			Assert.IsTrue(clique.Contains(6));
+		}
+
+		[Test]
 		public void BreadthFirstSearchTest()
 		{
 			// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
