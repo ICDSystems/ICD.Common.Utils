@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added RecursionUtils method to get a single clique given a starting node
+
 ### Changed
  - Fixed bug in IcdUriBuilder where Query property behaved differently to UriBuilder
 
