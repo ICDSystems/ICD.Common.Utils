@@ -36,14 +36,18 @@ namespace ICD.Common.Utils
 		/// Gets the clique containing the given node.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <param name="nodes"></param>
 		/// <param name="node"></param>
 		/// <param name="getAdjacent"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> GetClique<T>(IEnumerable<T> nodes, T node, Func<T, IEnumerable<T>> getAdjacent)
+		public static IEnumerable<T> GetClique<T>(T node, Func<T, IEnumerable<T>> getAdjacent)
 		{
-			Dictionary<T, IEnumerable<T>> map = nodes.ToDictionary(n => n, getAdjacent);
-			return GetClique(map, node);
+			if (node == null)
+				throw new ArgumentNullException("node");
+
+			if (getAdjacent == null)
+				throw new ArgumentNullException("getAdjacent");
+
+			return BreadthFirstSearch(node, getAdjacent);
 		}
 
 		/// <summary>
@@ -163,7 +167,7 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Returns all of the nodes in the tree via breadth-first search.
+		/// Returns all of the nodes in the graph via breadth-first search.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="root"></param>
@@ -171,6 +175,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		private static IEnumerable<T> BreadthFirstSearchIterator<T>(T root, Func<T, IEnumerable<T>> getChildren)
 		{
+			IcdHashSet<T> visited = new IcdHashSet<T> {root};
 			Queue<T> process = new Queue<T>();
 			process.Enqueue(root);
 
@@ -179,8 +184,11 @@ namespace ICD.Common.Utils
 			{
 				yield return current;
 
-				foreach (T child in getChildren(current))
+				foreach (T child in getChildren(current).Where(c => !visited.Contains(c)))
+				{
+					visited.Add(child);
 					process.Enqueue(child);
+				}
 			}
 		}
 

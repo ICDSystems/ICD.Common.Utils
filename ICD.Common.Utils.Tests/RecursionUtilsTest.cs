@@ -130,7 +130,7 @@ namespace ICD.Common.Utils.Tests
 		[Test]
 		public void GetCliqueSingleNodeTest()
 		{
-			int[] clique = RecursionUtils.GetClique(s_CliqueGraph.Keys, 1, n => s_CliqueGraph[n]).ToArray();
+			int[] clique = RecursionUtils.GetClique(1, n => s_CliqueGraph[n]).ToArray();
 
 			Assert.AreEqual(4, clique.Length);
 			Assert.IsTrue(clique.Contains(1));
@@ -138,7 +138,7 @@ namespace ICD.Common.Utils.Tests
 			Assert.IsTrue(clique.Contains(3));
 			Assert.IsTrue(clique.Contains(4));
 
-			clique = RecursionUtils.GetClique(s_CliqueGraph.Keys, 5, n => s_CliqueGraph[n]).ToArray();
+			clique = RecursionUtils.GetClique(5, n => s_CliqueGraph[n]).ToArray();
 
 			Assert.AreEqual(2, clique.Length);
 			Assert.IsTrue(clique.Contains(5));
