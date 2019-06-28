@@ -45,7 +45,7 @@ namespace ICD.Common.Utils
 		/// <summary>
 		/// Gets or sets any query information included in the URI. 
 		/// </summary>
-		public string Query { get { return m_Query == null ? null : "?" + m_Query; } set { m_Query = value; } }
+		public string Query { get { return string.IsNullOrEmpty(m_Query) ? string.Empty : "?" + m_Query; } set { m_Query = value; } }
 
 		/// <summary>
 		/// Gets or sets the scheme name of the URI.
@@ -98,7 +98,7 @@ namespace ICD.Common.Utils
 			Password = uri.GetPassword();
 			Path = uri.AbsolutePath;
 			Port = (ushort)uri.Port;
-			Query = uri.Query == null ? null : uri.Query.TrimStart('?');
+			Query = uri.Query.TrimStart('?');
 			Scheme = uri.Scheme;
 			UserName = uri.GetUserName();
 		}
