@@ -146,6 +146,9 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 			
+			if (!extends.TokenType.IsPrimitive())
+				throw new FormatException("Expected primitive token type but got " + extends.TokenType);
+
 			return extends.Value == null ? null : extends.Value.ToString();
 		}
 

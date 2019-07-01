@@ -110,6 +110,7 @@
     <Compile Include="Extensions\ByteExtensions.cs" />
     <Compile Include="Extensions\DayOfWeekExtensions.cs" />
     <Compile Include="Extensions\JsonSerializerExtensions.cs" />
+    <Compile Include="Extensions\JsonTokenExtensions.cs" />
     <Compile Include="Extensions\JsonWriterExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Comparers\PredicateEqualityComparer.cs" />
