@@ -63,5 +63,25 @@ namespace ICD.Common.Utils.Extensions
 			bool success = times.OrderByDescending(dt => dt).TryFirst(dt => inclusive ? target >= dt : target > dt, out latestTime);
 			return success ? latestTime : (DateTime?) null;
 		}
+
+		/// <summary>
+		/// Returns the DateTime representing the very start of the current day.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static DateTime StartOfDay(this DateTime extends)
+		{
+			return new DateTime(extends.Year, extends.Month, extends.Day, 0, 0, 0);
+		}
+
+		/// <summary>
+		/// Returns the DateTime representing the very end of the current day.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static DateTime EndOfDay(this DateTime extends)
+		{
+			return extends.StartOfDay() + new TimeSpan(24, 0, 0);
+		}
 	}
 }
