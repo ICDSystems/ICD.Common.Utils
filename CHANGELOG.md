@@ -6,12 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.6.0] - 2019-07-03
 ### Added
  - Added RecursionUtils method to get a single clique given a starting node
  - Breadth First Search can now search graphs in addition to trees
+ - Added StartOfDay and EndOfDay DateTime extension methods
 
 ### Changed
  - Fixed bug in IcdUriBuilder where Query property behaved differently to UriBuilder
+ - Throwing an exception when attempting to read a non-primitive JSON token as a string
 
 ## [9.5.0] - 2019-06-10
 ### Added
