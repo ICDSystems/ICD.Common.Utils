@@ -29,9 +29,10 @@ namespace ICD.Common.Utils
 				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_RED);
 				ErrorLog.Error(message);
 #else
-			    System.Console.ForegroundColor = ConsoleColor.Red;
-                System.Console.Error.WriteLine(message);
-                System.Console.ResetColor();
+				Console.Write("Error  - {0} - ", IcdEnvironment.GetLocalTime());
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Error.WriteLine(message);
+				Console.ResetColor();
 #endif
 			}
 			finally
@@ -57,9 +58,10 @@ namespace ICD.Common.Utils
 				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_YELLOW);
 				ErrorLog.Warn(message);
 #else
-			    System.Console.ForegroundColor = ConsoleColor.Yellow;
-                System.Console.Error.WriteLine(message);
-			    System.Console.ResetColor();
+				Console.Write("Warn   - {0} - ", IcdEnvironment.GetLocalTime());
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.Error.WriteLine(message);
+				Console.ResetColor();
 #endif
 			}
 			finally
@@ -85,9 +87,10 @@ namespace ICD.Common.Utils
 				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_BLUE);
 				ErrorLog.Notice(message);
 #else
-			    System.Console.ForegroundColor = ConsoleColor.Blue;
-                System.Console.Error.WriteLine(message);
-			    System.Console.ResetColor();
+				Console.Write("Notice - {0} - ", IcdEnvironment.GetLocalTime());
+				Console.ForegroundColor = ConsoleColor.Blue;
+				Console.Error.WriteLine(message);
+				Console.ResetColor();
 #endif
 			}
 			finally
@@ -113,9 +116,10 @@ namespace ICD.Common.Utils
 				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_GREEN);
 				ErrorLog.Ok(message);
 #else
-			    System.Console.ForegroundColor = ConsoleColor.Green;
-                System.Console.Error.WriteLine(message);
-			    System.Console.ResetColor();
+				Console.Write("OK     - {0} - ", IcdEnvironment.GetLocalTime());
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Error.WriteLine(message);
+				Console.ResetColor();
 #endif
 			}
 			finally
@@ -141,11 +145,12 @@ namespace ICD.Common.Utils
 				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_YELLOW_ON_RED_BACKGROUND);
 				ErrorLog.Exception(message, ex);
 #else
-			    System.Console.ForegroundColor = ConsoleColor.Yellow;
-                System.Console.BackgroundColor = ConsoleColor.Red;
-                System.Console.Error.WriteLine("{0}: {1}", ex.GetType().Name, message);
-			    System.Console.ResetColor();
-                System.Console.Error.WriteLine(ex.StackTrace);
+				Console.Write("Except - {0} - ", IcdEnvironment.GetLocalTime());
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.BackgroundColor = ConsoleColor.Red;
+				Console.Error.WriteLine("{0}: {1}", ex.GetType().Name, message);
+				Console.ResetColor();
+				Console.Error.WriteLine(ex.StackTrace);
 #endif
 			}
 			finally
@@ -172,9 +177,10 @@ namespace ICD.Common.Utils
 				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_CYAN);
 				ErrorLog.Info(message);
 #else
-			    System.Console.ForegroundColor = ConsoleColor.Cyan;
-                System.Console.Error.WriteLine(message);
-			    System.Console.ResetColor();
+				Console.Write("Info   - {0} - ", IcdEnvironment.GetLocalTime());
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.Error.WriteLine(message);
+				Console.ResetColor();
 #endif
 			}
 			finally
