@@ -147,6 +147,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
+		[CanBeNull]
 		public static object GetDefaultValue(Type type)
 		{
 			if (type == null)
@@ -314,6 +315,7 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <param name="type"></param>
 		/// <returns></returns>
+		[CanBeNull]
 		public static object ChangeType(object value, Type type)
 		{
 			if (type == null)
@@ -372,7 +374,9 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("eventHandler");
 
 			object handler = eventHandler.Target;
+// ReSharper disable InvokeAsExtensionMethod
 			MethodInfo callback = EventHandlerExtensions.GetMethodInfo(eventHandler);
+// ReSharper restore InvokeAsExtensionMethod
 
 			return SubscribeEvent(instance, eventInfo, handler, callback);
 		}
@@ -394,7 +398,9 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("eventHandler");
 
 			object handler = eventHandler.Target;
+// ReSharper disable InvokeAsExtensionMethod
 			MethodInfo callback = EventHandlerExtensions.GetMethodInfo(eventHandler);
+// ReSharper restore InvokeAsExtensionMethod
 
 			return SubscribeEvent(instance, eventInfo, handler, callback);
 		}
