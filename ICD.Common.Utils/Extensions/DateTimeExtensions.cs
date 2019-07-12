@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -82,6 +83,14 @@ namespace ICD.Common.Utils.Extensions
 		public static DateTime EndOfDay(this DateTime extends)
 		{
 			return extends.StartOfDay() + new TimeSpan(24, 0, 0);
+		}
+
+		[PublicAPI]
+		public static double ToUnixTimestamp(this DateTime extends)
+		{
+			DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			TimeSpan diff = extends.ToUniversalTime() - origin;
+			return Math.Floor(diff.TotalSeconds);
 		}
 	}
 }
