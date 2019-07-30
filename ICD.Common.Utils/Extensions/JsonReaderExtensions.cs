@@ -213,8 +213,12 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+#if SIMPLSHARP
 			string stringValue = extends.GetValueAsString();
 			return JsonUtils.ParseDateTime(stringValue);
+#else
+			return (DateTime)extends.Value;
+#endif
 		}
 	}
 }

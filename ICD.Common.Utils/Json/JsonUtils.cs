@@ -39,7 +39,11 @@ namespace ICD.Common.Utils.Json
 			if (token == null)
 				throw new ArgumentNullException("token");
 
+#if SIMPLSHARP
 			return ParseDateTime((string)token);
+#else
+			return (DateTime)token;
+#endif
 		}
 
 		/// <summary>
