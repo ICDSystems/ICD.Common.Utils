@@ -89,6 +89,7 @@
     <Compile Include="Email\EmailClient.cs" />
     <Compile Include="Email\eMailErrorCode.cs" />
     <Compile Include="Email\EmailStringCollection.cs" />
+    <Compile Include="Email\EmailValidation.cs" />
     <Compile Include="EncodingUtils.cs" />
     <Compile Include="Csv\CsvWriter.cs" />
     <Compile Include="Csv\CsvWriterSettings.cs" />
