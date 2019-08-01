@@ -42,13 +42,42 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-// ReSharper disable InvokeAsExtensionMethod
+			return GetClassAttributes<T>(type, inherit).FirstOrDefault();
+		}
+
+		/// <summary>
+		/// Gets the attributes on the given class type matching the generic type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> GetClassAttributes<T>(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return GetClassAttributes<T>(type, false);
+		}
+
+		/// <summary>
+		/// Gets the attributes on the given class type matching the generic type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="type"></param>
+		/// <param name="inherit"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> GetClassAttributes<T>(Type type, bool inherit)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			// ReSharper disable InvokeAsExtensionMethod
 			return ReflectionExtensions.GetCustomAttributes<T>(
 #if SIMPLSHARP
-				(CType)
+			                                                   (CType)
 #endif
-				type, inherit).FirstOrDefault();
-// ReSharper restore InvokeAsExtensionMethod
+															   type, inherit);
+			// ReSharper restore InvokeAsExtensionMethod
 		}
 
 		/// <summary>
