@@ -155,9 +155,14 @@ namespace ICD.Common.Utils.Extensions
 			while (reader.TokenType != JsonToken.EndObject)
 			{
 				if (reader.TokenType != JsonToken.PropertyName)
-					throw new FormatException();
+					throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.PropertyName, reader.TokenType));
 
-				switch ((string)reader.Value)
+				string propertyName = (string)reader.Value;
+
+				// Step into the value
+				reader.Read();
+
+				switch (propertyName)
 				{
 					case PROPERTY_KEY:
 						key = readKey(extends, reader);
