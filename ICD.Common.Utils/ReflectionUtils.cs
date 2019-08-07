@@ -220,14 +220,15 @@ namespace ICD.Common.Utils
 
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
+			try
+			{
 
 			if (parameters.Length == 0)
 				return Activator.CreateInstance(type);
 
 			ConstructorInfo constructor = GetConstructor(type, parameters);
 
-			try
-			{
+			
 				return constructor.Invoke(parameters);
 			}
 			catch (TypeLoadException e)
