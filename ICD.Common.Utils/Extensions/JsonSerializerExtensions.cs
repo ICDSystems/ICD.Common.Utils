@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -8,6 +7,9 @@ namespace ICD.Common.Utils.Extensions
 {
 	public static class JsonSerializerExtensions
 	{
+		private const string PROPERTY_KEY = "k";
+		private const string PROPERTY_VALUE = "v";
+
 		/// <summary>
 		/// Deserializes an array of items from the reader's current value.
 		/// </summary>
@@ -81,7 +83,15 @@ namespace ICD.Common.Utils.Extensions
 		public static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDict<TKey, TValue>(this JsonSerializer extends,
 		                                                                                    JsonReader reader)
 		{
-			return extends.DeserializeDict<TKey, TValue>(reader, p => (TKey)Convert.ChangeType(p, typeof(TKey), CultureInfo.InvariantCulture));
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			return extends.DeserializeDict(reader,
+			                               (s, r) => s.Deserialize<TKey>(r),
+			                               (s, r) => s.Deserialize<TValue>(r));
 		}
 
 		/// <summary>
@@ -91,27 +101,13 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="TValue"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="reader"></param>
-		/// <param name="getKey"></param>
-		public static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDict<TKey, TValue>(this JsonSerializer extends,
-		                                                                                    JsonReader reader,
-		                                                                                    Func<string, TKey> getKey)
-		{
-			return extends.DeserializeDict(reader, getKey, (s, r) => extends.Deserialize<TValue>(reader));
-		}
-
-		/// <summary>
-		/// Deserializes a dictionary of items from the reader's current value.
-		/// </summary>
-		/// <typeparam name="TKey"></typeparam>
-		/// <typeparam name="TValue"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="reader"></param>
-		/// <param name="getKey"></param>
+		/// <param name="readKey"></param>
 		/// <param name="readValue"></param>
 		public static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDict<TKey, TValue>(this JsonSerializer extends,
 		                                                                                    JsonReader reader,
-		                                                                                    Func<string, TKey> getKey,
-		                                                                                    Func<JsonSerializer, JsonReader,
+																							Func<JsonSerializer, JsonReader,
+																								TKey> readKey,
+																							Func<JsonSerializer, JsonReader,
 			                                                                                    TValue> readValue)
 		{
 			if (extends == null)
@@ -120,36 +116,39 @@ namespace ICD.Common.Utils.Extensions
 			if (reader == null)
 				throw new ArgumentNullException("reader");
 
-			if (getKey == null)
-				throw new ArgumentNullException("getKey");
+			if (readKey == null)
+				throw new ArgumentNullException("readKey");
 
 			if (readValue == null)
 				throw new ArgumentNullException("readValue");
 
-			if (reader.TokenType == JsonToken.Null)
-				return Enumerable.Empty<KeyValuePair<TKey, TValue>>();
+			return extends.DeserializeArray(reader, (s, r) => s.DeserializeKeyValuePair(r, readKey, readValue));
+		}
+
+		public static KeyValuePair<TKey, TValue> DeserializeKeyValuePair<TKey, TValue>(this JsonSerializer extends, JsonReader reader,
+		                                                                               Func<JsonSerializer, JsonReader,
+			                                                                               TKey> readKey,
+		                                                                               Func<JsonSerializer, JsonReader,
+			                                                                               TValue> readValue)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			if (readKey == null)
+				throw new ArgumentNullException("readKey");
+
+			if (readValue == null)
+				throw new ArgumentNullException("readValue");
 
 			if (reader.TokenType != JsonToken.StartObject)
 				throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.StartObject, reader.TokenType));
 
-			// ToArray to ensure everything gets read before moving onto the next token
-			return DeserializeDictIterator(extends, reader, getKey, readValue).ToArray();
-		}
+			TKey key = default(TKey);
+			TValue value = default(TValue);
 
-		/// <summary>
-		/// Deserializes a dictionary of items from the reader's current value.
-		/// </summary>
-		/// <typeparam name="TKey"></typeparam>
-		/// <typeparam name="TValue"></typeparam>
-		/// <param name="serializer"></param>
-		/// <param name="reader"></param>
-		/// <param name="getKey"></param>
-		/// <param name="readValue"></param>
-		private static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDictIterator<TKey, TValue>(
-			JsonSerializer serializer, JsonReader reader,
-			Func<string, TKey> getKey,
-			Func<JsonSerializer, JsonReader, TValue> readValue)
-		{
 			// Step into the first property
 			reader.Read();
 
@@ -158,17 +157,25 @@ namespace ICD.Common.Utils.Extensions
 				if (reader.TokenType != JsonToken.PropertyName)
 					throw new FormatException();
 
-				TKey key = getKey((string)reader.Value);
+				switch ((string)reader.Value)
+				{
+					case PROPERTY_KEY:
+						key = readKey(extends, reader);
+						break;
 
-				// Step into the value
-				reader.Read();
+					case PROPERTY_VALUE:
+						value = readValue(extends, reader);
+						break;
 
-				TValue value = readValue(serializer, reader);
-				yield return new KeyValuePair<TKey, TValue>(key, value);
+					default:
+						throw new FormatException(string.Format("Unexpected property {0}", reader.Value));
+				}
 
 				// Step out of the value
 				reader.Read();
 			}
+
+			return new KeyValuePair<TKey, TValue>(key, value);
 		}
 
 		/// <summary>
@@ -228,7 +235,9 @@ namespace ICD.Common.Utils.Extensions
 		public static void SerializeDict<TKey, TValue>(this JsonSerializer extends, JsonWriter writer,
 													   IEnumerable<KeyValuePair<TKey, TValue>> items)
 		{
-			extends.SerializeDict(writer, items, k => k.ToString());
+			extends.SerializeDict(writer, items,
+			                      (s, w, k) => s.Serialize(w, k),
+			                      (s, w, v) => s.Serialize(w, v));
 		}
 
 		/// <summary>
@@ -239,27 +248,11 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="writer"></param>
 		/// <param name="items"></param>
-		/// <param name="getPropertyName"></param>
-		public static void SerializeDict<TKey, TValue>(this JsonSerializer extends, JsonWriter writer,
-													   IEnumerable<KeyValuePair<TKey, TValue>> items,
-													   Func<TKey, string> getPropertyName)
-		{
-			extends.SerializeDict(writer, items, getPropertyName, (s, w, v) => s.Serialize(w, v));
-		}
-
-		/// <summary>
-		/// Serializes the given sequence of items to the writer.
-		/// </summary>
-		/// <typeparam name="TKey"></typeparam>
-		/// <typeparam name="TValue"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="writer"></param>
-		/// <param name="items"></param>
-		/// <param name="getPropertyName"></param>
+		/// <param name="writeKey"></param>
 		/// <param name="writeValue"></param>
 		public static void SerializeDict<TKey, TValue>(this JsonSerializer extends, JsonWriter writer,
 													   IEnumerable<KeyValuePair<TKey, TValue>> items,
-													   Func<TKey, string> getPropertyName,
+		                                               Action<JsonSerializer, JsonWriter, TKey> writeKey,
 													   Action<JsonSerializer, JsonWriter, TValue> writeValue)
 		{
 			if (extends == null)
@@ -268,26 +261,39 @@ namespace ICD.Common.Utils.Extensions
 			if (writer == null)
 				throw new ArgumentNullException("writer");
 
-			if (getPropertyName == null)
-				throw new ArgumentNullException("getPropertyName");
+			if (writeKey == null)
+				throw new ArgumentNullException("writeKey");
 
 			if (writeValue == null)
 				throw new ArgumentNullException("writeValue");
 
-			if (items == null)
-			{
-				writer.WriteNull();
-				return;
-			}
+			extends.SerializeArray(writer, items, (s, w, kvp) => s.SerializeKeyValuePair(w, kvp, writeKey, writeValue));
+		}
+
+		public static void SerializeKeyValuePair<TKey, TValue>(this JsonSerializer extends, JsonWriter writer,
+		                                                       KeyValuePair<TKey, TValue> kvp,
+		                                                       Action<JsonSerializer, JsonWriter, TKey> writeKey,
+		                                                       Action<JsonSerializer, JsonWriter, TValue> writeValue)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
+			if (writeKey == null)
+				throw new ArgumentNullException("writeKey");
+
+			if (writeValue == null)
+				throw new ArgumentNullException("writeValue");
 
 			writer.WriteStartObject();
 			{
-				foreach (KeyValuePair<TKey, TValue> kvp in items)
-				{
-					string propertyName = getPropertyName(kvp.Key);
-					writer.WritePropertyName(propertyName);
-					writeValue(extends, writer, kvp.Value);
-				}
+				writer.WritePropertyName(PROPERTY_KEY);
+				writeKey(extends, writer, kvp.Key);
+
+				writer.WritePropertyName(PROPERTY_VALUE);
+				writeValue(extends, writer, kvp.Value);
 			}
 			writer.WriteEndObject();
 		}
