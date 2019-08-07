@@ -223,12 +223,12 @@ namespace ICD.Common.Utils
 			try
 			{
 
-			if (parameters.Length == 0)
-				return Activator.CreateInstance(type);
+				if (parameters.Length == 0)
+					return Activator.CreateInstance(type);
 
-			ConstructorInfo constructor = GetConstructor(type, parameters);
+				ConstructorInfo constructor = GetConstructor(type, parameters);
 
-			
+
 				return constructor.Invoke(parameters);
 			}
 			catch (TypeLoadException e)
