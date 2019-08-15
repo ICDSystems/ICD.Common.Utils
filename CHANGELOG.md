@@ -5,9 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [9.7.0] - 2019-08-15
 ### Added
  - Added logger timestamps to non simplsharp programs
  - Added Net Standard Support for JSON DateTime formats
+ - Added EmailValidation class
+ 
+### Changed
+ - JSON dict serialization serializes keys instead of converting to property name
 
 ## [9.6.0] - 2019-07-03
 ### Added
