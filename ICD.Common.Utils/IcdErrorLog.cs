@@ -8,44 +8,35 @@ namespace ICD.Common.Utils
 {
 	public static class IcdErrorLog
 	{
-		private const int MUTEX_TIMEOUT = 30 * 1000;
-		private static readonly SafeMutex s_SafeMutex;
-		private static string s_LastMessage;
+		private static readonly SafeCriticalSection s_LoggingSection;
 
 		/// <summary>
 		/// Static constructor.
 		/// </summary>
 		static IcdErrorLog()
 		{
-			s_SafeMutex = new SafeMutex();
+			s_LoggingSection = new SafeCriticalSection();
 		}
 
 		[PublicAPI]
 		public static void Error(string message)
 		{
-			if(s_SafeMutex.WaitForMutex(MUTEX_TIMEOUT))
+			s_LoggingSection.Enter();
+
+			try
 			{
-				try
-				{
-					s_LastMessage = message;
 #if SIMPLSHARP
-					message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_RED);
-					ErrorLog.Error(message);
+				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_RED);
+				ErrorLog.Error(message);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Red;
                 System.Console.Error.WriteLine(message);
                 System.Console.ResetColor();
 #endif
-				}
-				finally
-				{
-					s_SafeMutex.ReleaseMutex();
-				}
 			}
-			else
+			finally
 			{
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, "Deadlock in Error Logging, last logged message is:");
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, StringUtils.ToMixedReadableHexLiteral(s_LastMessage));
+				s_LoggingSection.Leave();
 			}
 		}
 
@@ -58,29 +49,22 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void Warn(string message)
 		{
-			if (s_SafeMutex.WaitForMutex(MUTEX_TIMEOUT))
+			s_LoggingSection.Enter();
+
+			try
 			{
-				try
-				{
-					s_LastMessage = message;
 #if SIMPLSHARP
-					message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_YELLOW);
-					ErrorLog.Warn(message);
+				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_YELLOW);
+				ErrorLog.Warn(message);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Yellow;
                 System.Console.Error.WriteLine(message);
 			    System.Console.ResetColor();
 #endif
-				}
-				finally
-				{
-					s_SafeMutex.ReleaseMutex();
-				}
 			}
-			else
+			finally
 			{
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, "Deadlock in Error Logging, last logged message is:");
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, StringUtils.ToMixedReadableHexLiteral(s_LastMessage));
+				s_LoggingSection.Leave();
 			}
 		}
 
@@ -93,29 +77,22 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void Notice(string message)
 		{
-			if (s_SafeMutex.WaitForMutex(MUTEX_TIMEOUT))
+			s_LoggingSection.Enter();
+
+			try
 			{
-				s_LastMessage = message;
-				try
-				{
 #if SIMPLSHARP
-					message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_BLUE);
-					ErrorLog.Notice(message);
+				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_BLUE);
+				ErrorLog.Notice(message);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Blue;
                 System.Console.Error.WriteLine(message);
 			    System.Console.ResetColor();
 #endif
-				}
-				finally
-				{
-					s_SafeMutex.ReleaseMutex();
-				}
 			}
-			else
+			finally
 			{
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, "Deadlock in Error Logging, last logged message is:");
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, StringUtils.ToMixedReadableHexLiteral(s_LastMessage));
+				s_LoggingSection.Leave();
 			}
 		}
 
@@ -128,29 +105,22 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void Ok(string message)
 		{
-			if (s_SafeMutex.WaitForMutex(MUTEX_TIMEOUT))
+			s_LoggingSection.Enter();
+
+			try
 			{
-				s_LastMessage = message;
-				try
-				{
 #if SIMPLSHARP
-					message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_GREEN);
-					ErrorLog.Ok(message);
+				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_GREEN);
+				ErrorLog.Ok(message);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Green;
                 System.Console.Error.WriteLine(message);
 			    System.Console.ResetColor();
 #endif
-				}
-				finally
-				{
-					s_SafeMutex.ReleaseMutex();
-				}
 			}
-			else
+			finally
 			{
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, "Deadlock in Error Logging, last logged message is:");
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, StringUtils.ToMixedReadableHexLiteral(s_LastMessage));
+				s_LoggingSection.Leave();
 			}
 		}
 
@@ -163,14 +133,13 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void Exception(Exception ex, string message)
 		{
-			if (s_SafeMutex.WaitForMutex(MUTEX_TIMEOUT))
+			s_LoggingSection.Enter();
+
+			try
 			{
-				s_LastMessage = message;
-				try
-				{
 #if SIMPLSHARP
-					message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_YELLOW_ON_RED_BACKGROUND);
-					ErrorLog.Exception(message, ex);
+				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_YELLOW_ON_RED_BACKGROUND);
+				ErrorLog.Exception(message, ex);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Yellow;
                 System.Console.BackgroundColor = ConsoleColor.Red;
@@ -178,16 +147,10 @@ namespace ICD.Common.Utils
 			    System.Console.ResetColor();
                 System.Console.Error.WriteLine(ex.StackTrace);
 #endif
-				}
-				finally
-				{
-					s_SafeMutex.ReleaseMutex();
-				}
 			}
-			else
+			finally
 			{
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, "Deadlock in Error Logging, last logged message is:");
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, StringUtils.ToMixedReadableHexLiteral(s_LastMessage));
+				s_LoggingSection.Leave();
 			}
 		}
 
@@ -201,29 +164,22 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void Info(string message)
 		{
-			if (s_SafeMutex.WaitForMutex(MUTEX_TIMEOUT))
+			s_LoggingSection.Enter();
+
+			try
 			{
-				s_LastMessage = message;
-				try
-				{
 #if SIMPLSHARP
-					message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_CYAN);
-					ErrorLog.Info(message);
+				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_CYAN);
+				ErrorLog.Info(message);
 #else
 			    System.Console.ForegroundColor = ConsoleColor.Cyan;
                 System.Console.Error.WriteLine(message);
 			    System.Console.ResetColor();
 #endif
-				}
-				finally
-				{
-					s_SafeMutex.ReleaseMutex();
-				}
 			}
-			else
+			finally
 			{
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, "Deadlock in Error Logging, last logged message is:");
-				IcdConsole.PrintLine(eConsoleColor.YellowOnRed, StringUtils.ToMixedReadableHexLiteral(s_LastMessage));
+				s_LoggingSection.Leave();
 			}
 		}
 
