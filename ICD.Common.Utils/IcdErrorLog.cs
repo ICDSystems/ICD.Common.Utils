@@ -26,7 +26,7 @@ namespace ICD.Common.Utils
 			try
 			{
 #if SIMPLSHARP
-				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_RED);
+				message = eConsoleColor.Red.FormatAnsi(message);
 				ErrorLog.Error(message);
 #else
 				Console.Write("Error  - {0} - ", IcdEnvironment.GetLocalTime());
@@ -55,7 +55,7 @@ namespace ICD.Common.Utils
 			try
 			{
 #if SIMPLSHARP
-				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_YELLOW);
+				message = eConsoleColor.Yellow.FormatAnsi(message);
 				ErrorLog.Warn(message);
 #else
 				Console.Write("Warn   - {0} - ", IcdEnvironment.GetLocalTime());
@@ -84,7 +84,7 @@ namespace ICD.Common.Utils
 			try
 			{
 #if SIMPLSHARP
-				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_BLUE);
+				message = eConsoleColor.Blue.FormatAnsi(message);
 				ErrorLog.Notice(message);
 #else
 				Console.Write("Notice - {0} - ", IcdEnvironment.GetLocalTime());
@@ -113,7 +113,7 @@ namespace ICD.Common.Utils
 			try
 			{
 #if SIMPLSHARP
-				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_GREEN);
+				message = eConsoleColor.Green.FormatAnsi(message);
 				ErrorLog.Ok(message);
 #else
 				Console.Write("OK     - {0} - ", IcdEnvironment.GetLocalTime());
@@ -142,7 +142,7 @@ namespace ICD.Common.Utils
 			try
 			{
 #if SIMPLSHARP
-				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_YELLOW_ON_RED_BACKGROUND);
+				message = eConsoleColor.YellowOnRed.FormatAnsi(message);
 				ErrorLog.Exception(message, ex);
 #else
 				Console.Write("Except - {0} - ", IcdEnvironment.GetLocalTime());
@@ -174,7 +174,7 @@ namespace ICD.Common.Utils
 			try
 			{
 #if SIMPLSHARP
-				message = FormatConsoleColor(message, ConsoleColorExtensions.CONSOLE_CYAN);
+				message = eConsoleColor.Cyan.FormatAnsi(message);
 				ErrorLog.Info(message);
 #else
 				Console.Write("Info   - {0} - ", IcdEnvironment.GetLocalTime());
@@ -193,17 +193,6 @@ namespace ICD.Common.Utils
 		public static void Info(string message, params object[] args)
 		{
 			Info(string.Format(message, args));
-		}
-
-		/// <summary>
-		/// Formats the text with the given console color.
-		/// </summary>
-		/// <param name="text"></param>
-		/// <param name="color"></param>
-		/// <returns></returns>
-		private static string FormatConsoleColor(string text, string color)
-		{
-			return string.Format("{0}{1}{2}", color, text, ConsoleColorExtensions.CONSOLE_RESET);
 		}
 	}
 }

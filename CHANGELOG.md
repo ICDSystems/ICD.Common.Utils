@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+ - Fixed a bug where ANSI color encoded strings with percentages were being scrambled
+
 ## [9.7.0] - 2019-08-15
 ### Added
  - Added logger timestamps to non simplsharp programs

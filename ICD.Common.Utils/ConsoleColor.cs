@@ -28,6 +28,9 @@ namespace ICD.Common.Utils
 
 		public static string FormatAnsi(this eConsoleColor extends, string data)
 		{
+			// % needs to be escaped or weird things happen
+			data = string.IsNullOrEmpty(data) ? data : data.Replace("%", "%%");
+
 			return string.Format("{0}{1}{2}", extends.ToAnsiPrefix(), data, CONSOLE_RESET);
 		}
 
