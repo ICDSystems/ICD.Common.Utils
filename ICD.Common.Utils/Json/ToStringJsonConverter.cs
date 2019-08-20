@@ -43,12 +43,19 @@ namespace ICD.Common.Utils.Json
 		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
 		{
 			MethodInfo parse = GetParseMethod(objectType);
-			if (parse != null)
-				return parse.Invoke(null, new[] {reader.Value});
-
-			throw new ArgumentException(
+			if (parse == null)
+				throw new ArgumentException(
 				string.Format("{0} does not have a 'static {0} Parse(string)' method.", objectType.Name),
 				"objectType");
+
+			try
+			{
+				return parse.Invoke(null, new[] { reader.Value });
+			}
+			catch (TargetInvocationException e)
+			{
+				throw e.InnerException;
+			}
 		}
 
 		#endregion
