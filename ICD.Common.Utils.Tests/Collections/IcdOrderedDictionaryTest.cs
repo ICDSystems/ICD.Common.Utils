@@ -69,16 +69,26 @@ namespace ICD.Common.Utils.Tests.Collections
 		[Test]
 		public void IndexerTest()
 		{
-			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>
-			{
-				{0, 0},
-				{1, 10},
-				{-1, -10}
-			};
+			// ReSharper disable UseObjectOrCollectionInitializer
+			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>();
+			// ReSharper restore UseObjectOrCollectionInitializer
+
+			dict[0] = 0;
+			dict[1] = 10;
+			dict[-1] = -10;
+			dict[-1] = -11;
 
 			Assert.AreEqual(0, dict[0]);
 			Assert.AreEqual(10, dict[1]);
-			Assert.AreEqual(-10, dict[-1]);
+			Assert.AreEqual(-11, dict[-1]);
+
+			Assert.AreEqual(3, dict.Count);
+
+			int[] expectedKeys = {-1, 0, 1 };
+			int[] expectedValues = {-11, 0, 10};
+
+			Assert.AreEqual(expectedKeys, dict.Keys.ToArray());
+			Assert.AreEqual(expectedValues, dict.Values.ToArray());
 		}
 
 		#endregion

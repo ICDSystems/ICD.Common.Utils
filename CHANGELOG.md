@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+ - Fixed a bug with the IcdOrderedDict index setter that was creating additional values
+
 ## [8.7.0] - 2019-06-24
 ### Added
  - IcdXmlException exposes line number and position properties
