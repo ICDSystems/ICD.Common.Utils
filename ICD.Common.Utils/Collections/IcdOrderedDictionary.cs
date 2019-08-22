@@ -32,13 +32,8 @@ namespace ICD.Common.Utils.Collections
 				if (key == null)
 					throw new ArgumentNullException("key");
 
-				if (!ContainsKey(key))
-				{
-					int index = m_OrderedKeys.AddSorted(key, m_Comparer);
-					m_ValuesOrderedByKey.Insert(index, value);
-				}
-
-				m_Dictionary[key] = value;
+				Remove(key);
+				Add(key, value);
 			}
 		}
 
@@ -109,9 +104,12 @@ namespace ICD.Common.Utils.Collections
 				throw new ArgumentNullException("key");
 
 			if (m_Dictionary.ContainsKey(key))
-				throw new ArgumentException("An item with the same key has already been added.", "key");
+				throw new ArgumentOutOfRangeException("key", "An item with the same key has already been added.");
 
-			this[key] = value;
+			int index = m_OrderedKeys.AddSorted(key, m_Comparer);
+			m_ValuesOrderedByKey.Insert(index, value);
+
+			m_Dictionary[key] = value;
 		}
 
 		public void Clear()
