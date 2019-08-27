@@ -5,7 +5,6 @@ using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ICD.Common.Utils.Json
 {
@@ -17,63 +16,6 @@ namespace ICD.Common.Utils.Json
 	{
 		private const string MESSAGE_NAME_PROPERTY = "m";
 		private const string MESSAGE_DATA_PROPERTY = "d";
-
-		/// <summary>
-		/// Gets the data as a DateTime value.
-		/// </summary>
-		/// <param name="data"></param>
-		/// <returns></returns>
-		public static DateTime ParseDateTime(string data)
-		{
-			return DateTime.Parse(data);
-		}
-
-		/// <summary>
-		/// Gets the token as a DateTime value.
-		/// </summary>
-		/// <param name="token"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public static DateTime ParseDateTime(JToken token)
-		{
-			if (token == null)
-				throw new ArgumentNullException("token");
-
-#if SIMPLSHARP
-			return ParseDateTime((string)token);
-#else
-			return (DateTime)token;
-#endif
-		}
-
-		/// <summary>
-		/// Gets the token as a DateTime value.
-		/// </summary>
-		/// <param name="token"></param>
-		/// <param name="output"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public static bool TryParseDateTime(JToken token, out DateTime output)
-		{
-			if (token == null)
-				throw new ArgumentNullException("token");
-
-			output = default(DateTime);
-
-			try
-			{
-				output = ParseDateTime(token);
-				return true;
-			}
-			catch (FormatException)
-			{
-				return false;
-			}
-			catch (InvalidCastException)
-			{
-				return false;
-			}
-		}
 
 		/// <summary>
 		/// Serializes the given item and formats the JSON into a human-readable form.
