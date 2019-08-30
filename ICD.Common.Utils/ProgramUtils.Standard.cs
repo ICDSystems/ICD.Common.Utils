@@ -55,6 +55,15 @@ namespace ICD.Common.Utils
 				return Assembly.GetEntryAssembly().GetName().Name;
 			}
 		}
-	}
+
+		/// <summary>
+		/// Gets the date and time the program was installed.
+		/// </summary>
+		[PublicAPI]
+		public static DateTime ProgramInstallDate
+		{
+			get { return IcdFile.GetCreationTime(PathUtils.Join(PathUtils.ProgramPath, ProgramFile)); }
+		}
+    }
 }
 #endif
