@@ -142,8 +142,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static TimeSpan GetSystemUptime()
 		{
-			// TODO
-			return default(TimeSpan);
+			return TimeSpan.FromMilliseconds(Environment.TickCount);
 		}
 
 		/// <summary>
@@ -153,8 +152,8 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static TimeSpan GetProgramUptime()
 		{
-			// TODO
-			return default(TimeSpan);
+			var current = System.Diagnostics.Process.GetCurrentProcess();
+			return IcdEnvironment.GetLocalTime() - current.StartTime;
 		}
 
 		#endregion
