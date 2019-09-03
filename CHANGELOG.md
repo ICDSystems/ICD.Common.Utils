@@ -5,9 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [9.8.0] - 2019-09-03
 ### Added
  - Added Public API Properties to get the program install date based on the creation date of core dll file for NetStandard and SimplSharp
  - Implemented processor utils for NetStandard to get the system uptime and the program uptime
+ - Added methods for deserializing an XML array
 
 ### Changed
  - Fixed a bug where ANSI color encoded strings with percentages were being scrambled
