@@ -1,4 +1,5 @@
-﻿using ICD.Common.Utils.Services;
+﻿using ICD.Common.Utils.IO;
+using ICD.Common.Utils.Services;
 using ICD.Common.Utils.Services.Logging;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
@@ -84,6 +85,16 @@ namespace ICD.Common.Utils
 				ProgComments.TryGetValue(APPLICATION_NAME_SIMPL_KEY, out output);
 				return output;
 			}
+		}
+
+		/// <summary>
+		/// Returns the date and time the program was installed.
+		/// </summary>
+		/// <returns></returns>
+		[PublicAPI]
+		public static DateTime ProgramInstallDate
+		{
+			get { return IcdFile.GetCreationTime(PathUtils.Join(PathUtils.ProgramPath, ProgramFile)); }
 		}
 
 		/// <summary>
