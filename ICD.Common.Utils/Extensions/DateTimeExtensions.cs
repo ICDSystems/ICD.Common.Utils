@@ -11,6 +11,16 @@ namespace ICD.Common.Utils.Extensions
 	public static class DateTimeExtensions
 	{
 		/// <summary>
+		/// Gets the hour in 12 hour format (1 through 12).
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static int Get12Hour(this DateTime extends)
+		{
+			return ((extends.Hour + 11) % 12) + 1;
+		}
+
+		/// <summary>
 		/// Replacement for missing DateTime.ToShortTimeString() absent from NetStandard.
 		/// </summary>
 		/// <param name="extends"></param>

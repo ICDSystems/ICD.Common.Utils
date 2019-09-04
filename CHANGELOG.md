@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added an extension method for getting the hour in 12 hour format
+
 ## [9.8.0] - 2019-09-03
 ### Added
  - Added Public API Properties to get the program install date based on the creation date of core dll file for NetStandard and SimplSharp
