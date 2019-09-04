@@ -190,6 +190,16 @@ namespace ICD.Common.Utils
 			return CrestronEnvironment.GetLocalTime();
 		}
 
+		public static void SetLocalTime(DateTime localTime)
+		{
+			CrestronEnvironment.SetTimeAndDate((ushort)localTime.Hour,
+			                                   (ushort)localTime.Minute,
+			                                   (ushort)localTime.Second,
+			                                   (ushort)localTime.Month,
+			                                   (ushort)localTime.Day,
+			                                   (ushort)localTime.Year);
+		}
+
 		public static eEthernetEventType GetEthernetEventType(Crestron.SimplSharp.eEthernetEventType type)
 		{
 			switch (type)

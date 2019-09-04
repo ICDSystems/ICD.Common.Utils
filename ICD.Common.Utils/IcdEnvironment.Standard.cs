@@ -79,6 +79,16 @@ namespace ICD.Common.Utils
 			return DateTime.Now;
 		}
 
+		public static void SetLocalTime(DateTime localTime)
+		{
+#if DEBUG
+			IcdConsole.PrintLine(eConsoleColor.Magenta, "Debug Build - Skipped setting local time to {0}",
+			                     localTime.ToString("s"));
+#else
+			throw new NotSupportedException();
+#endif
+		}
+
 		/// <summary>
 		/// Converts 12 digit address to XX:XX:XX... format
 		/// </summary>
