@@ -72,9 +72,9 @@ namespace ICD.Common.Utils.Tests
 		[TestCase(9, 3, 0)]
 		[TestCase(3, 2, 1)]
 		[TestCase(-3, 2, 1)]
-		public void ModTest(int value, int mod, int expected)
+		public void ModulusTest(int value, int mod, int expected)
 		{
-			Assert.AreEqual(expected, MathUtils.Mod(value, mod));
+			Assert.AreEqual(expected, MathUtils.Modulus(value, mod));
 		}
     }
 }
