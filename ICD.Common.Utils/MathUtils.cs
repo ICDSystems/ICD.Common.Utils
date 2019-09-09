@@ -216,6 +216,7 @@ namespace ICD.Common.Utils
 		/// <param name="number"></param>
 		/// <param name="mod"></param>
 		/// <returns></returns>
+		/// <remarks>method name can't be "Mod", due to S+ compatability issues</remarks>
 		public static int Modulus(int number, int mod)
 		{
 			int remainder = number % mod;
