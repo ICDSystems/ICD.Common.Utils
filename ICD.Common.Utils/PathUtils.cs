@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
@@ -48,7 +49,7 @@ namespace ICD.Common.Utils
 #elif LINUX
 				return Join(RootPath, "opt", "ICD.Connect");
 #else
-				return Join(RootPath, "ProgramData", "ICD.Connect");
+				return Join(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "ICD.Connect");
 #endif
 			}
 		}
