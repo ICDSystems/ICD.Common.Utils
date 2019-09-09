@@ -9,7 +9,7 @@ namespace ICD.Common.Utils.Tests
 		[TestCase(0, 12)]
 		[TestCase(12, 12)]
 		[TestCase(23, 11)]
-		public void Get12Hour(int hour, int expected)
+		public void To12HourTest(int hour, int expected)
 		{
 			Assert.AreEqual(expected, DateTimeUtils.To12Hour(hour));
 		}
