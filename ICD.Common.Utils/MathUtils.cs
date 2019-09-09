@@ -216,7 +216,7 @@ namespace ICD.Common.Utils
 		/// <param name="number"></param>
 		/// <param name="mod"></param>
 		/// <returns></returns>
-		public static int Mod(int number, int mod)
+		public static int Modulus(int number, int mod)
 		{
 			int remainder = number % mod;
 			return remainder < 0 ? remainder + mod : remainder;
