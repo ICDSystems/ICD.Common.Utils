@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Added a method for converting 24 hour to 12 hour format
  - Added a method for determining if a culture uses 24 hour format
- - Added math util method for mod
+ - Added math util method for modulus
  - Added TimeSpan extension methods for cycling hours and minutes without modifying the day
 
 ## [9.8.0] - 2019-09-03
