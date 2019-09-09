@@ -9,7 +9,7 @@
 		/// <returns></returns>
 		public static int To12Hour(int hour)
 		{
-			return MathUtils.Mod(hour + 11, 12) + 1;
+			return MathUtils.Modulus(hour + 11, 12) + 1;
 		}
 	}
 }

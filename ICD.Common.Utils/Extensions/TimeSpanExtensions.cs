@@ -34,7 +34,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		public static TimeSpan AddHoursAndWrap(this TimeSpan extends, int hours)
 		{
-			hours = MathUtils.Mod(hours + extends.Hours, 24);
+			hours = MathUtils.Modulus(hours + extends.Hours, 24);
 			return new TimeSpan(extends.Days, hours, extends.Minutes, extends.Seconds, extends.Milliseconds);
 		}
 
@@ -49,8 +49,8 @@ namespace ICD.Common.Utils.Extensions
 			int currentHour = extends.Hours;
 			bool am = extends.Hours < 12;
 
-			int current12Hour = MathUtils.Mod(currentHour, 12);
-			int new12Hour = MathUtils.Mod(current12Hour + hours, 12);
+			int current12Hour = MathUtils.Modulus(currentHour, 12);
+			int new12Hour = MathUtils.Modulus(current12Hour + hours, 12);
 
 			return am
 				? new TimeSpan(extends.Days, new12Hour, extends.Minutes, extends.Seconds, extends.Milliseconds)
@@ -65,7 +65,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		public static TimeSpan AddMinutesAndWrap(this TimeSpan extends, int minutes)
 		{
-			minutes = MathUtils.Mod(minutes + extends.Minutes, 60);
+			minutes = MathUtils.Modulus(minutes + extends.Minutes, 60);
 			return new TimeSpan(extends.Days, extends.Hours, minutes, extends.Seconds, extends.Milliseconds);
 		}
 	}
