@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Common.Utils.Extensions;
+#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharp;
@@ -198,6 +199,8 @@ namespace ICD.Common.Utils
 			                                   (ushort)localTime.Month,
 			                                   (ushort)localTime.Day,
 			                                   (ushort)localTime.Year);
+
+			OnSystemDateTimeChanged.Raise(null);
 		}
 
 		public static eEthernetEventType GetEthernetEventType(Crestron.SimplSharp.eEthernetEventType type)

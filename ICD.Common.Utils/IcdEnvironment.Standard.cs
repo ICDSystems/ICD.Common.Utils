@@ -86,6 +86,8 @@ namespace ICD.Common.Utils
 			                     localTime.ToString("s"));
 #else
 			throw new NotSupportedException();
+
+			OnSystemDateTimeChanged.Raise(null);
 #endif
 		}
 
