@@ -14,10 +14,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added a dictionary extension method for getting or adding a new value via func
  - Added CultureInfo extensions for converting between 12 hour and 24 hour time formatting
  - Added environment methods for setting the current date and time
+ - Added BinarySearch extension method for all IList types
 
 ### Changed
  - The Root Config path in Net Standard will now be the ICD.Connect folder in the current environments ProgramData directory
  - Fixed a bug where CultureInfo was not being cloned correctly
+ - List AddSorted extensions now work for all IList types
 
 ## [9.8.0] - 2019-09-03
 ### Added
