@@ -204,16 +204,17 @@ namespace ICD.Common.Utils.Globalization
 		{
 			get
 			{
-				if (m_IsResident)
-					return base.DateTimeFormat;
-
-				ThrowIfNeutralCulture(this);
-
 				if (m_DatetimeFormat == null)
 				{
+					if (m_IsResident)
+						return base.DateTimeFormat;
+
+					ThrowIfNeutralCulture(this);
+
 					DateTimeFormatInfo dateTimeFormatInfo = GetDateTimeFormat(m_DatetimeFormatId);
 					if (IsReadOnly)
 						dateTimeFormatInfo = DateTimeFormatInfo.ReadOnly(dateTimeFormatInfo);
+
 					m_DatetimeFormat = dateTimeFormatInfo;
 				}
 				return m_DatetimeFormat;
@@ -221,13 +222,13 @@ namespace ICD.Common.Utils.Globalization
 			set
 			{
 				if (m_IsResident)
-				{
 					base.DateTimeFormat = value;
-					return;
-				}
+
 				ThrowIfReadOnly();
+
 				if (value == null)
 					throw new ArgumentException("value");
+
 				m_DatetimeFormat = value;
 			}
 		}
@@ -246,16 +247,17 @@ namespace ICD.Common.Utils.Globalization
 		{
 			get
 			{
-				if (m_IsResident)
-					return base.NumberFormat;
-
-				ThrowIfNeutralCulture(this);
-
 				if (m_NumberFormat == null)
 				{
+					if (m_IsResident)
+						return base.NumberFormat;
+
+					ThrowIfNeutralCulture(this);
+
 					NumberFormatInfo numberFormatInfo = GetNumberFormat(m_NumberFormatId);
 					if (IsReadOnly)
 						numberFormatInfo = NumberFormatInfo.ReadOnly(numberFormatInfo);
+
 					m_NumberFormat = numberFormatInfo;
 				}
 				return m_NumberFormat;
@@ -263,13 +265,13 @@ namespace ICD.Common.Utils.Globalization
 			set
 			{
 				if (m_IsResident)
-				{
 					base.NumberFormat = value;
-					return;
-				}
+
 				ThrowIfReadOnly();
+
 				if (value == null)
 					throw new ArgumentException("value");
+
 				m_NumberFormat = value;
 			}
 		}
@@ -851,24 +853,25 @@ namespace ICD.Common.Utils.Globalization
 				try
 				{
 					m_CompareInfo = ci.CompareInfo;
-					goto IL_CE;
 				}
 				catch (PlatformNotSupportedException)
 				{
 					m_CompareInfo = CultureInfo.InvariantCulture.CompareInfo;
-					goto IL_CE;
 				}
 			}
-			m_Calendar = icdCultureInfo.m_Calendar;
-			m_CalendarType = icdCultureInfo.m_CalendarType;
-			m_GregorianCalendarType = icdCultureInfo.m_GregorianCalendarType;
-			m_OptionalCalendars = icdCultureInfo.m_OptionalCalendars;
-			m_OptionalCalendarTypes = icdCultureInfo.m_OptionalCalendarTypes;
-			m_OptionalGregorianCalendarTypes = icdCultureInfo.m_OptionalGregorianCalendarTypes;
-			m_Parent = icdCultureInfo.m_Parent;
-			m_TextInfo = icdCultureInfo.m_TextInfo;
-			m_CompareInfo = icdCultureInfo.m_CompareInfo;
-			IL_CE:
+			else
+			{
+				m_Calendar = icdCultureInfo.m_Calendar;
+				m_CalendarType = icdCultureInfo.m_CalendarType;
+				m_GregorianCalendarType = icdCultureInfo.m_GregorianCalendarType;
+				m_OptionalCalendars = icdCultureInfo.m_OptionalCalendars;
+				m_OptionalCalendarTypes = icdCultureInfo.m_OptionalCalendarTypes;
+				m_OptionalGregorianCalendarTypes = icdCultureInfo.m_OptionalGregorianCalendarTypes;
+				m_Parent = icdCultureInfo.m_Parent;
+				m_TextInfo = icdCultureInfo.m_TextInfo;
+				m_CompareInfo = icdCultureInfo.m_CompareInfo;
+			}
+			
 			m_EnglishName = ci.EnglishName;
 			m_IsNeutralCulture = ci.IsNeutralCulture;
 			m_Lcid = ci.LCID;
@@ -877,19 +880,21 @@ namespace ICD.Common.Utils.Globalization
 			m_ThreeLetterIsoLanguageName = ci.ThreeLetterISOLanguageName;
 			m_ThreeLetterWindowsLanguageName = ci.ThreeLetterWindowsLanguageName;
 			m_TwoLetterIsoLanguageName = ci.TwoLetterISOLanguageName;
-			if (!m_IsNeutralCulture)
+
+			if (m_IsNeutralCulture)
+				return;
+
+			if (icdCultureInfo == null)
 			{
-				if (icdCultureInfo == null)
-				{
-					m_DatetimeFormat = ci.DateTimeFormat;
-					m_NumberFormat = ci.NumberFormat;
-					return;
-				}
-				m_DatetimeFormatId = icdCultureInfo.m_DatetimeFormatId;
-				m_DatetimeFormat = icdCultureInfo.m_DatetimeFormat;
-				m_NumberFormatId = icdCultureInfo.m_NumberFormatId;
-				m_NumberFormat = icdCultureInfo.m_NumberFormat;
+				m_DatetimeFormat = ci.DateTimeFormat.Clone() as DateTimeFormatInfo;
+				m_NumberFormat = ci.NumberFormat.Clone() as NumberFormatInfo;
+				return;
 			}
+
+			m_DatetimeFormatId = icdCultureInfo.m_DatetimeFormatId;
+			m_DatetimeFormat = icdCultureInfo.m_DatetimeFormat.Clone() as DateTimeFormatInfo;
+			m_NumberFormatId = icdCultureInfo.m_NumberFormatId;
+			m_NumberFormat = icdCultureInfo.m_NumberFormat.Clone() as NumberFormatInfo;
 		}
 
 		#region Methods

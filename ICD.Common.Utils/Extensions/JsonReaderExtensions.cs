@@ -1,6 +1,5 @@
 ﻿using System;
 using ICD.Common.Properties;
-using ICD.Common.Utils.Json;
 using Newtonsoft.Json;
 
 namespace ICD.Common.Utils.Extensions
@@ -21,7 +20,12 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			JsonSerializer serializer = new JsonSerializer();
+			JsonSerializer serializer =
+#if SIMPLSHARP
+				new JsonSerializer();
+#else
+				JsonSerializer.CreateDefault();
+#endif
 			return extends.ReadAsObject<T>(serializer);
 		}
 
@@ -145,7 +149,13 @@ namespace ICD.Common.Utils.Extensions
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
-			
+
+#if !SIMPLSHARP
+			// Newer versions of NewtonSoft try to be helpful and interpret strings as DateTimes without any consideration for different DateTime formats.
+			if (extends.TokenType == JsonToken.Date && extends.DateParseHandling != DateParseHandling.None)
+				throw new InvalidOperationException("DateParseHandling needs to be set to None");
+#endif
+
 			if (!extends.TokenType.IsPrimitive())
 				throw new FormatException("Expected primitive token type but got " + extends.TokenType);
 
@@ -213,12 +223,36 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-#if SIMPLSHARP
-			string stringValue = extends.GetValueAsString();
-			return JsonUtils.ParseDateTime(stringValue);
-#else
-			return (DateTime)extends.Value;
+#if !SIMPLSHARP
+			// Newer NewtonSoft tries to be helpful by assuming that anything that looks like a DateTime must be a date.
+			if (extends.DateParseHandling != DateParseHandling.None)
+				return (DateTime)extends.Value;
 #endif
+
+			string stringValue = extends.GetValueAsString();
+			return DateTime.Parse(stringValue);
+		}
+
+		/// <summary>
+		/// Gets the current value as a date.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="format"></param>
+		/// <param name="provider"></param>
+		/// <returns></returns>
+		public static DateTime GetValueAsDateTimeExact(this JsonReader extends, string format, IFormatProvider provider)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+#if !SIMPLSHARP
+			// Newer NewtonSoft tries to be helpful by assuming that anything that looks like a DateTime must be a date.
+			if (extends.DateParseHandling != DateParseHandling.None)
+				throw new InvalidOperationException("DateParseHandling needs to be set to None");
+#endif
+
+			string stringValue = extends.GetValueAsString();
+			return DateTime.ParseExact(stringValue, format, provider);
 		}
 	}
 }

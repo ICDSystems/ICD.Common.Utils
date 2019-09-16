@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using ICD.Common.Utils.IO;
 #if SIMPLSHARP
@@ -110,6 +112,64 @@ namespace ICD.Common.Utils.Xml
 			IXmlConverter converter = XmlConverterAttribute.GetConverterForType(type);
 
 			return converter.ReadXml(reader);
+		}
+
+		/// <summary>
+		/// Deserializes the child elements as items in an array.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="reader"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> DeserializeArray<T>(IcdXmlReader reader)
+		{
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			return DeserializeArray(typeof(T), reader).Cast<T>();
+		}
+
+		/// <summary>
+		/// Deserializes the child elements as items in an array.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="reader"></param>
+		/// <returns></returns>
+		public static IEnumerable<object> DeserializeArray(Type type, IcdXmlReader reader)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			if (reader.NodeType != XmlNodeType.Element)
+				throw new FormatException("Expected start element for array");
+
+			string arrayName = reader.Name;
+
+			// Read into the first element
+			do
+			{
+				reader.Read();
+			} while (reader.NodeType != XmlNodeType.Element && reader.NodeType != XmlNodeType.EndElement);
+
+			// Empty array
+			if (reader.NodeType == XmlNodeType.EndElement)
+				yield break;
+
+			// Read the items
+			IXmlConverter converter = XmlConverterAttribute.GetConverterForType(type);
+			while (reader.NodeType != XmlNodeType.EndElement)
+			{
+				yield return converter.ReadXml(reader);
+				reader.SkipInsignificantWhitespace();
+			}
+
+			if (reader.NodeType != XmlNodeType.EndElement || reader.Name != arrayName)
+				throw new FormatException("Expected end element for array");
+
+			// Read out of the array end element
+			reader.Read();
 		}
 
 		public static string ToString(int value)

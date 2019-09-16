@@ -209,5 +209,18 @@ namespace ICD.Common.Utils
 
 			return nearest.Aggregate((x, y) => Math.Abs(x - number) < Math.Abs(y - number) ? x : y);
 		}
+
+		/// <summary>
+		/// Calculates the modulus of the given number.
+		/// </summary>
+		/// <param name="number"></param>
+		/// <param name="mod"></param>
+		/// <returns></returns>
+		/// <remarks>method name can't be "Mod", due to S+ compatability issues</remarks>
+		public static int Modulus(int number, int mod)
+		{
+			int remainder = number % mod;
+			return remainder < 0 ? remainder + mod : remainder;
+		}
 	}
 }

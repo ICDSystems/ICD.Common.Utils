@@ -62,6 +62,11 @@ namespace ICD.Common.Utils
 		/// </summary>
 		public static event EventHandler OnProgramInitializationComplete;
 
+		/// <summary>
+		/// Raised when the system date/time has been set.
+		/// </summary>
+		public static event EventHandler OnSystemDateTimeChanged;
+
 		private static readonly SafeCriticalSection s_ProgramInitializationSection = new SafeCriticalSection();
 		private static bool s_ProgramInitializationComplete;
 

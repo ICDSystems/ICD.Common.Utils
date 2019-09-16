@@ -6,8 +6,30 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added a method for converting 24 hour to 12 hour format
+ - Added a method for determining if a culture uses 24 hour format
+ - Added math util method for modulus
+ - Added TimeSpan extension methods for cycling hours and minutes without modifying the day
+ - Added a dictionary extension method for getting or adding a new value via func
+ - Added CultureInfo extensions for converting between 12 hour and 24 hour time formatting
+ - Added environment methods for setting the current date and time
+ - Added BinarySearch extension method for all IList types
+
+### Changed
+ - The Root Config path in Net Standard will now be the ICD.Connect folder in the current environments ProgramData directory
+ - Fixed a bug where CultureInfo was not being cloned correctly
+ - List AddSorted extensions now work for all IList types
+
+## [9.8.0] - 2019-09-03
+### Added
+ - Added Public API Properties to get the program install date based on the creation date of core dll file for NetStandard and SimplSharp
+ - Implemented processor utils for NetStandard to get the system uptime and the program uptime
+ - Added methods for deserializing an XML array
+
 ### Changed
  - Fixed a bug where ANSI color encoded strings with percentages were being scrambled
+ - Improvements to JSON DateTime parsing, particularly in Net Standard
 
 ## [9.7.0] - 2019-08-15
 ### Added

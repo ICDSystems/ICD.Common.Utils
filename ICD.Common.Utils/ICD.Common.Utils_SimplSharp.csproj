@@ -86,6 +86,7 @@
     <Compile Include="Comparers\PredicateComparer.cs" />
     <Compile Include="Comparers\SequenceComparer.cs" />
     <Compile Include="ConsoleColor.cs" />
+    <Compile Include="DateTimeUtils.cs" />
     <Compile Include="Email\EmailClient.cs" />
     <Compile Include="Email\eMailErrorCode.cs" />
     <Compile Include="Email\EmailStringCollection.cs" />
@@ -109,6 +110,7 @@
     <None Include="ObfuscationSettings.cs" />
     <Compile Include="Extensions\BoolExtensions.cs" />
     <Compile Include="Extensions\ByteExtensions.cs" />
+    <Compile Include="Extensions\CultureInfoExtensions.cs" />
     <Compile Include="Extensions\DayOfWeekExtensions.cs" />
     <Compile Include="Extensions\JsonSerializerExtensions.cs" />
     <Compile Include="Extensions\JsonTokenExtensions.cs" />

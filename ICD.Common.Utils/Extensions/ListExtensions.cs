@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Comparers;
 
@@ -18,7 +17,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="items"></param>
 		[PublicAPI]
-		public static void AddSorted<T>(this List<T> extends, IEnumerable<T> items)
+		public static void AddSorted<T>(this IList<T> extends, IEnumerable<T> items)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -37,7 +36,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="items"></param>
 		/// <param name="comparer"></param>
 		[PublicAPI]
-		public static void AddSorted<T>(this List<T> extends, IEnumerable<T> items, IComparer<T> comparer)
+		public static void AddSorted<T>(this IList<T> extends, IEnumerable<T> items, IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -60,7 +59,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="items"></param>
 		/// <param name="predicate"></param>
 		[PublicAPI]
-		public static void AddSorted<T, TProp>(this List<T> extends, IEnumerable<T> items, Func<T, TProp> predicate)
+		public static void AddSorted<T, TProp>(this IList<T> extends, IEnumerable<T> items, Func<T, TProp> predicate)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -82,7 +81,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item"></param>
 		[PublicAPI]
-		public static int AddSorted<T>(this List<T> extends, T item)
+		public static int AddSorted<T>(this IList<T> extends, T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -98,7 +97,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <param name="comparer"></param>
 		[PublicAPI]
-		public static int AddSorted<T>(this List<T> extends, T item, IComparer<T> comparer)
+		public static int AddSorted<T>(this IList<T> extends, T item, IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -124,7 +123,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <param name="predicate"></param>
 		[PublicAPI]
-		public static int AddSorted<T, TProp>(this List<T> extends, T item, Func<T, TProp> predicate)
+		public static int AddSorted<T, TProp>(this IList<T> extends, T item, Func<T, TProp> predicate)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -137,44 +136,40 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Pads the list to the given total length.
+		/// Returns the index of the item in the list.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
-		/// <param name="totalLength"></param>
-		[PublicAPI]
-		public static void PadRight<T>(this List<T> extends, int totalLength)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (totalLength < 0)
-				throw new ArgumentOutOfRangeException("totalLength", "totalLength must be greater or equal to 0");
-
-			extends.PadRight(totalLength, default(T));
-		}
-
-		/// <summary>
-		/// Pads the list to the given total length with the given item.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="totalLength"></param>
 		/// <param name="item"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
 		[PublicAPI]
-		public static void PadRight<T>(this List<T> extends, int totalLength, T item)
+		public static int BinarySearch<T>(this IList<T> extends, T item, IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			if (totalLength < 0)
-				throw new ArgumentOutOfRangeException("totalLength", "totalLength must be greater or equal to 0");
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
 
-			int pad = totalLength - extends.Count;
-			if (pad <= 0)
-				return;
+			int lo = 0;
+			int hi = extends.Count - 1;
 
-			extends.AddRange(Enumerable.Repeat(item, pad));
+			while (lo <= hi)
+			{
+				int i = lo + ((hi - lo) >> 1);
+				int order = comparer.Compare(extends[i], item);
+
+				if (order == 0)
+					return i;
+
+				if (order < 0)
+					lo = i + 1;
+				else
+					hi = i - 1;
+			}
+
+			return ~lo;
 		}
 	}
 }

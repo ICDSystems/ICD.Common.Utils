@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Common.Utils.Extensions;
+#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharp;
@@ -188,6 +189,18 @@ namespace ICD.Common.Utils
 		public static DateTime GetLocalTime()
 		{
 			return CrestronEnvironment.GetLocalTime();
+		}
+
+		public static void SetLocalTime(DateTime localTime)
+		{
+			CrestronEnvironment.SetTimeAndDate((ushort)localTime.Hour,
+			                                   (ushort)localTime.Minute,
+			                                   (ushort)localTime.Second,
+			                                   (ushort)localTime.Month,
+			                                   (ushort)localTime.Day,
+			                                   (ushort)localTime.Year);
+
+			OnSystemDateTimeChanged.Raise(null);
 		}
 
 		public static eEthernetEventType GetEthernetEventType(Crestron.SimplSharp.eEthernetEventType type)
