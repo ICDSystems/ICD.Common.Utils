@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.9.0] - 2019-09-16
 ### Added
  - Added a method for converting 24 hour to 12 hour format
  - Added a method for determining if a culture uses 24 hour format
