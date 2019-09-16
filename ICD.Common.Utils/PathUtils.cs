@@ -85,6 +85,37 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Returns the absolute path to the program data directory.
+		/// </summary>
+		/// <value></value>
+		[PublicAPI]
+		public static string ProgramDataPath { get { return Join(RootConfigPath, ProgramDataDirectory); } }
+
+		/// <summary>
+		/// Returns the name of the program data directory.
+		/// This directory contains runtime program data that should be retained through deployments.
+		/// </summary>
+		public static string ProgramDataDirectory
+		{
+			get
+			{
+				switch (IcdEnvironment.RuntimeEnvironment)
+				{
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+					case IcdEnvironment.eRuntimeEnvironment.Standard:
+						return string.Format("Program{0:D2}Data", ProgramUtils.ProgramNumber);
+
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+						return "ProgramData";
+
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+		}
+
+		/// <summary>
 		/// Returns the absolute path to the common configuration directory.
 		/// </summary>
 		[PublicAPI]
