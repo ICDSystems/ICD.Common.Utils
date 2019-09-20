@@ -13,9 +13,10 @@ namespace ICD.Common.Utils
 			if (callback == null)
 				throw new ArgumentNullException("callback");
 
+			Enter();
+
 			try
 			{
-				Enter();
 				callback();
 			}
 			finally
@@ -35,9 +36,10 @@ namespace ICD.Common.Utils
 			if (callback == null)
 				throw new ArgumentNullException("callback");
 
+			Enter();
+
 			try
 			{
-				Enter();
 				return callback();
 			}
 			finally
