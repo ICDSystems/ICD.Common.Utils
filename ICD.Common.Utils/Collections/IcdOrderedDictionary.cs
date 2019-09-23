@@ -106,7 +106,7 @@ namespace ICD.Common.Utils.Collections
 			if (m_Dictionary.ContainsKey(key))
 				throw new ArgumentOutOfRangeException("key", "An item with the same key has already been added.");
 
-			int index = m_OrderedKeys.AddSorted(key, m_Comparer);
+			int index = m_OrderedKeys.InsertSorted(key, m_Comparer);
 			m_ValuesOrderedByKey.Insert(index, value);
 
 			m_Dictionary[key] = value;

@@ -8,14 +8,14 @@ namespace ICD.Common.Utils.Tests.Extensions
 	public sealed class ListExtensionsTest
 	{
 		[Test]
-		public void AddSortedTest()
+		public void InsertSortedTest()
 		{
 			List<int> testList = new List<int>();
 
-			Assert.AreEqual(0, testList.AddSorted(2));
-			Assert.AreEqual(1, testList.AddSorted(3));
-			Assert.AreEqual(0, testList.AddSorted(1));
-			Assert.AreEqual(1, testList.AddSorted(2));
+			Assert.AreEqual(0, testList.InsertSorted(2));
+			Assert.AreEqual(1, testList.InsertSorted(3));
+			Assert.AreEqual(0, testList.InsertSorted(1));
+			Assert.AreEqual(1, testList.InsertSorted(2));
 
 			Assert.AreEqual(4, testList.Count);
 			Assert.AreEqual(1, testList[0]);
@@ -25,15 +25,15 @@ namespace ICD.Common.Utils.Tests.Extensions
 		}
 
 		[Test]
-		public void AddSortedComparerTest()
+		public void InsertSortedComparerTest()
 		{
 			List<int> testList = new List<int>();
 			IComparer<int> comparer = new InverseComparer();
 
-			Assert.AreEqual(0, testList.AddSorted(2, comparer));
-			Assert.AreEqual(0, testList.AddSorted(3, comparer));
-			Assert.AreEqual(2, testList.AddSorted(1, comparer));
-			Assert.AreEqual(1, testList.AddSorted(2, comparer));
+			Assert.AreEqual(0, testList.InsertSorted(2, comparer));
+			Assert.AreEqual(0, testList.InsertSorted(3, comparer));
+			Assert.AreEqual(2, testList.InsertSorted(1, comparer));
+			Assert.AreEqual(1, testList.InsertSorted(2, comparer));
 
 			Assert.AreEqual(4, testList.Count);
 			Assert.AreEqual(3, testList[0]);

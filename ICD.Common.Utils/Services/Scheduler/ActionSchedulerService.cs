@@ -39,7 +39,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 			try
 			{
 				Subscribe(action);
-				m_Actions.AddSorted(action, a => a.NextRunTime);
+				m_Actions.InsertSorted(action, a => a.NextRunTime);
 			}
 			finally
 			{
@@ -195,7 +195,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 			try
 			{
 				m_Actions.Remove(action);
-				m_Actions.AddSorted(action, a => a.NextRunTime);
+				m_Actions.InsertSorted(action, a => a.NextRunTime);
 			}
 			finally
 			{

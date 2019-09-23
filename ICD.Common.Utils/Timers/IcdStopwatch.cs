@@ -178,7 +178,7 @@ namespace ICD.Common.Utils.Timers
 				long duration = stopwatch.ElapsedTicks;
 				stopwatch.Stop();
 
-				orderedMs.AddSorted(duration);
+				orderedMs.InsertSorted(duration);
 				totalTicks += duration;
 			}
 
