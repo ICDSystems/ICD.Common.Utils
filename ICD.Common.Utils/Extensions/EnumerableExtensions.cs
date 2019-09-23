@@ -810,11 +810,29 @@ namespace ICD.Common.Utils.Extensions
 			if (count < 0)
 				throw new ArgumentOutOfRangeException("count");
 
-			T[] array = new T[count];
-			int i = 0;
+			// Source is already an array
+			T[] arrayCast = extends as T[];
+			if (arrayCast != null)
+			{
+				T[] output = new T[count];
+				Array.Copy(arrayCast, output, count);
+				return output;
+			}
 
+			// Dumb sequence case
+			T[] array = new T[count];
+
+			int i = 0;
 			foreach (T item in extends)
+			{
 				array[i++] = item;
+				if (i >= count)
+					break;
+			}
+
+			if (i != count)
+				throw new ArgumentOutOfRangeException("count");
+
 			return array;
 		}
 
