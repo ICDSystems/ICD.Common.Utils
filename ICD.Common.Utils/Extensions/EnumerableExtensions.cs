@@ -733,6 +733,22 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Removes any null elements from an enumerable of nullable value types
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static IEnumerable<T> ExceptNulls<T>(this IEnumerable<T?> extends)
+			where T : struct
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.OfType<T>();
+		}
+
+		/// <summary>
 		/// Copies all the elements of the current one-dimensional array to the specified one-dimensional array
 		/// starting at the specified destination array index. The index is specified as a 32-bit integer.
 		/// </summary>
@@ -1242,22 +1258,6 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Removes any null elements from an enumerable of nullable value types
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="extends"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public static IEnumerable<T> ExceptNulls<T>(this IEnumerable<T?> extends)
-			where T : struct
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			return extends.OfType<T>();
-		}
-
-		/// <summary>
 		/// Computes the sum of a sequence of byte values.
 		/// </summary>
 		/// <param name="extends"></param>
@@ -1370,18 +1370,38 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Combines the corresponding elements of two sequences, producing a sequence of KeyValuePairs.
+		/// </summary>
+		/// <typeparam name="TFirst"></typeparam>
+		/// <typeparam name="TSecond"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="second"></param>
+		public static IEnumerable<KeyValuePair<TFirst, TSecond>> Zip<TFirst, TSecond>(this IEnumerable<TFirst> extends,
+		                                                                              IEnumerable<TSecond> second)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("first");
+
+			if (second == null)
+				throw new ArgumentNullException("second");
+
+			return extends.Zip(second, (f, s) => new KeyValuePair<TFirst, TSecond>(f, s));
+		}
+
+#if SIMPLSHARP
+		/// <summary>
 		/// Applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
 		/// </summary>
 		/// <typeparam name="TFirst"></typeparam>
 		/// <typeparam name="TSecond"></typeparam>
-		/// <param name="first"></param>
+		/// <param name="extends"></param>
 		/// <param name="second"></param>
 		/// <param name="callback"></param>
-		public static void Zip<TFirst, TSecond>(this IEnumerable<TFirst> first,
+		public static void Zip<TFirst, TSecond>(this IEnumerable<TFirst> extends,
 		                                        IEnumerable<TSecond> second,
 		                                        Action<TFirst, TSecond> callback)
 		{
-			if (first == null)
+			if (extends == null)
 				throw new ArgumentNullException("first");
 
 			if (second == null)
@@ -1390,7 +1410,7 @@ namespace ICD.Common.Utils.Extensions
 			if (callback == null)
 				throw new ArgumentNullException("callback");
 
-			using (IEnumerator<TFirst> enumerator1 = first.GetEnumerator())
+			using (IEnumerator<TFirst> enumerator1 = extends.GetEnumerator())
 			{
 				using (IEnumerator<TSecond> enumerator2 = second.GetEnumerator())
 				{
@@ -1399,51 +1419,6 @@ namespace ICD.Common.Utils.Extensions
 				}
 			}
 		}
-
-		// since S# can't do anonymous types
-		private struct TryParseStruct<T>
-		{
-			public readonly T value;
-			public readonly bool isParsed;
-
-			public TryParseStruct(T value, bool isParsed)
-			{
-				this.value = value;
-				this.isParsed = isParsed;
-			}
-		}
-
-		// since Func<...,T> can't specify `out` parameters
-		public delegate bool TryParseDelegate<T>(string input, out T output);
-
-		/// <summary>
-		/// Attempts to parse each value of the enumerable,
-		/// throwing away the values that don't parse correctly.
-		/// </summary>
-		/// <typeparam name="T">type to parse to</typeparam>
-		/// <param name="extends">enumerable of strings to parse</param>
-		/// <param name="tryParseFunc">TryParse function for given type</param>
-		/// <returns>enumerable of successfully parsed values</returns>
-		public static IEnumerable<T> TryParseSkipFailures<T>(this IEnumerable<string> extends,
-		                                                     TryParseDelegate<T> tryParseFunc)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (tryParseFunc == null)
-				throw new ArgumentNullException("tryParseFunc");
-
-			return extends.Select(str =>
-			                      {
-				                      T value;
-				                      bool isParsed = tryParseFunc(str, out value);
-				                      return new TryParseStruct<T>(value, isParsed);
-			                      })
-			              .Where(v => v.isParsed)
-			              .Select(v => v.value);
-		}
-
-#if SIMPLSHARP
 
 		/// <summary>
 		/// Applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
@@ -1494,7 +1469,6 @@ namespace ICD.Common.Utils.Extensions
 				}
 			}
 		}
-
 #endif
 	}
 }

@@ -222,13 +222,10 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("parameters");
 			try
 			{
-
 				if (parameters.Length == 0)
 					return Activator.CreateInstance(type);
 
 				ConstructorInfo constructor = GetConstructor(type, parameters);
-
-
 				return constructor.Invoke(parameters);
 			}
 			catch (TypeLoadException e)
