@@ -97,5 +97,15 @@ namespace ICD.Common.Utils
 
 			OnProgramInitializationComplete.Raise(null);
 		}
+
+		/// <summary>
+		/// Gets UTC time
+		/// Uses GetLocalTime so Crestron Env will have ms percision
+		/// </summary>
+		/// <returns></returns>
+		public static DateTime GetUtcTime()
+		{
+			return GetLocalTime().ToUniversalTime();
+		}
 	}
 }
