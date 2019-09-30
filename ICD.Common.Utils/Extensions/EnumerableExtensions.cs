@@ -649,6 +649,50 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns true if the given sequence is ordered.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static bool AreOrdered<T>(this IEnumerable<T> extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.AreOrdered(Comparer<T>.Default);
+		}
+
+		/// <summary>
+		/// Returns true if the given sequence is ordered.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		public static bool AreOrdered<T>(this IEnumerable<T> extends, IComparer<T> comparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			bool first = true;
+			T previous = default(T);
+
+			foreach (T item in extends)
+			{
+				if (!first && comparer.Compare(item, previous) < 0)
+					return false;
+
+				first = false;
+				previous = item;
+			}
+
+			return true;
+		}
+
+		/// <summary>
 		/// Default ordering for the items in the sequence.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>

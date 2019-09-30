@@ -284,6 +284,15 @@ namespace ICD.Common.Utils.Tests.Extensions
 			Assert.AreEqual(5, items.Length);
 		}
 
+		[TestCase(true)]
+		[TestCase(true, 1, 2, 3, 4)]
+		[TestCase(true, 1, 2, 2, 3, 4)]
+		[TestCase(false, 4, 3, 2, 1)]
+		public void AreOrderedTest(bool expected, params int[] items)
+		{
+			Assert.AreEqual(expected, items.AreOrdered());
+		}
+
 		[Test]
 		public void OrderTest()
 		{
