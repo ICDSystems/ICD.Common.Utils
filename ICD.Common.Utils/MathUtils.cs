@@ -216,10 +216,23 @@ namespace ICD.Common.Utils
 		/// <param name="number"></param>
 		/// <param name="mod"></param>
 		/// <returns></returns>
-		/// <remarks>method name can't be "Mod", due to S+ compatability issues</remarks>
+		/// <remarks>Method name can't be "Mod", due to S+ compatibility issues</remarks>
 		public static int Modulus(int number, int mod)
 		{
 			int remainder = number % mod;
+			return remainder < 0 ? remainder + mod : remainder;
+		}
+
+		/// <summary>
+		/// Calculates the modulus of the given number.
+		/// </summary>
+		/// <param name="number"></param>
+		/// <param name="mod"></param>
+		/// <returns></returns>
+		/// <remarks>Method name can't be "Mod", due to S+ compatibility issues</remarks>
+		public static long Modulus(long number, long mod)
+		{
+			long remainder = number % mod;
 			return remainder < 0 ? remainder + mod : remainder;
 		}
 	}

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - IcdEnvironment.GetUtcTime() to get UTC representaiton of current time.
  - Extension methods for determining if a sequence is in order
+ - Overload for calculating the modulus of longs
 
 ## [9.9.0] - 2019-09-16
 ### Added
