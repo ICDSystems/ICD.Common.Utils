@@ -6,10 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [10.0.0] - 2019-10-07
 ### Added
  - IcdEnvironment.GetUtcTime() to get UTC representaiton of current time.
  - Extension methods for determining if a sequence is in order
  - Overload for calculating the modulus of longs
+ - Default implementation for AbstractGenericXmlConverter Instantiate method
+ - Additional binary search extensions, now working for all ILists
+ - Added NullObject as a means of having null keys in hash tables
+
+### Changed
+ - Potential fix for unhelpful exception messages coming from SafeCriticalSection.Execute
+ - Small performance improvement when copying arrays
 
 ## [9.9.0] - 2019-09-16
 ### Added
