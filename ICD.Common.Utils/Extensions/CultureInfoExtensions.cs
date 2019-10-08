@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -10,7 +11,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static bool Uses24HourFormat(this CultureInfo extends)
+		public static bool Uses24HourFormat([NotNull]this CultureInfo extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -22,7 +23,7 @@ namespace ICD.Common.Utils.Extensions
 		/// Updates the time patterns for the given culture to use 12 hour time.
 		/// </summary>
 		/// <param name="extends"></param>
-		public static void ConvertTo12HourCulture(this CultureInfo extends)
+		public static void ConvertTo12HourCulture([NotNull]this CultureInfo extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -41,7 +42,7 @@ namespace ICD.Common.Utils.Extensions
 		/// Updates the time patterns for the given culture to use 24 hour time.
 		/// </summary>
 		/// <param name="extends"></param>
-		public static void ConvertTo24HourCulture(this CultureInfo extends)
+		public static void ConvertTo24HourCulture([NotNull]this CultureInfo extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

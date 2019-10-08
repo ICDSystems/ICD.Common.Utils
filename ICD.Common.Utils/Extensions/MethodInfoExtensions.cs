@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
 #else
@@ -15,8 +16,11 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="method">The Method</param>
 		/// <returns>Method signature</returns>
-		public static string GetSignature(this MethodInfo method)
+		public static string GetSignature([NotNull]this MethodInfo method)
 		{
+			if (method == null)
+				throw new ArgumentNullException("method");
+
 			return method.GetSignature(false);
 		}
 
@@ -26,8 +30,11 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="method">The Method</param>
 		/// <param name="callable">Return as a callable string(public void a(string b) would return a(b))</param>
 		/// <returns>Method signature</returns>
-		public static string GetSignature(this MethodInfo method, bool callable)
+		public static string GetSignature([NotNull]this MethodInfo method, bool callable)
 		{
+			if (method == null)
+				throw new ArgumentNullException("method");
+
 			bool firstParam = true;
 			StringBuilder sigBuilder = new StringBuilder();
 
@@ -122,6 +129,23 @@ namespace ICD.Common.Utils.Extensions
 			sigBuilder.Append(")");
 
 			return sigBuilder.ToString();
+		}
+
+		/// <summary>
+		/// Cross-platform shim for getting MethodInfo for the delegate.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static MethodInfo GetMethodInfo([NotNull]this Delegate extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+#if SIMPLSHARP
+			return extends.GetMethod();
+#else
+			return extends.Method;
+#endif
 		}
 	}
 }

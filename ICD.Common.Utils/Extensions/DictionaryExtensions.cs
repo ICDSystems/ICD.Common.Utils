@@ -14,7 +14,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="TValue"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="keys"></param>
-		public static void RemoveAll<TKey, TValue>(this IDictionary<TKey, TValue> extends, IEnumerable<TKey> keys)
+		public static void RemoveAll<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                           [NotNull] IEnumerable<TKey> keys)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -35,7 +36,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="value"></param>
 		/// <returns>False if value is not found in the dictionary.</returns>
 		[PublicAPI]
-		public static bool RemoveValue<TKey, TValue>(this IDictionary<TKey, TValue> extends, TValue value)
+		public static bool RemoveValue<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends, TValue value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -52,7 +53,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="value"></param>
 		[PublicAPI]
-		public static void RemoveAllValues<TKey, TValue>(this IDictionary<TKey, TValue> extends, TValue value)
+		public static void RemoveAllValues<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends, TValue value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -71,12 +72,12 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		[CanBeNull]
 		[PublicAPI]
-		public static TValue GetDefault<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key)
+		public static TValue GetDefault<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                              [NotNull] TKey key)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			// ReSharper disable once CompareNonConstrainedGenericWithNull
 			if (key == null)
 				throw new ArgumentNullException("key");
 
@@ -93,12 +94,13 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="defaultValue"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static TValue GetDefault<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key, TValue defaultValue)
+		public static TValue GetDefault<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                              [NotNull] TKey key,
+		                                              TValue defaultValue)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			// ReSharper disable once CompareNonConstrainedGenericWithNull
 			if (key == null)
 				throw new ArgumentNullException("key");
 
@@ -116,13 +118,13 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="defaultValue"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static TValue GetOrAddDefault<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key,
+		public static TValue GetOrAddDefault<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                                   [NotNull] TKey key,
 		                                                   TValue defaultValue)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			// ReSharper disable once CompareNonConstrainedGenericWithNull
 			if (key == null)
 				throw new ArgumentNullException("key");
 
@@ -141,7 +143,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="key"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static TValue GetOrAddNew<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key)
+		public static TValue GetOrAddNew<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                               [NotNull] TKey key)
 			where TValue : new()
 		{
 			if (extends == null)
@@ -165,7 +168,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="valueFunc"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static TValue GetOrAddNew<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key, Func<TValue> valueFunc)
+		public static TValue GetOrAddNew<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                               [NotNull] TKey key,
+		                                               [NotNull] Func<TValue> valueFunc)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -174,6 +179,9 @@ namespace ICD.Common.Utils.Extensions
 			if (key == null)
 // ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
+
+			if (valueFunc == null)
+				throw new ArgumentNullException("valueFunc");
 
 			TValue value;
 			if (!extends.TryGetValue(key, out value))
@@ -195,7 +203,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		/// <exception cref="ArgumentOutOfRangeException">The value does not exist in the dictionary.</exception>
 		[PublicAPI]
-		public static TKey GetKey<TKey, TValue>(this IDictionary<TKey, TValue> extends, TValue value)
+		public static TKey GetKey<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends, TValue value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -218,7 +226,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="key"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryGetKey<TKey, TValue>(this IDictionary<TKey, TValue> extends, TValue value, out TKey key)
+		public static bool TryGetKey<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends, TValue value,
+		                                           out TKey key)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -235,7 +244,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="value"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<TKey> GetKeys<TKey, TValue>(this IDictionary<TKey, TValue> extends, TValue value)
+		public static IEnumerable<TKey> GetKeys<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                                      TValue value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -253,8 +263,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="other"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool Update<TKey, TValue>(this IDictionary<TKey, TValue> extends,
-		                                        IEnumerable<KeyValuePair<TKey, TValue>> other)
+		public static bool Update<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                        [NotNull] IEnumerable<KeyValuePair<TKey, TValue>> other)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -275,15 +285,18 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool Update<TKey, TValue>(this IDictionary<TKey, TValue> extends,
-		                                        IEnumerable<KeyValuePair<TKey, TValue>> other,
-		                                        IEqualityComparer<TValue> comparer)
+		public static bool Update<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                        [NotNull] IEnumerable<KeyValuePair<TKey, TValue>> other,
+		                                        [NotNull] IEqualityComparer<TValue> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
 			if (other == null)
 				throw new ArgumentNullException("other");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
 
 			bool change = false;
 
@@ -308,7 +321,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="items"></param>
 		[PublicAPI]
-		public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> extends, IEnumerable<KeyValuePair<TKey, TValue>> items)
+		public static void AddRange<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                          [NotNull] IEnumerable<KeyValuePair<TKey, TValue>> items)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -329,8 +343,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="items"></param>
 		/// <param name="getKey"></param>
 		[PublicAPI]
-		public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> extends, IEnumerable<TValue> items,
-		                                          Func<TValue, TKey> getKey)
+		public static void AddRange<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                          [NotNull] IEnumerable<TValue> items,
+		                                          [NotNull] Func<TValue, TKey> getKey)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -354,8 +369,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="items"></param>
 		/// <param name="getValue"></param>
 		[PublicAPI]
-		public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> extends, IEnumerable<TKey> items,
-		                                          Func<TKey, TValue> getValue)
+		public static void AddRange<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                          [NotNull] IEnumerable<TKey> items,
+		                                          [NotNull] Func<TKey, TValue> getValue)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -378,8 +394,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="items"></param>
 		[PublicAPI]
-		public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> extends,
-		                                          IEnumerable<KeyValuePair<TKey, TValue>> items)
+		public static void AddRange<TKey, TValue>([NotNull] this Dictionary<TKey, TValue> extends,
+		                                          [NotNull] IEnumerable<KeyValuePair<TKey, TValue>> items)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -400,11 +416,14 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="other"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool DictionaryEqual<TKey, TValue>(this IDictionary<TKey, TValue> extends,
-		                                                 IDictionary<TKey, TValue> other)
+		public static bool DictionaryEqual<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                                 [NotNull] IDictionary<TKey, TValue> other)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
+
+			if (other == null)
+				throw new ArgumentNullException("other");
 
 			return extends.DictionaryEqual(other, EqualityComparer<TValue>.Default);
 		}
@@ -419,12 +438,15 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="valueComparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool DictionaryEqual<TKey, TValue>(this IDictionary<TKey, TValue> extends,
-		                                                 IDictionary<TKey, TValue> other,
-		                                                 IEqualityComparer<TValue> valueComparer)
+		public static bool DictionaryEqual<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                                 [NotNull] IDictionary<TKey, TValue> other,
+		                                                 [NotNull] IEqualityComparer<TValue> valueComparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
+
+			if (other == null)
+				throw new ArgumentNullException("other");
 
 			if (valueComparer == null)
 				throw new ArgumentNullException("valueComparer");
@@ -442,20 +464,21 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="valueComparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool DictionaryEqual<TKey, TValue>(this IDictionary<TKey, TValue> extends,
-		                                                 IDictionary<TKey, TValue> other,
-		                                                 Func<TValue, TValue, bool> valueComparer)
+		public static bool DictionaryEqual<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                                 [NotNull] IDictionary<TKey, TValue> other,
+		                                                 [NotNull] Func<TValue, TValue, bool> valueComparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
+
+			if (other == null)
+				throw new ArgumentNullException("other");
 
 			if (valueComparer == null)
 				throw new ArgumentNullException("valueComparer");
 
 			if (extends == other)
 				return true;
-			if (other == null)
-				return false;
 			if (extends.Count != other.Count)
 				return false;
 
@@ -467,6 +490,7 @@ namespace ICD.Common.Utils.Extensions
 				if (!valueComparer(kvp.Value, secondValue))
 					return false;
 			}
+
 			return true;
 		}
 
@@ -479,7 +503,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		[PublicAPI]
 		public static IEnumerable<KeyValuePair<TKey, TValue>> OrderByKey<TKey, TValue>(
-			this IEnumerable<KeyValuePair<TKey, TValue>> extends)
+			[NotNull] this IEnumerable<KeyValuePair<TKey, TValue>> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -495,7 +519,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<TValue> OrderValuesByKey<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> extends)
+		public static IEnumerable<TValue> OrderValuesByKey<TKey, TValue>(
+			[NotNull] this IEnumerable<KeyValuePair<TKey, TValue>> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -511,7 +536,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static Dictionary<TValue, List<TKey>> ToInverse<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> extends)
+		public static Dictionary<TValue, List<TKey>> ToInverse<TKey, TValue>(
+			[NotNull] this IEnumerable<KeyValuePair<TKey, TValue>> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -531,6 +557,23 @@ namespace ICD.Common.Utils.Extensions
 			}
 
 			return output;
+		}
+
+		/// <summary>
+		/// Turns an enumerable of KeyValuePairs back into a dictionary
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(
+			[NotNull] this IEnumerable<KeyValuePair<TKey, TValue>> extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.ToDictionary(x => x.Key, x => x.Value);
 		}
 	}
 }

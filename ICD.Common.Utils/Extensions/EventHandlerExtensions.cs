@@ -1,9 +1,5 @@
 ﻿using System;
-#if SIMPLSHARP
-using Crestron.SimplSharp.Reflection;
-#else
-using System.Reflection;
-#endif
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -17,7 +13,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <param name="sender"></param>
-		public static void Raise(this EventHandler extends, object sender)
+		public static void Raise([CanBeNull] this EventHandler extends, object sender)
 		{
 			if (extends != null)
 				extends(sender, EventArgs.Empty);
@@ -30,7 +26,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
-		public static void Raise<T>(this EventHandler<T> extends, object sender, T args)
+		public static void Raise<T>([CanBeNull]this EventHandler<T> extends, object sender, [NotNull]T args)
 			where T : EventArgs
 		{
 			if (args == null)
@@ -38,23 +34,6 @@ namespace ICD.Common.Utils.Extensions
 
 			if (extends != null)
 				extends(sender, args);
-		}
-
-		/// <summary>
-		/// Cross-platform shim for getting MethodInfo for the delegate.
-		/// </summary>
-		/// <param name="extends"></param>
-		/// <returns></returns>
-		public static MethodInfo GetMethodInfo(this Delegate extends)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-#if SIMPLSHARP
-			return extends.GetMethod();
-#else
-			return extends.Method;
-#endif
 		}
 	}
 }

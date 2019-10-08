@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -9,7 +10,7 @@ namespace ICD.Common.Utils.Extensions
 		/// Empties the StringBuilder.
 		/// </summary>
 		/// <param name="extends"></param>
-		public static void Clear(this StringBuilder extends)
+		public static void Clear([NotNull] this StringBuilder extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -23,7 +24,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static string Pop(this StringBuilder extends)
+		public static string Pop([NotNull] this StringBuilder extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ICD.Common.Properties;
 using Newtonsoft.Json;
 
 namespace ICD.Common.Utils.Extensions
@@ -16,8 +17,16 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="TItem"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="reader"></param>
-		public static IEnumerable<TItem> DeserializeArray<TItem>(this JsonSerializer extends, JsonReader reader)
+		[CanBeNull]
+		public static IEnumerable<TItem> DeserializeArray<TItem>([NotNull] this JsonSerializer extends,
+		                                                         [NotNull] JsonReader reader)
 		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
 			return extends.DeserializeArray(reader, (s, r) => extends.Deserialize<TItem>(reader));
 		}
 
@@ -28,8 +37,10 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="reader"></param>
 		/// <param name="read"></param>
-		public static IEnumerable<TItem> DeserializeArray<TItem>(this JsonSerializer extends, JsonReader reader,
-																 Func<JsonSerializer, JsonReader, TItem> read)
+		[CanBeNull]
+		public static IEnumerable<TItem> DeserializeArray<TItem>([NotNull] this JsonSerializer extends,
+		                                                         [NotNull] JsonReader reader,
+		                                                         [NotNull] Func<JsonSerializer, JsonReader, TItem> read)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -41,10 +52,11 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("read");
 
 			if (reader.TokenType == JsonToken.Null)
-				return Enumerable.Empty<TItem>();
+				return null;
 
 			if (reader.TokenType != JsonToken.StartArray)
-				throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.StartArray, reader.TokenType));
+				throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.StartArray,
+				                                        reader.TokenType));
 
 			// ToArray to ensure everything gets read before moving onto the next token
 			return DeserializeArrayIterator(extends, reader, read).ToArray();
@@ -57,8 +69,10 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="serializer"></param>
 		/// <param name="reader"></param>
 		/// <param name="read"></param>
-		private static IEnumerable<TItem> DeserializeArrayIterator<TItem>(JsonSerializer serializer, JsonReader reader,
-																		  Func<JsonSerializer, JsonReader, TItem> read)
+		[NotNull]
+		private static IEnumerable<TItem> DeserializeArrayIterator<TItem>(
+			[NotNull] JsonSerializer serializer, [NotNull] JsonReader reader,
+			[NotNull] Func<JsonSerializer, JsonReader, TItem> read)
 		{
 			// Step into the first value
 			reader.Read();
@@ -80,8 +94,10 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="TValue"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="reader"></param>
-		public static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDict<TKey, TValue>(this JsonSerializer extends,
-		                                                                                    JsonReader reader)
+		[CanBeNull]
+		public static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDict<TKey, TValue>(
+			[NotNull] this JsonSerializer extends,
+			[NotNull] JsonReader reader)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -103,12 +119,12 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="reader"></param>
 		/// <param name="readKey"></param>
 		/// <param name="readValue"></param>
-		public static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDict<TKey, TValue>(this JsonSerializer extends,
-		                                                                                    JsonReader reader,
-																							Func<JsonSerializer, JsonReader,
-																								TKey> readKey,
-																							Func<JsonSerializer, JsonReader,
-			                                                                                    TValue> readValue)
+		[CanBeNull]
+		public static IEnumerable<KeyValuePair<TKey, TValue>> DeserializeDict<TKey, TValue>(
+			[NotNull] this JsonSerializer extends,
+			[NotNull] JsonReader reader,
+			[NotNull] Func<JsonSerializer, JsonReader, TKey> readKey,
+			[NotNull] Func<JsonSerializer, JsonReader, TValue> readValue)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -125,11 +141,11 @@ namespace ICD.Common.Utils.Extensions
 			return extends.DeserializeArray(reader, (s, r) => s.DeserializeKeyValuePair(r, readKey, readValue));
 		}
 
-		public static KeyValuePair<TKey, TValue> DeserializeKeyValuePair<TKey, TValue>(this JsonSerializer extends, JsonReader reader,
-		                                                                               Func<JsonSerializer, JsonReader,
-			                                                                               TKey> readKey,
-		                                                                               Func<JsonSerializer, JsonReader,
-			                                                                               TValue> readValue)
+		public static KeyValuePair<TKey, TValue> DeserializeKeyValuePair<TKey, TValue>(
+			[NotNull] this JsonSerializer extends,
+			[NotNull] JsonReader reader,
+			[NotNull] Func<JsonSerializer, JsonReader, TKey> readKey,
+			[NotNull] Func<JsonSerializer, JsonReader, TValue> readValue)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -144,7 +160,8 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("readValue");
 
 			if (reader.TokenType != JsonToken.StartObject)
-				throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.StartObject, reader.TokenType));
+				throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.StartObject,
+				                                        reader.TokenType));
 
 			TKey key = default(TKey);
 			TValue value = default(TValue);
@@ -155,7 +172,8 @@ namespace ICD.Common.Utils.Extensions
 			while (reader.TokenType != JsonToken.EndObject)
 			{
 				if (reader.TokenType != JsonToken.PropertyName)
-					throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.PropertyName, reader.TokenType));
+					throw new FormatException(string.Format("Expected token {0} got {1}", JsonToken.PropertyName,
+					                                        reader.TokenType));
 
 				string propertyName = (string)reader.Value;
 
@@ -190,8 +208,15 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="writer"></param>
 		/// <param name="items"></param>
-		public static void SerializeArray<TItem>(this JsonSerializer extends, JsonWriter writer, IEnumerable<TItem> items)
+		public static void SerializeArray<TItem>([NotNull] this JsonSerializer extends, [NotNull] JsonWriter writer,
+		                                         [CanBeNull] IEnumerable<TItem> items)
 		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
 			extends.SerializeArray(writer, items, (s, w, item) => s.Serialize(w, item));
 		}
 
@@ -203,8 +228,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="writer"></param>
 		/// <param name="items"></param>
 		/// <param name="write"></param>
-		public static void SerializeArray<TItem>(this JsonSerializer extends, JsonWriter writer, IEnumerable<TItem> items,
-												 Action<JsonSerializer, JsonWriter, TItem> write)
+		public static void SerializeArray<TItem>([NotNull] this JsonSerializer extends, [NotNull] JsonWriter writer,
+		                                         [CanBeNull] IEnumerable<TItem> items,
+		                                         [NotNull] Action<JsonSerializer, JsonWriter, TItem> write)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -237,8 +263,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="writer"></param>
 		/// <param name="items"></param>
-		public static void SerializeDict<TKey, TValue>(this JsonSerializer extends, JsonWriter writer,
-													   IEnumerable<KeyValuePair<TKey, TValue>> items)
+		public static void SerializeDict<TKey, TValue>([NotNull] this JsonSerializer extends,
+		                                               [NotNull] JsonWriter writer,
+		                                               [CanBeNull] IEnumerable<KeyValuePair<TKey, TValue>> items)
 		{
 			extends.SerializeDict(writer, items,
 			                      (s, w, k) => s.Serialize(w, k),
@@ -255,10 +282,11 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="items"></param>
 		/// <param name="writeKey"></param>
 		/// <param name="writeValue"></param>
-		public static void SerializeDict<TKey, TValue>(this JsonSerializer extends, JsonWriter writer,
-													   IEnumerable<KeyValuePair<TKey, TValue>> items,
-		                                               Action<JsonSerializer, JsonWriter, TKey> writeKey,
-													   Action<JsonSerializer, JsonWriter, TValue> writeValue)
+		public static void SerializeDict<TKey, TValue>([NotNull] this JsonSerializer extends,
+		                                               [NotNull] JsonWriter writer,
+		                                               [CanBeNull] IEnumerable<KeyValuePair<TKey, TValue>> items,
+		                                               [NotNull] Action<JsonSerializer, JsonWriter, TKey> writeKey,
+		                                               [NotNull] Action<JsonSerializer, JsonWriter, TValue> writeValue)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -275,10 +303,11 @@ namespace ICD.Common.Utils.Extensions
 			extends.SerializeArray(writer, items, (s, w, kvp) => s.SerializeKeyValuePair(w, kvp, writeKey, writeValue));
 		}
 
-		public static void SerializeKeyValuePair<TKey, TValue>(this JsonSerializer extends, JsonWriter writer,
-		                                                       KeyValuePair<TKey, TValue> kvp,
-		                                                       Action<JsonSerializer, JsonWriter, TKey> writeKey,
-		                                                       Action<JsonSerializer, JsonWriter, TValue> writeValue)
+		public static void SerializeKeyValuePair<TKey, TValue>(
+			[NotNull] this JsonSerializer extends,
+			[NotNull] JsonWriter writer, KeyValuePair<TKey, TValue> kvp,
+			[NotNull] Action<JsonSerializer, JsonWriter, TKey> writeKey,
+			[NotNull] Action<JsonSerializer, JsonWriter, TValue> writeValue)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

@@ -21,7 +21,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool AddSorted<T>(this IList<T> extends, T item)
+		public static bool AddSorted<T>([NotNull] this IList<T> extends, T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -39,7 +39,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <param name="predicate"></param>
 		[PublicAPI]
-		public static bool AddSorted<T, TProp>(this IList<T> extends, T item, Func<T, TProp> predicate)
+		public static bool AddSorted<T, TProp>([NotNull] this IList<T> extends, T item,
+		                                       [NotNull] Func<T, TProp> predicate)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -61,7 +62,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool AddSorted<T>(this IList<T> extends, T item, IComparer<T> comparer)
+		public static bool AddSorted<T>([NotNull] this IList<T> extends, T item, [NotNull] IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -92,7 +93,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool RemoveSorted<T>(this IList<T> extends, T item)
+		public static bool RemoveSorted<T>([NotNull] this IList<T> extends, T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -110,7 +111,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <param name="predicate"></param>
 		[PublicAPI]
-		public static bool RemoveSorted<T, TProp>(this IList<T> extends, T item, Func<T, TProp> predicate)
+		public static bool RemoveSorted<T, TProp>([NotNull] this IList<T> extends, T item,
+		                                          [NotNull] Func<T, TProp> predicate)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -132,7 +134,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool RemoveSorted<T>(this IList<T> extends, T item, IComparer<T> comparer)
+		public static bool RemoveSorted<T>([NotNull] this IList<T> extends, T item, [NotNull] IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -160,7 +162,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="items"></param>
 		[PublicAPI]
-		public static void InsertSorted<T>(this IList<T> extends, IEnumerable<T> items)
+		public static void InsertSorted<T>([NotNull] this IList<T> extends, [NotNull] IEnumerable<T> items)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -179,7 +181,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="items"></param>
 		/// <param name="comparer"></param>
 		[PublicAPI]
-		public static void InsertSorted<T>(this IList<T> extends, IEnumerable<T> items, IComparer<T> comparer)
+		public static void InsertSorted<T>([NotNull] this IList<T> extends, [NotNull] IEnumerable<T> items,
+		                                   [NotNull] IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -202,7 +205,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="items"></param>
 		/// <param name="predicate"></param>
 		[PublicAPI]
-		public static void InsertSorted<T, TProp>(this IList<T> extends, IEnumerable<T> items, Func<T, TProp> predicate)
+		public static void InsertSorted<T, TProp>([NotNull] this IList<T> extends, [NotNull] IEnumerable<T> items,
+		                                          [NotNull] Func<T, TProp> predicate)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -224,7 +228,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item"></param>
 		[PublicAPI]
-		public static int InsertSorted<T>(this IList<T> extends, T item)
+		public static int InsertSorted<T>([NotNull] this IList<T> extends, T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -241,7 +245,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <param name="predicate"></param>
 		[PublicAPI]
-		public static int InsertSorted<T, TProp>(this IList<T> extends, T item, Func<T, TProp> predicate)
+		public static int InsertSorted<T, TProp>([NotNull] this IList<T> extends, T item,
+		                                         [NotNull] Func<T, TProp> predicate)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -261,7 +266,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <param name="comparer"></param>
 		[PublicAPI]
-		public static int InsertSorted<T>(this IList<T> extends, T item, IComparer<T> comparer)
+		public static int InsertSorted<T>([NotNull] this IList<T> extends, T item, [NotNull] IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -281,7 +286,7 @@ namespace ICD.Common.Utils.Extensions
 		#endregion
 
 		#region Contains Sorted
-		
+
 		/// <summary>
 		/// Returns true if the sorted list contains the given item.
 		/// </summary>
@@ -290,7 +295,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool ContainsSorted<T>(this IList<T> extends, T item)
+		public static bool ContainsSorted<T>([NotNull] this IList<T> extends, T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -307,7 +312,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool ContainsSorted<T>(this IList<T> extends, T item, IComparer<T> comparer)
+		public static bool ContainsSorted<T>([NotNull] this IList<T> extends, T item, [NotNull] IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -331,7 +336,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static int BinarySearch<T>(this IList<T> extends, T item, IComparer<T> comparer)
+		public static int BinarySearch<T>([NotNull] this IList<T> extends, T item, [NotNull] IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

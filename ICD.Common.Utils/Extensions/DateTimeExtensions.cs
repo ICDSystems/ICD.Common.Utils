@@ -58,7 +58,7 @@ namespace ICD.Common.Utils.Extensions
 		public static DateTime? PreviousLatestTime(this DateTime target, bool inclusive, params DateTime[] times)
 		{
 			if (times == null)
-				throw new ArgumentNullException("null");
+				throw new ArgumentNullException("times");
 
 			DateTime latestTime;
 			bool success = times.OrderByDescending(dt => dt).TryFirst(dt => inclusive ? target >= dt : target > dt, out latestTime);

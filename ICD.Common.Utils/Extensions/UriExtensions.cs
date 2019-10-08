@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -10,7 +11,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static string GetUserName(this Uri extends)
+		[NotNull]
+		public static string GetUserName([NotNull] this Uri extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -23,7 +25,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static string GetPassword(this Uri extends)
+		[NotNull]
+		public static string GetPassword([NotNull] this Uri extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

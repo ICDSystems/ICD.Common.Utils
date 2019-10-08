@@ -12,7 +12,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="type"></param>
 		[PublicAPI]
-		public static void WriteType(this JsonWriter extends, Type type)
+		public static void WriteType([NotNull]this JsonWriter extends, [CanBeNull]Type type)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -33,7 +33,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="propertyName"></param>
 		/// <param name="value"></param>
-		public static void WriteProperty(this JsonWriter extends, string propertyName, object value)
+		public static void WriteProperty([NotNull]this JsonWriter extends, string propertyName, object value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -48,7 +48,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="propertyName"></param>
 		/// <param name="value"></param>
-		public static void WriteProperty(this JsonWriter extends, string propertyName, string value)
+		public static void WriteProperty([NotNull]this JsonWriter extends, string propertyName, string value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -63,7 +63,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="propertyName"></param>
 		/// <param name="value"></param>
-		public static void WriteProperty(this JsonWriter extends, string propertyName, DateTime value)
+		public static void WriteProperty([NotNull]this JsonWriter extends, string propertyName, DateTime value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -78,7 +78,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="propertyName"></param>
 		/// <param name="value"></param>
-		public static void WriteProperty(this JsonWriter extends, string propertyName, bool value)
+		public static void WriteProperty([NotNull]this JsonWriter extends, string propertyName, bool value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -93,7 +93,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="propertyName"></param>
 		/// <param name="value"></param>
-		public static void WriteProperty(this JsonWriter extends, string propertyName, int value)
+		public static void WriteProperty([NotNull]this JsonWriter extends, string propertyName, int value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -108,7 +108,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="propertyName"></param>
 		/// <param name="value"></param>
-		public static void WriteProperty(this JsonWriter extends, string propertyName, Guid value)
+		public static void WriteProperty([NotNull]this JsonWriter extends, string propertyName, Guid value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -123,7 +123,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="propertyName"></param>
 		/// <param name="value"></param>
-		public static void WriteProperty(this JsonWriter extends, string propertyName, Type value)
+		public static void WriteProperty([NotNull]this JsonWriter extends, string propertyName, Type value)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

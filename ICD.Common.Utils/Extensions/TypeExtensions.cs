@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Collections;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
@@ -83,7 +84,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static bool CanBeNull(this Type extends)
+		public static bool CanBeNull([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentException("extends");
@@ -96,7 +97,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static bool IsNumeric(this Type extends)
+		public static bool IsNumeric([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentException("extends");
@@ -109,7 +110,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static bool IsSignedNumeric(this Type extends)
+		public static bool IsSignedNumeric([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentException("extends");
@@ -122,7 +123,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static bool IsDecimalNumeric(this Type extends)
+		public static bool IsDecimalNumeric([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentException("extends");
@@ -135,7 +136,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static bool IsIntegerNumeric(this Type extends)
+		public static bool IsIntegerNumeric([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentException("extends");
@@ -148,7 +149,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static Assembly GetAssembly(this Type extends)
+		[NotNull]
+		public static Assembly GetAssembly([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -167,7 +169,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="from"></param>
 		/// <returns></returns>
-		public static bool IsAssignableTo<T>(this Type from)
+		public static bool IsAssignableTo<T>([NotNull]this Type from)
 		{
 			if (from == null)
 				throw new ArgumentNullException("from");
@@ -181,7 +183,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="from"></param>
 		/// <param name="to"></param>
 		/// <returns></returns>
-		public static bool IsAssignableTo(this Type from, Type to)
+		public static bool IsAssignableTo([NotNull]this Type from, [NotNull]Type to)
 		{
 			if (from == null)
 				throw new ArgumentNullException("from");
@@ -197,7 +199,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static IEnumerable<Type> GetAllTypes(this Type extends)
+		[NotNull]
+		public static IEnumerable<Type> GetAllTypes([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -221,7 +224,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static IEnumerable<Type> GetBaseTypes(this Type extends)
+		[NotNull]
+		public static IEnumerable<Type> GetBaseTypes([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -236,7 +240,8 @@ namespace ICD.Common.Utils.Extensions
 			return types;
 		}
 
-		private static IEnumerable<Type> GetBaseTypesIterator(Type type)
+		[NotNull]
+		private static IEnumerable<Type> GetBaseTypesIterator([NotNull] Type type)
 		{
 			do
 			{
@@ -257,7 +262,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static IEnumerable<Type> GetImmediateInterfaces(this Type extends)
+		[NotNull]
+		public static IEnumerable<Type> GetImmediateInterfaces([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -286,7 +292,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static IEnumerable<Type> GetMinimalInterfaces(this Type extends)
+		[NotNull]
+		public static IEnumerable<Type> GetMinimalInterfaces([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -314,7 +321,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static string GetNameWithoutGenericArity(this Type extends)
+		[NotNull]
+		public static string GetNameWithoutGenericArity([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -330,7 +338,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static string GetMinimalName(this Type extends)
+		[NotNull]
+		public static string GetMinimalName([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -380,7 +389,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static string GetNameWithoutAssemblyDetails(this Type extends)
+		[NotNull]
+		public static string GetNameWithoutAssemblyDetails([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -401,7 +411,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="fullyQualifiedTypeName"></param>
 		/// <returns></returns>
-		private static string RemoveAssemblyDetails(string fullyQualifiedTypeName)
+		[NotNull]
+		private static string RemoveAssemblyDetails([NotNull] string fullyQualifiedTypeName)
 		{
 			StringBuilder builder = new StringBuilder();
 
@@ -450,7 +461,8 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends">Type. May be generic or nullable</param>
 		/// <returns>Full type name, fully qualified namespaces</returns>
-		public static string GetSyntaxName(this Type extends)
+		[NotNull]
+		public static string GetSyntaxName([NotNull]this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
 #else
@@ -20,7 +21,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> GetCustomAttributes<T>(this ICustomAttributeProvider extends)
+		public static IEnumerable<T> GetCustomAttributes<T>([NotNull] this ICustomAttributeProvider extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -35,7 +36,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="inherits"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> GetCustomAttributes<T>(this ICustomAttributeProvider extends, bool inherits)
+		public static IEnumerable<T> GetCustomAttributes<T>([NotNull] this ICustomAttributeProvider extends,
+		                                                    bool inherits)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -57,7 +59,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static T GetCustomAttribute<T>(this ICustomAttributeProvider extends)
+		public static T GetCustomAttribute<T>([NotNull] this ICustomAttributeProvider extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -72,7 +74,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="inherits"></param>
 		/// <returns></returns>
-		public static T GetCustomAttribute<T>(this ICustomAttributeProvider extends, bool inherits)
+		public static T GetCustomAttribute<T>([NotNull] this ICustomAttributeProvider extends, bool inherits)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -86,16 +88,18 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
-		/// <param name="inherits"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> GetCustomAttributesIncludingBaseInterfaces<T>(this Type extends)
+		public static IEnumerable<T> GetCustomAttributesIncludingBaseInterfaces<T>([NotNull] this Type extends)
 			where T : Attribute
 		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
 			return extends.GetCustomAttributes<T>(true)
-				.Union(extends.GetInterfaces()
-					.SelectMany(interfaceType => interfaceType
-						.GetCustomAttributes<T>(true)))
-				.Distinct();
+			              .Union(extends.GetInterfaces()
+			                            .SelectMany(interfaceType => interfaceType
+				                                        .GetCustomAttributes<T>(true)))
+			              .Distinct();
 		}
 
 		/// <summary>
@@ -103,23 +107,25 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
-		/// <param name="inherits"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> GetCustomAttributesIncludingBaseInterfaces<T>(this MemberInfo extends)
+		public static IEnumerable<T> GetCustomAttributesIncludingBaseInterfaces<T>([NotNull] this MemberInfo extends)
 			where T : Attribute
 		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
 			return extends.GetCustomAttributes<T>(true)
-				.Union(extends.DeclaringType?
-					       .GetInterfaces()
-					       .SelectMany(interfaceType => interfaceType
-						                                    .GetMember(
-							                                    extends.Name,
-							                                    extends.MemberType, 
-							                                    BindingFlags.Instance)
-						                                    .FirstOrDefault()?
-						                                    .GetCustomAttributes<T>(true) ?? Enumerable.Empty<T>())?
-					       .Except(null) ?? Enumerable.Empty<T>())
-				.Distinct();
+			              .Union(extends.DeclaringType?
+			                            .GetInterfaces()
+			                            .SelectMany(interfaceType => interfaceType
+			                                                         .GetMember(extends.Name,
+			                                                                    extends.MemberType,
+			                                                                    BindingFlags.Instance)
+			                                                         .FirstOrDefault()?
+			                                                         .GetCustomAttributes<T>(true) ??
+			                                                         Enumerable.Empty<T>())?
+			                            .Except(null) ?? Enumerable.Empty<T>())
+			              .Distinct();
 		}
 #endif
 	}

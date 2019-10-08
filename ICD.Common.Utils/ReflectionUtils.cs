@@ -4,6 +4,7 @@ using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
+using MethodInfoExtensions = ICD.Common.Utils.Extensions.MethodInfoExtensions;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharp.Reflection;
@@ -373,7 +374,7 @@ namespace ICD.Common.Utils
 
 			object handler = eventHandler.Target;
 // ReSharper disable InvokeAsExtensionMethod
-			MethodInfo callback = EventHandlerExtensions.GetMethodInfo(eventHandler);
+			MethodInfo callback = MethodInfoExtensions.GetMethodInfo(eventHandler);
 // ReSharper restore InvokeAsExtensionMethod
 
 			return SubscribeEvent(instance, eventInfo, handler, callback);
@@ -397,7 +398,7 @@ namespace ICD.Common.Utils
 
 			object handler = eventHandler.Target;
 // ReSharper disable InvokeAsExtensionMethod
-			MethodInfo callback = EventHandlerExtensions.GetMethodInfo(eventHandler);
+			MethodInfo callback = MethodInfoExtensions.GetMethodInfo(eventHandler);
 // ReSharper restore InvokeAsExtensionMethod
 
 			return SubscribeEvent(instance, eventInfo, handler, callback);

@@ -15,7 +15,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="first"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static int IndexOf(this string extends, IEnumerable<string> items, out string first)
+		public static int IndexOf([NotNull] this string extends, [NotNull] IEnumerable<string> items, out string first)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -52,7 +52,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="character"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool StartsWith(this string extends, char character)
+		public static bool StartsWith([NotNull] this string extends, char character)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -67,7 +67,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="character"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool EndsWith(this string extends, char character)
+		public static bool EndsWith([NotNull] this string extends, char character)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -83,7 +83,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="delimeter"></param>
 		/// <param name="count"></param>
 		/// <returns></returns>
-		public static IEnumerable<string> Split(this string extends, char delimeter, int count)
+		[NotNull]
+		public static IEnumerable<string> Split([NotNull] this string extends, char delimeter, int count)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -102,7 +103,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="delimeter"></param>
 		/// <param name="count"></param>
 		/// <returns></returns>
-		private static IEnumerable<string> SplitIterator(string value, char delimeter, int count)
+		[NotNull]
+		private static IEnumerable<string> SplitIterator([NotNull] string value, char delimeter, int count)
 		{
 			while (count > 1)
 			{
@@ -125,7 +127,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="chunkSize"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<string> Split(this string extends, int chunkSize)
+		[NotNull]
+		public static IEnumerable<string> Split([NotNull] this string extends, int chunkSize)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -134,7 +137,8 @@ namespace ICD.Common.Utils.Extensions
 				throw new InvalidOperationException("chunkSize must be greater than 0");
 
 			return Enumerable.Range(0, (int)Math.Ceiling(extends.Length / (double)chunkSize))
-			                 .Select(i => extends.Substring(i * chunkSize, Math.Min(chunkSize, extends.Length - (i * chunkSize))));
+			                 .Select(i => extends.Substring(i * chunkSize,
+			                                                Math.Min(chunkSize, extends.Length - (i * chunkSize))));
 		}
 
 		/// <summary>
@@ -143,7 +147,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string RemoveWhitespace(this string extends)
+		[NotNull]
+		public static string RemoveWhitespace([NotNull] this string extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -152,12 +157,13 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Removes all occurances of the given string.
+		/// Removes all occurrences of the given string.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <param name="other"></param>
 		/// <returns></returns>
-		public static string Remove(this string extends, string other)
+		[NotNull]
+		public static string Remove([NotNull] this string extends, [NotNull] string other)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -176,19 +182,21 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Removes all occurances the given characters from the string.
+		/// Removes all occurrences the given characters from the string.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <param name="characters"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string Remove(this string extends, IEnumerable<char> characters)
+		[NotNull]
+		public static string Remove([NotNull] this string extends, IEnumerable<char> characters)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
 			if (characters == null)
 				throw new ArgumentNullException("characters");
+
 			var cSet = characters.ToIcdHashSet();
 
 			return new string(extends.Where(c => !cSet.Contains(c)).ToArray());
@@ -200,7 +208,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool IsNumeric(this string extends)
+		public static bool IsNumeric([NotNull] this string extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -214,7 +222,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="character"></param>
 		/// <returns></returns>
-		public static bool Contains(this string extends, char character)
+		public static bool Contains([NotNull] this string extends, char character)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -227,8 +235,11 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static int GetStableHashCode(this string extends)
+		public static int GetStableHashCode([NotNull] this string extends)
 		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
 			unchecked
 			{
 				int hash1 = 5381;

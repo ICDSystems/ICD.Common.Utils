@@ -17,7 +17,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="defaultItem"></param>
 		/// <returns></returns>
-		public static T FirstOrDefault<T>(this IEnumerable<T> extends, T defaultItem)
+		public static T FirstOrDefault<T>([NotNull] this IEnumerable<T> extends, T defaultItem)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -34,7 +34,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="predicate"></param>
 		/// <param name="defaultItem"></param>
 		/// <returns></returns>
-		public static T FirstOrDefault<T>(this IEnumerable<T> extends, Func<T, bool> predicate, T defaultItem)
+		public static T FirstOrDefault<T>([NotNull] this IEnumerable<T> extends, [NotNull] Func<T, bool> predicate,
+		                                  T defaultItem)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -53,7 +54,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item">Outputs the first item in the sequence.</param>
 		/// <returns></returns>
-		public static bool TryFirst<T>(this IEnumerable<T> extends, out T item)
+		public static bool TryFirst<T>([NotNull] this IEnumerable<T> extends, out T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -80,7 +81,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="predicate"></param>
 		/// <param name="item">Outputs the first item in the sequence.</param>
 		/// <returns></returns>
-		public static bool TryFirst<T>(this IEnumerable<T> extends, Func<T, bool> predicate, out T item)
+		public static bool TryFirst<T>([NotNull] this IEnumerable<T> extends, [NotNull] Func<T, bool> predicate,
+		                               out T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -112,7 +114,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item">Outputs the last item in the sequence.</param>
 		/// <returns></returns>
-		public static bool TryLast<T>(this IEnumerable<T> extends, out T item)
+		public static bool TryLast<T>([NotNull] this IEnumerable<T> extends, out T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -139,7 +141,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="predicate"></param>
 		/// <param name="item">Outputs the last item in the sequence.</param>
 		/// <returns></returns>
-		public static bool TryLast<T>(this IEnumerable<T> extends, Func<T, bool> predicate, out T item)
+		public static bool TryLast<T>([NotNull] this IEnumerable<T> extends, [NotNull] Func<T, bool> predicate,
+		                              out T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -173,7 +176,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="index"></param>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public static bool TryElementAt<T>(this IEnumerable<T> extends, int index, out T item)
+		public static bool TryElementAt<T>([NotNull] this IEnumerable<T> extends, int index, out T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -200,6 +203,7 @@ namespace ICD.Common.Utils.Extensions
 					item = value;
 					return true;
 				}
+
 				current++;
 			}
 
@@ -214,7 +218,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="index"></param>
 		/// <param name="defaultValue"></param>
 		/// <returns></returns>
-		public static T ElementAtOrDefault<T>(this IEnumerable<T> extends, int index, T defaultValue)
+		public static T ElementAtOrDefault<T>([NotNull] this IEnumerable<T> extends, int index, T defaultValue)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -231,7 +235,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="other"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		public static bool SequenceEqual<T>(this IEnumerable<T> extends, IEnumerable<T> other, IEqualityComparer<T> comparer)
+		public static bool SequenceEqual<T>([NotNull] this IEnumerable<T> extends, [NotNull] IEnumerable<T> other,
+		                                    [NotNull] IEqualityComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -253,7 +258,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="other"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		public static bool SequenceEqual<T>(this IEnumerable<T> extends, IEnumerable<T> other, Func<T, T, bool> comparer)
+		public static bool SequenceEqual<T>([NotNull] this IEnumerable<T> extends, [NotNull] IEnumerable<T> other,
+		                                    [NotNull] Func<T, T, bool> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -298,7 +304,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="other"></param>
 		/// <returns></returns>
-		public static bool ScrambledEquals<T>(this IEnumerable<T> extends, IEnumerable<T> other)
+		public static bool ScrambledEquals<T>([NotNull] this IEnumerable<T> extends, [NotNull] IEnumerable<T> other)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -317,7 +323,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="other"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		public static bool ScrambledEquals<T>(this IEnumerable<T> extends, IEnumerable<T> other, IEqualityComparer<T> comparer)
+		public static bool ScrambledEquals<T>([NotNull] this IEnumerable<T> extends, [NotNull] IEnumerable<T> other,
+		                                      [NotNull] IEqualityComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -352,7 +359,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="match"></param>
 		/// <returns></returns>
-		public static int FindIndex<T>(this IEnumerable<T> extends, Predicate<T> match)
+		public static int FindIndex<T>([NotNull] this IEnumerable<T> extends, [NotNull] Predicate<T> match)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -370,7 +377,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="match"></param>
 		/// <returns></returns>
-		public static IEnumerable<int> FindIndices<T>(this IEnumerable<T> extends, Predicate<T> match)
+		public static IEnumerable<int> FindIndices<T>([NotNull] this IEnumerable<T> extends,
+		                                              [NotNull] Predicate<T> match)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -388,7 +396,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="sequence"></param>
 		/// <param name="match"></param>
 		/// <returns></returns>
-		private static IEnumerable<int> FindIndicesIterator<T>(IEnumerable<T> sequence, Predicate<T> match)
+		private static IEnumerable<int> FindIndicesIterator<T>([NotNull] IEnumerable<T> sequence,
+		                                                       [NotNull] Predicate<T> match)
 		{
 			int index = 0;
 
@@ -408,7 +417,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="selectors"></param>
 		/// <returns></returns>
-		public static IEnumerable<TResult> SelectMulti<TSource, TResult>(this IEnumerable<TSource> extends,
+		public static IEnumerable<TResult> SelectMulti<TSource, TResult>([NotNull] this IEnumerable<TSource> extends,
+		                                                                 [NotNull]
 		                                                                 params Func<TSource, TResult>[] selectors)
 		{
 			if (extends == null)
@@ -427,7 +437,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		[PublicAPI]
-		public static void Execute<T>(this IEnumerable<T> extends)
+		public static void Execute<T>([NotNull] this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -446,7 +456,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="action"></param>
 		[PublicAPI]
-		public static void ForEach<T>(this IEnumerable<T> extends, Action<T> action)
+		public static void ForEach<T>([NotNull] this IEnumerable<T> extends, [NotNull] Action<T> action)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -464,7 +474,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="action"></param>
 		[PublicAPI]
-		public static void ForEach<T>(this IEnumerable<T> extends, Action<T, int> action)
+		public static void ForEach<T>([NotNull] this IEnumerable<T> extends, [NotNull] Action<T, int> action)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -485,7 +495,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> Prepend<T>(this IEnumerable<T> extends, T item)
+		public static IEnumerable<T> Prepend<T>([NotNull]this IEnumerable<T> extends, T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -500,7 +510,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="sequence"></param>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		private static IEnumerable<T> PrependIterator<T>(IEnumerable<T> sequence, T item)
+		private static IEnumerable<T> PrependIterator<T>([NotNull]IEnumerable<T> sequence, T item)
 		{
 			yield return item;
 
@@ -517,7 +527,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="items"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<T> PrependMany<T>(this IEnumerable<T> extends, params T[] items)
+		public static IEnumerable<T> PrependMany<T>([NotNull] this IEnumerable<T> extends, [NotNull] params T[] items)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -535,7 +545,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="sequence"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		private static IEnumerable<T> PrependManyIterator<T>(IEnumerable<T> sequence, params T[] items)
+		private static IEnumerable<T> PrependManyIterator<T>([NotNull] IEnumerable<T> sequence,
+		                                                     [NotNull] params T[] items)
 		{
 			foreach (T item in items)
 				yield return item;
@@ -552,7 +563,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> Append<T>(this IEnumerable<T> extends, T item)
+		public static IEnumerable<T> Append<T>([NotNull]this IEnumerable<T> extends, T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -567,7 +578,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="sequence"></param>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		private static IEnumerable<T> AppendIterator<T>(IEnumerable<T> sequence, T item)
+		private static IEnumerable<T> AppendIterator<T>([NotNull]IEnumerable<T> sequence, T item)
 		{
 			foreach (T first in sequence)
 				yield return first;
@@ -584,7 +595,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="items"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<T> AppendMany<T>(this IEnumerable<T> extends, params T[] items)
+		public static IEnumerable<T> AppendMany<T>([NotNull] this IEnumerable<T> extends, [NotNull] params T[] items)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -602,7 +613,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="sequence"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		private static IEnumerable<T> AppendManyIterator<T>(IEnumerable<T> sequence, params T[] items)
+		private static IEnumerable<T> AppendManyIterator<T>([NotNull] IEnumerable<T> sequence,
+		                                                    [NotNull] params T[] items)
 		{
 			foreach (T each in sequence)
 				yield return each;
@@ -619,7 +631,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="count"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<T> PadRight<T>(this IEnumerable<T> extends, int count)
+		public static IEnumerable<T> PadRight<T>([NotNull] this IEnumerable<T> extends, int count)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -634,7 +646,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="sequence"></param>
 		/// <param name="count"></param>
 		/// <returns></returns>
-		private static IEnumerable<T> PadRightIterator<T>(IEnumerable<T> sequence, int count)
+		private static IEnumerable<T> PadRightIterator<T>([NotNull] IEnumerable<T> sequence, int count)
 		{
 			int index = 0;
 
@@ -654,7 +666,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static bool AreOrdered<T>(this IEnumerable<T> extends)
+		public static bool AreOrdered<T>([NotNull] this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -669,7 +681,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		public static bool AreOrdered<T>(this IEnumerable<T> extends, IComparer<T> comparer)
+		public static bool AreOrdered<T>([NotNull] this IEnumerable<T> extends, [NotNull] IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -698,7 +710,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static IOrderedEnumerable<T> Order<T>(this IEnumerable<T> extends)
+		public static IOrderedEnumerable<T> Order<T>([NotNull] this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -713,7 +725,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		public static IOrderedEnumerable<T> Order<T>(this IEnumerable<T> extends, IComparer<T> comparer)
+		public static IOrderedEnumerable<T> Order<T>([NotNull] this IEnumerable<T> extends,
+		                                             [NotNull] IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -731,7 +744,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		public static IOrderedEnumerable<T> OrderDescending<T>(this IEnumerable<T> extends, IComparer<T> comparer)
+		public static IOrderedEnumerable<T> OrderDescending<T>([NotNull] this IEnumerable<T> extends,
+		                                                       [NotNull] IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -749,7 +763,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> Except<T>(this IEnumerable<T> extends, T item)
+		public static IEnumerable<T> Except<T>([NotNull] this IEnumerable<T> extends, T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -765,7 +779,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="item"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> Except<T>(this IEnumerable<T> extends, T item, IEqualityComparer<T> comparer)
+		public static IEnumerable<T> Except<T>([NotNull] this IEnumerable<T> extends, T item,
+		                                       [NotNull] IEqualityComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -783,7 +798,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<T> ExceptNulls<T>(this IEnumerable<T?> extends)
+		public static IEnumerable<T> ExceptNulls<T>([NotNull] this IEnumerable<T?> extends)
 			where T : struct
 		{
 			if (extends == null)
@@ -800,7 +815,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="array"></param>
 		/// <param name="index"></param>
-		public static void CopyTo<T>(this IEnumerable<T> extends, T[] array, int index)
+		public static void CopyTo<T>([NotNull] this IEnumerable<T> extends, [NotNull] T[] array, int index)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -829,7 +844,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static IcdHashSet<T> ToIcdHashSet<T>(this IEnumerable<T> extends)
+		public static IcdHashSet<T> ToIcdHashSet<T>([NotNull] this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -844,7 +859,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		public static IcdHashSet<T> ToIcdHashSet<T>(this IEnumerable<T> extends, IEqualityComparer<T> comparer)
+		public static IcdHashSet<T> ToIcdHashSet<T>([NotNull] this IEnumerable<T> extends,
+		                                            [NotNull] IEqualityComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -862,7 +878,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="count"></param>
 		/// <returns></returns>
-		public static T[] ToArray<T>(this IEnumerable<T> extends, int count)
+		public static T[] ToArray<T>([NotNull] this IEnumerable<T> extends, int count)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -903,7 +919,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="count"></param>
 		/// <returns></returns>
-		public static List<T> ToList<T>(this IEnumerable<T> extends, int count)
+		public static List<T> ToList<T>([NotNull] this IEnumerable<T> extends, int count)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -923,7 +939,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static Dictionary<int, T> ToIndexedDictionary<T>(this IEnumerable<T> extends)
+		public static Dictionary<int, T> ToIndexedDictionary<T>([NotNull] this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -940,7 +956,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static Dictionary<uint, T> ToIndexedDictionaryUInt<T>(this IEnumerable<T> extends)
+		public static Dictionary<uint, T> ToIndexedDictionaryUInt<T>([NotNull] this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -948,22 +964,6 @@ namespace ICD.Common.Utils.Extensions
 			Dictionary<uint, T> output = new Dictionary<uint, T>();
 			extends.ForEach((item, index) => output.Add((uint)index, item));
 			return output;
-		}
-
-		/// <summary>
-		/// Turns an enumerable of KeyValuePairs back into a dictionary
-		/// </summary>
-		/// <typeparam name="TKey"></typeparam>
-		/// <typeparam name="TValue"></typeparam>
-		/// <param name="extends"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> extends)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			return extends.ToDictionary(x => x.Key, x => x.Value);
 		}
 
 		/// <summary>
@@ -975,8 +975,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="getProperty"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<TItem> Distinct<TItem, TProperty>(this IEnumerable<TItem> extends,
-		                                                            Func<TItem, TProperty> getProperty)
+		public static IEnumerable<TItem> Distinct<TItem, TProperty>([NotNull] this IEnumerable<TItem> extends,
+		                                                            [NotNull] Func<TItem, TProperty> getProperty)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -998,8 +998,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="propertyComparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<TItem> Distinct<TItem, TProperty>(this IEnumerable<TItem> extends,
+		public static IEnumerable<TItem> Distinct<TItem, TProperty>([NotNull] this IEnumerable<TItem> extends,
 		                                                            Func<TItem, TProperty> getProperty,
+		                                                            [NotNull]
 		                                                            IEqualityComparer<TProperty> propertyComparer)
 		{
 			if (extends == null)
@@ -1020,7 +1021,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static T Random<T>(this IEnumerable<T> extends)
+		public static T Random<T>([NotNull] this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1045,7 +1046,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="other"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static T Unanimous<T>(this IEnumerable<T> extends, T other)
+		public static T Unanimous<T>([NotNull] this IEnumerable<T> extends, T other)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1063,7 +1064,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool Unanimous<T>(this IEnumerable<T> extends, out T result)
+		public static bool Unanimous<T>([NotNull] this IEnumerable<T> extends, out T result)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1081,7 +1082,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool Unanimous<T>(this IEnumerable<T> extends, IEqualityComparer<T> comparer, out T result)
+		public static bool Unanimous<T>([NotNull] this IEnumerable<T> extends, [NotNull] IEqualityComparer<T> comparer,
+		                                out T result)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1120,7 +1122,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="partitionSize"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<IEnumerable<T>> Partition<T>(this IEnumerable<T> extends, int partitionSize)
+		public static IEnumerable<IEnumerable<T>> Partition<T>([NotNull] this IEnumerable<T> extends, int partitionSize)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1134,7 +1136,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="sequence"></param>
 		/// <param name="partitionSize"></param>
 		/// <returns></returns>
-		private static IEnumerable<IEnumerable<T>> PartitionIterator<T>(IEnumerable<T> sequence, int partitionSize)
+		private static IEnumerable<IEnumerable<T>> PartitionIterator<T>([NotNull] IEnumerable<T> sequence,
+		                                                                int partitionSize)
 		{
 			using (IEnumerator<T> enumerator = sequence.GetEnumerator())
 			{
@@ -1143,7 +1146,7 @@ namespace ICD.Common.Utils.Extensions
 			}
 		}
 
-		private static IEnumerable<T> YieldBatchElements<T>(IEnumerator<T> source, int partitionSize)
+		private static IEnumerable<T> YieldBatchElements<T>([NotNull] IEnumerator<T> source, int partitionSize)
 		{
 			if (source == null)
 				throw new ArgumentNullException("source");
@@ -1164,7 +1167,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T">Type of the object.</typeparam>
 		/// <param name="item">The instance that will be wrapped.</param>
 		/// <returns>An IEnumerable&lt;T&gt; consisting of a single item.</returns>
-		public static IEnumerable<T> Yield<T>(this T item)
+		public static IEnumerable<T> Yield<T>([CanBeNull] this T item)
 		{
 			yield return item;
 		}
@@ -1175,7 +1178,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static IEnumerable<T[]> GetAdjacentPairs<T>(this IEnumerable<T> extends)
+		public static IEnumerable<T[]> GetAdjacentPairs<T>([NotNull] this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1189,7 +1192,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		private static IEnumerable<T[]> GetAdjacentPairsIterator<T>(IEnumerable<T> extends)
+		private static IEnumerable<T[]> GetAdjacentPairsIterator<T>([NotNull] IEnumerable<T> extends)
 		{
 			T previous = default(T);
 			bool first = true;
@@ -1197,7 +1200,7 @@ namespace ICD.Common.Utils.Extensions
 			foreach (T item in extends)
 			{
 				if (!first)
-					yield return new[] { previous, item };
+					yield return new[] {previous, item};
 
 				first = false;
 				previous = item;
@@ -1211,7 +1214,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="getDelta"></param>
 		/// <returns></returns>
-		public static T GetClosest<T>(this IEnumerable<T> extends, Func<T, int> getDelta)
+		public static T GetClosest<T>([NotNull] this IEnumerable<T> extends, [NotNull] Func<T, int> getDelta)
 		{
 			return extends.MinBy(n => Math.Abs(getDelta(n)));
 		}
@@ -1234,8 +1237,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null</exception>
 		/// <exception cref="InvalidOperationException"><paramref name="source"/> is empty</exception>
 		[PublicAPI]
-		public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source,
-		                                           Func<TSource, TKey> selector)
+		public static TSource MinBy<TSource, TKey>([NotNull] this IEnumerable<TSource> source,
+		                                           [NotNull] Func<TSource, TKey> selector)
 		{
 			if (source == null)
 				throw new ArgumentNullException("source");
@@ -1265,8 +1268,9 @@ namespace ICD.Common.Utils.Extensions
 		/// or <paramref name="comparer"/> is null</exception>
 		/// <exception cref="InvalidOperationException"><paramref name="source"/> is empty</exception>
 		[PublicAPI]
-		public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector,
-		                                           IComparer<TKey> comparer)
+		public static TSource MinBy<TSource, TKey>([NotNull] this IEnumerable<TSource> source,
+		                                           [NotNull] Func<TSource, TKey> selector,
+		                                           [NotNull] IComparer<TKey> comparer)
 		{
 			if (source == null)
 				throw new ArgumentNullException("source");
@@ -1307,7 +1311,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static byte Sum(this IEnumerable<byte> extends)
+		public static byte Sum([NotNull] this IEnumerable<byte> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1326,7 +1330,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<T> Consolidate<T>(this IEnumerable<T> extends)
+		public static IEnumerable<T> Consolidate<T>([NotNull] this IEnumerable<T> extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1346,7 +1350,8 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static IEnumerable<T> Consolidate<T>(this IEnumerable<T> extends, IComparer<T> comparer)
+		public static IEnumerable<T> Consolidate<T>([NotNull] this IEnumerable<T> extends,
+		                                            [NotNull] IComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1368,7 +1373,8 @@ namespace ICD.Common.Utils.Extensions
 		///  <param name="sequence"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		private static IEnumerable<T> ConsolidateIterator<T>(IEnumerable<T> sequence, IComparer<T> comparer)
+		private static IEnumerable<T> ConsolidateIterator<T>([NotNull] IEnumerable<T> sequence,
+		                                                     [NotNull] IComparer<T> comparer)
 		{
 			bool first = true;
 			T last = default(T);
@@ -1394,7 +1400,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="predicate"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool AnyAndAll<T>(this IEnumerable<T> extends, Func<T, bool> predicate)
+		public static bool AnyAndAll<T>([NotNull] this IEnumerable<T> extends, [NotNull] Func<T, bool> predicate)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1420,11 +1426,12 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="TSecond"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="second"></param>
-		public static IEnumerable<KeyValuePair<TFirst, TSecond>> Zip<TFirst, TSecond>(this IEnumerable<TFirst> extends,
-		                                                                              IEnumerable<TSecond> second)
+		public static IEnumerable<KeyValuePair<TFirst, TSecond>> Zip<TFirst, TSecond>(
+			[NotNull] this IEnumerable<TFirst> extends,
+			[NotNull] IEnumerable<TSecond> second)
 		{
 			if (extends == null)
-				throw new ArgumentNullException("first");
+				throw new ArgumentNullException("extends");
 
 			if (second == null)
 				throw new ArgumentNullException("second");
@@ -1441,9 +1448,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="second"></param>
 		/// <param name="callback"></param>
-		public static void Zip<TFirst, TSecond>(this IEnumerable<TFirst> extends,
-		                                        IEnumerable<TSecond> second,
-		                                        Action<TFirst, TSecond> callback)
+		public static void Zip<TFirst, TSecond>([NotNull]this IEnumerable<TFirst> extends,
+		                                        [NotNull]IEnumerable<TSecond> second,
+		                                        [NotNull]Action<TFirst, TSecond> callback)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("first");
@@ -1474,9 +1481,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="other"></param>
 		/// <param name="callback"></param>
 		/// <returns></returns>
-		public static IEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IEnumerable<TFirst> extends,
-		                                                                 IEnumerable<TSecond> other,
-		                                                                 Func<TFirst, TSecond, TResult> callback)
+		public static IEnumerable<TResult> Zip<TFirst, TSecond, TResult>([NotNull]this IEnumerable<TFirst> extends,
+		                                                                 [NotNull]IEnumerable<TSecond> other,
+		                                                                 [NotNull]Func<TFirst, TSecond, TResult> callback)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1500,9 +1507,9 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="second"></param>
 		/// <param name="callback"></param>
 		/// <returns></returns>
-		private static IEnumerable<TResult> ZipIterator<TFirst, TSecond, TResult>(IEnumerable<TFirst> first,
-		                                                                          IEnumerable<TSecond> second,
-		                                                                          Func<TFirst, TSecond, TResult> callback)
+		private static IEnumerable<TResult> ZipIterator<TFirst, TSecond, TResult>([NotNull]IEnumerable<TFirst> first,
+		                                                                          [NotNull]IEnumerable<TSecond> second,
+		                                                                          [NotNull]Func<TFirst, TSecond, TResult> callback)
 		{
 			using (IEnumerator<TFirst> enumerator1 = first.GetEnumerator())
 			{

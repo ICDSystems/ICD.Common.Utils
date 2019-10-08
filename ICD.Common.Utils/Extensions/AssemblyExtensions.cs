@@ -18,7 +18,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[CanBeNull]
-		public static string GetPath(this Assembly extends)
+		public static string GetPath([NotNull]this Assembly extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -29,7 +29,7 @@ namespace ICD.Common.Utils.Extensions
 #endif
 				.CodeBase;
 
-			if (path == null)
+			if (string.IsNullOrEmpty(path))
 			{
 #if STANDARD
 				path = extends.Location;
@@ -51,7 +51,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static DateTime GetCreationTime(this Assembly extends)
+		public static DateTime GetCreationTime([NotNull]this Assembly extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -66,7 +66,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string GetInformationalVersion(this Assembly extends)
+		public static string GetInformationalVersion([NotNull]this Assembly extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -85,7 +85,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="version"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryGetInformationalVersion(this Assembly extends, out string version)
+		public static bool TryGetInformationalVersion([NotNull]this Assembly extends, out string version)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

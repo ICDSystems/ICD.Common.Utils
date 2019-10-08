@@ -1,4 +1,5 @@
 ﻿using System;
+using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp.Reflection;
 #else
@@ -14,7 +15,7 @@ namespace ICD.Common.Utils.Extensions
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
-		public static bool GetIsOut(this ParameterInfo extends)
+		public static bool GetIsOut([NotNull] this ParameterInfo extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");

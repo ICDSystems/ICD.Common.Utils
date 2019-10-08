@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Extensions
 {
@@ -11,7 +12,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="items"></param>
-		public static void EnqueueRange<T>(this Queue<T> extends, IEnumerable<T> items)
+		public static void EnqueueRange<T>([NotNull] this Queue<T> extends, [NotNull] IEnumerable<T> items)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -30,7 +31,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public static bool Dequeue<T>(this Queue<T> extends, out T item)
+		public static bool Dequeue<T>([NotNull] this Queue<T> extends, out T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -51,7 +52,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public static bool Peek<T>(this Queue<T> extends, out T item)
+		public static bool Peek<T>([NotNull] this Queue<T> extends, out T item)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
