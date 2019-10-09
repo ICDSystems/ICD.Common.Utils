@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Attributes
@@ -286,11 +287,36 @@ namespace ICD.Common.Utils.Attributes
 		#region Methods
 
 		/// <summary>
+		/// Remaps the numeric value into the min-max range of the target numeric type.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		[NotNull]
+		public static object Remap([NotNull] object value, [NotNull] Type type)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (!type.IsNumeric())
+				throw new ArgumentException("Target type is not numeric");
+
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
+
+			double intermediate = RemapToDouble(value);
+			return RemapFromDouble(intermediate, type);
+		}
+
+		/// <summary>
 		/// Remaps the given numeric value from its min/max range into double min/max range.
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static double RemapToDouble(object value)
+		public static double RemapToDouble([NotNull] object value)
 		{
 			if (value == null)
 				throw new ArgumentNullException("value");
@@ -308,7 +334,8 @@ namespace ICD.Common.Utils.Attributes
 		/// <param name="value"></param>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		public static object RemapFromDouble(double value, Type type)
+		[NotNull]
+		public static object RemapFromDouble(double value, [NotNull] Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -321,12 +348,40 @@ namespace ICD.Common.Utils.Attributes
 		}
 
 		/// <summary>
+		/// Remaps the given numeric value to the defined min/max.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		[NotNull]
+		public object RemapMinMax([NotNull] object value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (!value.GetType().IsNumeric())
+				throw new ArgumentException("Source value is not numeric");
+
+			double sourceMin = GetMinAsDouble(value.GetType());
+			double sourceMax = GetMaxAsDouble(value.GetType());
+
+			double targetMin = Convert.ToDouble(Min);
+			double targetMax = Convert.ToDouble(Max);
+
+			double doubleValue = Convert.ToDouble(value);
+
+			double remapped = MathUtils.MapRange(sourceMin, sourceMax, targetMin, targetMax, doubleValue);
+
+			return Convert.ChangeType(remapped, value.GetType(), CultureInfo.InvariantCulture);
+		}
+
+		/// <summary>
 		/// Clamps the given numeric value into the valid ranges of the target numeric type.
 		/// </summary>
 		/// <param name="value"></param>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		public static object Clamp(object value, Type type)
+		[NotNull]
+		public static object Clamp([NotNull] object value, [NotNull] Type type)
 		{
 			if (value == null)
 				throw new ArgumentNullException("value");
@@ -352,7 +407,7 @@ namespace ICD.Common.Utils.Attributes
 		/// <param name="value"></param>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		public static double Clamp(double value, Type type)
+		public static double Clamp(double value, [NotNull] Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -365,36 +420,13 @@ namespace ICD.Common.Utils.Attributes
 		}
 
 		/// <summary>
-		/// Remaps the numeric value into the min-max range of the target numeric type.
-		/// </summary>
-		/// <param name="value"></param>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		public static object Remap(object value, Type type)
-		{
-			if (value == null)
-				throw new ArgumentNullException("value");
-
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			if (!type.IsNumeric())
-				throw new ArgumentException("Target type is not numeric");
-
-			if (!value.GetType().IsNumeric())
-				throw new ArgumentException("Source value is not numeric");
-
-			double intermediate = RemapToDouble(value);
-			return RemapFromDouble(intermediate, type);
-		}
-
-		/// <summary>
 		/// Clamps the given numeric value to the defined min/max then remaps to the target numeric type.
 		/// </summary>
 		/// <param name="value"></param>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		public object ClampMinMaxThenRemap(object value, Type type)
+		[NotNull]
+		public object ClampMinMaxThenRemap([NotNull] object value, [NotNull] Type type)
 		{
 			if (value == null)
 				throw new ArgumentNullException("value");
@@ -418,33 +450,12 @@ namespace ICD.Common.Utils.Attributes
 			return Convert.ChangeType(remapped, value.GetType(), CultureInfo.InvariantCulture);
 		}
 
-		/// <summary>
-		/// Remaps the given numeric value to the defined min/max.
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public object RemapMinMax(object value)
-		{
-			if (value == null)
-				throw new ArgumentNullException("value");
+		#endregion
 
-			if (!value.GetType().IsNumeric())
-				throw new ArgumentException("Source value is not numeric");
+		#region Private Methods
 
-			double sourceMin = GetMinAsDouble(value.GetType());
-			double sourceMax = GetMaxAsDouble(value.GetType());
-
-			double targetMin = Convert.ToDouble(Min);
-			double targetMax = Convert.ToDouble(Max);
-
-			double doubleValue = Convert.ToDouble(value);
-
-			double remapped = MathUtils.MapRange(sourceMin, sourceMax, targetMin, targetMax, doubleValue);
-
-			return Convert.ChangeType(remapped, value.GetType(), CultureInfo.InvariantCulture);
-		}
-
-		private object RemapMinMax(object value, Type type)
+		[NotNull]
+		private object RemapMinMax([NotNull] object value, [NotNull] Type type)
 		{
 			if (value == null)
 				throw new ArgumentNullException("value");
@@ -471,16 +482,12 @@ namespace ICD.Common.Utils.Attributes
 			return Convert.ChangeType(remapped, type, CultureInfo.InvariantCulture);
 		}
 
-		#endregion
-
-		#region Private Methods
-
 		/// <summary>
 		/// Gets the min value for the given numeric type as a double.
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		private static double GetMinAsDouble(Type type)
+		private static double GetMinAsDouble([NotNull] Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -500,7 +507,7 @@ namespace ICD.Common.Utils.Attributes
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		private static double GetMaxAsDouble(Type type)
+		private static double GetMaxAsDouble([NotNull] Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
