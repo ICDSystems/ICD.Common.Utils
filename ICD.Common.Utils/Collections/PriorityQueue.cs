@@ -30,6 +30,7 @@ namespace ICD.Common.Utils.Collections
 		/// <summary>
 		/// Gets a reference for locking.
 		/// </summary>
+		[NotNull]
 		public object SyncRoot { get { return this; } }
 
 		#endregion
@@ -59,7 +60,7 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="item"></param>
 		[PublicAPI]
-		public void Enqueue(T item)
+		public void Enqueue([CanBeNull] T item)
 		{
 			Enqueue(item, int.MaxValue);
 		}
@@ -71,16 +72,10 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="item"></param>
 		/// <param name="priority"></param>
 		[PublicAPI]
-		public void Enqueue(T item, int priority)
+		public void Enqueue([CanBeNull] T item, int priority)
 		{
-			List<T> queue;
-			if (!m_PriorityToQueue.TryGetValue(priority, out queue))
-			{
-				queue = new List<T>();
-				m_PriorityToQueue.Add(priority, queue);
-			}
-
-			queue.Add(item);
+			m_PriorityToQueue.GetOrAddNew(priority, () => new List<T>())
+			                 .Add(item);
 			m_Count++;
 		}
 
@@ -89,18 +84,10 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="item"></param>
 		[PublicAPI]
-		public void EnqueueFirst(T item)
+		public void EnqueueFirst([CanBeNull] T item)
 		{
-			const int priority = int.MinValue;
-
-			List<T> queue;
-			if (!m_PriorityToQueue.TryGetValue(priority, out queue))
-			{
-				queue = new List<T>();
-				m_PriorityToQueue.Add(priority, queue);
-			}
-
-			queue.Insert(0, item);
+			m_PriorityToQueue.GetOrAddNew(int.MinValue, () => new List<T>())
+			                 .Insert(0, item);
 			m_Count++;
 		}
 
@@ -112,7 +99,7 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="item"></param>
 		/// <param name="remove"></param>
 		[PublicAPI]
-		public void EnqueueRemove(T item, Func<T, bool> remove)
+		public void EnqueueRemove([CanBeNull] T item, [NotNull] Func<T, bool> remove)
 		{
 			if (remove == null)
 				throw new ArgumentNullException("remove");
@@ -129,7 +116,7 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="remove"></param>
 		/// <param name="priority"></param>
 		[PublicAPI]
-		public void EnqueueRemove(T item, Func<T, bool> remove, int priority)
+		public void EnqueueRemove([CanBeNull] T item, [NotNull] Func<T, bool> remove, int priority)
 		{
 			if (remove == null)
 				throw new ArgumentNullException("remove");
@@ -180,6 +167,7 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <returns></returns>
 		[PublicAPI]
+		[CanBeNull]
 		public T Dequeue()
 		{
 			T output;
@@ -227,6 +215,7 @@ namespace ICD.Common.Utils.Collections
 		/// Gets an enumerator for the items.
 		/// </summary>
 		/// <returns></returns>
+		[NotNull]
 		public IEnumerator<T> GetEnumerator()
 		{
 			return m_PriorityToQueue.Values
@@ -239,8 +228,11 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="array"></param>
 		/// <param name="index"></param>
-		public void CopyTo(Array array, int index)
+		public void CopyTo([NotNull] Array array, int index)
 		{
+			if (array == null)
+				throw new ArgumentNullException("array");
+
 			foreach (T item in this)
 				array.SetValue(item, index++);
 		}
@@ -253,6 +245,7 @@ namespace ICD.Common.Utils.Collections
 		/// Gets an enumerator for the items.
 		/// </summary>
 		/// <returns></returns>
+		[NotNull]
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();

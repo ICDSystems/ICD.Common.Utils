@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Collections
@@ -19,11 +20,14 @@ namespace ICD.Common.Utils.Collections
 
 		public bool IsReadOnly { get { return false; } }
 
+		[NotNull]
 		public ICollection<TKey> Keys { get { return m_OrderedKeys; } }
 
+		[NotNull]
 		public ICollection<TValue> Values { get { return m_ValuesOrderedByKey; } }
 
-		public TValue this[TKey key]
+		[CanBeNull]
+		public TValue this[[NotNull] TKey key]
 		{
 			get { return m_Dictionary[key]; }
 			set
@@ -51,7 +55,7 @@ namespace ICD.Common.Utils.Collections
 		/// Constructor.
 		/// </summary>
 		/// <param name="comparer"></param>
-		public IcdOrderedDictionary(IComparer<TKey> comparer)
+		public IcdOrderedDictionary([NotNull] IComparer<TKey> comparer)
 			: this(comparer, EqualityComparer<TKey>.Default)
 		{
 		}
@@ -61,7 +65,7 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="comparer"></param>
 		/// <param name="equalityComparer"></param>
-		public IcdOrderedDictionary(IComparer<TKey> comparer, IEqualityComparer<TKey> equalityComparer)
+		public IcdOrderedDictionary([NotNull] IComparer<TKey> comparer, [NotNull] IEqualityComparer<TKey> equalityComparer)
 		{
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
@@ -79,7 +83,7 @@ namespace ICD.Common.Utils.Collections
 		/// Constructor.
 		/// </summary>
 		/// <param name="dictionary"></param>
-		public IcdOrderedDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary)
+		public IcdOrderedDictionary([NotNull] IEnumerable<KeyValuePair<TKey, TValue>> dictionary)
 			: this()
 		{
 			if (dictionary == null)
@@ -91,16 +95,18 @@ namespace ICD.Common.Utils.Collections
 
 		#region Methods
 
+		[NotNull]
 		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
 		{
 			return m_OrderedKeys.Select(k => new KeyValuePair<TKey, TValue>(k, m_Dictionary[k]))
 			                    .GetEnumerator();
 		}
 
-		public void Add(TKey key, TValue value)
+		public void Add([NotNull] TKey key, [CanBeNull] TValue value)
 		{
-// ReSharper disable once CompareNonConstrainedGenericWithNull
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
 
 			if (m_Dictionary.ContainsKey(key))
@@ -119,15 +125,21 @@ namespace ICD.Common.Utils.Collections
 			m_Dictionary.Clear();
 		}
 
-		public bool ContainsKey(TKey key)
+		public bool ContainsKey([NotNull] TKey key)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("key");
+
 			return m_Dictionary.ContainsKey(key);
 		}
 
-		public bool Remove(TKey key)
+		public bool Remove([NotNull] TKey key)
 		{
-// ReSharper disable once CompareNonConstrainedGenericWithNull
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
 
 			if (!m_Dictionary.Remove(key))
@@ -141,8 +153,13 @@ namespace ICD.Common.Utils.Collections
 			return true;
 		}
 
-		public bool TryGetValue(TKey key, out TValue value)
+		public bool TryGetValue([NotNull] TKey key, out TValue value)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("key");
+
 			return m_Dictionary.TryGetValue(key, out value);
 		}
 
@@ -150,6 +167,7 @@ namespace ICD.Common.Utils.Collections
 
 		#region Private Methods
 
+		[NotNull]
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
@@ -167,8 +185,11 @@ namespace ICD.Common.Utils.Collections
 			       EqualityComparer<TValue>.Default.Equals(value, item.Value);
 		}
 
-		void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int index)
+		void ICollection<KeyValuePair<TKey, TValue>>.CopyTo([NotNull] KeyValuePair<TKey, TValue>[] array, int index)
 		{
+			if (array == null)
+				throw new ArgumentNullException("array");
+
 			foreach (KeyValuePair<TKey, TValue> kvp in this)
 			{
 				array.SetValue(kvp, index);

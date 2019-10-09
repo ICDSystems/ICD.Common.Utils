@@ -49,7 +49,7 @@ namespace ICD.Common.Utils.Collections
 		/// Constructor.
 		/// </summary>
 		/// <param name="items"></param>
-		public IcdHashSet(IEnumerable<T> items)
+		public IcdHashSet([NotNull] IEnumerable<T> items)
 			: this(EqualityComparer<T>.Default, items)
 		{
 		}
@@ -58,7 +58,7 @@ namespace ICD.Common.Utils.Collections
 		/// Constructor.
 		/// </summary>
 		/// <param name="comparer"></param>
-		public IcdHashSet(IEqualityComparer<T> comparer)
+		public IcdHashSet([NotNull] IEqualityComparer<T> comparer)
 			: this(comparer, Enumerable.Empty<T>())
 		{
 		}
@@ -68,7 +68,7 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="comparer"></param>
 		/// <param name="items"></param>
-		public IcdHashSet(IEqualityComparer<T> comparer, IEnumerable<T> items)
+		public IcdHashSet([NotNull] IEqualityComparer<T> comparer, [NotNull] IEnumerable<T> items)
 		{
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
@@ -91,7 +91,8 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public IcdHashSet<T> Union(IEnumerable<T> set)
+		[NotNull]
+		public IcdHashSet<T> Union([NotNull] IEnumerable<T> set)
 		{
 			if (set == null)
 				throw new ArgumentNullException("set");
@@ -108,7 +109,8 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public IcdHashSet<T> Subtract(IEnumerable<T> set)
+		[NotNull]
+		public IcdHashSet<T> Subtract([NotNull] IEnumerable<T> set)
 		{
 			if (set == null)
 				throw new ArgumentNullException("set");
@@ -127,7 +129,8 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public IcdHashSet<T> Intersection(IEnumerable<T> set)
+		[NotNull]
+		public IcdHashSet<T> Intersection([NotNull] IEnumerable<T> set)
 		{
 			if (set == null)
 				throw new ArgumentNullException("set");
@@ -146,7 +149,8 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public IcdHashSet<T> NonIntersection(IEnumerable<T> set)
+		[NotNull]
+		public IcdHashSet<T> NonIntersection([NotNull] IEnumerable<T> set)
 		{
 			if (set == null)
 				throw new ArgumentNullException("set");
@@ -170,7 +174,7 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public bool IsSubsetOf(IcdHashSet<T> set)
+		public bool IsSubsetOf([NotNull] IcdHashSet<T> set)
 		{
 			if (set == null)
 				throw new ArgumentNullException("set");
@@ -184,7 +188,7 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public bool IsProperSubsetOf(IcdHashSet<T> set)
+		public bool IsProperSubsetOf([NotNull] IcdHashSet<T> set)
 		{
 			if (set == null)
 				throw new ArgumentNullException("set");
@@ -198,7 +202,7 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public bool IsSupersetOf(IcdHashSet<T> set)
+		public bool IsSupersetOf([NotNull] IcdHashSet<T> set)
 		{
 			if (set == null)
 				throw new ArgumentNullException("set");
@@ -212,7 +216,7 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public bool IsProperSupersetOf(IcdHashSet<T> set)
+		public bool IsProperSupersetOf([NotNull] IcdHashSet<T> set)
 		{
 			if (set == null)
 				throw new ArgumentNullException("set");
@@ -226,7 +230,7 @@ namespace ICD.Common.Utils.Collections
 		/// <param name="set"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public bool SetEquals(IcdHashSet<T> set)
+		public bool SetEquals([NotNull] IcdHashSet<T> set)
 		{
 			if (set == null)
 				throw new ArgumentNullException("set");
@@ -243,7 +247,7 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public bool Add(T item)
+		public bool Add([NotNull] T item)
 		{
 // ReSharper disable CompareNonConstrainedGenericWithNull
 			if (item == null)
@@ -261,7 +265,7 @@ namespace ICD.Common.Utils.Collections
 		/// Adds the item to the collection.
 		/// </summary>
 		/// <param name="item"></param>
-		void ICollection<T>.Add(T item)
+		void ICollection<T>.Add([NotNull] T item)
 		{
 			Add(item);
 		}
@@ -270,7 +274,7 @@ namespace ICD.Common.Utils.Collections
 		/// Adds each of the items in the sequence to the collection.
 		/// </summary>
 		/// <param name="items"></param>
-		public void AddRange(IEnumerable<T> items)
+		public void AddRange([NotNull] IEnumerable<T> items)
 		{
 			if (items == null)
 				throw new ArgumentNullException("items");
@@ -293,7 +297,7 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public bool Contains(T item)
+		public bool Contains([NotNull] T item)
 		{
 // ReSharper disable CompareNonConstrainedGenericWithNull
 			if (item == null)
@@ -307,8 +311,11 @@ namespace ICD.Common.Utils.Collections
 		/// Copies the items of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
 		/// </summary>
 		/// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the items copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param><param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception><exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional.-or-<paramref name="arrayIndex"/> is equal to or greater than the length of <paramref name="array"/>.-or-The number of items in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.-or-Type T cannot be cast automatically to the type of the destination <paramref name="array"/>.</exception>
-		public void CopyTo(T[] array, int arrayIndex)
+		public void CopyTo([NotNull] T[] array, int arrayIndex)
 		{
+			if (array == null)
+				throw new ArgumentNullException("array");
+
 			m_Dict.Keys.CopyTo(array, arrayIndex);
 		}
 
@@ -319,7 +326,7 @@ namespace ICD.Common.Utils.Collections
 		/// true if <paramref name="item"/> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"/>.
 		/// </returns>
 		/// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
-		public bool Remove(T item)
+		public bool Remove([NotNull] T item)
 		{
 // ReSharper disable CompareNonConstrainedGenericWithNull
 			if (item == null)
@@ -333,7 +340,7 @@ namespace ICD.Common.Utils.Collections
 		/// Removes each of the items in the sequence from the collection.
 		/// </summary>
 		/// <param name="items"></param>
-		public void RemoveRange(IEnumerable<T> items)
+		public void RemoveRange([NotNull] IEnumerable<T> items)
 		{
 			if (items == null)
 				throw new ArgumentNullException("items");
@@ -352,6 +359,7 @@ namespace ICD.Common.Utils.Collections
 		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
 		/// </returns>
 		/// <filterpriority>1</filterpriority>
+		[NotNull]
 		public IEnumerator<T> GetEnumerator()
 		{
 			return m_Dict.Keys.GetEnumerator();
@@ -364,6 +372,7 @@ namespace ICD.Common.Utils.Collections
 		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
 		/// </returns>
 		/// <filterpriority>2</filterpriority>
+		[NotNull]
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Collections
 {
@@ -20,8 +21,10 @@ namespace ICD.Common.Utils.Collections
 
 		public bool IsReadOnly { get { return false; } }
 
+		[NotNull]
 		public ICollection<TKey> Keys { get { return m_KeyToValue.Keys; } }
 
+		[NotNull]
 		public ICollection<TValue> Values { get { return m_ValueToKey.Keys; } }
 
 		#endregion
@@ -30,21 +33,20 @@ namespace ICD.Common.Utils.Collections
 		/// Constructor.
 		/// </summary>
 		public BiDictionary()
-			: this(null)
 		{
+			m_KeyToValue = new Dictionary<TKey, TValue>();
+			m_ValueToKey = new Dictionary<TValue, TKey>();
 		}
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="dict"></param>
-		public BiDictionary(Dictionary<TKey, TValue> dict)
+		public BiDictionary([NotNull] Dictionary<TKey, TValue> dict)
+			: this()
 		{
-			m_KeyToValue = new Dictionary<TKey, TValue>();
-			m_ValueToKey = new Dictionary<TValue, TKey>();
-
 			if (dict == null)
-				return;
+				throw new ArgumentNullException("dict");
 
 			foreach (KeyValuePair<TKey, TValue> kvp in dict)
 				Add(kvp.Key, kvp.Value);
@@ -58,24 +60,31 @@ namespace ICD.Common.Utils.Collections
 			m_ValueToKey.Clear();
 		}
 
-		public bool ContainsKey(TKey key)
+		public bool ContainsKey([NotNull] TKey key)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("key");
+
 			return m_KeyToValue.ContainsKey(key);
 		}
 
-		public bool ContainsValue(TValue value)
+		public bool ContainsValue([NotNull] TValue value)
 		{
 			return m_ValueToKey.ContainsKey(value);
 		}
 
-		public void Add(TKey key, TValue value)
+		public void Add([NotNull] TKey key, [NotNull] TValue value)
 		{
-// ReSharper disable once CompareNonConstrainedGenericWithNull
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
 
-// ReSharper disable once CompareNonConstrainedGenericWithNull
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (value == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("value");
 
 			if (ContainsKey(key))
@@ -88,14 +97,16 @@ namespace ICD.Common.Utils.Collections
 			m_ValueToKey.Add(value, key);
 		}
 
-		public void Set(TKey key, TValue value)
+		public void Set([NotNull] TKey key, [NotNull] TValue value)
 		{
-// ReSharper disable once CompareNonConstrainedGenericWithNull
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
 
-// ReSharper disable once CompareNonConstrainedGenericWithNull
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (value == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("value");
 
 			RemoveKey(key);
@@ -104,18 +115,35 @@ namespace ICD.Common.Utils.Collections
 			Add(key, value);
 		}
 
-		public TKey GetKey(TValue value)
+		[NotNull]
+		public TKey GetKey([NotNull] TValue value)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (value == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("value");
+
 			return m_ValueToKey[value];
 		}
 
-		public TValue GetValue(TKey key)
+		[NotNull]
+		public TValue GetValue([NotNull] TKey key)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("key");
+
 			return m_KeyToValue[key];
 		}
 
-		public bool RemoveKey(TKey key)
+		public bool RemoveKey([NotNull] TKey key)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("key");
+
 			if (!ContainsKey(key))
 				return false;
 
@@ -127,8 +155,13 @@ namespace ICD.Common.Utils.Collections
 			return true;
 		}
 
-		public bool RemoveValue(TValue value)
+		public bool RemoveValue([NotNull] TValue value)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (value == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("value");
+
 			if (!ContainsValue(value))
 				return false;
 
@@ -137,13 +170,23 @@ namespace ICD.Common.Utils.Collections
 			return RemoveKey(key);
 		}
 
-		public bool TryGetValue(TKey key, out TValue value)
+		public bool TryGetValue([NotNull] TKey key, out TValue value)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("key");
+
 			return m_KeyToValue.TryGetValue(key, out value);
 		}
 
-		public bool TryGetKey(TValue value, out TKey key)
+		public bool TryGetKey([NotNull] TValue value, out TKey key)
 		{
+// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (value == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("value");
+
 			return m_ValueToKey.TryGetValue(value, out key);
 		}
 
@@ -151,9 +194,10 @@ namespace ICD.Common.Utils.Collections
 
 		#region IDictionary
 
-		TValue IDictionary<TKey, TValue>.this[TKey key] { get { return GetValue(key); } set { Set(key, value); } }
+		[NotNull]
+		TValue IDictionary<TKey, TValue>.this[[NotNull] TKey key] { get { return GetValue(key); } set { Set(key, value); } }
 
-		bool IDictionary<TKey, TValue>.Remove(TKey key)
+		bool IDictionary<TKey, TValue>.Remove([NotNull] TKey key)
 		{
 			return RemoveKey(key);
 		}
@@ -177,7 +221,7 @@ namespace ICD.Common.Utils.Collections
 			return RemoveKey(item.Key);
 		}
 
-		void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+		void ICollection<KeyValuePair<TKey, TValue>>.CopyTo([NotNull] KeyValuePair<TKey, TValue>[] array, int arrayIndex)
 		{
 			(m_KeyToValue as IDictionary<TKey, TValue>).CopyTo(array, arrayIndex);
 		}
@@ -186,11 +230,13 @@ namespace ICD.Common.Utils.Collections
 
 		#region IEnumerable
 
+		[NotNull]
 		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
 		{
 			return m_KeyToValue.GetEnumerator();
 		}
 
+		[NotNull]
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();

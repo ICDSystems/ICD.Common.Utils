@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Timers;
@@ -32,6 +33,7 @@ namespace ICD.Common.Utils.Collections
 
 		bool ICollection.IsSynchronized { get { return true; } }
 
+		[NotNull]
 		object ICollection.SyncRoot { get { return this; } }
 
 		#endregion
@@ -72,7 +74,7 @@ namespace ICD.Common.Utils.Collections
 		/// Enqueues the given item.
 		/// </summary>
 		/// <param name="item"></param>
-		public void Enqueue(T item)
+		public void Enqueue([CanBeNull] T item)
 		{
 			m_QueueSection.Enter();
 
@@ -158,18 +160,23 @@ namespace ICD.Common.Utils.Collections
 
 		#region IEnumerable/ICollection
 
+		[NotNull]
 		public IEnumerator<T> GetEnumerator()
 		{
 			return m_QueueSection.Execute(() => m_Queue.ToList(m_Queue.Count).GetEnumerator());
 		}
 
+		[NotNull]
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
 		}
 
-		void ICollection.CopyTo(Array array, int index)
+		void ICollection.CopyTo([NotNull] Array array, int index)
 		{
+			if (array == null)
+				throw new ArgumentNullException("array");
+
 			m_QueueSection.Enter();
 
 			try
