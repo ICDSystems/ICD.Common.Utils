@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ICD.Common.Utils
 {
@@ -6,7 +7,7 @@ namespace ICD.Common.Utils
 	/// Convenience wrapper for supporting null keys in hash tables.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public struct NullObject<T> : IEquatable<NullObject<T>>
+	public struct NullObject<T> : IEquatable<NullObject<T>>, IComparable<NullObject<T>>
 	{
 		#region Properties
 
@@ -98,6 +99,21 @@ namespace ICD.Common.Utils
 				result++;
 
 			return result;
+		}
+
+		#endregion
+
+		#region Comparable
+
+		public int CompareTo(NullObject<T> other)
+		{
+			if (IsNull && other.IsNull)
+				return 0;
+
+			if (IsNull)
+				return -1;
+
+			return Comparer<T>.Default.Compare(Item, other.Item);
 		}
 
 		#endregion

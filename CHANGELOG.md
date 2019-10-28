@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+ - NullObject implements IComparable, fixes issues with null keys in ordered dictionaries
+
 ## [10.0.0] - 2019-10-07
 ### Added
  - IcdEnvironment.GetUtcTime() to get UTC representaiton of current time.
