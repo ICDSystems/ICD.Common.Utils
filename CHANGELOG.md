@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+  - Fixed an issue where commands would collapse to the point of the last deleted command instead of the position in queue where the new command was going
 
 ## [8.7.1] - 2019-08-22
 ### Changed
