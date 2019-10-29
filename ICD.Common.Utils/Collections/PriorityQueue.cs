@@ -121,8 +121,6 @@ namespace ICD.Common.Utils.Collections
 			if (remove == null)
 				throw new ArgumentNullException("remove");
 
-			bool inserted = false;
-
 			foreach (KeyValuePair<int, List<T>> kvp in m_PriorityToQueue.ToArray())
 			{
 				int[] removeIndices =
@@ -131,35 +129,17 @@ namespace ICD.Common.Utils.Collections
 					   .Reverse()
 					   .ToArray();
 
-				if (removeIndices.Length == 0)
-					continue;
-
 				foreach (int removeIndex in removeIndices)
 				{
 					kvp.Value.RemoveAt(removeIndex);
 					m_Count--;
 				}
 
-				if (!inserted)
-				{
-					int insertIndex = removeIndices[0];
-
-					if (insertIndex >= kvp.Value.Count)
-						kvp.Value.Add(item);
-					else
-						kvp.Value.Insert(insertIndex, item);
-
-					m_Count++;
-
-					inserted = true;
-				}
-
 				if (kvp.Value.Count == 0)
 					m_PriorityToQueue.Remove(kvp.Key);
 			}
 
-			if (!inserted)
-				Enqueue(item, priority);
+			Enqueue(item, priority);
 		}
 
 		/// <summary>

@@ -128,6 +128,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Better VC-4 support for IcdConsole
  - JSON refactoring for simpler deserialization
 
+## [8.7.2] - 2019-10-29
+### Changed
+  - Fixed a bug with PriorityQueue de-duplication where a new command would be inserted in the wrong position
+
 ## [8.7.1] - 2019-08-22
 ### Changed
  - Fixed a bug with the IcdOrderedDict index setter that was creating additional values
