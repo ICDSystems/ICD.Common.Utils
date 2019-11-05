@@ -280,6 +280,16 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Appends the local path to the program data path.
+		/// </summary>
+		/// <returns></returns>
+		public static string GetProgramDataPath(params string[] localPath)
+		{
+			string local = Join(localPath);
+			return Join(ProgramDataPath, local);
+		}
+
+		/// <summary>
 		/// Returns true if the given path exists.
 		/// </summary>
 		/// <param name="path"></param>
