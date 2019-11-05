@@ -32,6 +32,9 @@ namespace ICD.Common.Utils.Sqlite
 		/// <param name="path"></param>
 		public static void CreateFile(string path)
 		{
+			string directory = IcdPath.GetDirectoryName(path);
+			IcdDirectory.CreateDirectory(directory);
+
 			using (IcdFileStream fs = IcdFile.Create(path))
 				fs.Close();
 		}
