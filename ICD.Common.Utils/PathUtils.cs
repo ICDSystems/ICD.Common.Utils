@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
@@ -287,6 +286,27 @@ namespace ICD.Common.Utils
 		{
 			string local = Join(localPath);
 			return Join(ProgramDataPath, local);
+		}
+
+		/// <summary>
+		///Appends the local path to the room data path.
+		/// </summary>
+		/// <returns></returns>
+		public static string GetRoomDataPath(int roomId, params string[] localPath)
+		{
+			string local = Join(localPath);
+			string roomDataDirectory = GetRoomDataDirectory(roomId);
+			return Join(ProgramDataPath, roomDataDirectory, local);
+		}
+
+		/// <summary>
+		/// Gets the directory name of the room data directory for the room with the given id.
+		/// </summary>
+		/// <param name="roomId"></param>
+		/// <returns></returns>
+		public static string GetRoomDataDirectory(int roomId)
+		{
+			return string.Format("Room{0}Data", roomId);
 		}
 
 		/// <summary>
