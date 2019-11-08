@@ -33,5 +33,18 @@ namespace ICD.Common.Utils.Extensions
 
 			return extends.UserInfo.Split(':').Skip(1).FirstOrDefault(string.Empty);
 		}
+
+		/// <summary>
+		/// Returns true if the URI matches the default http://localhost/
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static bool GetIsDefault([NotNull] this Uri extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.ToString() == "http://localhost/";
+		}
 	}
 }
