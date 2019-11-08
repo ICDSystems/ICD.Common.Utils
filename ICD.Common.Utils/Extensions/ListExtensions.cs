@@ -323,6 +323,28 @@ namespace ICD.Common.Utils.Extensions
 			return extends.BinarySearch(item, comparer) >= 0;
 		}
 
+		/// <summary>
+		/// Returns true if the sorted list contains the given item.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <typeparam name="TProp"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="item"></param>
+		/// <param name="predicate"></param>
+		[PublicAPI]
+		public static bool ContainsSorted<T, TProp>([NotNull] this IList<T> extends, T item,
+		                                            [NotNull] Func<T, TProp> predicate)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (predicate == null)
+				throw new ArgumentNullException("predicate");
+
+			PredicateComparer<T, TProp> comparer = new PredicateComparer<T, TProp>(predicate);
+			return extends.ContainsSorted(item, comparer);
+		}
+
 		#endregion
 
 		#region Binary Search
