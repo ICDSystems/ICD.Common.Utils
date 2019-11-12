@@ -1306,6 +1306,33 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns the maximum value from the sequence, otherwise the default value.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static T MaxOrDefault<T>([NotNull] this IEnumerable<T> extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			Comparer<T> comparer = Comparer<T>.Default;
+			T value = default(T);
+
+			using (IEnumerator<T> enumerator = extends.GetEnumerator())
+			{
+				while (enumerator.MoveNext())
+				{
+					T x = enumerator.Current;
+					if (comparer.Compare(x, value) > 0)
+						value = x;
+				}
+			}
+
+			return value;
+		}
+
+		/// <summary>
 		/// Computes the sum of a sequence of byte values.
 		/// </summary>
 		/// <param name="extends"></param>
