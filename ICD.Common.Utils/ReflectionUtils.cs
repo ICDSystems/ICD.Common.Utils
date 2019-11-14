@@ -51,13 +51,7 @@ namespace ICD.Common.Utils
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
 
-#if SIMPLSHARP
-			IEnumerable<CType>
-#else
-			IEnumerable<Type> 
-#endif
-				parameterTypes = method.GetParameters().Select(p => p.ParameterType);
-
+			IEnumerable<Type> parameterTypes = method.GetParameters().Select(p => (Type)p.ParameterType);
 			return ParametersMatchTypes(parameterTypes, parameters);
 		}
 
@@ -81,13 +75,7 @@ namespace ICD.Common.Utils
 		/// <param name="types"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		private static bool ParametersMatchTypes(
-#if SIMPLSHARP
-			IEnumerable<CType>
-#else
-			IEnumerable<Type>
-#endif
-				types, IEnumerable<object> parameters)
+		private static bool ParametersMatchTypes(IEnumerable<Type> types, IEnumerable<object> parameters)
 		{
 			if (types == null)
 				throw new ArgumentNullException("types");
@@ -95,27 +83,11 @@ namespace ICD.Common.Utils
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
 
+			return types
 #if SIMPLSHARP
-			IList<CType>
-#else
-			IList<Type>
+				   .Cast<object>()
 #endif
-				typesArray = types as
-#if SIMPLSHARP
-				             IList<CType>
-#else
-							 IList<Type>
-#endif
-							 ?? types.ToArray();
-
-			IList<object> parametersArray = parameters as IList<object> ?? parameters.ToArray();
-
-			if (parametersArray.Count != typesArray.Count)
-				return false;
-
-			// Compares each pair of items in the two arrays.
-			return !parametersArray.Where((t, index) => !ParameterMatchesType(typesArray[index], t))
-			                       .Any();
+			       .SequenceEqual(parameters, (a, b) => ParameterMatchesType((Type)a, b));
 		}
 
 		/// <summary>
@@ -164,7 +136,7 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Platform independant delegate instantiation.
+		/// Platform independent delegate instantiation.
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="firstArgument"></param>
