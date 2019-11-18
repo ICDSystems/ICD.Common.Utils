@@ -6,8 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [10.1.0] - 2019-11-18
+### Added
+ - Added PathUtils methods for getting ProgramData paths
+ - Added a method for determining if a URI is defaults
+ - Added MaxOrDefault extension method for enumerables
+ - Added a method for finding an item in a sorted list by a given predicate
+
 ### Changed
  - NullObject implements IComparable, fixes issues with null keys in ordered dictionaries
+ - IcdSqliteConnection CreateFile method will create directories recursively
 
 ## [10.0.0] - 2019-10-07
 ### Added
