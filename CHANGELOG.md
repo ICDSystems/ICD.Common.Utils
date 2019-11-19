@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added shim methods for finding closest DateTimes from a sequence
+
 ## [10.1.0] - 2019-11-18
 ### Added
  - Added PathUtils methods for getting ProgramData paths
