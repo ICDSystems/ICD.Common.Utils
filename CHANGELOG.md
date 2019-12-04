@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added MathUtils methods for converting to and from percentages
+
 ## [10.2.0] - 2019-12-04
 ### Added
  - Added shim methods for finding closest DateTimes from a sequence

@@ -72,7 +72,7 @@ namespace ICD.Common.Utils
 		public static double MapRange(double inputStart, double inputEnd, double outputStart, double outputEnd, double value)
 		{
 			if (inputStart.Equals(inputEnd))
-				throw new DivideByZeroException();
+				return outputStart;
 
 			double slope = (outputEnd - outputStart) / (inputEnd - inputStart);
 			return outputStart + slope * (value - inputStart);
@@ -90,7 +90,7 @@ namespace ICD.Common.Utils
 		public static decimal MapRange(decimal inputStart, decimal inputEnd, decimal outputStart, decimal outputEnd, decimal value)
 		{
 			if (inputStart.Equals(inputEnd))
-				throw new DivideByZeroException();
+				return outputStart;
 
 			decimal slope = (outputEnd - outputStart) / (inputEnd - inputStart);
 			return outputStart + slope * (value - inputStart);
@@ -234,6 +234,30 @@ namespace ICD.Common.Utils
 		{
 			long remainder = number % mod;
 			return remainder < 0 ? remainder + mod : remainder;
+		}
+
+		/// <summary>
+		/// Converts the value to a percentage.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static float ToPercent(float min, float max, float value)
+		{
+			return MapRange(min, max, 0.0f, 1.0f, value);
+		}
+
+		/// <summary>
+		/// Converts the value from a percentage.
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		/// <param name="percent"></param>
+		/// <returns></returns>
+		public static float FromPercent(float min, float max, float percent)
+		{
+			return MapRange(0.0f, 1.0f, min, max, percent);
 		}
 	}
 }
