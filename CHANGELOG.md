@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
  - Added MathUtils methods for converting to and from percentages
+ - Added enum extensions for finding the inclusion and exclusion of enum flags
 
 ## [10.2.0] - 2019-12-04
 ### Added

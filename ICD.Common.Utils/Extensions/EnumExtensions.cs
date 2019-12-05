@@ -32,6 +32,34 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns these enum flags, excluding the other enum flags.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static T ExcludeFlags<T>(this T extends, T other)
+			where T : struct, IConvertible
+		{
+			return EnumUtils.ExcludeFlags(extends, other);
+		}
+
+		/// <summary>
+		/// Returns these enum flags, including the other enum flags.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static T IncludeFlags<T>(this T extends, T other)
+			where T : struct, IConvertible
+		{
+			return EnumUtils.IncludeFlags(extends, other);
+		}
+
+		/// <summary>
 		/// Returns the enum value as a 
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
