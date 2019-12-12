@@ -130,10 +130,10 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Adds the given number of hours to the time, wrapping every 24 hours without modifying the day.
+		/// Adds the given number of years to the date, and checks if the day is still valid (basically only for leap days).
 		/// </summary>
 		/// <param name="extends"></param>
-		/// <param name="hours"></param>
+		/// <param name="years"></param>
 		/// <returns></returns>
 		public static DateTime AddYearsAndWrap(this DateTime extends, int years)
 		{
@@ -146,7 +146,7 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Adds the given number of hours to the time, wrapping every 24 hours without modifying the day.
+		/// Adds the given number of months to the date, wrapping every 12 months, and lowering the day in the month is not valid.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <param name="months"></param>
@@ -161,7 +161,7 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Adds the given number of hours to the time, wrapping every 24 hours without modifying the day.
+		/// Adds the given number of days to the date, wrapping when the number of days exceeds the days in a month.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <param name="days"></param>
