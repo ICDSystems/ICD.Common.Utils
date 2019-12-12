@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Added MathUtils methods for converting to and from percentages
  - Added enum extensions for finding the inclusion and exclusion of enum flags
+ - Added DateTime extensions for adding years, months, days, hours, minutes and wrapping without modifying other values
 
 ## [10.2.0] - 2019-12-04
 ### Added
@@ -70,7 +71,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added logger timestamps to non simplsharp programs
  - Added Net Standard Support for JSON DateTime formats
  - Added EmailValidation class
- 
+
 ### Changed
  - JSON dict serialization serializes keys instead of converting to property name
 
@@ -257,7 +258,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - New XML conversion framework for performance improvements
 
 ### Changed
- - XmlUtils is now using the improved XML conversion framework 
+ - XmlUtils is now using the improved XML conversion framework
  - Better implementation of DictionaryExtensions.ToInverse
 
 ## [5.0.0] - 2018-09-14
@@ -330,8 +331,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Adding extension method for getting Informational Version from an Assembly
  - Adding WeakKeyDictionary for caching
  - Reflection util methods
- 
+
 ### Changed
  - JSON serialization/deserialization features moved into base converter
  - Removed suffix from assembly name
- 
