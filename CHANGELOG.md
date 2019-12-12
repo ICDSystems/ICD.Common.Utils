@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added MathUtils methods for converting to and from percentages
  - Added enum extensions for finding the inclusion and exclusion of enum flags
  - Added DateTime extensions for adding years, months, days, hours, minutes and wrapping without modifying other values
+ - Added shims for deserializing an XML array using a callback for each item
 
 ## [10.2.0] - 2019-12-04
 ### Added

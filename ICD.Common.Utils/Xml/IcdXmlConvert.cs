@@ -131,10 +131,48 @@ namespace ICD.Common.Utils.Xml
 		/// <summary>
 		/// Deserializes the child elements as items in an array.
 		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="reader"></param>
+		/// <param name="deserializeItem"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> DeserializeArray<T>(IcdXmlReader reader, Func<IcdXmlReader, T> deserializeItem)
+		{
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			if (deserializeItem == null)
+				throw new ArgumentNullException("deserializeItem");
+
+			return DeserializeArray(typeof(T), reader, r => deserializeItem(r)).Cast<T>();
+		}
+
+		/// <summary>
+		/// Deserializes the child elements as items in an array.
+		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="reader"></param>
 		/// <returns></returns>
 		public static IEnumerable<object> DeserializeArray(Type type, IcdXmlReader reader)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (reader == null)
+				throw new ArgumentNullException("reader");
+
+			IXmlConverter converter = XmlConverterAttribute.GetConverterForType(type);
+
+			return DeserializeArray(type, reader, r => converter.ReadXml(r));
+		}
+
+		/// <summary>
+		/// Deserializes the child elements as items in an array.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="reader"></param>
+		/// <param name="deserializeItem"></param>
+		/// <returns></returns>
+		public static IEnumerable<object> DeserializeArray(Type type, IcdXmlReader reader, Func<IcdXmlReader, object> deserializeItem)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -158,10 +196,9 @@ namespace ICD.Common.Utils.Xml
 				yield break;
 
 			// Read the items
-			IXmlConverter converter = XmlConverterAttribute.GetConverterForType(type);
 			while (reader.NodeType != XmlNodeType.EndElement)
 			{
-				yield return converter.ReadXml(reader);
+				yield return deserializeItem(reader);
 				reader.SkipInsignificantWhitespace();
 			}
 
