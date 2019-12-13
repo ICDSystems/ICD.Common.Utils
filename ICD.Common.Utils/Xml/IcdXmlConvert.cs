@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using ICD.Common.Properties;
 using ICD.Common.Utils.IO;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronXml;
@@ -14,6 +15,8 @@ namespace ICD.Common.Utils.Xml
 {
 	public static class IcdXmlConvert
 	{
+		#region Object Serialization
+
 		/// <summary>
 		/// Serializes the given instance to an xml string.
 		/// </summary>
@@ -114,6 +117,61 @@ namespace ICD.Common.Utils.Xml
 			return converter.ReadXml(reader);
 		}
 
+		#endregion
+
+		#region Array Serialization
+
+		/// <summary>
+		/// Serializes the sequence to XML.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="childElementName"></param>
+		/// <param name="writer"></param>
+		/// <param name="items"></param>
+		/// <param name="elementName"></param>
+		public static void SerializeArray<T>(string elementName, string childElementName, [NotNull] IcdXmlTextWriter writer,
+		                                     [NotNull] IEnumerable<T> items)
+		{
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
+			if (items == null)
+				throw new ArgumentNullException("items");
+
+			IXmlConverter converter = XmlConverterAttribute.GetConverterForType(typeof(T));
+
+			SerializeArray(elementName, childElementName, writer, items, (w, element, item) => converter.WriteXml(w, element, item));
+		}
+
+		/// <summary>
+		/// Serializes the sequence to XML.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="childElementName"></param>
+		/// <param name="writer"></param>
+		/// <param name="items"></param>
+		/// <param name="serializeItem"></param>
+		/// <param name="elementName"></param>
+		public static void SerializeArray<T>(string elementName, string childElementName, [NotNull] IcdXmlTextWriter writer,
+		                                     [NotNull] IEnumerable<T> items, [NotNull] Action<IcdXmlTextWriter, string, T> serializeItem)
+		{
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
+			if (items == null)
+				throw new ArgumentNullException("items");
+
+			if (serializeItem == null)
+				throw new ArgumentNullException("serializeItem");
+
+			writer.WriteStartElement(elementName);
+			{
+				foreach (T item in items)
+					serializeItem(writer, childElementName, item);
+			}
+			writer.WriteEndElement();
+		}
+
 		/// <summary>
 		/// Deserializes the child elements as items in an array.
 		/// </summary>
@@ -162,7 +220,7 @@ namespace ICD.Common.Utils.Xml
 
 			IXmlConverter converter = XmlConverterAttribute.GetConverterForType(type);
 
-			return DeserializeArray(type, reader, r => converter.ReadXml(r));
+			return DeserializeArray(type, reader, converter.ReadXml);
 		}
 
 		/// <summary>
@@ -208,6 +266,10 @@ namespace ICD.Common.Utils.Xml
 			// Read out of the array end element
 			reader.Read();
 		}
+
+		#endregion
+
+		#region Value Serialization
 
 		public static string ToString(int value)
 		{
@@ -431,5 +493,7 @@ namespace ICD.Common.Utils.Xml
 		{
 			return XmlConvert.ToUInt64(data);
 		}
+
+		#endregion
 	}
 }
