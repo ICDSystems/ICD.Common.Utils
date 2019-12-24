@@ -148,7 +148,7 @@ namespace ICD.Common.Utils
 		/// Gets the values from an enumeration without performing any caching. This is slow because of reflection.
 		/// </summary>
 		/// <returns></returns>
-		private static IEnumerable<int> GetValues(Type type)
+		public static IEnumerable<int> GetValues(Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
