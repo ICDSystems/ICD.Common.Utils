@@ -167,6 +167,37 @@ namespace ICD.Common.Utils
 			}
 		}
 
+		/// <summary>
+		/// Returns the absolute path to the control system web server directory.
+		/// </summary>
+		/// <value></value>
+		[PublicAPI]
+		public static string WebServerPath
+		{
+			get
+			{
+				switch (IcdEnvironment.RuntimeEnvironment)
+				{
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+						return Join(RootPath, "HTML");
+
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+						return Join(RootPath, "Html");
+
+					case IcdEnvironment.eRuntimeEnvironment.Standard:
+#if LINUX
+						return Join(RootPath, "var", "www", "html");
+#else
+						return "C:\\INetPub";
+#endif
+
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Methods
@@ -178,6 +209,9 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static string Join(params string[] items)
 		{
+			if (items == null)
+				throw new ArgumentNullException("items");
+
 			return items.Length > 1
 				       ? items.Skip(1).Aggregate(items.First(), IcdPath.Combine)
 				       : items.FirstOrDefault(string.Empty);
@@ -243,6 +277,9 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static string GetDefaultConfigPath(params string[] localPath)
 		{
+			if (localPath == null)
+				throw new ArgumentNullException("localPath");
+
 			string local = Join(localPath);
 
 			// Program slot configuration
@@ -264,6 +301,9 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static string GetCommonConfigPath(params string[] localPath)
 		{
+			if (localPath == null)
+				throw new ArgumentNullException("localPath");
+
 			string local = Join(localPath);
 			return Join(CommonConfigPath, local);
 		}
@@ -274,6 +314,9 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static string GetProgramConfigPath(params string[] localPath)
 		{
+			if (localPath == null)
+				throw new ArgumentNullException("localPath");
+
 			string local = Join(localPath);
 			return Join(ProgramConfigPath, local);
 		}
@@ -284,16 +327,22 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static string GetProgramDataPath(params string[] localPath)
 		{
+			if (localPath == null)
+				throw new ArgumentNullException("localPath");
+
 			string local = Join(localPath);
 			return Join(ProgramDataPath, local);
 		}
 
 		/// <summary>
-		///Appends the local path to the room data path.
+		/// Appends the local path to the room data path.
 		/// </summary>
 		/// <returns></returns>
 		public static string GetRoomDataPath(int roomId, params string[] localPath)
 		{
+			if (localPath == null)
+				throw new ArgumentNullException("localPath");
+
 			string local = Join(localPath);
 			string roomDataDirectory = GetRoomDataDirectory(roomId);
 			return Join(ProgramDataPath, roomDataDirectory, local);
@@ -307,6 +356,38 @@ namespace ICD.Common.Utils
 		public static string GetRoomDataDirectory(int roomId)
 		{
 			return string.Format("Room{0}Data", roomId);
+		}
+
+		/// <summary>
+		/// Appends the local path to the web server path.
+		/// </summary>
+		/// <param name="localPath"></param>
+		/// <returns></returns>
+		public static string GetWebServerPath(params string[] localPath)
+		{
+			if (localPath == null)
+				throw new ArgumentNullException("localPath");
+
+			string local = Join(localPath);
+			return Join(WebServerPath, local);
+		}
+
+		/// <summary>
+		/// Gets the URL to the resource at the given web server path.
+		/// </summary>
+		/// <param name="webServerPath"></param>
+		/// <returns></returns>
+		public static string GetUrl(string webServerPath)
+		{
+			if (webServerPath == null)
+				throw new ArgumentNullException("webServerPath");
+
+			if (!webServerPath.StartsWith(WebServerPath))
+				throw new ArgumentException("Path is not in the web server directory");
+
+			string local = webServerPath.Substring(WebServerPath.Length);
+
+			return string.Format("{0}/{1}", IcdEnvironment.NetworkAddresses.First(), local);
 		}
 
 		/// <summary>
