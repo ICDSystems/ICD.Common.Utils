@@ -5,7 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-
+### Added
+ - Added WriteAllByte method on IcdFile.
+ 
 ### Added
  - Added MathUtils methods for converting to and from percentages
  - Added enum extensions for finding the inclusion and exclusion of enum flags

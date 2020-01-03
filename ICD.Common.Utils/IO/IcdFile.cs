@@ -100,5 +100,11 @@ namespace ICD.Common.Utils.IO
 		{
 			return new IcdStreamWriter(File.AppendText(path));
 		}
+
+		public static void WriteAllBytes(string path, byte[] bytes)
+		{
+			using (FileStream stream = File.OpenWrite(path))
+				stream.Write(bytes, 0, bytes.Length);
+		}
 	}
 }
