@@ -385,7 +385,8 @@ namespace ICD.Common.Utils
 			if (!webServerPath.StartsWith(WebServerPath))
 				throw new ArgumentException("Path is not in the web server directory");
 
-			string local = webServerPath.Substring(WebServerPath.Length);
+			string local = webServerPath.Substring(WebServerPath.Length + 1)
+			                            .Replace('\\', '/');
 
 			return string.Format("{0}/{1}", IcdEnvironment.NetworkAddresses.First(), local);
 		}
