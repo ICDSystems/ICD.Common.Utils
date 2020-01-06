@@ -5,15 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Added
- - Added WriteAllByte method on IcdFile.
- 
+
 ### Added
  - Added MathUtils methods for converting to and from percentages
  - Added enum extensions for finding the inclusion and exclusion of enum flags
  - Added DateTime extensions for adding years, months, days, hours, minutes and wrapping without modifying other values
  - Added shims for deserializing an XML array using a callback for each item
  - Added methods for serializing an XML array
+ - Added WriteAllByte method on IcdFile.
+ - Added PathUtils for building paths in the HTML directory
 
 ## [10.2.0] - 2019-12-04
 ### Added
