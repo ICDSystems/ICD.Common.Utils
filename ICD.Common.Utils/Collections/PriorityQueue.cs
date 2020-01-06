@@ -93,8 +93,8 @@ namespace ICD.Common.Utils.Collections
 
 		/// <summary>
 		/// Removes any items in the queue matching the predicate.
-		/// Inserts the given item in the position of the first removed item, or at the end of the queue.
-		/// This is useful for reducing duplication, or replacing items with something more pertinant.
+		/// Appends the given item at the end of the given priority level.
+		/// This is useful for reducing duplication, or replacing items with something more pertinent.
 		/// </summary>
 		/// <param name="item"></param>
 		/// <param name="remove"></param>
@@ -109,8 +109,8 @@ namespace ICD.Common.Utils.Collections
 
 		/// <summary>
 		/// Removes any items in the queue matching the predicate.
-		/// Inserts the given item in the position of the first removed item, or at the end of the queue.
-		/// This is useful for reducing duplication, or replacing items with something more pertinant.
+		/// Appends the given item at the end of the given priority level.
+		/// This is useful for reducing duplication, or replacing items with something more pertinent.
 		/// </summary>
 		/// <param name="item"></param>
 		/// <param name="remove"></param>
