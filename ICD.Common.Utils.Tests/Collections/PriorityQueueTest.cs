@@ -133,8 +133,8 @@ namespace ICD.Common.Utils.Tests.Collections
 			};
 
 			Assert.AreEqual(1, dequeue[0]);
-			Assert.AreEqual(4, dequeue[1]);
-			Assert.AreEqual(3, dequeue[2]);
+			Assert.AreEqual(3, dequeue[1]);
+			Assert.AreEqual(4, dequeue[2]);
 		}
 
 		[Test]
