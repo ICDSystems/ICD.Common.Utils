@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
+ - Added Not null tag for ICDUriBuilder Constructor that takes a URI as an argument.
  - Added MathUtils methods for converting to and from percentages
  - Added enum extensions for finding the inclusion and exclusion of enum flags
  - Added DateTime extensions for adding years, months, days, hours, minutes and wrapping without modifying other values

@@ -4,6 +4,7 @@ using System.Linq;
 #endif
 using System.Text;
 using System.Text.RegularExpressions;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils
@@ -85,7 +86,7 @@ namespace ICD.Common.Utils
 		/// Constructor.
 		/// </summary>
 		/// <param name="uri"></param>
-		public IcdUriBuilder(Uri uri)
+		public IcdUriBuilder([NotNull] Uri uri)
 		{
 			if (uri == null)
 				throw new ArgumentNullException("uri");
