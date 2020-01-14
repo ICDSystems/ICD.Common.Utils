@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Attributes;
 
 namespace ICD.Common.Utils.Xml
 {
+	[MeansImplicitUse]
 	[AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     public sealed class XmlConverterAttribute : AbstractIcdAttribute
     {
