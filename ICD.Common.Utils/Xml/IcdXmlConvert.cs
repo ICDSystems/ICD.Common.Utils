@@ -138,9 +138,12 @@ namespace ICD.Common.Utils.Xml
 			if (items == null)
 				throw new ArgumentNullException("items");
 
-			IXmlConverter converter = XmlConverterAttribute.GetConverterForType(typeof(T));
-
-			SerializeArray(elementName, childElementName, writer, items, (w, element, item) => converter.WriteXml(w, element, item));
+			SerializeArray(elementName, childElementName, writer, items,
+			               (w, element, item) =>
+			               {
+				               IXmlConverter converter = XmlConverterAttribute.GetConverterForInstance(item);
+				               converter.WriteXml(w, element, item);
+			               });
 		}
 
 		/// <summary>
