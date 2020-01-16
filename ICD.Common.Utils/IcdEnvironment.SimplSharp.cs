@@ -9,6 +9,8 @@ namespace ICD.Common.Utils
 {
 	public static partial class IcdEnvironment
 	{
+		#region Properties
+
 		public static string NewLine { get { return CrestronEnvironment.NewLine; } }
 
 		public static eRuntimeEnvironment RuntimeEnvironment
@@ -31,36 +33,24 @@ namespace ICD.Common.Utils
 			{
 				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
 					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_CURRENT_IP_ADDRESS;
-				const EthernetAdapterType primaryType = EthernetAdapterType.EthernetLANAdapter;
-				const EthernetAdapterType secondaryType = EthernetAdapterType.EthernetLAN2Adapter;
 
-				string address1 = null;
-
-				try
+				foreach (EthernetAdapterType type in EnumUtils.GetValuesExceptNone<EthernetAdapterType>())
 				{
-					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(primaryType);
-					address1 = CrestronEthernetHelper.GetEthernetParameter(param, id);
-				}
-				catch (ArgumentException)
-				{
-				}
-				
-				if (!string.IsNullOrEmpty(address1))
-					yield return address1;
+					string address;
 
-				string address2 = null;
+					try
+					{
+						short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+						address = CrestronEthernetHelper.GetEthernetParameter(param, id);
+					}
+					catch (ArgumentException)
+					{
+						continue;
+					}
 
-				try
-				{
-					short adapter2Type = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(secondaryType);
-					address2 = CrestronEthernetHelper.GetEthernetParameter(param, adapter2Type);
+					if (!string.IsNullOrEmpty(address))
+						yield return address;
 				}
-				catch (ArgumentException)
-				{
-				}
-
-				if (!string.IsNullOrEmpty(address2))
-					yield return address2;
 			}
 		}
 
@@ -74,36 +64,24 @@ namespace ICD.Common.Utils
 			{
 				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
 					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_MAC_ADDRESS;
-				const EthernetAdapterType primaryType = EthernetAdapterType.EthernetLANAdapter;
-				const EthernetAdapterType secondaryType = EthernetAdapterType.EthernetLAN2Adapter;
 
-				string macAddress1 = null;
-
-				try
+				foreach (EthernetAdapterType type in EnumUtils.GetValuesExceptNone<EthernetAdapterType>())
 				{
-					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(primaryType);
-					macAddress1 = CrestronEthernetHelper.GetEthernetParameter(param, id);
-				}
-				catch (ArgumentException)
-				{
-				}
+					string macAddress;
 
-				if (!string.IsNullOrEmpty(macAddress1))
-					yield return macAddress1;
+					try
+					{
+						short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+						macAddress = CrestronEthernetHelper.GetEthernetParameter(param, id);
+					}
+					catch (ArgumentException)
+					{
+						continue;
+					}
 
-				string macAddress2 = null;
-
-				try
-				{
-					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(secondaryType);
-					macAddress2 = CrestronEthernetHelper.GetEthernetParameter(param, id);
+					if (!string.IsNullOrEmpty(macAddress))
+						yield return macAddress;
 				}
-				catch (ArgumentException)
-				{
-				}
-
-				if (!string.IsNullOrEmpty(macAddress2))
-					yield return macAddress2;
 			}
 		}
 
@@ -141,39 +119,28 @@ namespace ICD.Common.Utils
 			{
 				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
 					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_HOSTNAME;
-				const EthernetAdapterType primaryType = EthernetAdapterType.EthernetLANAdapter;
-				const EthernetAdapterType secondaryType = EthernetAdapterType.EthernetLAN2Adapter;
 
-				string address1 = null;
-
-				try
+				foreach (EthernetAdapterType type in EnumUtils.GetValuesExceptNone<EthernetAdapterType>())
 				{
-					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(primaryType);
-					address1 = CrestronEthernetHelper.GetEthernetParameter(param, id);
+					string hostname;
+
+					try
+					{
+						short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+						hostname = CrestronEthernetHelper.GetEthernetParameter(param, id);
+					}
+					catch (ArgumentException)
+					{
+						continue;
+					}
+
+					if (!string.IsNullOrEmpty(hostname))
+						yield return hostname;
 				}
-				catch (ArgumentException)
-				{
-				}
-
-				if (!string.IsNullOrEmpty(address1))
-					yield return address1;
-
-				string address2 = null;
-
-				try
-				{
-
-					short adapter2Type = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(secondaryType);
-					address2 = CrestronEthernetHelper.GetEthernetParameter(param, adapter2Type);
-				}
-				catch (ArgumentException)
-				{
-				}
-
-				if (!string.IsNullOrEmpty(address2))
-					yield return address2;
 			}
 		}
+
+		#endregion
 
 		/// <summary>
 		/// Static constructor.
