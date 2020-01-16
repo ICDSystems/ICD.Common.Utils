@@ -1,14 +1,19 @@
-﻿using ICD.Common.Utils.Extensions;
-#if SIMPLSHARP
+﻿#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharp;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils
 {
 	public static partial class IcdEnvironment
 	{
+		/// <summary>
+		/// For some reason crestron returns "Invalid Value" for ethernet parameters sometimes :/
+		/// </summary>
+		private const string INVALID_VALUE = "Invalid Value";
+
 		#region Properties
 
 		public static string NewLine { get { return CrestronEnvironment.NewLine; } }
@@ -48,7 +53,7 @@ namespace ICD.Common.Utils
 						continue;
 					}
 
-					if (!string.IsNullOrEmpty(address))
+					if (!string.IsNullOrEmpty(address) && !address.Equals(INVALID_VALUE))
 						yield return address;
 				}
 			}
@@ -79,7 +84,7 @@ namespace ICD.Common.Utils
 						continue;
 					}
 
-					if (!string.IsNullOrEmpty(macAddress))
+					if (!string.IsNullOrEmpty(macAddress) && !macAddress.Equals(INVALID_VALUE))
 						yield return macAddress;
 				}
 			}
@@ -100,7 +105,12 @@ namespace ICD.Common.Utils
 				try
 				{
 					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
-					return CrestronEthernetHelper.GetEthernetParameter(param, id);
+					string status = CrestronEthernetHelper.GetEthernetParameter(param, id);
+
+					if (!string.IsNullOrEmpty(status) && !status.Equals(INVALID_VALUE))
+						return status;
+
+					return null;
 				}
 				catch (ArgumentException)
 				{
@@ -134,7 +144,7 @@ namespace ICD.Common.Utils
 						continue;
 					}
 
-					if (!string.IsNullOrEmpty(hostname))
+					if (!string.IsNullOrEmpty(hostname) && !hostname.Equals(INVALID_VALUE))
 						yield return hostname;
 				}
 			}

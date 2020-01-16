@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
  - Network/MAC/DNS address utils are now enumerating all adapter types
+ - Ignoring Crestron ethernet parameters that say "Invalid Value"
 
 ## [10.2.0] - 2019-12-04
 ### Added
