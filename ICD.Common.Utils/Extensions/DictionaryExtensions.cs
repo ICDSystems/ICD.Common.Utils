@@ -131,6 +131,41 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// If the key is present in the dictionary return the value, otherwise add a new value to the dictionary and return it.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="key"></param>
+		/// <param name="valueFunc"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static TValue GetOrAddNew<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+													   [NotNull] TKey key,
+													   [NotNull] Func<TValue> valueFunc)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (key == null)
+				// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("key");
+
+			if (valueFunc == null)
+				throw new ArgumentNullException("valueFunc");
+
+			TValue value;
+			if (!extends.TryGetValue(key, out value))
+			{
+				value = valueFunc();
+				extends.Add(key, value);
+			}
+
+			return value;
+		}
+
+		/// <summary>
 		/// Gets a key for the given value.
 		/// </summary>
 		/// <typeparam name="TKey"></typeparam>
