@@ -46,6 +46,9 @@ namespace ICD.Common.Utils
 					try
 					{
 						short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+						if (id >= InitialParametersClass.NumberOfEthernetInterfaces)
+							continue;
+
 						address = CrestronEthernetHelper.GetEthernetParameter(param, id);
 					}
 					catch (ArgumentException)
@@ -77,6 +80,9 @@ namespace ICD.Common.Utils
 					try
 					{
 						short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+						if (id >= InitialParametersClass.NumberOfEthernetInterfaces)
+							continue;
+
 						macAddress = CrestronEthernetHelper.GetEthernetParameter(param, id);
 					}
 					catch (ArgumentException)
@@ -105,6 +111,9 @@ namespace ICD.Common.Utils
 				try
 				{
 					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+					if (id >= InitialParametersClass.NumberOfEthernetInterfaces)
+						return null;
+
 					string status = CrestronEthernetHelper.GetEthernetParameter(param, id);
 
 					if (!string.IsNullOrEmpty(status) && !status.Equals(INVALID_VALUE))
@@ -137,6 +146,9 @@ namespace ICD.Common.Utils
 					try
 					{
 						short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+						if (id >= InitialParametersClass.NumberOfEthernetInterfaces)
+							continue;
+
 						hostname = CrestronEthernetHelper.GetEthernetParameter(param, id);
 					}
 					catch (ArgumentException)
