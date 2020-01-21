@@ -5,8 +5,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Added
- - Added public access to GetValues enumeration extension
 
 ### Added
  - Added Not null tag for ICDUriBuilder Constructor that takes a URI as an argument.
@@ -17,6 +15,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added methods for serializing an XML array
  - Added WriteAllByte method on IcdFile.
  - Added PathUtils for building paths in the HTML directory
+ - Added public access to GetValues enumeration extension
+
+## [10.3.0] - 2020-01-20
+### Changed
+ - Network/MAC/DNS address utils are now enumerating all adapter types
+ - Ignoring Crestron ethernet parameters that say "Invalid Value"
+ - Skipping network interfaces with an invalid adapter id
 
 ## [10.2.0] - 2019-12-04
 ### Added

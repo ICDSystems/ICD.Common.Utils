@@ -1,14 +1,21 @@
-﻿using ICD.Common.Utils.Extensions;
-#if SIMPLSHARP
+﻿#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharp;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils
 {
 	public static partial class IcdEnvironment
 	{
+		/// <summary>
+		/// For some reason crestron returns "Invalid Value" for ethernet parameters sometimes :/
+		/// </summary>
+		private const string INVALID_VALUE = "Invalid Value";
+
+		#region Properties
+
 		public static string NewLine { get { return CrestronEnvironment.NewLine; } }
 
 		public static eRuntimeEnvironment RuntimeEnvironment
@@ -31,36 +38,27 @@ namespace ICD.Common.Utils
 			{
 				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
 					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_CURRENT_IP_ADDRESS;
-				const EthernetAdapterType primaryType = EthernetAdapterType.EthernetLANAdapter;
-				const EthernetAdapterType secondaryType = EthernetAdapterType.EthernetLAN2Adapter;
 
-				string address1 = null;
-
-				try
+				foreach (EthernetAdapterType type in EnumUtils.GetValuesExceptNone<EthernetAdapterType>())
 				{
-					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(primaryType);
-					address1 = CrestronEthernetHelper.GetEthernetParameter(param, id);
-				}
-				catch (ArgumentException)
-				{
-				}
-				
-				if (!string.IsNullOrEmpty(address1))
-					yield return address1;
+					string address;
 
-				string address2 = null;
+					try
+					{
+						short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+						if (id >= InitialParametersClass.NumberOfEthernetInterfaces)
+							continue;
 
-				try
-				{
-					short adapter2Type = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(secondaryType);
-					address2 = CrestronEthernetHelper.GetEthernetParameter(param, adapter2Type);
-				}
-				catch (ArgumentException)
-				{
-				}
+						address = CrestronEthernetHelper.GetEthernetParameter(param, id);
+					}
+					catch (ArgumentException)
+					{
+						continue;
+					}
 
-				if (!string.IsNullOrEmpty(address2))
-					yield return address2;
+					if (!string.IsNullOrEmpty(address) && !address.Equals(INVALID_VALUE))
+						yield return address;
+				}
 			}
 		}
 
@@ -74,36 +72,27 @@ namespace ICD.Common.Utils
 			{
 				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
 					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_MAC_ADDRESS;
-				const EthernetAdapterType primaryType = EthernetAdapterType.EthernetLANAdapter;
-				const EthernetAdapterType secondaryType = EthernetAdapterType.EthernetLAN2Adapter;
 
-				string macAddress1 = null;
-
-				try
+				foreach (EthernetAdapterType type in EnumUtils.GetValuesExceptNone<EthernetAdapterType>())
 				{
-					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(primaryType);
-					macAddress1 = CrestronEthernetHelper.GetEthernetParameter(param, id);
-				}
-				catch (ArgumentException)
-				{
-				}
+					string macAddress;
 
-				if (!string.IsNullOrEmpty(macAddress1))
-					yield return macAddress1;
+					try
+					{
+						short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+						if (id >= InitialParametersClass.NumberOfEthernetInterfaces)
+							continue;
 
-				string macAddress2 = null;
+						macAddress = CrestronEthernetHelper.GetEthernetParameter(param, id);
+					}
+					catch (ArgumentException)
+					{
+						continue;
+					}
 
-				try
-				{
-					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(secondaryType);
-					macAddress2 = CrestronEthernetHelper.GetEthernetParameter(param, id);
+					if (!string.IsNullOrEmpty(macAddress) && !macAddress.Equals(INVALID_VALUE))
+						yield return macAddress;
 				}
-				catch (ArgumentException)
-				{
-				}
-
-				if (!string.IsNullOrEmpty(macAddress2))
-					yield return macAddress2;
 			}
 		}
 
@@ -122,7 +111,15 @@ namespace ICD.Common.Utils
 				try
 				{
 					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
-					return CrestronEthernetHelper.GetEthernetParameter(param, id);
+					if (id >= InitialParametersClass.NumberOfEthernetInterfaces)
+						return null;
+
+					string status = CrestronEthernetHelper.GetEthernetParameter(param, id);
+
+					if (!string.IsNullOrEmpty(status) && !status.Equals(INVALID_VALUE))
+						return status;
+
+					return null;
 				}
 				catch (ArgumentException)
 				{
@@ -141,39 +138,31 @@ namespace ICD.Common.Utils
 			{
 				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
 					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_HOSTNAME;
-				const EthernetAdapterType primaryType = EthernetAdapterType.EthernetLANAdapter;
-				const EthernetAdapterType secondaryType = EthernetAdapterType.EthernetLAN2Adapter;
 
-				string address1 = null;
-
-				try
+				foreach (EthernetAdapterType type in EnumUtils.GetValuesExceptNone<EthernetAdapterType>())
 				{
-					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(primaryType);
-					address1 = CrestronEthernetHelper.GetEthernetParameter(param, id);
+					string hostname;
+
+					try
+					{
+						short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+						if (id >= InitialParametersClass.NumberOfEthernetInterfaces)
+							continue;
+
+						hostname = CrestronEthernetHelper.GetEthernetParameter(param, id);
+					}
+					catch (ArgumentException)
+					{
+						continue;
+					}
+
+					if (!string.IsNullOrEmpty(hostname) && !hostname.Equals(INVALID_VALUE))
+						yield return hostname;
 				}
-				catch (ArgumentException)
-				{
-				}
-
-				if (!string.IsNullOrEmpty(address1))
-					yield return address1;
-
-				string address2 = null;
-
-				try
-				{
-
-					short adapter2Type = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(secondaryType);
-					address2 = CrestronEthernetHelper.GetEthernetParameter(param, adapter2Type);
-				}
-				catch (ArgumentException)
-				{
-				}
-
-				if (!string.IsNullOrEmpty(address2))
-					yield return address2;
 			}
 		}
+
+		#endregion
 
 		/// <summary>
 		/// Static constructor.
