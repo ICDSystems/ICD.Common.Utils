@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added WriteAllByte method on IcdFile.
  - Added PathUtils for building paths in the HTML directory
  - Added public access to GetValues enumeration extension
+ 
+### Changed
+ - Fixed exception trying to get DHCP status of network interfaces on Linux
 
 ## [10.3.0] - 2020-01-20
 ### Changed
