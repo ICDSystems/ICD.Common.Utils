@@ -57,14 +57,21 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				bool enabled =
-					NetworkInterface.GetAllNetworkInterfaces()
-					                .Where(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 ||
-					                             ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-					                .Select(ni => ni.GetIPProperties().GetIPv4Properties().IsDhcpEnabled)
-									.FirstOrDefault();
+				try
+				{
+					bool enabled =
+						NetworkInterface.GetAllNetworkInterfaces()
+										.Where(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 ||
+													 ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+										.Select(ni => ni.GetIPProperties().GetIPv4Properties().IsDhcpEnabled)
+										.FirstOrDefault();
 
-				return enabled.ToString();
+					return enabled.ToString();
+				}
+				catch(PlatformNotSupportedException)
+				{
+					return false.ToString();
+				}
 			}
 		}
 
