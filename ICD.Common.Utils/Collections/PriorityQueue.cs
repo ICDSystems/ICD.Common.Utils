@@ -131,7 +131,24 @@ namespace ICD.Common.Utils.Collections
 			if (remove == null)
 				throw new ArgumentNullException("remove");
 
-			EnqueueRemove(item, remove, int.MaxValue, false);
+			EnqueueRemove(item, remove, int.MaxValue);
+		}
+
+		/// <summary>
+		/// Removes any items in the queue matching the predicate.
+		/// Appends the given item at the end of the given priority level.
+		/// This is useful for reducing duplication, or replacing items with something more pertinent.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="remove"></param>
+		/// <param name="priority"></param>
+		[PublicAPI]
+		public void EnqueueRemove([CanBeNull] T item, [NotNull] Func<T, bool> remove, int priority)
+		{
+			if (remove == null)
+				throw new ArgumentNullException("remove");
+
+			EnqueueRemove(item, remove, priority, false);
 		}
 
 		/// <summary>
