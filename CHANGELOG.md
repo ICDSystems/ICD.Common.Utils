@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.8.0] - 2020-01-23
+### Added
+  - Added an overload to PriorityQueue for determing the de-duplication behaviour
+
 ## [8.7.2] - 2019-10-29
 ### Changed
   - Fixed a bug with PriorityQueue de-duplication where a new command would be inserted in the wrong position
