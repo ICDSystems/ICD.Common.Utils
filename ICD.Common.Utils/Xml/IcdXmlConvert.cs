@@ -314,6 +314,11 @@ namespace ICD.Common.Utils.Xml
 			return XmlConvert.ToString(value);
 		}
 
+		public static string ToString(DateTime value)
+		{
+			return value.ToString("o");
+		}
+
 		public static string ToString(TimeSpan value)
 		{
 			return XmlConvert.ToString(value);
@@ -351,6 +356,8 @@ namespace ICD.Common.Utils.Xml
 				return ToString((sbyte)child);
 			if (child is short)
 				return ToString((short)child);
+			if (child is DateTime)
+				return ToString((DateTime)child);
 			if (child is TimeSpan)
 				return ToString((TimeSpan)child);
 			if (child is uint)
@@ -395,6 +402,8 @@ namespace ICD.Common.Utils.Xml
 				return ToSByte(value);
 			if (type == typeof(short))
 				return ToInt16(value);
+			if (type == typeof(DateTime))
+				return ToDateTime(value);
 			if (type == typeof(TimeSpan))
 				return ToTimeSpan(value);
 			if (type == typeof(uint))
@@ -420,6 +429,11 @@ namespace ICD.Common.Utils.Xml
 		public static char ToChar(string data)
 		{
 			return XmlConvert.ToChar(data);
+		}
+
+		public static DateTime ToDateTime(string data)
+		{
+			return DateTime.Parse(data);
 		}
 
 		public static DateTime ToDateTime(string data, string format)
