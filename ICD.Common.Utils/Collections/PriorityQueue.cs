@@ -80,6 +80,20 @@ namespace ICD.Common.Utils.Collections
 		}
 
 		/// <summary>
+		/// Adds the item to the queue with the given priority at the given index.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="priority"></param>
+		/// <param name="position"></param>
+		[PublicAPI]
+		public void Enqueue([CanBeNull] T item, int priority, int position)
+		{
+			m_PriorityToQueue.GetOrAddNew(priority, ()=> new List<T>())
+			                 .Insert(position, item);
+			m_Count++;
+		}
+
+		/// <summary>
 		/// Enqueues the item at the beginning of the queue.
 		/// </summary>
 		/// <param name="item"></param>
@@ -121,6 +135,27 @@ namespace ICD.Common.Utils.Collections
 			if (remove == null)
 				throw new ArgumentNullException("remove");
 
+			EnqueueRemove(item, remove, priority, false);
+		}
+
+		/// <summary>
+		/// Removes any items in the queue matching the predicate.
+		/// Appends the given item at the end of the given priority level.
+		/// This is useful for reducing duplication, or replacing items with something more pertinent.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="remove"></param>
+		/// <param name="priority"></param>
+		/// <param name="deDuplicateToEndOfQueue"></param>
+		[PublicAPI]
+		public void EnqueueRemove([CanBeNull] T item, [NotNull] Func<T, bool> remove, int priority, bool deDuplicateToEndOfQueue)
+		{
+			if (remove == null)
+				throw new ArgumentNullException("remove");
+
+			int lowestMatchingPriority = int.MaxValue;
+			int? firstMatchingIndex = null;
+
 			foreach (KeyValuePair<int, List<T>> kvp in m_PriorityToQueue.ToArray())
 			{
 				int[] removeIndices =
@@ -128,6 +163,12 @@ namespace ICD.Common.Utils.Collections
 					   .FindIndices(v => remove(v))
 					   .Reverse()
 					   .ToArray();
+
+				if (removeIndices.Any() && kvp.Key < lowestMatchingPriority )
+				{
+					lowestMatchingPriority = kvp.Key;
+					firstMatchingIndex = removeIndices.Last();
+				}
 
 				foreach (int removeIndex in removeIndices)
 				{
@@ -139,7 +180,16 @@ namespace ICD.Common.Utils.Collections
 					m_PriorityToQueue.Remove(kvp.Key);
 			}
 
-			Enqueue(item, priority);
+
+			if(deDuplicateToEndOfQueue)
+				Enqueue(item, priority);
+			else
+			{
+				if(firstMatchingIndex == null)
+					Enqueue(item, lowestMatchingPriority);
+				else
+					Enqueue(item, lowestMatchingPriority, firstMatchingIndex.Value);
+			}
 		}
 
 		/// <summary>
