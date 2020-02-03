@@ -141,20 +141,50 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="key"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static TValue GetOrAddNew<TKey, TValue>(this IDictionary<TKey, TValue> extends, TKey key)
+		public static TValue GetOrAddNew<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+													   [NotNull] TKey key)
 			where TValue : new()
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			// ReSharper disable once CompareNonConstrainedGenericWithNull
+			// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (key == null)
+				// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
+
+			return extends.GetOrAddNew(key, () => ReflectionUtils.CreateInstance<TValue>());
+		}
+
+		/// <summary>
+		/// If the key is present in the dictionary return the value, otherwise add a new value to the dictionary and return it.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="key"></param>
+		/// <param name="valueFunc"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static TValue GetOrAddNew<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+													   [NotNull] TKey key,
+													   [NotNull] Func<TValue> valueFunc)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (key == null)
+				// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("key");
+
+			if (valueFunc == null)
+				throw new ArgumentNullException("valueFunc");
 
 			TValue value;
 			if (!extends.TryGetValue(key, out value))
 			{
-				value = ReflectionUtils.CreateInstance<TValue>();
+				value = valueFunc();
 				extends.Add(key, value);
 			}
 
