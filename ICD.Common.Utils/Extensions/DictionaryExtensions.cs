@@ -144,15 +144,15 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		[PublicAPI]
 		public static TValue GetOrAddNew<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
-		                                               [NotNull] TKey key)
+													   [NotNull] TKey key)
 			where TValue : new()
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-// ReSharper disable CompareNonConstrainedGenericWithNull
+			// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (key == null)
-// ReSharper restore CompareNonConstrainedGenericWithNull
+				// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
 
 			return extends.GetOrAddNew(key, () => ReflectionUtils.CreateInstance<TValue>());
@@ -169,15 +169,15 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		[PublicAPI]
 		public static TValue GetOrAddNew<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
-		                                               [NotNull] TKey key,
-		                                               [NotNull] Func<TValue> valueFunc)
+													   [NotNull] TKey key,
+													   [NotNull] Func<TValue> valueFunc)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-// ReSharper disable CompareNonConstrainedGenericWithNull
+			// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (key == null)
-// ReSharper restore CompareNonConstrainedGenericWithNull
+				// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
 
 			if (valueFunc == null)
