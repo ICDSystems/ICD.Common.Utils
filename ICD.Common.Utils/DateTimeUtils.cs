@@ -1,4 +1,6 @@
-﻿namespace ICD.Common.Utils
+﻿using System;
+
+namespace ICD.Common.Utils
 {
 	public static class DateTimeUtils
 	{
@@ -10,6 +12,26 @@
 		public static int To12Hour(int hour)
 		{
 			return MathUtils.Modulus(hour + 11, 12) + 1;
+		}
+
+		/// <summary>
+		/// Creates a DateTime from the given number of milliseconds since the epoch (1970-01-01T00:00:00Z)
+		/// </summary>
+		/// <param name="milliseconds">milliseconds since the epoch</param>
+		/// <returns></returns>
+		public static DateTime FromEpochMilliseconds(long milliseconds)
+		{
+			return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(milliseconds);
+		}
+
+		/// <summary>
+		/// Creates a DateTime from the given number of seconds since the epoch (1970-01-01T00:00:00Z)
+		/// </summary>
+		/// <param name="seconds">seconds since the epoch</param>
+		/// <returns></returns>
+		public static DateTime FromEpochSeconds(long seconds)
+		{
+			return FromEpochMilliseconds(seconds * 1000);
 		}
 	}
 }
