@@ -141,6 +141,44 @@ namespace ICD.Common.Utils.Extensions
 			                               JsonToken.Integer);
 			throw new InvalidCastException(message);
 		}
+		
+		/// <summary>
+		/// Gets the current value as a long.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static long GetValueAsLong([NotNull] this JsonReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (extends.TokenType == JsonToken.Integer)
+				return (long)extends.Value;
+
+			string message = string.Format("Token {0} {1} is not {2}", extends.TokenType, extends.Value,
+										   JsonToken.Integer);
+			throw new InvalidCastException(message);
+		}
+
+		/// <summary>
+		/// Gets the current value as an unsigned long.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static ulong GetValueAsULong([NotNull] this JsonReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (extends.TokenType == JsonToken.Integer)
+				return (ulong)extends.Value;
+
+			string message = string.Format("Token {0} {1} is not {2}", extends.TokenType, extends.Value,
+										   JsonToken.Integer);
+			throw new InvalidCastException(message);
+		}
 
 		/// <summary>
 		/// Gets the current value as a string.
