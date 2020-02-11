@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added WriteAllByte method on IcdFile.
  - Added PathUtils for building paths in the HTML directory
  - Added public access to GetValues enumeration extension
+ - Added extensions for getting JsonReader values as long or ulong
+ - Added DateTimeUtils methods for creating DateTimes from epoch seconds or milliseconds
  
 ### Changed
  - Fixed exception trying to get DHCP status of network interfaces on Linux
