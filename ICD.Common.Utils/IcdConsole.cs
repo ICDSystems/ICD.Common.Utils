@@ -83,13 +83,17 @@ namespace ICD.Common.Utils
 
 		public static void PrintLine(eConsoleColor color, string message)
 		{
+			string ansi = color.FormatAnsi(message);
+
 #if SIMPLSHARP
-			PrintLine(color.FormatAnsi(message));
+			PrintLine(ansi);
 #else
 			System.Console.ForegroundColor = color.ToForegroundConsoleColor();
 			System.Console.BackgroundColor = color.ToBackgroundConsoleColor();
 			System.Console.WriteLine(message);
 			System.Console.ResetColor();
+
+			OnConsolePrint.Raise(null, new StringEventArgs(ansi + IcdEnvironment.NewLine));
 #endif
 		}
 
@@ -118,6 +122,8 @@ namespace ICD.Common.Utils
 
 		public static void Print(eConsoleColor color, string message)
 		{
+			string ansi = color.FormatAnsi(message);
+
 #if SIMPLSHARP
 			Print(color.FormatAnsi(message));
 #else
@@ -125,6 +131,8 @@ namespace ICD.Common.Utils
 			System.Console.BackgroundColor = color.ToBackgroundConsoleColor();
 			System.Console.Write(message);
 			System.Console.ResetColor();
+
+			OnConsolePrint.Raise(null, new StringEventArgs(ansi));
 #endif
 		}
 
