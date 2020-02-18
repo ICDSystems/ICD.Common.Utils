@@ -86,6 +86,7 @@
     <Compile Include="Comparers\PredicateComparer.cs" />
     <Compile Include="Comparers\SequenceComparer.cs" />
     <Compile Include="ConsoleColor.cs" />
+    <Compile Include="Converters\AnsiToHtml.cs" />
     <Compile Include="DateTimeUtils.cs" />
     <Compile Include="Email\EmailClient.cs" />
     <Compile Include="Email\eMailErrorCode.cs" />
