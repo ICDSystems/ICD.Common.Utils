@@ -166,6 +166,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Better VC-4 support for IcdConsole
  - JSON refactoring for simpler deserialization
 
+## [8.8.1] - 2020-02-18
+### Changed
+ - IcdTimer - fixed issue that prevented OnElapsed event from firing when Length is less than (or close to) Heartbeat Interval
+
 ## [8.8.0] - 2020-01-23
 ### Added
   - Added an overload to PriorityQueue for determing the de-duplication behaviour
