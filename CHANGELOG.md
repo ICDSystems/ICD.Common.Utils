@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [8.8.1] - 2020-02-18
 ### Changed
  - IcdTimer - fixed issue that prevented OnElapsed event from firing when Length is less than (or close to) Heartbeat Interval
 
