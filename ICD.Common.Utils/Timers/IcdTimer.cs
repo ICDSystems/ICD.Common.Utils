@@ -118,6 +118,7 @@ namespace ICD.Common.Utils.Timers
 			Length = length;
 
 			m_Stopwatch.Reset();
+			m_LastHeartbeatMilliseconds = 0;
 			m_Stopwatch.Start();
 
 			RaiseOnIsRunningChanged();
