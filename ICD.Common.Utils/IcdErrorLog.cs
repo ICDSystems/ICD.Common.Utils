@@ -25,14 +25,12 @@ namespace ICD.Common.Utils
 
 			try
 			{
-#if SIMPLSHARP
 				message = eConsoleColor.Red.FormatAnsi(message);
+
+#if SIMPLSHARP
 				ErrorLog.Error(message);
 #else
-				Console.Write("Error  - {0} - ", IcdEnvironment.GetLocalTime());
-				Console.ForegroundColor = ConsoleColor.Red;
-				Console.Error.WriteLine(message);
-				Console.ResetColor();
+				Console.Error.WriteLine("Error  - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
 #endif
 			}
 			finally
@@ -54,14 +52,13 @@ namespace ICD.Common.Utils
 
 			try
 			{
-#if SIMPLSHARP
 				message = eConsoleColor.Yellow.FormatAnsi(message);
+
+#if SIMPLSHARP
+				
 				ErrorLog.Warn(message);
 #else
-				Console.Write("Warn   - {0} - ", IcdEnvironment.GetLocalTime());
-				Console.ForegroundColor = ConsoleColor.Yellow;
-				Console.Error.WriteLine(message);
-				Console.ResetColor();
+				Console.Error.WriteLine("Warn   - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
 #endif
 			}
 			finally
@@ -83,14 +80,12 @@ namespace ICD.Common.Utils
 
 			try
 			{
-#if SIMPLSHARP
 				message = eConsoleColor.Blue.FormatAnsi(message);
+
+#if SIMPLSHARP
 				ErrorLog.Notice(message);
 #else
-				Console.Write("Notice - {0} - ", IcdEnvironment.GetLocalTime());
-				Console.ForegroundColor = ConsoleColor.Blue;
-				Console.Error.WriteLine(message);
-				Console.ResetColor();
+				Console.Error.WriteLine("Notice - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
 #endif
 			}
 			finally
@@ -112,14 +107,12 @@ namespace ICD.Common.Utils
 
 			try
 			{
-#if SIMPLSHARP
 				message = eConsoleColor.Green.FormatAnsi(message);
+
+#if SIMPLSHARP
 				ErrorLog.Ok(message);
 #else
-				Console.Write("OK     - {0} - ", IcdEnvironment.GetLocalTime());
-				Console.ForegroundColor = ConsoleColor.Green;
-				Console.Error.WriteLine(message);
-				Console.ResetColor();
+				Console.Error.WriteLine("OK     - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
 #endif
 			}
 			finally
@@ -141,15 +134,16 @@ namespace ICD.Common.Utils
 
 			try
 			{
-#if SIMPLSHARP
+#if !SIMPLSHARP
+				message = string.Format("{0}: {1}", ex.GetType().Name, message);
+#endif
+
 				message = eConsoleColor.YellowOnRed.FormatAnsi(message);
+
+#if SIMPLSHARP
 				ErrorLog.Exception(message, ex);
 #else
-				Console.Write("Except - {0} - ", IcdEnvironment.GetLocalTime());
-				Console.ForegroundColor = ConsoleColor.Yellow;
-				Console.BackgroundColor = ConsoleColor.Red;
-				Console.Error.WriteLine("{0}: {1}", ex.GetType().Name, message);
-				Console.ResetColor();
+				Console.Error.WriteLine("Except - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
 				Console.Error.WriteLine(ex.StackTrace);
 #endif
 			}
@@ -173,14 +167,12 @@ namespace ICD.Common.Utils
 
 			try
 			{
-#if SIMPLSHARP
 				message = eConsoleColor.Cyan.FormatAnsi(message);
+
+#if SIMPLSHARP
 				ErrorLog.Info(message);
 #else
-				Console.Write("Info   - {0} - ", IcdEnvironment.GetLocalTime());
-				Console.ForegroundColor = ConsoleColor.Cyan;
-				Console.Error.WriteLine(message);
-				Console.ResetColor();
+				Console.Error.WriteLine("Info   - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
 #endif
 			}
 			finally

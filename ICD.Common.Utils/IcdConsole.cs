@@ -49,9 +49,7 @@ namespace ICD.Common.Utils
 			{
 				try
 				{
-
 					CrestronConsole.ConsoleCommandResponse(message);
-
 				}
 				catch (NotSupportedException)
 				{
@@ -84,17 +82,7 @@ namespace ICD.Common.Utils
 		public static void PrintLine(eConsoleColor color, string message)
 		{
 			string ansi = color.FormatAnsi(message);
-
-#if SIMPLSHARP
 			PrintLine(ansi);
-#else
-			System.Console.ForegroundColor = color.ToForegroundConsoleColor();
-			System.Console.BackgroundColor = color.ToBackgroundConsoleColor();
-			System.Console.WriteLine(message);
-			System.Console.ResetColor();
-
-			OnConsolePrint.Raise(null, new StringEventArgs(ansi + IcdEnvironment.NewLine));
-#endif
 		}
 
 		public static void PrintLine(eConsoleColor color, string message, params object[] args)
@@ -123,17 +111,7 @@ namespace ICD.Common.Utils
 		public static void Print(eConsoleColor color, string message)
 		{
 			string ansi = color.FormatAnsi(message);
-
-#if SIMPLSHARP
-			Print(color.FormatAnsi(message));
-#else
-			System.Console.ForegroundColor = color.ToForegroundConsoleColor();
-			System.Console.BackgroundColor = color.ToBackgroundConsoleColor();
-			System.Console.Write(message);
-			System.Console.ResetColor();
-
-			OnConsolePrint.Raise(null, new StringEventArgs(ansi));
-#endif
+			Print(ansi);
 		}
 
 		public static void Print(eConsoleColor color, string message, params object[] args)

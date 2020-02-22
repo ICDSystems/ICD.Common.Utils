@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ICD.Common.Utils.Converters
 {
@@ -48,7 +47,7 @@ namespace ICD.Common.Utils.Converters
 			int depth = 0;
 
 			// Hack - Append a reset to close any open spans
-			ansi += "\x1b[0m";
+			ansi += AnsiUtils.CODE_RESET;
 
 			return RegexUtils.ReplaceGroup(ansi, ANSI_PATTERN, "match", match =>
 			{
