@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Fixed exception trying to get DHCP status of network interfaces on Linux
  - Fixed a bug where color formatted console output on Net Standard was not raising the OnConsolePrint event
  - Simplifying ANSI color methods, better cross-platform color support
+ - Console uses unicode for table drawing on Net Standard
 
 ## [10.3.0] - 2020-01-20
 ### Changed
