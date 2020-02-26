@@ -28,23 +28,23 @@ namespace ICD.Common.Utils
 		private static readonly Dictionary<string, string> s_PuttyColors =
 			new Dictionary<string, string>
 			{
-				{"30", "000000"}, // Black
-				{"31", "BB0000"}, // Red
-				{"32", "00BB00"}, // Green
-				{"33", "BBBB00"}, // Yellow
-				{"34", "0000BB"}, // Blue
-				{"35", "BB00BB"}, // Magenta
-				{"36", "00BBBB"}, // Cyan
-				{"37", "BBBBBB"}, // White
+				{"30", "#000000"}, // Black
+				{"31", "#BB0000"}, // Red
+				{"32", "#00BB00"}, // Green
+				{"33", "#BBBB00"}, // Yellow
+				{"34", "#0000BB"}, // Blue
+				{"35", "#BB00BB"}, // Magenta
+				{"36", "#00BBBB"}, // Cyan
+				{"37", "#BBBBBB"}, // White
 
-				{"30;1", "555555"}, // Bright Black
-				{"31;1", "FF5555"}, // Bright Red
-				{"32;1", "55FF55"}, // Bright Green
-				{"33;1", "FFFF55"}, // Bright Yellow
-				{"34;1", "5555FF"}, // Bright Blue
-				{"35;1", "FF55FF"}, // Bright Magenta
-				{"36;1", "55FFFF"}, // Bright Cyan
-				{"37;1", "FFFFFF"}, // Bright White
+				{"30;1", "#555555"}, // Bright Black
+				{"31;1", "#FF5555"}, // Bright Red
+				{"32;1", "#55FF55"}, // Bright Green
+				{"33;1", "#FFFF55"}, // Bright Yellow
+				{"34;1", "#5555FF"}, // Bright Blue
+				{"35;1", "#FF55FF"}, // Bright Magenta
+				{"36;1", "#55FFFF"}, // Bright Cyan
+				{"37;1", "#FFFFFF"}, // Bright White
 			};
 
 		/// <summary>
@@ -123,7 +123,7 @@ namespace ICD.Common.Utils
 		public static string InvertBright(string code)
 		{
 			return code.EndsWith(";1")
-				? code.Substring(0, code.Length - 1)
+				? code.Substring(0, code.Length - 2)
 				: code + ";1";
 		}
 	}
