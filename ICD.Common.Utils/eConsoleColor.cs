@@ -32,7 +32,7 @@ namespace ICD.Common.Utils
 
 		public static string FormatAnsi(this eConsoleColor extends, string data)
 		{
-			string code = s_ConsoleColorCodes.GetDefault(extends, AnsiUtils.CODE_RESET);
+			string code = s_ConsoleColorCodes.GetDefault(extends, AnsiUtils.ANSI_RESET);
 			return AnsiUtils.Format(data, code);
 		}
 	}

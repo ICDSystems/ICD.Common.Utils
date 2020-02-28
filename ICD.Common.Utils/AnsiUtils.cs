@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace ICD.Common.Utils
@@ -13,8 +14,25 @@ namespace ICD.Common.Utils
 		public const string COLOR_CYAN = "\x1b[36;1m";
 		public const string COLOR_WHITE = "\x1b[37;1m";
 		public const string COLOR_YELLOW_ON_RED_BACKGROUND = "\x1b[93;41m";
+		public const string ANSI_RESET = "\x1b[0m";
 
-		public const string CODE_RESET = "\x1b[0m";
+		public const string CODE_BLACK = "30";
+		public const string CODE_RED = "31";
+		public const string CODE_GREEN = "32";
+		public const string CODE_YELLOW = "33";
+		public const string CODE_BLUE = "34";
+		public const string CODE_MAGENTA = "35";
+		public const string CODE_CYAN = "36";
+		public const string CODE_WHITE = "37";
+
+		public const string CODE_BRIGHT_BLACK = "30;1";
+		public const string CODE_BRIGHT_RED = "31;1";
+		public const string CODE_BRIGHT_GREEN = "32;1";
+		public const string CODE_BRIGHT_YELLOW = "33;1";
+		public const string CODE_BRIGHT_BLUE = "34;1";
+		public const string CODE_BRIGHT_MAGENTA = "35;1";
+		public const string CODE_BRIGHT_CYAN = "36;1";
+		public const string CODE_BRIGHT_WHITE = "37;1";
 
 		/// <summary>
 		/// Matches ANSI escape codes, e.g. \x1b[31m and \x1b[30;1m
@@ -28,23 +46,23 @@ namespace ICD.Common.Utils
 		private static readonly Dictionary<string, string> s_PuttyColors =
 			new Dictionary<string, string>
 			{
-				{"30", "#000000"}, // Black
-				{"31", "#BB0000"}, // Red
-				{"32", "#00BB00"}, // Green
-				{"33", "#BBBB00"}, // Yellow
-				{"34", "#0000BB"}, // Blue
-				{"35", "#BB00BB"}, // Magenta
-				{"36", "#00BBBB"}, // Cyan
-				{"37", "#BBBBBB"}, // White
+				{CODE_BLACK, "#000000"},
+				{CODE_RED, "#BB0000"},
+				{CODE_GREEN, "#00BB00"},
+				{CODE_YELLOW, "#BBBB00"},
+				{CODE_BLUE, "#0000BB"},
+				{CODE_MAGENTA, "#BB00BB"},
+				{CODE_CYAN, "#00BBBB"},
+				{CODE_WHITE, "#BBBBBB"},
 
-				{"30;1", "#555555"}, // Bright Black
-				{"31;1", "#FF5555"}, // Bright Red
-				{"32;1", "#55FF55"}, // Bright Green
-				{"33;1", "#FFFF55"}, // Bright Yellow
-				{"34;1", "#5555FF"}, // Bright Blue
-				{"35;1", "#FF55FF"}, // Bright Magenta
-				{"36;1", "#55FFFF"}, // Bright Cyan
-				{"37;1", "#FFFFFF"}, // Bright White
+				{CODE_BRIGHT_BLACK, "#555555"},
+				{CODE_BRIGHT_RED, "#FF5555"},
+				{CODE_BRIGHT_GREEN, "#55FF55"},
+				{CODE_BRIGHT_YELLOW, "#FFFF55"},
+				{CODE_BRIGHT_BLUE, "#5555FF"},
+				{CODE_BRIGHT_MAGENTA, "#FF55FF"},
+				{CODE_BRIGHT_CYAN, "#55FFFF"},
+				{CODE_BRIGHT_WHITE, "#FFFFFF"}
 			};
 
 		/// <summary>
@@ -64,17 +82,17 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Prefixes the given data with an ANSI control code and suffixes with a reset code.
+		/// Prefixes the given data with an ANSI control sequence and suffixes with a reset sequence.
 		/// </summary>
 		/// <param name="data"></param>
-		/// <param name="code"></param>
+		/// <param name="ansiSequence"></param>
 		/// <returns></returns>
-		public static string Format(string data, string code)
+		public static string Format(string data, string ansiSequence)
 		{
 			// % needs to be escaped or weird things happen
 			data = string.IsNullOrEmpty(data) ? data : data.Replace("%", "%%");
 
-			return string.Format("{0}{1}{2}", code, data, CODE_RESET);
+			return string.Format("{0}{1}{2}", ansiSequence, data, ANSI_RESET);
 		}
 
 		/// <summary>
@@ -141,6 +159,23 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public string GetColor(IDictionary<string, string> colors, bool invertBright)
 		{
+			if (colors == null)
+				throw new ArgumentNullException("colors");
+
+			return GetColor<string>(colors, invertBright);
+		}
+
+		/// <summary>
+		/// Gets the color value for the code.
+		/// </summary>
+		/// <param name="colors"></param>
+		/// <param name="invertBright"></param>
+		/// <returns></returns>
+		public T GetColor<T>(IDictionary<string, T> colors, bool invertBright)
+		{
+			if (colors == null)
+				throw new ArgumentNullException("colors");
+
 			string code = invertBright ? AnsiUtils.InvertBright(Code) : Code;
 			return colors[code];
 		}
