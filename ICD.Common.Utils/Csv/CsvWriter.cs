@@ -11,32 +11,80 @@ namespace ICD.Common.Utils.Csv
 		private const string DOUBLE_QUOTE_MARK = "\"\"";
 
 		private readonly IcdTextWriter m_Writer;
-
-		private readonly string m_Seperator;
-		private readonly string m_LineTerminator;
-		private readonly bool m_AlwaysEscape;
-
+		private readonly CsvWriterSettings m_Settings;
 		private bool m_NewLine;
+
+		#region Properties
+
+		private string Separator { get { return m_Settings.InsertSpaceAfterComma ? ", " : ","; } }
+
+		private string LineTerminator { get { return m_Settings.NewLineSequence; } }
+
+		#endregion
+
+		#region Constructors
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public CsvWriter(IcdTextWriter writer, bool spaceAfterComma, bool alwaysEscape, string newline, params string[] header)
+		public CsvWriter([NotNull] IcdTextWriter writer, [NotNull] CsvWriterSettings settings, [NotNull] params string[] header)
 		{
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
+			if (settings == null)
+				throw new ArgumentNullException("settings");
+
+			if (header == null)
+				throw new ArgumentNullException("header");
+
 			m_NewLine = true;
 			m_Writer = writer;
-			m_Seperator = spaceAfterComma ? ", " : ",";
-			m_AlwaysEscape = alwaysEscape;
-			m_LineTerminator = newline;
+			m_Settings = settings;
 
-			if(header.Any())
+			if (header.Any())
 				AppendRow(header);
 		}
 
+		/// <summary>
+		/// Deconstructor.
+		/// </summary>
 		~CsvWriter()
 		{
 			Dispose();
 		}
+
+		/// <summary>
+		/// Instantiates a new CsvWriter with the properties given in the CsvWriterSettings.
+		/// </summary>
+		/// <param name="writer"></param>
+		/// <param name="settings"></param>
+		/// <param name="header"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static CsvWriter Create([NotNull] IcdTextWriter writer, [NotNull] CsvWriterSettings settings,
+		                               [NotNull] params string[] header)
+		{
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
+			if (settings == null)
+				throw new ArgumentNullException("settings");
+
+			if (header == null)
+				throw new ArgumentNullException("header");
+
+			return new CsvWriter(writer, settings, header);
+		}
+
+		#endregion
+
+		public void Dispose()
+		{
+			m_Writer.Dispose();
+		}
+
+		#region Methods
 
 		/// <summary>
 		/// Calls ToString() for each item and adds the row to the builder.
@@ -82,9 +130,9 @@ namespace ICD.Common.Utils.Csv
 			value = value ?? string.Empty;
 
 			if (!m_NewLine)
-				m_Writer.WrappedTextWriter.Write(m_Seperator);
+				m_Writer.WrappedTextWriter.Write(Separator);
 
-			if (m_AlwaysEscape || value.Contains(","))
+			if (m_Settings.AlwaysEscapeEveryValue || value.Contains(","))
 			{
 				value = value.Replace(QUOTATION_MARK, DOUBLE_QUOTE_MARK);
 
@@ -107,31 +155,11 @@ namespace ICD.Common.Utils.Csv
 		[PublicAPI]
 		public void AppendNewline()
 		{
-			m_Writer.WrappedTextWriter.Write(m_LineTerminator);
+			m_Writer.WrappedTextWriter.Write(LineTerminator);
 
 			m_NewLine = true;
 		}
 
-		public void Dispose()
-		{
-			m_Writer.Dispose();
-		}
-
-		/// <summary>
-		/// Instantiates a new CsvWriter with the properties given in the CsvWriterSettings.
-		/// </summary>
-		/// <param name="writer"></param>
-		/// <param name="settings"></param>
-		/// <param name="header"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public static CsvWriter Create(IcdTextWriter writer, CsvWriterSettings settings, params string[] header)
-		{
-			return new CsvWriter(writer,
-			                     settings.InsertSpaceAfterComma,
-			                     settings.AlwaysEscapeEveryValue,
-			                     settings.NewLineSequence,
-			                     header);
-		}
+		#endregion
 	}
 }
