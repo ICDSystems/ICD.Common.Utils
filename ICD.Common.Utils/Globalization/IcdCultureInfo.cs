@@ -471,10 +471,8 @@ namespace ICD.Common.Utils.Globalization
 				}
 			}
 
-			string[] array = builtinCultures;
-			for (int i = 0; i < array.Length; i++)
+			foreach (string name in builtinCultures)
 			{
-				string name = array[i];
 				try
 				{
 					CultureInfo cultureInfo = CultureInfo.GetCultureInfo(name);
