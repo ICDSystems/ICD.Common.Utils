@@ -976,7 +976,6 @@ namespace ICD.Common.Utils.Xml
 		/// Calls childElementCallback for each item in the list.
 		/// </summary>
 		/// <param name="xml"></param>
-		/// <param name="rootElement"></param>
 		/// <param name="childElement"></param>
 		/// <param name="readChild"></param>
 		public static IEnumerable<T> ReadListFromXml<T>(string xml, string childElement, Func<string, T> readChild)
@@ -1012,7 +1011,6 @@ namespace ICD.Common.Utils.Xml
 		/// Deserializes the xml to a list.
 		/// </summary>
 		/// <param name="xml"></param>
-		/// <param name="rootElement"></param>
 		/// <param name="childElement"></param>
 		public static IEnumerable<T> ReadListFromXml<T>(string xml, string childElement)
 		{
