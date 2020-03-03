@@ -154,13 +154,38 @@ namespace ICD.Common.Utils
 			return sb.ToString();
 		}
 
+		#endregion
+
+		#region Private Methods
+
+		private int[] GetColumnWidths()
+		{
+			int[] columnWidths = new int[m_Columns.Length];
+			for (int index = 0; index < m_Columns.Length; index++)
+				columnWidths[index] = GetColumnWidth(index);
+
+			return columnWidths;
+		}
+
+		private int GetColumnWidth(int index)
+		{
+			int titleLength = m_Columns[index].Length + 1;
+			if (m_Rows.Count == 0)
+				return titleLength;
+
+			int maxColumnWidth = m_Rows.Except((string[])null)
+			                           .Max(x => x[index] != null ? x[index].Length : 0) + 1;
+
+			return (titleLength > maxColumnWidth) ? titleLength : maxColumnWidth;
+		}
+
 		private void AppendTopSeparator(StringBuilder builder, IList<int> columnWidths)
 		{
 #if SIMPLSHARP
 			// Can't do fancy tables so don't bother drawing the top row
 			return;
 #else
-			builder.Append(DOWN_RIGHT);
+			builder.Append(DOWN_RIGHT).Append(HORIZONTAL);
 
 			for (int index = 0; index < columnWidths.Count; index++)
 			{
@@ -187,7 +212,7 @@ namespace ICD.Common.Utils
 			AppendSeparator(builder, columnWidths);
 			return;
 #else
-			builder.Append(UP_RIGHT);
+			builder.Append(UP_RIGHT).Append(HORIZONTAL);
 
 			for (int index = 0; index < columnWidths.Count; index++)
 			{
@@ -208,35 +233,10 @@ namespace ICD.Common.Utils
 #endif
 		}
 
-		#endregion
-
-		#region Private Methods
-
-		private int[] GetColumnWidths()
-		{
-			int[] columnWidths = new int[m_Columns.Length];
-			for (int index = 0; index < m_Columns.Length; index++)
-				columnWidths[index] = GetColumnWidth(index);
-
-			return columnWidths;
-		}
-
-		private int GetColumnWidth(int index)
-		{
-			int titleLength = m_Columns[index].Length + 1;
-			if (m_Rows.Count == 0)
-				return titleLength;
-
-			int maxColumnWidth = m_Rows.Except((string[])null)
-			                           .Max(x => x[index] != null ? x[index].Length : 0) + 1;
-
-			return (titleLength > maxColumnWidth) ? titleLength : maxColumnWidth;
-		}
-
 		private static void AppendRow(StringBuilder builder, IList<string> row, IList<int> columnWidths)
 		{
 #if !SIMPLSHARP
-			builder.Append(VERTICAL);
+			builder.Append(VERTICAL).Append(' ');
 #endif
 
 			for (int index = 0; index < row.Count; index++)
@@ -261,7 +261,7 @@ namespace ICD.Common.Utils
 		private static void AppendSeparator(StringBuilder builder, IList<int> columnWidths)
 		{
 #if !SIMPLSHARP
-			builder.Append(VERTICAL_RIGHT);
+			builder.Append(VERTICAL_RIGHT).Append(HORIZONTAL);
 #endif
 
 			for (int index = 0; index < columnWidths.Count; index++)
