@@ -39,7 +39,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 			try
 			{
 				Subscribe(action);
-				m_Actions.InsertSorted(action, a => a.NextRunTime);
+				m_Actions.InsertSorted(action, a => a.NextRunTimeUtc);
 			}
 			finally
 			{
@@ -96,15 +96,15 @@ namespace ICD.Common.Utils.Services.Scheduler
 
 		private void TimerCallback()
 		{
-			DateTime currentTime = IcdEnvironment.GetLocalTime();
+			DateTime currentTime = IcdEnvironment.GetUtcTime();
 			IScheduledAction[] actionsToRun;
 
 			m_CriticalSection.Enter();
 			try
 			{
 				actionsToRun = m_Actions
-					.Where(a => a.NextRunTime <= currentTime && a.NextRunTime > m_LastRunTime)
-					.OrderBy(a => a.NextRunTime)
+					.Where(a => a.NextRunTimeUtc <= currentTime && a.NextRunTimeUtc > m_LastRunTime)
+					.OrderBy(a => a.NextRunTimeUtc)
 					.ToArray();
 			}
 			finally
@@ -135,14 +135,14 @@ namespace ICD.Common.Utils.Services.Scheduler
 			m_CriticalSection.Enter();
 			try
 			{
-				var action = m_Actions.FirstOrDefault(a => a.NextRunTime != null && a.NextRunTime > m_LastRunTime);
-				if (action == null || action.NextRunTime == null)
+				var action = m_Actions.FirstOrDefault(a => a.NextRunTimeUtc != null && a.NextRunTimeUtc > m_LastRunTime);
+				if (action == null || action.NextRunTimeUtc == null)
 				{
 					m_Timer.Stop();
 					return;
 				}
 
-				long msToNextAction = (long)(action.NextRunTime.Value - IcdEnvironment.GetLocalTime()).TotalMilliseconds;
+				long msToNextAction = (long)(action.NextRunTimeUtc.Value - IcdEnvironment.GetUtcTime()).TotalMilliseconds;
 				if (msToNextAction < 0)
 					msToNextAction = 0;
 				m_Timer.Reset(msToNextAction);
@@ -195,7 +195,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 			try
 			{
 				m_Actions.Remove(action);
-				m_Actions.InsertSorted(action, a => a.NextRunTime);
+				m_Actions.InsertSorted(action, a => a.NextRunTimeUtc);
 			}
 			finally
 			{

@@ -12,7 +12,7 @@ namespace ICD.Common.Utils.Services.Scheduler
 		/// <summary>
 		/// Gets the next time this action should be run
 		/// </summary>
-		DateTime? NextRunTime { get; }
+		DateTime? NextRunTimeUtc { get; }
 
 		void Run();
 	}

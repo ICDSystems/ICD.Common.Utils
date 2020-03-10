@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Fixed a bug where color formatted console output on Net Standard was not raising the OnConsolePrint event
  - Simplifying ANSI color methods, better cross-platform color support
  - Console uses unicode for table drawing on Net Standard
+ - Using UTC for tracking scheduled events, fixes issues with DST
 
 ## [10.3.0] - 2020-01-20
 ### Changed

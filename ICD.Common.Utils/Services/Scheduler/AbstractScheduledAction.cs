@@ -7,17 +7,17 @@ namespace ICD.Common.Utils.Services.Scheduler
 	{
 		public event EventHandler OnScheduledRunTimeChanged;
 
-		private DateTime? m_NextRunTime;
+		private DateTime? m_NextRunTimeUtc;
 
-		public DateTime? NextRunTime
+		public DateTime? NextRunTimeUtc
 		{
-			get { return m_NextRunTime; }
+			get { return m_NextRunTimeUtc; }
 			private set
 			{
-				if (m_NextRunTime == value)
+				if (m_NextRunTimeUtc == value)
 					return;
 
-				m_NextRunTime = value;
+				m_NextRunTimeUtc = value;
 
 				OnScheduledRunTimeChanged.Raise(this);
 			}
@@ -26,12 +26,12 @@ namespace ICD.Common.Utils.Services.Scheduler
 		public void Run()
 		{
 			RunFinal();
-			NextRunTime = GetNextRunTime();
+			NextRunTimeUtc = GetNextRunTimeUtc();
 		}
 
 		public void UpdateNextRunTime()
 		{
-			NextRunTime = GetNextRunTime();
+			NextRunTimeUtc = GetNextRunTimeUtc();
 		}
 
 		/// <summary>
@@ -42,6 +42,6 @@ namespace ICD.Common.Utils.Services.Scheduler
 		/// <summary>
 		/// Runs after RunFinal in order to set the next run time of this action
 		/// </summary>
-		public abstract DateTime? GetNextRunTime();
+		public abstract DateTime? GetNextRunTimeUtc();
 	}
 }
