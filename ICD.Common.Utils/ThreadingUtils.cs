@@ -41,11 +41,11 @@ namespace ICD.Common.Utils
 			if (condition == null)
 				throw new ArgumentNullException("condition");
 
-			DateTime end = IcdEnvironment.GetLocalTime().AddMilliseconds(timeout);
+			DateTime end = IcdEnvironment.GetUtcTime().AddMilliseconds(timeout);
 
 			while (!condition())
 			{
-				if (IcdEnvironment.GetLocalTime() >= end)
+				if (IcdEnvironment.GetUtcTime() >= end)
 					return false;
 			}
 
@@ -137,7 +137,7 @@ namespace ICD.Common.Utils
 			       {
 				       try
 				       {
-					       state.Started = IcdEnvironment.GetLocalTime();
+					       state.Started = IcdEnvironment.GetUtcTime();
 
 					       callback(param);
 					       RemoveThreadState(state);
@@ -190,7 +190,7 @@ namespace ICD.Common.Utils
 			/// <summary>
 			/// Gets the duration of the thread.
 			/// </summary>
-			public TimeSpan? Duration { get { return IcdEnvironment.GetLocalTime() - Started; } }
+			public TimeSpan? Duration { get { return IcdEnvironment.GetUtcTime() - Started; } }
 
 			/// <summary>
 			/// Threads can be garbage collected before they execute so we keep a reference.

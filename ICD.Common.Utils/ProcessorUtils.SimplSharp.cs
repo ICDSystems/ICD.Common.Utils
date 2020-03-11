@@ -21,8 +21,8 @@ namespace ICD.Common.Utils
 
 		private static string s_VersionResult;
 
-		private static DateTime? s_SystemUptimeStartTime;
-		private static DateTime? s_ProgramUptimeStartTime;
+		private static DateTime? s_SystemUptimeStartTimeUtc;
+		private static DateTime? s_ProgramUptimeStartTimeUtc;
 
 		#region Properties
 
@@ -237,7 +237,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static TimeSpan GetSystemUptime()
 		{
-			if (s_SystemUptimeStartTime == null)
+			if (s_SystemUptimeStartTimeUtc == null)
 			{
 				string uptime = GetSystemUptimeFeedback();
 				Match match = Regex.Match(uptime, UPTIME_REGEX);
@@ -251,10 +251,10 @@ namespace ICD.Common.Utils
 				int milliseconds = int.Parse(match.Groups["milliseconds"].Value);
 
 				TimeSpan span = new TimeSpan(days, hours, minutes, seconds, milliseconds);
-				s_SystemUptimeStartTime = IcdEnvironment.GetLocalTime() - span;
+				s_SystemUptimeStartTimeUtc = IcdEnvironment.GetUtcTime() - span;
 			}
 
-			return IcdEnvironment.GetLocalTime() - s_SystemUptimeStartTime.Value;
+			return IcdEnvironment.GetUtcTime() - s_SystemUptimeStartTimeUtc.Value;
 		}
 
 		/// <summary>
@@ -264,7 +264,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static TimeSpan GetProgramUptime()
 		{
-			if (s_ProgramUptimeStartTime == null)
+			if (s_ProgramUptimeStartTimeUtc == null)
 			{
 				string uptime = GetProgramUptimeFeedback((int)ProgramUtils.ProgramNumber);
 				Match match = Regex.Match(uptime, UPTIME_REGEX);
@@ -278,10 +278,10 @@ namespace ICD.Common.Utils
 				int milliseconds = int.Parse(match.Groups["milliseconds"].Value);
 
 				TimeSpan span = new TimeSpan(days, hours, minutes, seconds, milliseconds);
-				s_ProgramUptimeStartTime = IcdEnvironment.GetLocalTime() - span;
+				s_ProgramUptimeStartTimeUtc = IcdEnvironment.GetUtcTime() - span;
 			}
 
-			return IcdEnvironment.GetLocalTime() - s_ProgramUptimeStartTime.Value;
+			return IcdEnvironment.GetUtcTime() - s_ProgramUptimeStartTimeUtc.Value;
 		}
 
 		#endregion

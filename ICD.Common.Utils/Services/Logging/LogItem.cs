@@ -43,7 +43,7 @@ namespace ICD.Common.Utils.Services.Logging
 		{
 			m_Severity = severity;
 			m_Message = message;
-			m_Timestamp = IcdEnvironment.GetLocalTime().ToUniversalTime();
+			m_Timestamp = IcdEnvironment.GetUtcTime();
 		}
 
 		#endregion
