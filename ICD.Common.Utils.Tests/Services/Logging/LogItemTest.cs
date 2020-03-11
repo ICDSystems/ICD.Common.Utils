@@ -12,7 +12,7 @@ namespace ICD.Common.Utils.Tests.Services.Logging
         public void TimestampTest()
         {
             LogItem item = new LogItem(eSeverity.Critical, null);
-            DateTime time = IcdEnvironment.GetLocalTime();
+            DateTime time = IcdEnvironment.GetUtcTime();
 
             Assert.IsTrue((time - item.Timestamp).TotalSeconds <= 1);
         }
