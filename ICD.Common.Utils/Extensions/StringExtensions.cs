@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Extensions
@@ -255,6 +256,56 @@ namespace ICD.Common.Utils.Extensions
 
 				return hash1 + (hash2 * 1566083941);
 			}
+		}
+
+		/// <summary>
+		/// Strips all of the non-printable characters and control codes from the string.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static string ToPrintableCharacters([NotNull] this string extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			// Strip ANSI escape sequences
+			extends = Regex.Replace(extends, AnsiUtils.ANSI_REGEX, string.Empty);
+
+			// Strip control characters
+			extends = Regex.Replace(extends, @"\p{C}+", string.Empty);
+
+			return extends;
+		}
+
+		/// <summary>
+		/// Gets the printable length of the string.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static int GetPrintableLength([NotNull] this string extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.ToPrintableCharacters().Length;
+		}
+
+		/// <summary>
+		/// Pads the string to the number of printable characters.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="length"></param>
+		/// <returns></returns>
+		public static string PadRightPrintable([NotNull] this string extends, int length)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			int printableLength = extends.GetPrintableLength();
+			int actualLength = extends.Length;
+			int delta = actualLength - printableLength;
+
+			return extends.PadRight(length + delta);
 		}
 	}
 }

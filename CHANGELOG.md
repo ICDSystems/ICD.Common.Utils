@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Console uses unicode for table drawing on Net Standard
  - Using UTC for tracking scheduled events, fixes issues with DST
  - Using UTC for tracking durations
+ - Fixed a bug where table width calculations were not considering unprintable characters
 
 ## [10.3.0] - 2020-01-20
 ### Changed

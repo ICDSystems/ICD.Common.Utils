@@ -169,14 +169,14 @@ namespace ICD.Common.Utils
 
 		private int GetColumnWidth(int index)
 		{
-			int titleLength = m_Columns[index].Length + 1;
+			int titleLength = m_Columns[index].GetPrintableLength() + 1;
 			if (m_Rows.Count == 0)
 				return titleLength;
 
 			int maxColumnWidth = m_Rows.Except((string[])null)
-			                           .Max(x => x[index] != null ? x[index].Length : 0) + 1;
+			                           .Max(x => x[index] != null ? x[index].GetPrintableLength() : 0) + 1;
 
-			return (titleLength > maxColumnWidth) ? titleLength : maxColumnWidth;
+			return titleLength > maxColumnWidth ? titleLength : maxColumnWidth;
 		}
 
 		private void AppendTopSeparator(StringBuilder builder, IList<int> columnWidths)
@@ -245,7 +245,7 @@ namespace ICD.Common.Utils
 					builder.Append(' ');
 
 				string value = row[index] ?? string.Empty;
-				builder.Append(value.PadRight(columnWidths[index]));
+				builder.Append(value.PadRightPrintable(columnWidths[index]));
 
 				if (index < row.Count - 1)
 					builder.Append(VERTICAL);

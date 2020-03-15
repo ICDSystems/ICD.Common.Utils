@@ -37,7 +37,7 @@ namespace ICD.Common.Utils
 		/// <summary>
 		/// Matches ANSI escape codes, e.g. \x1b[31m and \x1b[30;1m
 		/// </summary>
-		private const string ANSI_PATTERN = "(?'match'\x01b\\[(?'code'[\\d;]+)m)";
+		public const string ANSI_REGEX = "(?'match'\x01b\\[(?'code'[\\d;]+)m)";
 
 		/// <summary>
 		/// Matches ANSI escape codes to HTML styles.
@@ -105,7 +105,7 @@ namespace ICD.Common.Utils
 			if (string.IsNullOrEmpty(data))
 				yield break;
 
-			Regex regex = new Regex(ANSI_PATTERN);
+			Regex regex = new Regex(ANSI_REGEX);
 			Match match = regex.Match(data);
 
 			// No matches
