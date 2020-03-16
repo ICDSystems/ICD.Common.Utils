@@ -46,5 +46,21 @@ namespace ICD.Common.Utils.Extensions
 
 			return extends.ToString() == "http://localhost/";
 		}
+
+		/// <summary>
+		/// Returns the string representation of the given URI, replacing the password with asterixes.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static string ToPrivateString([NotNull] this Uri extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			IcdUriBuilder builder = new IcdUriBuilder(extends);
+			builder.Password = builder.Password == null ? null : StringUtils.PasswordFormat(builder.Password);
+			
+			return builder.ToString();
+		}
 	}
 }
