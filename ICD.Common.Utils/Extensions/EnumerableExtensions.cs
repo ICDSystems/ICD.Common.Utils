@@ -1306,6 +1306,37 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns the minimum value from the sequence, otherwise the default value.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static T MinOrDefault<T>([NotNull] this IEnumerable<T> extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			Comparer<T> comparer = Comparer<T>.Default;
+			T value = default(T);
+			bool first = true;
+
+			foreach (T x in extends)
+			{
+				if (first)
+				{
+					first = false;
+					value = x;
+					continue;
+				}
+
+				if (comparer.Compare(x, value) < 0)
+					value = x;
+			}
+
+			return value;
+		}
+
+		/// <summary>
 		/// Returns the maximum value from the sequence, otherwise the default value.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -1319,14 +1350,10 @@ namespace ICD.Common.Utils.Extensions
 			Comparer<T> comparer = Comparer<T>.Default;
 			T value = default(T);
 
-			using (IEnumerator<T> enumerator = extends.GetEnumerator())
+			foreach (T x in extends)
 			{
-				while (enumerator.MoveNext())
-				{
-					T x = enumerator.Current;
-					if (comparer.Compare(x, value) > 0)
-						value = x;
-				}
+				if (comparer.Compare(x, value) > 0)
+					value = x;
 			}
 
 			return value;
