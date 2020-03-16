@@ -967,6 +967,52 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns true if all of the items in the sequence are equal, or the sequence is empty.
+		/// </summary>
+		/// <typeparam name="TItem"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static bool IsDistinct<TItem>([NotNull] this IEnumerable<TItem> extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			IEqualityComparer<TItem> comparer = EqualityComparer<TItem>.Default;
+			return extends.IsDistinct(comparer);
+		}
+
+		/// <summary>
+		/// Returns true if all of the items in the sequence are equal, or the sequence is empty.
+		/// </summary>
+		/// <typeparam name="TItem"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		public static bool IsDistinct<TItem>([NotNull] this IEnumerable<TItem> extends, [NotNull] IEqualityComparer<TItem> comparer)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			TItem other = default(TItem);
+			bool first = true;
+
+			foreach (TItem item in extends)
+			{
+				if (first)
+				{
+					other = item;
+					first = false;
+					continue;
+				}
+
+				if (!comparer.Equals(item, other))
+					return false;
+			}
+
+			return true;
+		}
+
+		/// <summary>
 		/// Gets distinct elements from the sequence based on given property.
 		/// </summary>
 		/// <typeparam name="TItem"></typeparam>
