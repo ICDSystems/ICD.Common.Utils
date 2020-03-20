@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.0.0] - 2020-03-20
 ### Added
  - Added Not null tag for ICDUriBuilder Constructor that takes a URI as an argument.
  - Added MathUtils methods for converting to and from percentages
