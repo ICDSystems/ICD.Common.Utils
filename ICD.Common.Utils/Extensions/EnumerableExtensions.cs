@@ -839,6 +839,26 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Creates a new collection and fills it with the items of the enumerable.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <typeparam name="TCollection"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static TCollection ToCollection<T, TCollection>([NotNull] this IEnumerable<T> extends)
+			where TCollection : ICollection<T>
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			TCollection collection = ReflectionUtils.CreateInstance<TCollection>();
+			foreach (T item in extends)
+				collection.Add(item);
+
+			return collection;
+		}
+
+		/// <summary>
 		/// Returns the sequence as a IcdHashSet.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
