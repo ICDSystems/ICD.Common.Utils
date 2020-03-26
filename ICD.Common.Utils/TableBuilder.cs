@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 
@@ -38,17 +39,21 @@ namespace ICD.Common.Utils
 		private readonly List<string[]> m_Rows;
 		private readonly string[] m_Columns;
 
+		#region Properties
+
 		/// <summary>
 		/// Gets the columns.
 		/// </summary>
 		[PublicAPI]
-		public string[] Columns { get { return m_Columns; } }
+		public string[] Columns { get { return m_Columns.ToArray(); } }
 
 		/// <summary>
 		/// Gets the number of columns.
 		/// </summary>
 		[PublicAPI]
 		public int ColumnsCount { get { return m_Columns.Length; } }
+
+		#endregion
 
 		/// <summary>
 		/// Constructor.
@@ -91,10 +96,37 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public TableBuilder AddRow(params string[] row)
 		{
-			if (row != null && row.Length != m_Columns.Length)
+			// Special empty row case
+			if (row == null)
+			{
+				m_Rows.Add(null);
+				return this;
+			}
+
+			if (row.Length != m_Columns.Length)
 				throw new ArgumentException("Row must match columns length.");
 
-			m_Rows.Add(row);
+			// Split new-lines into multiple rows
+			List<string[]> rows = new List<string[]>();
+
+			for (int column = 0; column < row.Length; column++)
+			{
+				string cell = row[column];
+				string[] lines = Regex.Split(cell, "\r\n|\r|\n");
+
+				for (int line = 0; line < lines.Length; line++)
+				{
+					// Add a new row for this line
+					if (line >= rows.Count)
+						rows.Add(new string[row.Length]);
+
+					// Insert the line into the row
+					rows[line][column] = lines[line];
+				}
+			}
+
+			// Add all of the rows into the table
+			m_Rows.AddRange(rows);
 
 			return this;
 		}
@@ -108,12 +140,21 @@ namespace ICD.Common.Utils
 			return AddRow(new string[m_Columns.Length]);
 		}
 
+		/// <summary>
+		/// Adds a horizontal line to the builder.
+		/// </summary>
+		/// <returns></returns>
 		[PublicAPI]
 		public TableBuilder AddSeparator()
 		{
 			return AddRow(null);
 		}
 
+		/// <summary>
+		/// Adds a new header to the builder.
+		/// </summary>
+		/// <param name="row"></param>
+		/// <returns></returns>
 		[PublicAPI]
 		public TableBuilder AddHeader(params string[] row)
 		{
@@ -133,24 +174,24 @@ namespace ICD.Common.Utils
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
-
-			int[] columnWidths = GetColumnWidths();
-
-			AppendTopSeparator(sb, columnWidths);
-
-			AppendRow(sb, m_Columns, columnWidths);
-			AppendSeparator(sb, columnWidths);
-
-			foreach (string[] row in m_Rows)
 			{
-				if (row == null)
-					AppendSeparator(sb, columnWidths);
-				else
-					AppendRow(sb, row, columnWidths);
+				int[] columnWidths = GetColumnWidths();
+
+				AppendTopSeparator(sb, columnWidths);
+
+				AppendRow(sb, m_Columns, columnWidths);
+				AppendSeparator(sb, columnWidths);
+
+				foreach (string[] row in m_Rows)
+				{
+					if (row == null)
+						AppendSeparator(sb, columnWidths);
+					else
+						AppendRow(sb, row, columnWidths);
+				}
+
+				AppendBottomSeparator(sb, columnWidths);
 			}
-
-			AppendBottomSeparator(sb, columnWidths);
-
 			return sb.ToString();
 		}
 
