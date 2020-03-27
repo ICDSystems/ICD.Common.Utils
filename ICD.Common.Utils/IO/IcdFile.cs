@@ -106,5 +106,10 @@ namespace ICD.Common.Utils.IO
 			using (FileStream stream = File.OpenWrite(path))
 				stream.Write(bytes, 0, bytes.Length);
 		}
+
+		public static void Move([NotNull] string sourceFileName, [NotNull] string destFileName)
+		{
+			File.Move(sourceFileName, destFileName);
+		}
 	}
 }
