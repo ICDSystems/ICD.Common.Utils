@@ -51,7 +51,15 @@ namespace ICD.Common.Utils
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
 
-			IEnumerable<Type> parameterTypes = method.GetParameters().Select(p => (Type)p.ParameterType);
+			ParameterInfo[] methodParameters = method.GetParameters();
+
+			// Bail early if the counts don't match
+			ICollection<object> parametersCollection = parameters as ICollection<object>;
+			if (parametersCollection != null && parametersCollection.Count != methodParameters.Length)
+				return false;
+
+			// Compare the parameters to the objects
+			IEnumerable<Type> parameterTypes = methodParameters.Select(p => (Type)p.ParameterType);
 			return ParametersMatchTypes(parameterTypes, parameters);
 		}
 
