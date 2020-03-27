@@ -78,9 +78,9 @@ namespace ICD.Common.Utils.IO
 		}
 
 		[PublicAPI]
-		public static IcdFileStream Open(string path, FileMode mode)
+		public static IcdFileStream Open(string path, eIcdFileMode mode)
 		{
-			return new IcdFileStream(File.Open(path, mode));
+			return new IcdFileStream(File.Open(path, mode.ToFileMode()));
 		}
 
 		[PublicAPI]

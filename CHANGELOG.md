@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Added ToCollection extension method for copying an enumerable to a new collection
  - TableBuilder supports multi-line content
+ - Added eIcdFileMode for IO platform agnosticism
 
 ## [11.0.0] - 2020-03-20
 ### Added
