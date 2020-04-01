@@ -93,6 +93,20 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns true if the type is anonymous.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static bool IsAnonymous([NotNull] this Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return (type.Name.Contains("AnonymousType") || type.Name.Contains("AnonType")) &&
+			       (type.Name.StartsWith("<>") || type.Name.StartsWith("VB$"));
+		}
+
+		/// <summary>
 		/// Returns true if the given type is a numeric type.
 		/// </summary>
 		/// <param name="extends"></param>
