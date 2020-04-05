@@ -269,6 +269,42 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Attempts to parse the string as a double.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryParse(string value, out double result)
+		{
+			return TryConvert(Convert.ToDouble, value, out result);
+		}
+
+		/// <summary>
+		/// Attempts to parse the string as a byte.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryParse(string value, out byte result)
+		{
+			return TryConvert(Convert.ToByte, value, out result);
+		}
+
+		/// <summary>
+		/// Attempts to parse the string as a float.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryParse(string value, out char result)
+		{
+			return TryConvert(Convert.ToChar, value, out result);
+		}
+
+		/// <summary>
 		/// Attempts to parse the string as a bool.
 		/// </summary>
 		/// <param name="value"></param>
