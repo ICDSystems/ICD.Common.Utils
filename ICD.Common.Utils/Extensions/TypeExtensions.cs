@@ -209,12 +209,38 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Extracts the inner Types from this current Type inheriting/implementing the given generic Type.
+		///		E.g.
+		///			typeof(List&lt;int&gt;).GetInnerGenericTypes(typeof(IEnumerable&lt;&gt;));
+		///		Returns
+		///			[ typeof(int) ]
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="genericType"></param>
+		/// <returns></returns>
+		[NotNull]
+		public static IEnumerable<Type> GetInnerGenericTypes([NotNull] this Type extends, Type genericType)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (genericType == null)
+				throw new ArgumentNullException("genericType");
+
+			return extends
+				.GetAllTypes()
+				.First(t => t.IsGenericType &&
+				            t.GetGenericTypeDefinition() == genericType)
+				.GetGenericArguments();
+		}
+
+		/// <summary>
 		/// Returns the given type, all base types, and all implemented interfaces.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[NotNull]
-		public static IEnumerable<Type> GetAllTypes([NotNull]this Type extends)
+		public static IEnumerable<Type> GetAllTypes([NotNull] this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
