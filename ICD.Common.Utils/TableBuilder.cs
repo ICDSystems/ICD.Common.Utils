@@ -111,7 +111,7 @@ namespace ICD.Common.Utils
 
 			for (int column = 0; column < row.Length; column++)
 			{
-				string cell = row[column];
+				string cell = row[column] ?? string.Empty;
 				string[] lines = Regex.Split(cell, "\r\n|\r|\n");
 
 				for (int line = 0; line < lines.Length; line++)
