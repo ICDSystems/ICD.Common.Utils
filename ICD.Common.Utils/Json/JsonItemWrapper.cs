@@ -1,97 +1,97 @@
 ﻿using System;
-using System.Text.RegularExpressions;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ICD.Common.Utils.Json
 {
 	/// <summary>
 	/// Simple wrapper for serialization of an object and its type.
 	/// </summary>
+	[JsonConverter(typeof(JsonItemWrapperConverter))]
 	public sealed class JsonItemWrapper
 	{
-		private const string TYPE_TOKEN = "t";
-		private const string ITEM_TOKEN = "i";
-
-		private readonly object m_Item;
-
 		/// <summary>
 		/// Gets the Type of the item. Returns null if the item is null.
 		/// </summary>
-		public Type ItemType { get { return m_Item == null ? null : m_Item.GetType(); } }
+		[CanBeNull]
+		public Type Type { get; set; }
 
 		/// <summary>
 		/// Gets the wrapped item.
 		/// </summary>
-		public object Item { get { return m_Item; } }
+		[CanBeNull]
+		public object Item { get; set; }
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		public JsonItemWrapper()
+			: this(null)
+		{
+		}
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="item"></param>
-		public JsonItemWrapper(object item)
+		public JsonItemWrapper([CanBeNull] object item)
 		{
-			m_Item = item;
+			Item = item;
+			Type = item == null ? null : item.GetType();
 		}
+	}
+
+	public sealed class JsonItemWrapperConverter : AbstractGenericJsonConverter<JsonItemWrapper>
+	{
+		private const string TYPE_TOKEN = "t";
+		private const string ITEM_TOKEN = "i";
 
 		/// <summary>
-		/// Writes the JsonItemWrapper as a JObject.
+		/// Override to write properties to the writer.
 		/// </summary>
 		/// <param name="writer"></param>
-		public void Write(JsonWriter writer)
+		/// <param name="value"></param>
+		/// <param name="serializer"></param>
+		protected override void WriteProperties(JsonWriter writer, JsonItemWrapper value, JsonSerializer serializer)
 		{
-			if (writer == null)
-				throw new ArgumentNullException("writer");
+			base.WriteProperties(writer, value, serializer);
 
-			writer.WriteStartObject();
+			if (value.Type != null)
+				writer.WriteProperty(TYPE_TOKEN, value.Type.GetMinimalName());
+
+			if (value.Item != null)
 			{
-				writer.WritePropertyName(TYPE_TOKEN);
-				writer.WriteType(ItemType);
-
 				writer.WritePropertyName(ITEM_TOKEN);
-				writer.WriteValue(JsonConvert.SerializeObject(m_Item));
+				serializer.Serialize(writer, value.Item);
 			}
-			writer.WriteEndObject();
 		}
 
 		/// <summary>
-		/// Reads the JToken back to the wrapped object.
+		/// Override to handle the current property value with the given name.
 		/// </summary>
-		/// <param name="token"></param>
-		/// <returns></returns>
-		public static object ReadToObject(JToken token)
+		/// <param name="property"></param>
+		/// <param name="reader"></param>
+		/// <param name="instance"></param>
+		/// <param name="serializer"></param>
+		protected override void ReadProperty(string property, JsonReader reader, JsonItemWrapper instance, JsonSerializer serializer)
 		{
-			if (token == null)
-				throw new ArgumentNullException("token");
-
-			string typeString = (string)token.SelectToken(TYPE_TOKEN);
-			if (string.IsNullOrEmpty(typeString))
-				return null;
-
-			string itemString = (string)token.SelectToken(ITEM_TOKEN);
-			Type type = Type.GetType(typeString);
-
-			if (type == null)
+			switch (property)
 			{
-				typeString = typeString.Replace("_SimplSharp", "").Replace("_NetStandard", "");
-				type = Type.GetType(typeString);
+				case TYPE_TOKEN:
+					instance.Type = reader.TokenType == JsonToken.Null ? null : reader.GetValueAsType();
+					break;
+
+				case ITEM_TOKEN:
+					if (instance.Type == null && reader.TokenType != JsonToken.Null)
+						throw new FormatException("No Type for associated Item");
+					instance.Item = serializer.Deserialize(reader, instance.Type);
+					break;
+
+				default:
+					base.ReadProperty(property, reader, instance, serializer);
+					break;
 			}
-
-			if (type == null)
-			{
-				typeString = AddSimplSharpSuffix(typeString);
-				type = Type.GetType(typeString);
-			}
-
-			return JsonConvert.DeserializeObject(itemString, type);
-		}
-
-		private static string AddSimplSharpSuffix(string typeString)
-		{
-			return Regex.Replace(typeString,
-				"(?'prefix'[^,]+, )(?'assembly'[^,]*)(?'suffix', .*)",
-				"${prefix}${assembly}_SimplSharp${suffix}");
 		}
 	}
 }
