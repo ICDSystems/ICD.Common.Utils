@@ -5,12 +5,12 @@ using System.Linq;
 namespace ICD.Common.Utils.Tests
 {
 	[TestFixture]
-    public sealed class EnumUtilsTest
-    {
+	public sealed class EnumUtilsTest
+	{
 		public enum eTestEnum
 		{
 			None = 0,
-			A = 1, 
+			A = 1,
 			B = 2,
 			C = 3,
 		}
@@ -24,7 +24,7 @@ namespace ICD.Common.Utils.Tests
 			C = 4,
 			D = 32
 		}
-		
+
 		[Test]
 		public void GetValuesTest()
 		{
@@ -36,7 +36,7 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(eTestEnum.B, values[2]);
 			Assert.AreEqual(eTestEnum.C, values[3]);
 		}
-		
+
 		[Test]
 		public void IsEnumTypeGenericTest()
 		{
@@ -57,17 +57,29 @@ namespace ICD.Common.Utils.Tests
 			Assert.IsFalse(EnumUtils.IsEnum(""));
 		}
 
-        [Test]
-        public void IsDefinedTest()
-        {
-            Assert.IsFalse(EnumUtils.IsDefined((eTestEnum)20));
-            Assert.IsTrue(EnumUtils.IsDefined((eTestEnum)2));
+		[Test]
+		public void IsDefinedTest()
+		{
+			Assert.IsFalse(EnumUtils.IsDefined((eTestEnum)20));
+			Assert.IsTrue(EnumUtils.IsDefined((eTestEnum)2));
 
-            Assert.IsFalse(EnumUtils.IsDefined((eTestFlagsEnum)8));
-            Assert.IsTrue(EnumUtils.IsDefined((eTestFlagsEnum)3));
-        }
+			Assert.IsFalse(EnumUtils.IsDefined((eTestFlagsEnum)8));
+			Assert.IsTrue(EnumUtils.IsDefined((eTestFlagsEnum)3));
+		}
 
-        #region Values
+		#region Values
+
+		[Test]
+		public void GetNamesTest()
+		{
+			string[] names = EnumUtils.GetNames<eTestEnum>().ToArray();
+
+			Assert.AreEqual(4, names.Length);
+			Assert.IsTrue(names.Contains("None"));
+			Assert.IsTrue(names.Contains("A"));
+			Assert.IsTrue(names.Contains("B"));
+			Assert.IsTrue(names.Contains("C"));
+		}
 
 		[Test]
 		public void GetValuesGenericTest()
@@ -107,7 +119,9 @@ namespace ICD.Common.Utils.Tests
 		[Test]
 		public void GetFlagsIntersectionGenericTest()
 		{
-			Assert.AreEqual(eTestFlagsEnum.B, EnumUtils.GetFlagsIntersection(eTestFlagsEnum.A | eTestFlagsEnum.B, eTestFlagsEnum.B | eTestFlagsEnum.C));
+			Assert.AreEqual(eTestFlagsEnum.B,
+			                EnumUtils.GetFlagsIntersection(eTestFlagsEnum.A | eTestFlagsEnum.B,
+			                                               eTestFlagsEnum.B | eTestFlagsEnum.C));
 		}
 
 		[Test]
@@ -138,11 +152,11 @@ namespace ICD.Common.Utils.Tests
 			Assert.IsTrue(aValues.Contains(eTestFlagsEnum.D));
 		}
 
-	    [Test]
-	    public void GetAllFlagCombinationsExceptNoneGenericTest()
-	    {
-		    eTestFlagsEnum a = eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D;
-		    eTestFlagsEnum[] aValues = EnumUtils.GetAllFlagCombinationsExceptNone(a).ToArray();
+		[Test]
+		public void GetAllFlagCombinationsExceptNoneGenericTest()
+		{
+			eTestFlagsEnum a = eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D;
+			eTestFlagsEnum[] aValues = EnumUtils.GetAllFlagCombinationsExceptNone(a).ToArray();
 
 			Assert.AreEqual(15, aValues.Length);
 			Assert.IsFalse(aValues.Contains(eTestFlagsEnum.None));
@@ -167,7 +181,8 @@ namespace ICD.Common.Utils.Tests
 		public void GetFlagsAllValueGenericTest()
 		{
 			eTestFlagsEnum value = EnumUtils.GetFlagsAllValue<eTestFlagsEnum>();
-			Assert.AreEqual(eTestFlagsEnum.None | eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D, value);
+			Assert.AreEqual(eTestFlagsEnum.None | eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D,
+			                value);
 		}
 
 		[Test]
@@ -181,7 +196,8 @@ namespace ICD.Common.Utils.Tests
 		public void HasFlagsGenericTest()
 		{
 			Assert.IsTrue(EnumUtils.HasFlags(eTestFlagsEnum.A | eTestFlagsEnum.B, eTestFlagsEnum.A | eTestFlagsEnum.B));
-			Assert.IsFalse(EnumUtils.HasFlags(eTestFlagsEnum.A | eTestFlagsEnum.B, eTestFlagsEnum.A | eTestFlagsEnum.C));
+			Assert.IsFalse(EnumUtils.HasFlags(eTestFlagsEnum.A | eTestFlagsEnum.B,
+			                                  eTestFlagsEnum.A | eTestFlagsEnum.C));
 		}
 
 		[Test]
@@ -200,28 +216,28 @@ namespace ICD.Common.Utils.Tests
 			Assert.IsTrue(EnumUtils.HasMultipleFlags(eTestFlagsEnum.A | eTestFlagsEnum.B));
 		}
 
-        [TestCase(false, eTestFlagsEnum.None)]
-        [TestCase(true, eTestFlagsEnum.B)]
-        [TestCase(true, eTestFlagsEnum.B | eTestFlagsEnum.C)]
-        public void HasAnyFlagsTest(bool expected, eTestFlagsEnum value)
-        {
-            Assert.AreEqual(expected, EnumUtils.HasAnyFlags(value));
-        }
+		[TestCase(false, eTestFlagsEnum.None)]
+		[TestCase(true, eTestFlagsEnum.B)]
+		[TestCase(true, eTestFlagsEnum.B | eTestFlagsEnum.C)]
+		public void HasAnyFlagsTest(bool expected, eTestFlagsEnum value)
+		{
+			Assert.AreEqual(expected, EnumUtils.HasAnyFlags(value));
+		}
 
-        [TestCase(false, eTestFlagsEnum.None, eTestFlagsEnum.None)]
-        [TestCase(false, eTestFlagsEnum.None, eTestFlagsEnum.B)]
-        [TestCase(true, eTestFlagsEnum.B, eTestFlagsEnum.B)]
-        [TestCase(false, eTestFlagsEnum.None | eTestFlagsEnum.A, eTestFlagsEnum.B | eTestFlagsEnum.C)]
-        public void HasAnyFlagsValueTest(bool expected, eTestFlagsEnum value, eTestFlagsEnum other)
-        {
-            Assert.AreEqual(expected, EnumUtils.HasAnyFlags(value, other));
-        }
+		[TestCase(false, eTestFlagsEnum.None, eTestFlagsEnum.None)]
+		[TestCase(false, eTestFlagsEnum.None, eTestFlagsEnum.B)]
+		[TestCase(true, eTestFlagsEnum.B, eTestFlagsEnum.B)]
+		[TestCase(false, eTestFlagsEnum.None | eTestFlagsEnum.A, eTestFlagsEnum.B | eTestFlagsEnum.C)]
+		public void HasAnyFlagsValueTest(bool expected, eTestFlagsEnum value, eTestFlagsEnum other)
+		{
+			Assert.AreEqual(expected, EnumUtils.HasAnyFlags(value, other));
+		}
 
-        #endregion
+		#endregion
 
-        #region Conversion
+		#region Conversion
 
-        [Test]
+		[Test]
 		public void ParseGenericTest()
 		{
 			Assert.AreEqual(eTestEnum.A, EnumUtils.Parse<eTestEnum>("A", false));
@@ -243,35 +259,35 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(default(eTestEnum), output);
 		}
 
-        [Test]
-        public void ParseStrictGenericTest()
-        {
-            Assert.AreEqual(eTestEnum.A, EnumUtils.ParseStrict<eTestEnum>("1", false));
-            Assert.Throws<ArgumentOutOfRangeException>(() => EnumUtils.ParseStrict<eTestEnum>("4", false));
+		[Test]
+		public void ParseStrictGenericTest()
+		{
+			Assert.AreEqual(eTestEnum.A, EnumUtils.ParseStrict<eTestEnum>("1", false));
+			Assert.Throws<ArgumentOutOfRangeException>(() => EnumUtils.ParseStrict<eTestEnum>("4", false));
 
-            Assert.AreEqual(eTestFlagsEnum.A | eTestFlagsEnum.B, EnumUtils.ParseStrict<eTestFlagsEnum>("3", false));
-            Assert.Throws<ArgumentOutOfRangeException>(() => EnumUtils.ParseStrict<eTestFlagsEnum>("8", false));
-        }
+			Assert.AreEqual(eTestFlagsEnum.A | eTestFlagsEnum.B, EnumUtils.ParseStrict<eTestFlagsEnum>("3", false));
+			Assert.Throws<ArgumentOutOfRangeException>(() => EnumUtils.ParseStrict<eTestFlagsEnum>("8", false));
+		}
 
-        [Test]
-        public void TryParseStrictGenericTest()
-        {
-            eTestEnum outputA;
+		[Test]
+		public void TryParseStrictGenericTest()
+		{
+			eTestEnum outputA;
 
-            Assert.AreEqual(true, EnumUtils.TryParseStrict("1", false, out outputA));
-            Assert.AreEqual(eTestEnum.A, outputA);
+			Assert.AreEqual(true, EnumUtils.TryParseStrict("1", false, out outputA));
+			Assert.AreEqual(eTestEnum.A, outputA);
 
-            Assert.AreEqual(false, EnumUtils.TryParseStrict("4", false, out outputA));
-            Assert.AreEqual(eTestEnum.None, outputA);
+			Assert.AreEqual(false, EnumUtils.TryParseStrict("4", false, out outputA));
+			Assert.AreEqual(eTestEnum.None, outputA);
 
-            eTestFlagsEnum outputB;
+			eTestFlagsEnum outputB;
 
-            Assert.AreEqual(true, EnumUtils.TryParseStrict("3", false, out outputB));
-            Assert.AreEqual(eTestFlagsEnum.A | eTestFlagsEnum.B, outputB);
+			Assert.AreEqual(true, EnumUtils.TryParseStrict("3", false, out outputB));
+			Assert.AreEqual(eTestFlagsEnum.A | eTestFlagsEnum.B, outputB);
 
-            Assert.AreEqual(false, EnumUtils.TryParseStrict("8", false, out outputB));
-            Assert.AreEqual(eTestFlagsEnum.None, outputB);
-        }
+			Assert.AreEqual(false, EnumUtils.TryParseStrict("8", false, out outputB));
+			Assert.AreEqual(eTestFlagsEnum.None, outputB);
+		}
 
 		#endregion
 	}

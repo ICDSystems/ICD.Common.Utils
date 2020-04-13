@@ -13,16 +13,16 @@ namespace ICD.Common.Utils
 {
 	public static class EnumUtils
 	{
-		private static readonly Dictionary<Type, object> s_EnumValuesCache;
-		private static readonly Dictionary<Type, Dictionary<int, object>> s_EnumFlagsCache;
+		private static readonly Dictionary<Type, object[]> s_EnumValuesCache;
+		private static readonly Dictionary<Type, Dictionary<object, object[]>> s_EnumFlagsCache;
 
 		/// <summary>
 		/// Static constructor.
 		/// </summary>
 		static EnumUtils()
 		{
-			s_EnumValuesCache = new Dictionary<Type, object>();
-			s_EnumFlagsCache = new Dictionary<Type, Dictionary<int, object>>();
+			s_EnumValuesCache = new Dictionary<Type, object[]>();
+			s_EnumFlagsCache = new Dictionary<Type, Dictionary<object, object[]>>();
 		}
 
 		#region Validation
@@ -58,7 +58,6 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool IsEnum<T>(T value)
 		{
-// ReSharper disable once CompareNonConstrainedGenericWithNull
 			return value != null && IsEnumType(value.GetType());
 		}
 
@@ -124,6 +123,30 @@ namespace ICD.Common.Utils
 		#region Values
 
 		/// <summary>
+		/// Gets the names of the values in the enumeration.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static IEnumerable<string> GetNames<T>()
+			where T : struct, IConvertible
+		{
+			return GetNames(typeof(T));
+		}
+
+		/// <summary>
+		/// Gets the names of the values in the enumeration.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static IEnumerable<string> GetNames([NotNull] Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return GetValues(type).Select(v => v.ToString());
+		}
+
+		/// <summary>
 		/// Gets the values from an enumeration.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -131,46 +154,51 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetValues<T>()
 			where T : struct, IConvertible
 		{
-			Type type = typeof(T);
-
-			// Reflection is slow and this method is called a lot, so we cache the results.
-			object cache;
-			if (!s_EnumValuesCache.TryGetValue(type, out cache))
-			{
-				cache = GetValuesUncached<T>().ToArray();
-				s_EnumValuesCache[type] = cache;
-			}
-
-			return cache as T[];
+			return GetValues(typeof(T)).Cast<T>();
 		}
 
 		/// <summary>
-		/// Gets the values from an enumeration without performing any caching. This is slow because of reflection.
+		/// Gets the values from an enumeration.
 		/// </summary>
 		/// <returns></returns>
-		public static IEnumerable<int> GetValues(Type type)
+		public static IEnumerable<object> GetValues(Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			return GetValuesUncached(type);
+			// Reflection is slow and this method is called a lot, so we cache the results.
+			return s_EnumValuesCache.GetOrAddNew(type, () => GetValuesUncached(type).ToArray());
 		}
 
 		/// <summary>
-		/// Gets the values from an enumeration without performing any caching. This is slow because of reflection.
+		/// Gets the values from an enumeration except the 0 value.
 		/// </summary>
+		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		private static IEnumerable<T> GetValuesUncached<T>()
+		public static IEnumerable<T> GetValuesExceptNone<T>()
 			where T : struct, IConvertible
 		{
-			return GetValuesUncached(typeof(T)).Select(i => (T)(object)i);
+			return GetValuesExceptNone(typeof(T)).Cast<T>();
+		}
+
+		/// <summary>
+		/// Gets the values from an enumeration except the 0 value.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static IEnumerable<object> GetValuesExceptNone([NotNull] Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return GetFlagsExceptNone(type);
 		}
 
 		/// <summary>
 		/// Gets the values from an enumeration without performing any caching. This is slow because of reflection.
 		/// </summary>
 		/// <returns></returns>
-		private static IEnumerable<int> GetValuesUncached(Type type)
+		private static IEnumerable<object> GetValuesUncached(Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -182,34 +210,10 @@ namespace ICD.Common.Utils
 #if SIMPLSHARP
 				.GetCType()
 #else
-				.GetTypeInfo()
+			       .GetTypeInfo()
 #endif
-				.GetFields(BindingFlags.Static | BindingFlags.Public)
-				.Select(x => x.GetValue(null))
-				.Cast<int>();
-		}
-
-		/// <summary>
-		/// Gets the values from an enumeration except the 0 value.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
-		public static IEnumerable<T> GetValuesExceptNone<T>()
-			where T : struct, IConvertible
-		{
-			return GetFlagsExceptNone<T>();
-		}
-
-		/// <summary>
-		/// Gets the values from an enumeration except the 0 value without performing any caching. This is slow because of reflection.
-		/// </summary>
-		/// <returns></returns>
-		public static IEnumerable<int> GetValuesExceptNone(Type type)
-		{
-			if (type == null)
-				throw new ArgumentNullException("type");
-
-			return GetValues(type).Except(0);
+			       .GetFields(BindingFlags.Static | BindingFlags.Public)
+			       .Select(x => x.GetValue(null));
 		}
 
 		#endregion
@@ -330,24 +334,21 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetFlags<T>(T value)
 			where T : struct, IConvertible
 		{
-			Type type = typeof(T);
-			int valueInt = (int)(object)value;
+			return GetFlags(typeof(T), value).Cast<T>();
+		}
 
-			Dictionary<int, object> cache;
-			if (!s_EnumFlagsCache.TryGetValue(type, out cache))
-			{
-				cache = new Dictionary<int, object>();
-				s_EnumFlagsCache[type] = cache;
-			}
-
-			object flags;
-			if (!cache.TryGetValue(valueInt, out flags))
-			{
-				flags = GetValues<T>().Where(e => HasFlag(value, e)).ToArray();
-				cache[valueInt] = flags;
-			}
-
-			return flags as T[];
+		/// <summary>
+		/// Gets all of the set flags on the given enum.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static IEnumerable<object> GetFlags(Type type, object value)
+		{
+			return s_EnumFlagsCache.GetOrAddNew(type, () => new Dictionary<object, object[]>())
+			                       .GetOrAddNew(value, () => GetValues(type)
+			                                                 .Where(f => HasFlag(value, f))
+			                                                 .ToArray());
 		}
 
 		/// <summary>
@@ -358,8 +359,7 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetFlagsExceptNone<T>()
 			where T : struct, IConvertible
 		{
-			T allValue = GetFlagsAllValue<T>();
-			return GetFlagsExceptNone(allValue);
+			return GetFlagsExceptNone(typeof(T)).Cast<T>();
 		}
 
 		/// <summary>
@@ -371,7 +371,35 @@ namespace ICD.Common.Utils
 		public static IEnumerable<T> GetFlagsExceptNone<T>(T value)
 			where T : struct, IConvertible
 		{
-			return GetFlags(value).Except(default(T));
+			return GetFlagsExceptNone(typeof(T), value).Cast<T>();
+		}
+
+		/// <summary>
+		/// Gets all of the set flags on the given enum type except 0.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static IEnumerable<object> GetFlagsExceptNone([NotNull] Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			object allValue = GetFlagsAllValue(type);
+			return GetFlagsExceptNone(type, allValue);
+		}
+
+		/// <summary>
+		/// Gets all of the set flags on the given enum except 0.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static IEnumerable<object> GetFlagsExceptNone([NotNull] Type type, object value)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			return GetFlags(type, value).Where(f => (int)f != 0);
 		}
 
 		/// <summary>
@@ -412,7 +440,7 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			return GetValuesUncached(type).Aggregate(0, (current, value) => current | value);
+			return GetValuesUncached(type).Aggregate(0, (current, value) => current | (int)value);
 		}
 
 		/// <summary>
@@ -426,6 +454,17 @@ namespace ICD.Common.Utils
 			where T : struct, IConvertible
 		{
 			return HasFlags(value, flag);
+		}
+
+		/// <summary>
+		/// Returns true if the enum contains the given flag.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="flag"></param>
+		/// <returns></returns>
+		public static bool HasFlag(object value, object flag)
+		{
+			return HasFlag((int)value, (int)flag);
 		}
 
 		/// <summary>
