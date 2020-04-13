@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
@@ -930,6 +931,30 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentOutOfRangeException("count");
 
 			return array;
+		}
+
+		/// <summary>
+		/// Creates a generic List of the given item type.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="itemType"></param>
+		/// <returns></returns>
+		public static IList ToList<T>([NotNull] this IEnumerable<T> extends, [NotNull] Type itemType)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (itemType == null)
+				throw new ArgumentNullException("itemType");
+
+			Type genericListType = typeof(List<>);
+			Type specificListType = genericListType.MakeGenericType(itemType);
+			IList list = (IList)ReflectionUtils.CreateInstance(specificListType);
+
+			foreach (object item in extends)
+				list.Add(item);
+
+			return list;
 		}
 
 		/// <summary>
