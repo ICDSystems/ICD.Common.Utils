@@ -359,6 +359,32 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Appends the local path to the user data path.
+		/// </summary>
+		/// <param name="userName"></param>
+		/// <param name="localPath"></param>
+		/// <returns></returns>
+		public static string GetUserDataPath(string userName, params string[] localPath)
+		{
+			if (localPath == null)
+				throw new ArgumentNullException("localPath");
+
+			string local = Join(localPath);
+			string userDataDirectory = GetUserDataDirectory(userName);
+			return Join(ProgramDataPath, userDataDirectory, local);
+		}
+
+		/// <summary>
+		/// Gets the directory name of the user data directory for the user with the given name.
+		/// </summary>
+		/// <param name="userName"></param>
+		/// <returns></returns>
+		public static string GetUserDataDirectory(string userName)
+		{
+			return string.Format("User{0}Data", StringUtils.RemoveWhitespace(userName));
+		}
+
+		/// <summary>
 		/// Appends the local path to the web server path.
 		/// </summary>
 		/// <param name="localPath"></param>
