@@ -5,25 +5,40 @@ namespace ICD.Common.Utils.Extensions
 {
 	public static class TimeSpanExtensions
 	{
+		/// <summary>
+		/// Writes the TimeSpan to a string in the format "A day/s, B hour/s, C minute/s, D second/s, E ms"
+		/// Omits any items that are 0.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
 		public static string ToReadableString(this TimeSpan extends)
 		{
 			StringBuilder builder = new StringBuilder();
 
-			if (extends.Days > 0)
+			if (extends.Days == 1)
+				builder.AppendFormat("{0} day, ", extends.Days);
+			else if (extends.Days > 1)
 				builder.AppendFormat("{0} days, ", extends.Days);
-			if (extends.Hours > 0)
-				builder.AppendFormat("{0} hours, ", extends.Hours);
-			if (extends.Minutes > 0)
-				builder.AppendFormat("{0} minutes, ", extends.Minutes);
-			if (extends.Seconds > 0)
-				builder.AppendFormat("{0} seconds, ", extends.Seconds);
-			if (extends.Milliseconds > 0)
-			{
-				builder.AppendFormat("{0}.{1} ms", extends.Milliseconds,
-				                     ((double)extends.Ticks / TimeSpan.TicksPerMillisecond) - extends.TotalMilliseconds);
-			}
 
-			return builder.ToString();
+			if (extends.Hours == 1)
+				builder.AppendFormat("{0} hour, ", extends.Hours);
+			else if (extends.Hours > 1)
+				builder.AppendFormat("{0} hours, ", extends.Hours);
+
+			if (extends.Minutes == 1)
+				builder.AppendFormat("{0} minute, ", extends.Minutes);
+			else if (extends.Minutes > 1)
+				builder.AppendFormat("{0} minutes, ", extends.Minutes);
+
+			if (extends.Seconds == 1)
+				builder.AppendFormat("{0} second, ", extends.Seconds);
+			else if (extends.Seconds > 1)
+				builder.AppendFormat("{0} seconds, ", extends.Seconds);
+
+			if (extends.Milliseconds > 0)
+				builder.AppendFormat("{0} ms", extends.Milliseconds);
+
+			return builder.ToString().TrimEnd(',', ' ');
 		}
 
 		/// <summary>
