@@ -146,6 +146,22 @@ namespace ICD.Common.Utils.Xml
 		}
 
 		/// <summary>
+		/// Gets the value of the attribute with the given name and returns as a GUID.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static Guid GetAttributeAsGuid(string xml, string name)
+		{
+			using (IcdXmlReader reader = new IcdXmlReader(xml))
+			{
+				reader.ReadToNextElement();
+				return reader.GetAttributeAsGuid(name);
+			}
+		}
+
+		/// <summary>
 		/// Gets the value of the attribute with the given name and returns as a bool.
 		/// </summary>
 		/// <param name="xml"></param>

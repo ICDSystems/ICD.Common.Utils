@@ -114,6 +114,22 @@ namespace ICD.Common.Utils.Xml
 			return bool.Parse(value);
 		}
 
+		/// <summary>
+		/// Gets the value of the attribute with the given name and returns as a GUID.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static Guid GetAttributeAsGuid(this IcdXmlReader extends, string name)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string value = extends.GetAttributeAsString(name);
+			return new Guid(value);
+		}
+
 		#endregion
 
 		#region Recurse
