@@ -414,7 +414,7 @@ namespace ICD.Common.Utils.Xml
 		}
 
 		/// <summary>
-		/// Parses the element content as a short.
+		/// Parses the element content as a TimeSpan.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <returns></returns>
@@ -437,6 +437,21 @@ namespace ICD.Common.Utils.Xml
 
 			// PT0S format
 			return IcdXmlConvert.ToTimeSpan(content);
+		}
+
+		/// <summary>
+		/// Parses the element content as a DateTime.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static DateTime ReadElementContentAsDateTime(this IcdXmlReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string content = extends.ReadElementContentAsString();
+			return IcdXmlConvert.ToDateTime(content);
 		}
 
 		/// <summary>

@@ -481,10 +481,23 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="childElement"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static TimeSpan? ReadChildElementContentAsTimeSpan(string xml, string childElement)
+		public static TimeSpan ReadChildElementContentAsTimeSpan(string xml, string childElement)
 		{
 			using (IcdXmlReader reader = GetChildElement(xml, childElement))
 				return reader.ReadElementContentAsTimeSpan();
+		}
+
+		/// <summary>
+		/// Gets the content of an immediate child.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="childElement"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static DateTime ReadChildElementContentAsDateTime(string xml, string childElement)
+		{
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
+				return reader.ReadElementContentAsDateTime();
 		}
 
 		/// <summary>
@@ -704,6 +717,25 @@ namespace ICD.Common.Utils.Xml
 			try
 			{
 				return ReadChildElementContentAsTimeSpan(xml, childElement);
+			}
+			catch (FormatException)
+			{
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the content of the immediate child. Returns null if the child element was not found.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="childElement"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static DateTime? TryReadChildElementContentAsDateTime(string xml, string childElement)
+		{
+			try
+			{
+				return ReadChildElementContentAsDateTime(xml, childElement);
 			}
 			catch (FormatException)
 			{
