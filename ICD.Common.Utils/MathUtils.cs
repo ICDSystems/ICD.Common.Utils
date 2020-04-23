@@ -17,6 +17,18 @@ namespace ICD.Common.Utils
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
+		public static byte Clamp(byte number, byte min, byte max)
+		{
+			return (byte)Clamp((double)number, min, max);
+		}
+
+		/// <summary>
+		/// Clamps the number between the two values.
+		/// </summary>
+		/// <param name="number"></param>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		/// <returns></returns>
 		public static int Clamp(int number, int min, int max)
 		{
 			return (int)Clamp((double)number, min, max);
