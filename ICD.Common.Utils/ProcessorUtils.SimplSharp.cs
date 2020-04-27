@@ -1,4 +1,5 @@
-﻿using ICD.Common.Utils.Services;
+﻿using System.Globalization;
+using ICD.Common.Utils.Services;
 using ICD.Common.Utils.Services.Logging;
 #if SIMPLSHARP
 using System;
@@ -91,7 +92,7 @@ namespace ICD.Common.Utils
 		/// Gets the date that the firmware was updated.
 		/// </summary>
 		[PublicAPI]
-		public static string ModelVersionDate
+		public static DateTime ModelVersionDate
 		{
 			get
 			{
@@ -99,12 +100,12 @@ namespace ICD.Common.Utils
 				Match match = regex.Match(VersionResult);
 
 				if (match.Success)
-					return match.Groups["date"].Value;
+					return DateTime.ParseExact(match.Groups["date"].Value, "MMM dd yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
 
 				ServiceProvider.TryGetService<ILoggerService>()
 							   .AddEntry(eSeverity.Warning, "Unable to get model version date from \"{0}\"", VersionResult);
 				
-				return string.Empty;
+				return DateTime.MinValue;
 			}
 		}
 

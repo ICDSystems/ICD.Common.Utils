@@ -1,4 +1,5 @@
-﻿using ICD.Common.Utils.Services;
+﻿using ICD.Common.Utils.IO;
+using ICD.Common.Utils.Services;
 using ICD.Common.Utils.Services.Logging;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
@@ -40,7 +41,16 @@ namespace ICD.Common.Utils
 		/// Gets the compile date of the program.
 		/// </summary>
 		[PublicAPI]
-		public static string CompiledDate { get { return ProgComments.GetDefault(COMPILED_ON_KEY, null); } }
+		public static DateTime CompiledDate
+		{
+			get
+			{
+				string dateString;
+				return ProgComments.TryGetValue(COMPILED_ON_KEY, out dateString)
+					? DateTime.Parse(dateString).ToUniversalTime()
+					: DateTime.MinValue;
+			}
+		}
 
 		/// <summary>
 		/// Gets the compiler revision version.
@@ -84,6 +94,16 @@ namespace ICD.Common.Utils
 				ProgComments.TryGetValue(APPLICATION_NAME_SIMPL_KEY, out output);
 				return output;
 			}
+		}
+
+		/// <summary>
+		/// Returns the date and time the program was installed.
+		/// </summary>
+		/// <returns></returns>
+		[PublicAPI]
+		public static DateTime ProgramInstallDate
+		{
+			get { return IcdFile.GetCreationTime(PathUtils.Join(PathUtils.ProgramPath, ProgramFile)).ToUniversalTime(); }
 		}
 
 		/// <summary>

@@ -31,12 +31,12 @@ namespace ICD.Common.Utils
 		/// Gets the date that the firmware was updated.
 		/// </summary>
 		[PublicAPI]
-		public static string ModelVersionDate
+		public static DateTime ModelVersionDate
 		{
 			get
 			{
 				// TODO
-				return null;
+				return DateTime.MinValue;
 			}
 		}
 
