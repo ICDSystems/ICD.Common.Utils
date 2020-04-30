@@ -18,11 +18,11 @@ namespace ICD.Common.Utils
 		/// Gets the compile date of the program.
 		/// </summary>
 		[PublicAPI]
-		public static string CompiledDate
+		public static DateTime CompiledDate
 		{
 			get
 			{
-				return IcdFile.GetLastWriteTime(Assembly.GetEntryAssembly().Location).ToString();
+				return IcdFile.GetLastWriteTime(Assembly.GetEntryAssembly().Location);
 			}
 		}
 
