@@ -149,6 +149,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Better VC-4 support for IcdConsole
  - JSON refactoring for simpler deserialization
 
+## [8.9.0] - 2020-04-30
+### Changed
+ - ProgramUtils and ProcessorUtils return dates instead of strings for date properties
+
 ## [8.8.1] - 2020-02-18
 ### Changed
  - IcdTimer - fixed issue that prevented OnElapsed event from firing when Length is less than (or close to) Heartbeat Interval
