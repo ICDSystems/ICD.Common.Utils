@@ -209,13 +209,17 @@ namespace ICD.Common.Utils
 				ConstructorInfo constructor = GetConstructor(type, parameters);
 				return constructor.Invoke(parameters);
 			}
-			catch (TypeLoadException e)
+			catch (Exception e)
 			{
-				throw e.GetBaseException();
-			}
-			catch (TargetInvocationException e)
-			{
-				throw e.GetBaseException();
+				// Crestron sandbox doesn't let us reference System.Reflection types...
+				switch (e.GetType().Name)
+				{
+					case "TypeLoadException":
+					case "TargetInvocationException":
+						throw e.GetBaseException();
+				}
+
+				throw;
 			}
 		}
 
