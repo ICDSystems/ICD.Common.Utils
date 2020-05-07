@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using ICD.Common.Properties;
+using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Collections
 {
@@ -14,6 +16,8 @@ namespace ICD.Common.Utils.Collections
 	{
 		private readonly LinkedList<TContents> m_Collection;
 		private int m_MaxSize;
+
+		public event EventHandler<GenericEventArgs<TContents>> OnItemTrimmed;
 
 		#region Properties
 
@@ -141,7 +145,11 @@ namespace ICD.Common.Utils.Collections
 		private void Trim()
 		{
 			while (Count > MaxSize)
+			{
+				TContents removed = m_Collection.First.Value;
 				m_Collection.RemoveFirst();
+				OnItemTrimmed.Raise(this, new GenericEventArgs<TContents>(removed));
+			}
 		}
 
 		#endregion
