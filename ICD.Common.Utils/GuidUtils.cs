@@ -4,6 +4,9 @@ namespace ICD.Common.Utils
 {
 	public static class GuidUtils
 	{
+		/// <summary>
+		/// Generates a pseudo-random guid from the given seed.
+		/// </summary>
 		public static Guid GenerateSeeded(int seed)
 		{
 			Random seeded = new Random(seed);
@@ -12,6 +15,20 @@ namespace ICD.Common.Utils
 			seeded.NextBytes(bytes);
 
 			return new Guid(bytes);
+		}
+
+		/// <summary>
+		/// Combines the two guids to make a new, deterministic guid.
+		/// </summary>
+		public static Guid Combine(Guid a, Guid b)
+		{
+			byte[] aBytes = a.ToByteArray();
+			byte[] bBytes = b.ToByteArray();
+
+			for (int index = 0; index < aBytes.Length; index++)
+				aBytes[index] = (byte)(aBytes[index] ^ bBytes[index]);
+
+			return new Guid(aBytes);
 		}
 	}
 }
