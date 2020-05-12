@@ -182,12 +182,20 @@ namespace ICD.Common.Utils
 				AppendRow(sb, m_Columns, columnWidths);
 				AppendSeparator(sb, columnWidths);
 
-				foreach (string[] row in m_Rows)
+				string[] previousRow = null;
+
+				for (int index = 0; index < m_Rows.Count; index++)
 				{
-					if (row == null)
-						AppendSeparator(sb, columnWidths);
-					else
+					string[] row = m_Rows[index];
+
+					// Data row
+					if (row != null)
 						AppendRow(sb, row, columnWidths);
+					// Separator
+					else if (previousRow != null && index < m_Rows.Count - 1)
+						AppendSeparator(sb, columnWidths);
+
+					previousRow = row;
 				}
 
 				AppendBottomSeparator(sb, columnWidths);
