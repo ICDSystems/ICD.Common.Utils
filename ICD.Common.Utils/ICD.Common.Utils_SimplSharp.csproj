@@ -98,6 +98,7 @@
     <Compile Include="EventArguments\BoolEventArgs.cs" />
     <Compile Include="EventArguments\CharEventArgs.cs" />
     <Compile Include="EventArguments\DateTimeEventArgs.cs" />
+    <Compile Include="EventArguments\DateTimeNullableEventArgs.cs" />
     <Compile Include="EventArguments\FloatEventArgs.cs" />
     <Compile Include="EventArguments\GenericEventArgs.cs" />
     <Compile Include="EventArguments\IGenericEventArgs.cs" />
