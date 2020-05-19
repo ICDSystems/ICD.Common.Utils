@@ -17,6 +17,9 @@ namespace ICD.Common.Utils.Collections
 		private readonly LinkedList<TContents> m_Collection;
 		private int m_MaxSize;
 
+		/// <summary>
+		/// Raised when an item is trimmed from the end of the queue.
+		/// </summary>
 		public event EventHandler<GenericEventArgs<TContents>> OnItemTrimmed;
 
 		#region Properties
