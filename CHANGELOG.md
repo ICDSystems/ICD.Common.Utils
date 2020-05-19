@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Rewrote JsonItemWrapper serialization for JsonConvert friendliness
 
+## [11.1.0] - 2020-05-19
+### Added
+ - ScrollQueue - Added OnItemTrimmed event
+ - Added DateTimeNullableEventArgs
+
 ## [11.0.0] - 2020-03-20
 ### Added
  - Added Not null tag for ICDUriBuilder Constructor that takes a URI as an argument.
