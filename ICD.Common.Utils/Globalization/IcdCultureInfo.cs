@@ -428,47 +428,48 @@ namespace ICD.Common.Utils.Globalization
 			}
 
 			s_SqlConnectionString = string.Format(SQL_CONNECTION_STRING_FORMAT, databasePath);
-			using (IcdSqliteConnection sQLiteConnection = new IcdSqliteConnection(s_SqlConnectionString))
+			try
 			{
-				try
+				using (IcdSqliteConnection sQLiteConnection = new IcdSqliteConnection(s_SqlConnectionString))
 				{
 					sQLiteConnection.Open();
-				}
-				catch (Exception)
-				{
-					s_IsDatabasePresent = false;
-					return;
-				}
-				s_IsDatabasePresent = true;
-				IcdSqliteCommand sQLiteCommand = new IcdSqliteCommand("select count(*) from cultureinfo", sQLiteConnection);
-				int num = Convert.ToInt32(sQLiteCommand.ExecuteScalar());
-				s_AvailableCultureNames = new string[num + 1];
-				IcdSqliteCommand sQLiteCommand2 = new IcdSqliteCommand("select id, name, lcid, isneutralculture from cultureinfo",
-				                                                       sQLiteConnection);
-				using (IcdSqliteDataReader sQLiteDataReader = sQLiteCommand2.ExecuteReader())
-				{
-					while (sQLiteDataReader.Read())
-					{
-						int @int = sQLiteDataReader.GetInt32(0);
-						bool boolean = sQLiteDataReader.GetBoolean(3);
-						string @string = sQLiteDataReader.GetString(1);
-						s_DictAvailableCulturesByName[@string] = boolean ? CultureTypes.NeutralCultures : CultureTypes.SpecificCultures;
-						int int2 = sQLiteDataReader.GetInt32(2);
-						s_DictAvailableCulturesByLcid[int2] = boolean ? CultureTypes.NeutralCultures : CultureTypes.SpecificCultures;
-						s_AvailableCultureNames[@int] = @string;
-					}
-				}
+					s_IsDatabasePresent = true;
 
-				sQLiteCommand2 = new IcdSqliteCommand("select id, specificculture from specificcultureinfo", sQLiteConnection);
-				using (IcdSqliteDataReader sQLiteDataReader2 = sQLiteCommand2.ExecuteReader())
-				{
-					while (sQLiteDataReader2.Read())
+					IcdSqliteCommand sQLiteCommand = new IcdSqliteCommand("select count(*) from cultureinfo", sQLiteConnection);
+					int num = Convert.ToInt32(sQLiteCommand.ExecuteScalar());
+					s_AvailableCultureNames = new string[num + 1];
+					IcdSqliteCommand sQLiteCommand2 = new IcdSqliteCommand("select id, name, lcid, isneutralculture from cultureinfo",
+					                                                       sQLiteConnection);
+					using (IcdSqliteDataReader sQLiteDataReader = sQLiteCommand2.ExecuteReader())
 					{
-						int int3 = sQLiteDataReader2.GetInt32(0);
-						string string2 = sQLiteDataReader2.GetString(1);
-						s_DictSpecificCulture[s_AvailableCultureNames[int3]] = string2;
+						while (sQLiteDataReader.Read())
+						{
+							int @int = sQLiteDataReader.GetInt32(0);
+							bool boolean = sQLiteDataReader.GetBoolean(3);
+							string @string = sQLiteDataReader.GetString(1);
+							s_DictAvailableCulturesByName[@string] = boolean ? CultureTypes.NeutralCultures : CultureTypes.SpecificCultures;
+							int int2 = sQLiteDataReader.GetInt32(2);
+							s_DictAvailableCulturesByLcid[int2] = boolean ? CultureTypes.NeutralCultures : CultureTypes.SpecificCultures;
+							s_AvailableCultureNames[@int] = @string;
+						}
+					}
+
+					sQLiteCommand2 = new IcdSqliteCommand("select id, specificculture from specificcultureinfo", sQLiteConnection);
+					using (IcdSqliteDataReader sQLiteDataReader2 = sQLiteCommand2.ExecuteReader())
+					{
+						while (sQLiteDataReader2.Read())
+						{
+							int int3 = sQLiteDataReader2.GetInt32(0);
+							string string2 = sQLiteDataReader2.GetString(1);
+							s_DictSpecificCulture[s_AvailableCultureNames[int3]] = string2;
+						}
 					}
 				}
+			}
+			catch (Exception)
+			{
+				s_IsDatabasePresent = false;
+				return;
 			}
 
 			foreach (string name in builtinCultures)
