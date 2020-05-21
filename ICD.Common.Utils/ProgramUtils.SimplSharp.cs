@@ -1,4 +1,5 @@
-﻿using ICD.Common.Utils.IO;
+﻿using System.Globalization;
+using ICD.Common.Utils.IO;
 using ICD.Common.Utils.Services;
 using ICD.Common.Utils.Services.Logging;
 #if SIMPLSHARP
@@ -46,9 +47,28 @@ namespace ICD.Common.Utils
 			get
 			{
 				string dateString;
-				return ProgComments.TryGetValue(COMPILED_ON_KEY, out dateString)
-					? DateTime.Parse(dateString).ToUniversalTime()
-					: DateTime.MinValue;
+				if (!ProgComments.TryGetValue(COMPILED_ON_KEY, out dateString))
+					return DateTime.MinValue;
+
+				// Crestron writes compile time in system local time with no sense of localization...
+				try
+				{
+					return DateTime.Parse(dateString).ToUniversalTime();
+				}
+				catch (FormatException)
+				{
+				}
+
+				// Try again with dd/mm/yyyy
+				try
+				{
+					return DateTime.ParseExact(dateString, "dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture).ToUniversalTime();
+				}
+				catch (FormatException)
+				{
+				}
+
+				return DateTime.MinValue;
 			}
 		}
 
