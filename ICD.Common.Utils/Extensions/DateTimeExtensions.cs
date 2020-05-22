@@ -117,6 +117,16 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns the give date in ISO-8601 format.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static string ToIso(this DateTime extends)
+		{
+			return extends.ToString("o");
+		}
+
+		/// <summary>
 		/// Returns the given date in unix timestamp format.
 		/// </summary>
 		/// <param name="extends"></param>

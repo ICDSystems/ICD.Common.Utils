@@ -69,7 +69,7 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("extends");
 
 			extends.WritePropertyName(propertyName);
-			extends.WriteValue(value);
+			extends.WriteValue(value.ToIso());
 		}
 
 		/// <summary>

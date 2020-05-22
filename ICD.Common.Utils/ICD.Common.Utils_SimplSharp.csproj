@@ -131,6 +131,7 @@
     <Compile Include="IO\IcdBinaryReader.cs" />
     <Compile Include="IO\eSeekOrigin.cs" />
     <Compile Include="IO\IcdStreamWriter.cs" />
+    <Compile Include="Json\DateTimeIsoConverter.cs" />
     <Compile Include="Json\ToStringJsonConverter.cs" />
     <Compile Include="NullObject.cs" />
     <Compile Include="ProcessorUtils.SimplSharp.cs" />

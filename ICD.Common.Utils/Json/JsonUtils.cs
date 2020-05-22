@@ -17,6 +17,33 @@ namespace ICD.Common.Utils.Json
 		private const string MESSAGE_NAME_PROPERTY = "m";
 		private const string MESSAGE_DATA_PROPERTY = "d";
 
+		private static JsonSerializerSettings s_CommonSettings;
+
+		/// <summary>
+		/// Gets the common JSON serializer settings for cross-platform support.
+		/// </summary>
+		public static JsonSerializerSettings CommonSettings
+		{
+			get
+			{
+				if (s_CommonSettings != null)
+					return s_CommonSettings;
+
+				s_CommonSettings = new JsonSerializerSettings
+				{
+#if !SIMPLSHARP
+					// Turn off the ridiculous new behaviour of DateTiming anything vaguely resembling a date
+					DateParseHandling = DateParseHandling.None,
+#endif
+				};
+
+				// Serialize DateTimes to ISO
+				s_CommonSettings.Converters.Add(new DateTimeIsoConverter());
+
+				return s_CommonSettings;
+			}
+		}
+
 		/// <summary>
 		/// Serializes the given item and formats the JSON into a human-readable form.
 		/// </summary>
