@@ -10,9 +10,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added ToCollection extension method for copying an enumerable to a new collection
  - TableBuilder supports multi-line content
  - Added eIcdFileMode for IO platform agnosticism
+ - Extension method for determining if a Type is anonymous
+ - Extension method for getting inner generic Types
+ - Added extension method for dynamically converting a sequence to a generic list of the given item type
+ - Added methods for getting UserData paths
+ - Added methods for reading GUIDs from XML
+ - Added methods for reading DateTimes from XML
+ - Added method for combining GUIDs
 
 ### Changed
  - Rewrote JsonItemWrapper serialization for JsonConvert friendliness
+ - Reflection optimizations
+ - Fixed NullParameterException in TableBuilder
+ - Improvements to EnumUtils, less reliance on casting to/from int
+ - Cleaned up TimeSpan.ToReadableString() output
+ - Fixed a bug where System.Reflection exceptions can't be caught in S#
+ - TableBuilder no longer draws redundant separators
+ - Fixed a bug where CompiledOn date was not being parsed correctly due to culture
+ - S# DateTimes are serialized to JSON in ISO-8601 format
 
 ## [11.1.0] - 2020-05-19
 ### Added
