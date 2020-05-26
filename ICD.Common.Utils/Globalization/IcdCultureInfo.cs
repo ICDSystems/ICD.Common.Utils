@@ -506,7 +506,7 @@ namespace ICD.Common.Utils.Globalization
 
 			CultureTypes cultureTypes;
 			if (!s_DictAvailableCulturesByLcid.TryGetValue(culture, out cultureTypes))
-				throw new ArgumentException("not supported");
+				throw new ArgumentException(string.Format("Culture {0} not supported", culture));
 
 			if (!s_IsDatabasePresent || (cultureTypes & CultureTypes.InstalledWin32Cultures) != 0)
 			{
@@ -551,7 +551,7 @@ namespace ICD.Common.Utils.Globalization
 
 			CultureTypes cultureTypes;
 			if (!s_DictAvailableCulturesByName.TryGetValue(name, out cultureTypes))
-				throw new ArgumentException("not supported");
+				throw new ArgumentException(string.Format("Culture {0} not supported", name));
 
 			if (!s_IsDatabasePresent || (cultureTypes & CultureTypes.InstalledWin32Cultures) != 0)
 			{
