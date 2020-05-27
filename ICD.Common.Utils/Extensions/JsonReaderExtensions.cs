@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using ICD.Common.Properties;
 using Newtonsoft.Json;
 
@@ -272,7 +273,7 @@ namespace ICD.Common.Utils.Extensions
 #endif
 
 			string stringValue = extends.GetValueAsString();
-			return DateTime.Parse(stringValue);
+			return DateTime.Parse(stringValue, null, DateTimeStyles.RoundtripKind);
 		}
 
 		/// <summary>

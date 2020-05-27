@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using ICD.Common.Utils.Extensions;
 using Newtonsoft.Json;
@@ -15,7 +16,12 @@ namespace ICD.Common.Utils.Json
 		/// <param name="serializer">The calling serializer.</param>
 		public override void WriteJson(JsonWriter writer, DateTime value, JsonSerializer serializer)
 		{
-			writer.WriteValue(value.ToIso());
+			string iso = value.ToIso();
+
+			// Remove redundant ms
+			iso = iso.Replace(".0000000", "");
+
+			writer.WriteValue(iso);
 		}
 
 		/// <summary>
@@ -48,11 +54,10 @@ namespace ICD.Common.Utils.Json
 
 				// No TimeZoneInfo in CF, so now things get gross
 				dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
-				string iso = dateTime.ToIso() + match.Groups["zone"].Value;
-				return DateTime.Parse(iso);
+				serial = dateTime.ToIso() + match.Groups["zone"].Value;
 			}
 
-			return DateTime.Parse(serial);
+			return DateTime.Parse(serial, null, DateTimeStyles.RoundtripKind);
 		}
 	}
 }
