@@ -1,7 +1,8 @@
-﻿using System.Globalization;
+﻿#if SIMPLSHARP
+using System.Globalization;
+using Crestron.SimplSharp;
 using ICD.Common.Utils.Services;
 using ICD.Common.Utils.Services.Logging;
-#if SIMPLSHARP
 using System;
 using System.Text.RegularExpressions;
 using ICD.Common.Properties;
@@ -117,19 +118,7 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				Regex regex = new Regex(VER_REGEX);
-				Match match = regex.Match(VersionResult);
-
-				if (!match.Success)
-				{
-					ServiceProvider.TryGetService<ILoggerService>()
-					               .AddEntry(eSeverity.Warning, "Unable to get serial number from \"{0}\"", VersionResult);
-
-					return string.Empty;
-				}
-
-				int decValue = int.Parse(match.Groups["serial"].Value, System.Globalization.NumberStyles.HexNumber);
-				return decValue.ToString();
+				return CrestronEnvironment.SystemInfo.SerialNumber;
 			}
 		}
 
