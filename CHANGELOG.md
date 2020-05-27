@@ -128,6 +128,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Better VC-4 support for IcdConsole
  - JSON refactoring for simpler deserialization
 
+## [8.9.1] - 2020-05-27
+### Changed
+ - Changed ProcessorUtils to use CrestronEnvironment to retrive serial number - this fixes issues with new serial numbers that aren't deciaml TSIDs
+
 ## [8.9.0] - 2020-04-30
 ### Changed
  - ProgramUtils and ProcessorUtils return dates instead of strings for date properties
