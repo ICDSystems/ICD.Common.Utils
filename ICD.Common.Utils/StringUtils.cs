@@ -346,7 +346,7 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Returns the object.ToString() with spaces before capital letters.
+		/// Formats the object.ToString() to a human readable representation.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -359,9 +359,7 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Inserts spaces before capital letters.
-		/// 
-		/// http://stackoverflow.com/questions/4488969/split-a-string-by-capital-letters
+		/// Formats the string to a human readable representation.
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
@@ -370,12 +368,27 @@ namespace ICD.Common.Utils
 			if (name == null)
 				throw new ArgumentNullException("name");
 
-			Regex regex = new Regex(@"
-                (?<=[A-Z])(?=[A-Z][a-z]) |
-                 (?<=[^A-Z])(?=[A-Z]) |
-                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
+			// Remove s_, m_, _ member prefixes and delimiters
+			name = Regex.Replace(name, "s_|m_|_", " ");
 
-			return regex.Replace(name, " ");
+			// Split string by capital letters
+			// http://stackoverflow.com/questions/4488969/split-a-string-by-capital-letters
+			name = Regex.Replace(name, @"(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])", " ");
+
+			// Fix punctuation from the capital letter split
+			// "Comma, Delimited"
+			// became
+			// "Comma , Delimited"
+			name = RegexUtils.ReplaceGroup(name, "(?'space' )[^A-Z]", "space", "");
+
+			// Replace runs of whitespace with a single space
+			name = Regex.Replace(name, @"\s+", " ");
+
+			// Remove leading/trailing whitespace
+			name = name.Trim();
+
+			// Capitalize first letter
+			return UppercaseFirst(name);
 		}
 
 		/// <summary>

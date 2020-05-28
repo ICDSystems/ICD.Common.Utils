@@ -24,11 +24,18 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual("\x08\x22\x00\x00\x00\x02", output);
 		}
 
-		[Test, UsedImplicitly]
-		public void NiceNameTest()
+		[TestCase("Test", "Test")]
+		[TestCase("test", "Test")]
+		[TestCase("TodayILiveInTheUSAWithSimon", "Today I Live In The USA With Simon")]
+		[TestCase("CONST_VALUE", "CONST VALUE")]
+		[TestCase("m_PrivateMember", "Private Member")]
+		[TestCase("variableName", "Variable Name")]
+		[TestCase("Comma, Delimited", "Comma, Delimited")]
+		[TestCase("Comma,Delimited", "Comma, Delimited")]
+		public void NiceNameTest(string input, string expected)
 		{
-			string output = StringUtils.NiceName("TodayILiveInTheUSAWithSimon");
-			Assert.AreEqual("Today I Live In The USA With Simon", output);
+			string output = StringUtils.NiceName(input);
+			Assert.AreEqual(expected, output);
 		}
 
 		[Test, UsedImplicitly]
