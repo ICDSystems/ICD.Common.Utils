@@ -52,7 +52,7 @@ namespace ICD.Common.Utils.Json
 		[PublicAPI]
 		public static string Format(object value)
 		{
-			string serial = JsonConvert.SerializeObject(value);
+			string serial = JsonConvert.SerializeObject(value, Formatting.None, CommonSettings);
 			return Format(serial);
 		}
 

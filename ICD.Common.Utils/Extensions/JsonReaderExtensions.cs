@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Text.RegularExpressions;
 using ICD.Common.Properties;
 using Newtonsoft.Json;
 
@@ -271,35 +271,29 @@ namespace ICD.Common.Utils.Extensions
 			if (extends.DateParseHandling != DateParseHandling.None)
 				return (DateTime)extends.Value;
 #endif
+			/*
+			"\"\\/Date(1335205592410)\\/\""         .NET JavaScriptSerializer
+			"\"\\/Date(1335205592410-0500)\\/\""    .NET DataContractJsonSerializer
+			"2012-04-23T18:25:43.511Z"              JavaScript built-in JSON object
+			"2012-04-21T18:25:43-05:00"             ISO 8601
+			 */
 
-			string stringValue = extends.GetValueAsString();
-			return DateTime.Parse(stringValue, null, DateTimeStyles.RoundtripKind);
-		}
+			string serial = extends.GetValueAsString();
 
-		/// <summary>
-		/// Gets the current value as a date.
-		/// </summary>
-		/// <param name="extends"></param>
-		/// <param name="format"></param>
-		/// <param name="provider"></param>
-		/// <returns></returns>
-		public static DateTime GetValueAsDateTimeExact([NotNull] this JsonReader extends, [NotNull] string format,
-		                                               IFormatProvider provider)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
+			Match match;
+			if (RegexUtils.Matches(serial, @"Date\((?'date'\d+)(?'zone'(-|\+)\d+)?\)", out match))
+			{
+				long ms = long.Parse(match.Groups["date"].Value);
+				DateTime dateTime = DateTimeUtils.FromEpochMilliseconds(ms);
+				if (!match.Groups["zone"].Success)
+					return dateTime;
 
-			if (format == null)
-				throw new ArgumentNullException("format");
+				// No TimeZoneInfo in CF, so now things get gross
+				dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+				serial = dateTime.ToIso() + match.Groups["zone"].Value;
+			}
 
-#if !SIMPLSHARP
-			// Newer NewtonSoft tries to be helpful by assuming that anything that looks like a DateTime must be a date.
-			if (extends.DateParseHandling != DateParseHandling.None)
-				throw new InvalidOperationException("DateParseHandling needs to be set to None");
-#endif
-
-			string stringValue = extends.GetValueAsString();
-			return DateTime.ParseExact(stringValue, format, provider);
+			return DateTimeUtils.FromIso8601(serial);
 		}
 	}
 }

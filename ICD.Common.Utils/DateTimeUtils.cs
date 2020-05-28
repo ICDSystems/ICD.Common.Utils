@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ICD.Common.Utils
 {
@@ -32,6 +33,16 @@ namespace ICD.Common.Utils
 		public static DateTime FromEpochSeconds(long seconds)
 		{
 			return FromEpochMilliseconds(seconds * 1000);
+		}
+
+		/// <summary>
+		/// Returns a DateTime for the given ISO-8601 string.
+		/// </summary>
+		/// <param name="iso"></param>
+		/// <returns></returns>
+		public static DateTime FromIso8601(string iso)
+		{
+			return DateTime.Parse(iso, null, DateTimeStyles.RoundtripKind);
 		}
 	}
 }

@@ -7,12 +7,30 @@ namespace ICD.Common.Utils.Extensions
 	public static class JsonWriterExtensions
 	{
 		/// <summary>
+		/// Writes the DateTime as an ISO-8601 string.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="dateTime"></param>
+		public static void WriteDateTime([NotNull] this JsonWriter extends, DateTime dateTime)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string iso = dateTime.ToIso();
+
+			// Remove redundant ms
+			iso = iso.Replace(".0000000", "");
+
+			extends.WriteValue(iso);
+		}
+
+		/// <summary>
 		/// Writes the type value.
 		/// </summary>
 		/// <param name="extends"></param>
 		/// <param name="type"></param>
 		[PublicAPI]
-		public static void WriteType([NotNull]this JsonWriter extends, [CanBeNull]Type type)
+		public static void WriteType([NotNull] this JsonWriter extends, [CanBeNull] Type type)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -69,7 +87,7 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("extends");
 
 			extends.WritePropertyName(propertyName);
-			extends.WriteValue(value.ToIso());
+			extends.WriteDateTime(value);
 		}
 
 		/// <summary>
