@@ -1,5 +1,6 @@
 ﻿using System;
-using ICD.Common.Properties;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ICD.Common.Utils.Services.Logging
 {
@@ -17,12 +18,12 @@ namespace ICD.Common.Utils.Services.Logging
 		/// <summary>
 		/// Gets the log time in UTC.
 		/// </summary>
-		[PublicAPI]
 		public DateTime Timestamp { get { return m_Timestamp; } }
 
 		/// <summary>
 		/// Get/Set for severity level.
 		/// </summary>
+		[JsonConverter(typeof(StringEnumConverter))]
 		public eSeverity Severity { get { return m_Severity; } }
 
 		/// <summary>
@@ -40,10 +41,22 @@ namespace ICD.Common.Utils.Services.Logging
 		/// <param name="severity">Severity Level, between 0 and 7</param>
 		/// <param name="message">Error message text</param>
 		public LogItem(eSeverity severity, string message)
+			: this(IcdEnvironment.GetUtcTime(), severity, message)
+		{
+		}
+
+		/// <summary>
+		/// Creates a new LogItem object with the specified values.
+		/// </summary>
+		/// <param name="timestamp"></param>
+		/// <param name="severity">Severity Level, between 0 and 7</param>
+		/// <param name="message">Error message text</param>
+		[JsonConstructor]
+		public LogItem(DateTime timestamp, eSeverity severity, string message)
 		{
 			m_Severity = severity;
 			m_Message = message;
-			m_Timestamp = IcdEnvironment.GetUtcTime();
+			m_Timestamp = timestamp;
 		}
 
 		#endregion
@@ -72,6 +85,11 @@ namespace ICD.Common.Utils.Services.Logging
 			return !a1.Equals(a2);
 		}
 
+		/// <summary>
+		/// Returns true if this instance is equal to the given object.
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
 		public bool Equals(LogItem other)
 		{
 			return m_Severity == other.m_Severity &&
