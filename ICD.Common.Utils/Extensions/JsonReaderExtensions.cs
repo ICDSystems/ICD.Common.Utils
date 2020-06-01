@@ -96,10 +96,14 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[PublicAPI]
+		[CanBeNull]
 		public static Type GetValueAsType([NotNull] this JsonReader extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
+
+			if (extends.TokenType == JsonToken.Null)
+				return null;
 
 			string value = extends.GetValueAsString();
 			return Type.GetType(value);

@@ -40,6 +40,9 @@ namespace ICD.Common.Utils.Json
 				// Serialize DateTimes to ISO
 				s_CommonSettings.Converters.Add(new DateTimeIsoConverter());
 
+				// Minify Type serialization
+				s_CommonSettings.Converters.Add(new MinimalTypeConverter());
+
 				return s_CommonSettings;
 			}
 		}
