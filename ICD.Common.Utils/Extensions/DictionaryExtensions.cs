@@ -8,6 +8,29 @@ namespace ICD.Common.Utils.Extensions
 	public static class DictionaryExtensions
 	{
 		/// <summary>
+		/// Removes the key from the dictionary, outputting the value.
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="key"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static bool Remove<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
+		                                        [NotNull] TKey key, out TValue value)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("key");
+
+			return extends.TryGetValue(key, out value) && extends.Remove(key);
+		}
+
+		/// <summary>
 		/// Removes all of the given keys from the dictionary.
 		/// </summary>
 		/// <typeparam name="TKey"></typeparam>
@@ -78,7 +101,9 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
 
 			return extends.GetDefault(key, default(TValue));
@@ -101,7 +126,9 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
 
 			TValue value;
@@ -119,13 +146,14 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		[PublicAPI]
 		public static TValue GetOrAddDefault<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> extends,
-		                                                   [NotNull] TKey key,
-		                                                   TValue defaultValue)
+		                                                   [NotNull] TKey key, TValue defaultValue)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+// ReSharper disable CompareNonConstrainedGenericWithNull
 			if (key == null)
+// ReSharper restore CompareNonConstrainedGenericWithNull
 				throw new ArgumentNullException("key");
 
 			TValue value = extends.GetDefault(key, defaultValue);
