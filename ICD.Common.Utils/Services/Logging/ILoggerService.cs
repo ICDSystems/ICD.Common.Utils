@@ -21,14 +21,20 @@ namespace ICD.Common.Utils.Services.Logging
 
 	public interface ILoggerService
 	{
+		/// <summary>
+		/// Raised when an item is logged against the logger service.
+		/// </summary>
 		[PublicAPI]
 		event EventHandler<LogItemEventArgs> OnEntryAdded;
 
+		/// <summary>
+		/// Raised when the severity level changes.
+		/// </summary>
 		[PublicAPI]
 		event EventHandler<SeverityEventArgs> OnSeverityLevelChanged;
 
 		/// <summary>
-		/// Gets and sets the severity level.
+		/// Gets and sets the minimum severity threshold for log items to be logged.
 		/// </summary>
 		[PublicAPI]
 		eSeverity SeverityLevel { get; set; }
@@ -45,7 +51,8 @@ namespace ICD.Common.Utils.Services.Logging
 		/// </summary>
 		/// <returns></returns>
 		[PublicAPI]
-		KeyValuePair<int, LogItem>[] GetHistory();
+		[NotNull]
+		IEnumerable<KeyValuePair<int, LogItem>> GetHistory();
 	}
 
 	/// <summary>
