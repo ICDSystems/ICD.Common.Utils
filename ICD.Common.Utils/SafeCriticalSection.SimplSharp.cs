@@ -1,4 +1,6 @@
 ﻿using System;
+using ICD.Common.Utils.Services;
+using ICD.Common.Utils.Services.Logging;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
 
@@ -44,8 +46,20 @@ namespace ICD.Common.Utils
 			try
 			{
 #if DEBUG
-				if (!m_CriticalSection.WaitForMutex(TIMEOUT))
-					throw new InvalidProgramException("Deadlock detected in program");
+				int attempt = 1;
+				while (!m_CriticalSection.WaitForMutex(TIMEOUT))
+				{
+					// Poor-man's stack trace
+					try
+					{
+						throw new InvalidProgramException("Failed to aquire mutex in expected timeframe - Attempt " + attempt++);
+					}
+					catch (Exception e)
+					{
+						ServiceProvider.GetService<ILoggerService>()
+						               .AddEntry(eSeverity.Error, e, "Deadlock detected in program");
+					}
+				}
 #else
 				m_CriticalSection.Enter();
 #endif
