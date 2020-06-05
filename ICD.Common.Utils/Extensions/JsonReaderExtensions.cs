@@ -186,6 +186,44 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Gets the current value as a float.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static float GetValueAsFloat([NotNull] this JsonReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (extends.TokenType == JsonToken.Float || extends.TokenType == JsonToken.Integer)
+				return (float)extends.Value;
+
+			string message = string.Format("Token {0} {1} is not {2}", extends.TokenType, extends.Value,
+										   JsonToken.Integer);
+			throw new InvalidCastException(message);
+		}
+
+		/// <summary>
+		/// Gets the current value as a double.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static double GetValueAsDouble([NotNull] this JsonReader extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (extends.TokenType == JsonToken.Float || extends.TokenType == JsonToken.Integer)
+				return (double)extends.Value;
+
+			string message = string.Format("Token {0} {1} is not {2}", extends.TokenType, extends.Value,
+										   JsonToken.Integer);
+			throw new InvalidCastException(message);
+		}
+
+		/// <summary>
 		/// Gets the current value as a string.
 		/// </summary>
 		/// <param name="extends"></param>
