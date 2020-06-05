@@ -128,5 +128,22 @@ namespace ICD.Common.Utils.Extensions
 			              .Distinct();
 		}
 #endif
+
+		/// <summary>
+		/// Gets the EventArgs Type for the given event.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static Type GetEventArgsType([NotNull] this EventInfo extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			Type eventHandlerType = extends.EventHandlerType;
+			return eventHandlerType == typeof(EventHandler)
+				       ? typeof(EventArgs)
+				       : eventHandlerType.GetInnerGenericTypes(typeof(EventHandler<>))
+				                         .First();
+		}
 	}
 }
