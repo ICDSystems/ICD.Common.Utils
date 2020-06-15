@@ -1,6 +1,5 @@
 ﻿using System;
 using ICD.Common.Properties;
-using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Timers
 {
@@ -11,36 +10,20 @@ namespace ICD.Common.Utils.Timers
 	[PublicAPI]
 	public sealed class Repeater : IDisposable
 	{
-		/// <summary>
-		/// Raised on the initial repeat.
-		/// </summary>
-		[PublicAPI]
-		public event EventHandler OnInitialRepeat;
-
-		/// <summary>
-		/// Raised on each subsequent repeat.
-		/// </summary>
-		[PublicAPI]
-		public event EventHandler OnRepeat;
+		public delegate void RepeatCallback(bool isInitial);
 
 		private readonly SafeTimer m_RepeatTimer;
 
-		private readonly long m_BeforeRepeat;
-		private readonly long m_BetweenRepeat;
+		private RepeatCallback m_RepeatCallback; 
 
 		#region Constructor
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="beforeRepeat">The delay before the second increment</param>
-		/// <param name="betweenRepeat">The delay between each subsequent repeat</param>
-		public Repeater(long beforeRepeat, long betweenRepeat)
+		public Repeater()
 		{
-			m_RepeatTimer = SafeTimer.Stopped(RepeatCallback);
-
-			m_BeforeRepeat = beforeRepeat;
-			m_BetweenRepeat = betweenRepeat;
+			m_RepeatTimer = SafeTimer.Stopped(TimerElapsed);
 		}
 
 		/// <summary>
@@ -66,12 +49,21 @@ namespace ICD.Common.Utils.Timers
 		/// <summary>
 		/// Begin repeating.
 		/// </summary>
+		/// <param name="repeatCallback"></param>
+		/// <param name="beforeRepeat">The delay before the second increment</param>
+		/// <param name="betweenRepeat">The delay between each subsequent repeat</param>
 		[PublicAPI]
-		public void Start()
+		public void Start([NotNull] RepeatCallback repeatCallback, long beforeRepeat, long betweenRepeat)
 		{
-			OnInitialRepeat.Raise(this);
+			if (repeatCallback == null)
+				throw new ArgumentNullException("repeatCallback");
 
-			m_RepeatTimer.Reset(m_BeforeRepeat, m_BetweenRepeat);
+			Stop();
+
+			m_RepeatCallback = repeatCallback;
+			m_RepeatCallback(true);
+
+			m_RepeatTimer.Reset(beforeRepeat, betweenRepeat);
 		}
 
 		/// <summary>
@@ -81,6 +73,7 @@ namespace ICD.Common.Utils.Timers
 		public void Stop()
 		{
 			m_RepeatTimer.Stop();
+			m_RepeatCallback = null;
 		}
 
 		#endregion
@@ -90,9 +83,9 @@ namespace ICD.Common.Utils.Timers
 		/// <summary>
 		/// Called for every repeat.
 		/// </summary>
-		private void RepeatCallback()
+		private void TimerElapsed()
 		{
-			OnRepeat.Raise(this);
+			m_RepeatCallback(false);
 		}
 
 		#endregion
