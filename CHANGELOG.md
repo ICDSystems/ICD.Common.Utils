@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
  - Added attributes for controlling obfuscation
+ - Added AggregateOrDefault extension method for applying an accumulator function over a sequence that returns a default value if the sequence is empty
 
 ## [12.0.0] - 2020-06-18
 ### Added

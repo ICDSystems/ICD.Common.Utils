@@ -1407,24 +1407,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			Comparer<T> comparer = Comparer<T>.Default;
-			T value = default(T);
-			bool first = true;
-
-			foreach (T x in extends)
-			{
-				if (first)
-				{
-					first = false;
-					value = x;
-					continue;
-				}
-
-				if (comparer.Compare(x, value) < 0)
-					value = x;
-			}
-
-			return value;
+			return extends.AggregateOrDefault((a, b) => Comparer<T>.Default.Compare(a, b) < 0 ? a : b);
 		}
 
 		/// <summary>
@@ -1438,16 +1421,60 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			Comparer<T> comparer = Comparer<T>.Default;
-			T value = default(T);
+			return extends.AggregateOrDefault((a, b) => Comparer<T>.Default.Compare(a, b) > 0 ? a : b);
+		}
 
-			foreach (T x in extends)
+		/// <summary>
+		/// Applies an accumulator function over a sequence.
+		/// </summary>
+		/// <typeparam name="TSource"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="func"></param>
+		/// <returns>The final accumulator value.</returns>
+		[CanBeNull]
+		public static TSource AggregateOrDefault<TSource>([NotNull] this IEnumerable<TSource> extends,
+		                                                  [NotNull] Func<TSource, TSource, TSource> func)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (func == null)
+				throw new ArgumentNullException("func");
+
+			return extends.AggregateOrDefault(func, default(TSource));
+		}
+
+		/// <summary>
+		/// Applies an accumulator function over a sequence.
+		/// </summary>
+		/// <typeparam name="TSource"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="func"></param>
+		/// <param name="defaultValue"></param>
+		/// <returns>The final accumulator value.</returns>
+		[CanBeNull]
+		public static TSource AggregateOrDefault<TSource>([NotNull] this IEnumerable<TSource> extends,
+		                                                  [NotNull] Func<TSource, TSource, TSource> func,
+		                                                  TSource defaultValue)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (func == null)
+				throw new ArgumentNullException("func");
+
+			using (IEnumerator<TSource> enumerator = extends.GetEnumerator())
 			{
-				if (comparer.Compare(x, value) > 0)
-					value = x;
-			}
+				if (!enumerator.MoveNext())
+					return defaultValue;
 
-			return value;
+				TSource result = enumerator.Current;
+
+				while (enumerator.MoveNext())
+					result = func(result, enumerator.Current);
+
+				return result;
+			}
 		}
 
 		/// <summary>
