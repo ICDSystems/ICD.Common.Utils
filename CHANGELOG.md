@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [12.0.0] - 2020-06-18
 ### Added
  - Added ToCollection extension method for copying an enumerable to a new collection
  - TableBuilder supports multi-line content
@@ -17,7 +18,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added methods for reading GUIDs from XML
  - Added methods for reading DateTimes from XML
  - Added method for combining GUIDs
-
+ - Added method for getting the EventArgs type for an EventHandler
+ - Added methods for getting a JSON value as a float or double
+ - Added dictionary Remove method for outputting the removed value
+ - Added IGenericEventArgs interface
+ - Added MinimalTypeConverter for serializing Types to JSON
+ - Added common JSON serializer settings for common, platform agnostic DateTime and Type conversion
+ 
 ### Changed
  - Rewrote JsonItemWrapper serialization for JsonConvert friendliness
  - Reflection optimizations
@@ -28,6 +35,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - TableBuilder no longer draws redundant separators
  - Fixed a bug where CompiledOn date was not being parsed correctly due to culture
  - S# DateTimes are serialized to JSON in ISO-8601 format
+ - Deadlock detection works better for false positives
+ - Improved LogItem JSON serialization
+ - Improved NiceName method to better handle syntax, whitespace and punctuation
+ - Fixed a bug where IcdCultureInfo would fail to load on Crestron 4-series processors
+ - Clarifying which culture failed to load when IcdCultureInfo throws an exception
 
 ## [11.1.0] - 2020-05-19
 ### Added
