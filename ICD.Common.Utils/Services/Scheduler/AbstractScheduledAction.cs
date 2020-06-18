@@ -25,11 +25,10 @@ namespace ICD.Common.Utils.Services.Scheduler
 
 		public void Run()
 		{
-			RunFinal();
-			NextRunTimeUtc = GetNextRunTimeUtc();
+			NextRunTimeUtc = RunFinal();
 		}
 
-		public void UpdateNextRunTime()
+		protected void UpdateNextRunTime()
 		{
 			NextRunTimeUtc = GetNextRunTimeUtc();
 		}
@@ -37,11 +36,11 @@ namespace ICD.Common.Utils.Services.Scheduler
 		/// <summary>
 		/// Runs when the action has hit its scheduled time
 		/// </summary>
-		public abstract void RunFinal();
+		protected abstract DateTime? RunFinal();
 
 		/// <summary>
 		/// Runs after RunFinal in order to set the next run time of this action
 		/// </summary>
-		public abstract DateTime? GetNextRunTimeUtc();
+		protected abstract DateTime? GetNextRunTimeUtc();
 	}
 }
