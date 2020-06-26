@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added attributes for controlling obfuscation
+
 ## [12.0.0] - 2020-06-18
 ### Added
  - Added ToCollection extension method for copying an enumerable to a new collection
