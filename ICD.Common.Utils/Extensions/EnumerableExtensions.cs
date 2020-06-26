@@ -1407,7 +1407,27 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.AggregateOrDefault((a, b) => Comparer<T>.Default.Compare(a, b) < 0 ? a : b);
+			return extends.MinOrDefault(v => v);
+		}
+
+		/// <summary>
+		/// Returns the minimum value from the sequence, otherwise the default value.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="selector"></param>
+		/// <returns></returns>
+		public static TValue MinOrDefault<T, TValue>([NotNull] this IEnumerable<T> extends, [NotNull] Func<T, TValue> selector)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (selector == null)
+				throw new ArgumentNullException("selector");
+
+			return extends.Select(selector)
+			              .AggregateOrDefault((a, b) => Comparer<TValue>.Default.Compare(a, b) < 0 ? a : b);
 		}
 
 		/// <summary>
@@ -1421,7 +1441,27 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.AggregateOrDefault((a, b) => Comparer<T>.Default.Compare(a, b) > 0 ? a : b);
+			return extends.MaxOrDefault(v => v);
+		}
+
+		/// <summary>
+		/// Returns the maximum value from the sequence, otherwise the default value.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="selector"></param>
+		/// <returns></returns>
+		public static TValue MaxOrDefault<T, TValue>([NotNull] this IEnumerable<T> extends, [NotNull] Func<T, TValue> selector)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (selector == null)
+				throw new ArgumentNullException("selector");
+
+			return extends.Select(selector)
+			              .AggregateOrDefault((a, b) => Comparer<TValue>.Default.Compare(a, b) > 0 ? a : b);
 		}
 
 		/// <summary>
