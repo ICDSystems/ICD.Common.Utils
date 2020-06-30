@@ -311,7 +311,7 @@ namespace ICD.Common.Utils
 			{
 				ServiceProvider.TryGetService<ILoggerService>()
 							   .AddEntry(eSeverity.Warning, "{0} - Failed to send console command \"{1}\"",
-										 typeof(ProcessorUtils).Name, UPTIME_COMMAND);
+										 typeof(ProcessorUtils).Name, PROGUPTIME_COMMAND_ROOT);
 			}
 			return uptime;
 		}
