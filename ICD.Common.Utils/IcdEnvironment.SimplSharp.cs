@@ -100,7 +100,7 @@ namespace ICD.Common.Utils
 		/// Gets the dhcp status of the processor.
 		/// </summary>
 		[PublicAPI]
-		public static string DhcpStatus
+		public static bool DhcpStatus
 		{
 			get
 			{
@@ -112,18 +112,18 @@ namespace ICD.Common.Utils
 				{
 					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
 					if (id >= InitialParametersClass.NumberOfEthernetInterfaces)
-						return null;
+						return false;
 
 					string status = CrestronEthernetHelper.GetEthernetParameter(param, id);
 
 					if (!string.IsNullOrEmpty(status) && !status.Equals(INVALID_VALUE))
-						return status;
+						return status == "ON";
 
-					return null;
+					return false;
 				}
 				catch (ArgumentException)
 				{
-					return null;
+					return false;
 				}
 			}
 		}
@@ -132,7 +132,7 @@ namespace ICD.Common.Utils
 		/// Gets the hostname of the processor.
 		/// </summary>
 		[PublicAPI]
-		public static IEnumerable<string> Hostname
+		public static IEnumerable<string> Hostnames
 		{
 			get
 			{

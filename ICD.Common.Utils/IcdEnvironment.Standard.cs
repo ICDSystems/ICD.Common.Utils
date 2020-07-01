@@ -53,24 +53,22 @@ namespace ICD.Common.Utils
 		/// Gets the dhcp status of the processor.
 		/// </summary>
 		[PublicAPI]
-		public static string DhcpStatus
+		public static bool DhcpStatus
 		{
 			get
 			{
 				try
 				{
-					bool enabled =
+					return
 						NetworkInterface.GetAllNetworkInterfaces()
 										.Where(ni => ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 ||
 													 ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
 										.Select(ni => ni.GetIPProperties().GetIPv4Properties().IsDhcpEnabled)
 										.FirstOrDefault();
-
-					return enabled.ToString();
 				}
-				catch(PlatformNotSupportedException)
+				catch (PlatformNotSupportedException)
 				{
-					return false.ToString();
+					return false;
 				}
 			}
 		}
@@ -79,7 +77,7 @@ namespace ICD.Common.Utils
 		/// Gets the hostname of the processor.
 		/// </summary>
 		[PublicAPI]
-		public static IEnumerable<string> Hostname { get { yield return Dns.GetHostName(); } }
+		public static IEnumerable<string> Hostnames { get { yield return Dns.GetHostName(); } }
 
 		public static DateTime GetLocalTime()
 		{
