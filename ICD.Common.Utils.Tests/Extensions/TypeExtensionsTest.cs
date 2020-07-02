@@ -145,7 +145,15 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void GetMinimalInterfacesTest()
 		{
-			Assert.Inconclusive();
+			Type[] interfaces = typeof(ICollection<int>).GetMinimalInterfaces().ToArray();
+
+			Assert.AreEqual(1, interfaces.Length);
+			Assert.AreEqual(typeof(IEnumerable<int>), interfaces[0]);
+
+			interfaces = typeof(IEnumerable<int>).GetMinimalInterfaces().ToArray();
+
+			Assert.AreEqual(1, interfaces.Length);
+			Assert.AreEqual(typeof(IEnumerable), interfaces[0]);
 		}
 
 		[TestCase(typeof(int), "Int32")]
