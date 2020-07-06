@@ -1,4 +1,5 @@
-﻿// =============================================================================
+﻿#if SIMPLSHARP
+// =============================================================================
 //          Definition of Custom Attributes for Declarative Obfuscation
 // =============================================================================
 //
@@ -17,7 +18,7 @@ using System;
 
 // ReSharper disable once CheckNamespace
 
-namespace ICD.Common.Properties
+namespace System.Reflection
 {
     /// <summary>
     /// Instructs obfuscation tools to use their standard obfuscation rules for the appropriate assembly type.
@@ -141,3 +142,4 @@ namespace ICD.Common.Properties
         }
     }
 }
+#endif
