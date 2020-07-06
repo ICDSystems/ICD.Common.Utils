@@ -30,7 +30,6 @@
     <None Remove="SIMPLSharpLogs\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="ObfuscationSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="ICD.Common.projectinfo" />
