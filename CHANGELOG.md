@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
- - ReflectionExtensions : GetProperty and SetProperty extensions for NetStandard
+ - ReflectionExtensions : GetProperty, SetProperty, CallMethod extensions for NetStandard
 
 ### Added
  - Added attributes for controlling obfuscation
