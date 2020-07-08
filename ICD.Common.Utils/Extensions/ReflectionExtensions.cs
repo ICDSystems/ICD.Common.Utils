@@ -127,6 +127,74 @@ namespace ICD.Common.Utils.Extensions
 			                            .Except(null) ?? Enumerable.Empty<T>())
 			              .Distinct();
 		}
+
+		/// <summary>
+		/// Sets the value of a property
+		/// Traverses the path to access properties nested in other properties
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="value"></param>
+		/// <param name="path"></param>
+		/// <returns>true if property was set, false if property was not found</returns>
+		public static bool SetProperty([NotNull] this object extends, [CanBeNull] object value, [NotNull] params string[] path)
+		{
+			if (extends == null)
+				throw new ArgumentNullException(nameof(extends));
+			if (path == null)
+				throw new ArgumentNullException(nameof(path));
+
+			object currentObject = extends;
+
+			//Grab property values until the last item in the path
+			for (int i = 0; i < path.Length - 1; i++)
+			{
+				PropertyInfo info = extends.GetType().GetProperty(path[i]);
+				if (info == null)
+					return false;
+				currentObject = info.GetValue(currentObject);
+			}
+
+			//Set the property to the value
+			PropertyInfo finalPath = currentObject.GetType().GetProperty(path[path.Length - 1]);
+			if (finalPath == null)
+				return false;
+
+			finalPath.SetValue(currentObject, value);
+			return true;
+		}
+
+		/// <summary>
+		/// Gets the value of a property
+		/// Traverses the path to access properties nested in other properties
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="value"></param>
+		/// <param name="path"></param>
+		/// <returns>true if property was set, false if property was not found</returns>
+		public static bool GetProperty([NotNull] this object extends, [CanBeNull] out object value, [NotNull] params string[] path)
+		{
+			if (extends == null)
+				throw new ArgumentNullException(nameof(extends));
+			if (path == null)
+				throw new ArgumentNullException(nameof(path));
+
+			value = null;
+
+			object currentObject = extends;
+
+			//Grab property values
+			foreach (string node in path)
+			{
+				PropertyInfo info = extends.GetType().GetProperty(node);
+				if (info == null)
+					return false;
+				currentObject = info.GetValue(currentObject);
+			}
+
+			//set the last value and return
+			value = currentObject;
+			return true;
+		}
 #endif
 
 		/// <summary>
