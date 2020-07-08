@@ -170,7 +170,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <param name="value"></param>
 		/// <param name="path"></param>
-		/// <returns>true if property was set, false if property was not found</returns>
+		/// <returns>true if property get was successful, false if the property was not found</returns>
 		public static bool GetProperty([NotNull] this object extends, [CanBeNull] out object value, [NotNull] params string[] path)
 		{
 			if (extends == null)
