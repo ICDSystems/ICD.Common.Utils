@@ -195,6 +195,41 @@ namespace ICD.Common.Utils.Extensions
 			value = currentObject;
 			return true;
 		}
+
+		public static bool CallMethod([NotNull] this object extends, string methodName)
+		{
+			object value;
+			return CallMethod(extends, methodName, out value, new object[] { });
+		}
+
+		public static bool CallMethod([NotNull] this object extends, string methodName, [CanBeNull] out object value)
+		{
+			return CallMethod(extends, methodName, out value, new object[] { });
+		}
+
+		public static bool CallMethod([NotNull] this object extends, string methodName, [NotNull] params object[] parameters)
+		{
+			object value;
+			return CallMethod(extends, methodName, out value, parameters);
+		}
+
+		public static bool CallMethod([NotNull] this object extends, string methodName, [CanBeNull] out object value, [NotNull] params object[] parameters)
+		{
+			if (extends == null)
+				throw new ArgumentNullException(nameof(extends));
+			if (parameters == null)
+				throw new ArgumentNullException(nameof(parameters));
+
+			value = false;
+
+			MethodInfo method = extends.GetType().GetMethod(methodName);
+			if (method == null)
+				return false;
+
+			value = method.Invoke(extends, parameters);
+
+			return true;
+		}
 #endif
 
 		/// <summary>
