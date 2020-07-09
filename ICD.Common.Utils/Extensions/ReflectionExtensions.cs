@@ -127,6 +127,7 @@ namespace ICD.Common.Utils.Extensions
 			                            .Except(null) ?? Enumerable.Empty<T>())
 			              .Distinct();
 		}
+#endif
 
 		/// <summary>
 		/// Sets the value of a property
@@ -139,27 +140,37 @@ namespace ICD.Common.Utils.Extensions
 		public static bool SetProperty([NotNull] this object extends, [CanBeNull] object value, [NotNull] params string[] path)
 		{
 			if (extends == null)
-				throw new ArgumentNullException(nameof(extends));
+				throw new ArgumentNullException("extends");
 			if (path == null)
-				throw new ArgumentNullException(nameof(path));
+				throw new ArgumentNullException("path");
 
 			object currentObject = extends;
 
 			//Grab property values until the last item in the path
 			for (int i = 0; i < path.Length - 1; i++)
 			{
-				PropertyInfo info = extends.GetType().GetProperty(path[i]);
+				PropertyInfo info =
+					extends.GetType()
+#if SIMPLSHARP
+					       .GetCType()
+#endif
+					       .GetProperty(path[i]);
 				if (info == null)
 					return false;
-				currentObject = info.GetValue(currentObject);
+				currentObject = info.GetValue(currentObject, null);
 			}
 
 			//Set the property to the value
-			PropertyInfo finalPath = currentObject.GetType().GetProperty(path[path.Length - 1]);
+			PropertyInfo finalPath =
+				currentObject.GetType()
+#if SIMPLSHARP
+				             .GetCType()
+#endif
+				             .GetProperty(path[path.Length - 1]);
 			if (finalPath == null)
 				return false;
 
-			finalPath.SetValue(currentObject, value);
+			finalPath.SetValue(currentObject, value, null);
 			return true;
 		}
 
@@ -174,9 +185,9 @@ namespace ICD.Common.Utils.Extensions
 		public static bool GetProperty([NotNull] this object extends, [CanBeNull] out object value, [NotNull] params string[] path)
 		{
 			if (extends == null)
-				throw new ArgumentNullException(nameof(extends));
+				throw new ArgumentNullException("extends");
 			if (path == null)
-				throw new ArgumentNullException(nameof(path));
+				throw new ArgumentNullException("path");
 
 			value = null;
 
@@ -185,10 +196,16 @@ namespace ICD.Common.Utils.Extensions
 			//Grab property values
 			foreach (string node in path)
 			{
-				PropertyInfo info = extends.GetType().GetProperty(node);
+				PropertyInfo info =
+					extends.GetType()
+#if SIMPLSHARP
+					       .GetCType()
+#endif
+					       .GetProperty(node);
 				if (info == null)
 					return false;
-				currentObject = info.GetValue(currentObject);
+
+				currentObject = info.GetValue(currentObject, null);
 			}
 
 			//set the last value and return
@@ -216,13 +233,18 @@ namespace ICD.Common.Utils.Extensions
 		public static bool CallMethod([NotNull] this object extends, string methodName, [CanBeNull] out object value, [NotNull] params object[] parameters)
 		{
 			if (extends == null)
-				throw new ArgumentNullException(nameof(extends));
+				throw new ArgumentNullException("extends");
 			if (parameters == null)
-				throw new ArgumentNullException(nameof(parameters));
+				throw new ArgumentNullException("parameters");
 
 			value = false;
 
-			MethodInfo method = extends.GetType().GetMethod(methodName);
+			MethodInfo method =
+				extends.GetType()
+#if SIMPLSHARP
+				       .GetCType()
+#endif
+				       .GetMethod(methodName);
 			if (method == null)
 				return false;
 
@@ -230,7 +252,6 @@ namespace ICD.Common.Utils.Extensions
 
 			return true;
 		}
-#endif
 
 		/// <summary>
 		/// Gets the EventArgs Type for the given event.
