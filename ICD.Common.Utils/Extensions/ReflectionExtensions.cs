@@ -190,7 +190,7 @@ namespace ICD.Common.Utils.Extensions
 
 				if (info == null)
 					return false;
-				currentObject = info.GetValue(currentObject, null);
+				currentObject = info.GetValue(currentObject);
 			}
 
 			//Set the property to the value
@@ -203,7 +203,7 @@ namespace ICD.Common.Utils.Extensions
 			if (finalPath == null)
 				return false;
 
-			finalPath.SetValue(currentObject, value, null);
+			finalPath.SetValue(currentObject, value);
 			return true;
 		}
 
@@ -234,7 +234,7 @@ namespace ICD.Common.Utils.Extensions
 												 .GetProperty(path[i]);
 				if (info == null)
 					return null;
-				currentObject = info.GetValue(currentObject, null);
+				currentObject = info.GetValue(currentObject);
 			}
 
 			//Set the property to the value
@@ -277,7 +277,7 @@ namespace ICD.Common.Utils.Extensions
 				if (info == null)
 					return false;
 
-				currentObject = info.GetValue(currentObject, null);
+				currentObject = info.GetValue(currentObject);
 			}
 
 			//set the last value and return
