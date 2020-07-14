@@ -5,12 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [12.1.0] - 2020-07-14
 ### Added
  - ReflectionExtensions : GetProperty, SetProperty, CallMethod extensions for NetStandard
-
-### Added
  - Added attributes for controlling obfuscation
  - Added AggregateOrDefault extension method for applying an accumulator function over a sequence that returns a default value if the sequence is empty
+
+### Changed
+ - DHCP status is a boolean
+ - Changed Hostname property to Hostnames
 
 ## [12.0.0] - 2020-06-18
 ### Added
