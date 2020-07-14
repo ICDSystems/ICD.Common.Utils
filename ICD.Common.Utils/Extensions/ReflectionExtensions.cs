@@ -176,6 +176,40 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Gets the PropertyInfo of the specified property
+		/// Traverses the path to access properties nested in other properties
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="path"></param>
+		/// <returns>true if property get was successful, false if the property was not found</returns>
+		[CanBeNull]
+		public static PropertyInfo GetPropertyInfo([NotNull] this object extends, [NotNull] params string[] path)
+		{
+			if (extends == null)
+				throw new ArgumentNullException(nameof(extends));
+			if (path == null)
+				throw new ArgumentNullException(nameof(path));
+
+			object currentObject = extends;
+
+			//Grab property values until the last item in the path
+			for (int i = 0; i < path.Length - 1; i++)
+			{
+				PropertyInfo info = currentObject.GetType()
+#if SIMPLSHARP
+												.GetCType()
+#endif
+												 .GetProperty(path[i]);
+				if (info == null)
+					return null;
+				currentObject = info.GetValue(currentObject);
+			}
+
+			//Set the property to the value
+			return currentObject.GetType().GetProperty(path[path.Length - 1]);
+		}
+
+		/// <summary>
 		/// Gets the value of a property
 		/// Traverses the path to access properties nested in other properties
 		/// </summary>
