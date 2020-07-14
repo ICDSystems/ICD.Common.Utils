@@ -129,6 +129,38 @@ namespace ICD.Common.Utils.Extensions
 		}
 #endif
 
+#if SIMPLSHARP
+		/// <summary>
+		/// Returns the value of the property
+		/// Only needed for SIMPLSHARP since newer .Net contains this already
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="obj"></param>
+		/// <returns>The property value for the obj parameter.</returns>
+		public static object GetValue([NotNull] this PropertyInfo extends, object obj)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.GetValue(obj, null);
+		}
+
+		/// <summary>
+		/// Sets the value of the property
+		/// Only needed for SIMPLSHARP since newer .Net contains this already
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="obj"></param>
+		/// <param name="value"></param>
+		public static void SetValue([NotNull] this PropertyInfo extends, object obj, object value)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			extends.SetValue(obj, value, null);
+		}
+#endif
+
 		/// <summary>
 		/// Sets the value of a property
 		/// Traverses the path to access properties nested in other properties
