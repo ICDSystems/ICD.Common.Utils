@@ -192,6 +192,31 @@ namespace ICD.Common.Utils.Tests.Extensions
 
 		}
 
+		[Test]
+		public void GetPropertyInfoTest()
+		{
+			var testClass = new PropertyTestClass();
+
+			// Test GetPropertyInfo at various levels
+			Assert.AreEqual(testClass.GetType().GetProperty("PropertyString"), 
+			                testClass.GetPropertyInfo("PropertyString"), 
+			                "First level property not expected value");
+			Assert.AreEqual(testClass.InternalClass.GetType().GetProperty("InternalPropertyString"), 
+			                testClass.GetPropertyInfo("InternalClass", "InternalPropertyString"), 
+			                "Second level property not expected value");
+			Assert.AreEqual(testClass.InternalClass.DeepClass.GetType().GetProperty("DeepPropertyString"), 
+			                testClass.GetPropertyInfo("InternalClass", "DeepClass", "DeepPropertyString"),
+			                "Third level property not expected value");
+
+			// Property that doesn't exits should return null
+			Assert.IsNull(testClass.GetPropertyInfo("InternalClass", "DeepClass", "NonExistent"));
+			Assert.IsNull(testClass.GetPropertyInfo("FakeFirstLevel", "FakeSecondLevel" , "FakeThridLevel"));
+			Assert.IsNull(testClass.GetPropertyInfo("InternalClass", "FakeSecondLevel", "ThirdLevelCanNotBeReal"));
+			Assert.IsNull(testClass.GetPropertyInfo("InternalClass", "FakeSecondLevel"));
+			Assert.IsNull(testClass.GetPropertyInfo("FakeFirstLevel"));
+
+		}
+
 		#endregion
 	}
 }
