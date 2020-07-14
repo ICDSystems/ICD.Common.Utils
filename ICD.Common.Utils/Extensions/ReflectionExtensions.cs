@@ -186,9 +186,9 @@ namespace ICD.Common.Utils.Extensions
 		public static PropertyInfo GetPropertyInfo([NotNull] this object extends, [NotNull] params string[] path)
 		{
 			if (extends == null)
-				throw new ArgumentNullException(nameof(extends));
+				throw new ArgumentNullException("extends");
 			if (path == null)
-				throw new ArgumentNullException(nameof(path));
+				throw new ArgumentNullException("path");
 
 			object currentObject = extends;
 
@@ -202,11 +202,15 @@ namespace ICD.Common.Utils.Extensions
 												 .GetProperty(path[i]);
 				if (info == null)
 					return null;
-				currentObject = info.GetValue(currentObject);
+				currentObject = info.GetValue(currentObject, null);
 			}
 
 			//Set the property to the value
-			return currentObject.GetType().GetProperty(path[path.Length - 1]);
+			return currentObject.GetType()
+#if SIMPLSHARP
+				.GetCType()
+#endif
+				.GetProperty(path[path.Length - 1]);
 		}
 
 		/// <summary>
