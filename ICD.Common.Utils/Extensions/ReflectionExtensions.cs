@@ -150,11 +150,12 @@ namespace ICD.Common.Utils.Extensions
 			for (int i = 0; i < path.Length - 1; i++)
 			{
 				PropertyInfo info =
-					extends.GetType()
+						currentObject.GetType()
 #if SIMPLSHARP
 					       .GetCType()
 #endif
-					       .GetProperty(path[i]);
+						             .GetProperty(path[i]);
+
 				if (info == null)
 					return false;
 				currentObject = info.GetValue(currentObject, null);
@@ -197,11 +198,12 @@ namespace ICD.Common.Utils.Extensions
 			foreach (string node in path)
 			{
 				PropertyInfo info =
-					extends.GetType()
+						currentObject.GetType()
 #if SIMPLSHARP
-					       .GetCType()
+							.GetCType()
 #endif
-					       .GetProperty(node);
+							.GetProperty(node);
+
 				if (info == null)
 					return false;
 
