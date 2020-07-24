@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Repeater changed to use configured callbacks instead of a dumb event
  - Scheduled action callbacks allow a TimeSpan to be returned to delay actions
+ - Workaround for logged XML format exceptions when failing to parse floats
 
 ## [12.1.0] - 2020-07-14
 ### Added
