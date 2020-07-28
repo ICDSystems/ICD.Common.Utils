@@ -205,7 +205,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return extends.All(char.IsDigit);
+			return extends.AnyAndAll(char.IsDigit);
 		}
 
 		/// <summary>
