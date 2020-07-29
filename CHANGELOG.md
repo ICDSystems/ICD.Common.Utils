@@ -147,7 +147,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added methods for deserializing an XML array
 
 ### Changed
- - Fixed a bug where ANSI color encoded strings with percentages were being scrambled
  - Improvements to JSON DateTime parsing, particularly in Net Standard
 
 ## [9.7.0] - 2019-08-15
@@ -158,6 +157,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
  - JSON dict serialization serializes keys instead of converting to property name
+ - Fixed a bug where ANSI color encoded strings with percentages were being scrambled
 
 ## [9.6.0] - 2019-07-03
 ### Added
@@ -231,6 +231,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Better VC-4 support for IcdConsole
  - JSON refactoring for simpler deserialization
+
+## [8.9.2] - 2020-07-28
+### Changed
+ - StringExtensions - fixed an issue with IsNumeric where empty strings would return true
 
 ## [8.9.1] - 2020-05-27
 ### Changed
