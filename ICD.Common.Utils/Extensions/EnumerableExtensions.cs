@@ -1094,12 +1094,27 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
+			Random random = new Random(Guid.NewGuid().GetHashCode());
+			return extends.Random(random);
+		}
+
+		/// <summary>
+		/// Returns a random item from the given sequence.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="random"></param>
+		/// <returns></returns>
+		public static T Random<T>([NotNull] this IEnumerable<T> extends, [NotNull] Random random)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
 			IList<T> sequence = extends as IList<T> ?? extends.ToArray();
 
 			if (sequence.Count == 0)
 				throw new InvalidOperationException("Sequence is empty.");
 
-			Random random = new Random(Guid.NewGuid().GetHashCode());
 			int index = random.Next(0, sequence.Count);
 
 			return sequence[index];

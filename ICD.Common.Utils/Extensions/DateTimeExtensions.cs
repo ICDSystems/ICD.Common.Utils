@@ -224,6 +224,15 @@ namespace ICD.Common.Utils.Extensions
 			minutes = MathUtils.Modulus(minutes + extends.Minute, 60);
 			return new DateTime(extends.Year, extends.Month, extends.Day, extends.Hour, minutes, extends.Second, extends.Millisecond);
 		}
-	
+
+		/// <summary>
+		/// Returns the total number of seconds since DateTime.MinValue
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static double GetTotalSeconds(this DateTime extends)
+		{
+			return (extends - DateTime.MinValue).TotalSeconds;
+		}
 	}
 }
