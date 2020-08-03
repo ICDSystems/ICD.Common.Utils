@@ -1,5 +1,6 @@
 ﻿using System;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.EventArguments
 {
@@ -25,5 +26,20 @@ namespace ICD.Common.Utils.EventArguments
 		}
 
 		#endregion
+	}
+
+	public static class XmlRecursionEventArgsExtensions
+	{
+		/// <summary>
+		/// Raises the event safely. Simply skips if the handler is null.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="sender"></param>
+		/// <param name="outer"></param>
+		/// <param name="path"></param>
+		public static void Raise([CanBeNull]this EventHandler<XmlRecursionEventArgs> extends, object sender, string outer, string[] path)
+		{
+			extends.Raise(sender, new XmlRecursionEventArgs(outer, path));
+		}
 	}
 }

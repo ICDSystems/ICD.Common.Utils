@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added Get and Set extensions to PropertyInfo in SIMPLSHARP to mimic overloads avaliable in NETSTANDARD
  - Added Collection extensions for setting and adding ranges of items
  - Added a method for getting the total number of seconds in a date
+ - Added extensions to raise events with common event args using the data directly
 
 ### Changed
  - Repeater changed to use configured callbacks instead of a dumb event
