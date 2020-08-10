@@ -129,6 +129,39 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Gets the SSL state of the processor.
+		/// </summary>
+		[PublicAPI]
+		public static bool SslEnabled
+		{
+			get
+			{
+				const CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET param =
+					CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_SSL_OFF_STATUS;
+				const EthernetAdapterType type = EthernetAdapterType.EthernetLANAdapter;
+
+				try
+				{
+					short id = CrestronEthernetHelper.GetAdapterdIdForSpecifiedAdapterType(type);
+					if (id >= InitialParametersClass.NumberOfEthernetInterfaces)
+						return false;
+
+					string status = CrestronEthernetHelper.GetEthernetParameter(param, id);
+
+					if (!string.IsNullOrEmpty(status) && !status.Equals(INVALID_VALUE))
+						// GET_SSL_OFF_STATUS return OFF for SSL is Enabled and ON for SSL is disabled
+						return status == "OFF";
+
+					return false;
+				}
+				catch (ArgumentException)
+				{
+					return false;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Gets the hostname of the processor.
 		/// </summary>
 		[PublicAPI]

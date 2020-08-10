@@ -74,6 +74,15 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Exists for parity with SimplSharp processors which have the ability to enable/disable SSL communication.
+		/// </summary>
+		[PublicAPI]
+		public static bool SslEnabled
+		{
+			get { return true; }
+		}
+
+		/// <summary>
 		/// Gets the hostname of the processor.
 		/// </summary>
 		[PublicAPI]
