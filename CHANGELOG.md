@@ -91,6 +91,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Better VC-4 support for IcdConsole
  - JSON refactoring for simpler deserialization
 
+## [8.9.3] - 2020-08-17
+### Changed
+ - Workaround for logged XML format exceptions when failing to parse floats
+
 ## [8.9.2] - 2020-07-28
 ### Changed
  - StringExtensions - fixed an issue with IsNumeric where empty strings would return true
