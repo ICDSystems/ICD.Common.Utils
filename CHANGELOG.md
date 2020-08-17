@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+ - Workaround for logged XML format exceptions when failing to parse floats
+
 ## [8.9.2] - 2020-07-28
 ### Changed
  - StringExtensions - fixed an issue with IsNumeric where empty strings would return true

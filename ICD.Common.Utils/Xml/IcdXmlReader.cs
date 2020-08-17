@@ -177,26 +177,16 @@ namespace ICD.Common.Utils.Xml
 
 		public long ReadElementContentAsLong()
 		{
-			try
-			{
-				return m_Reader.ReadElementContentAsLong();
-			}
-			catch (XmlException e)
-			{
-				throw new IcdXmlException(e);
-			}
+			// ReadElementContentAsLong() logs and throws...
+			string value = ReadElementContentAsString();
+			return long.Parse(value);
 		}
 
 		public float ReadElementContentAsFloat()
 		{
-			try
-			{
-				return m_Reader.ReadElementContentAsFloat();
-			}
-			catch (XmlException e)
-			{
-				throw new IcdXmlException(e);
-			}
+			// ReadElementContentAsFloat() logs and throws...
+			string value = ReadElementContentAsString();
+			return float.Parse(value);
 		}
 
 		public bool ReadElementContentAsBoolean()
