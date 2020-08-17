@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.9.3] - 2020-08-17
 ### Changed
  - Workaround for logged XML format exceptions when failing to parse floats
 
