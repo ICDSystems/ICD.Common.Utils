@@ -110,6 +110,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="TimeZoneInfo\IcdTimeZoneInfo.cs" />
     <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="Extensions\BoolExtensions.cs" />
     <Compile Include="Extensions\ByteExtensions.cs" />
@@ -222,6 +223,8 @@
     <Compile Include="Timers\IcdTimer.cs" />
     <Compile Include="Timers\Repeater.cs" />
     <Compile Include="Timers\SafeTimer.cs" />
+    <Compile Include="TimeZoneInfo\IcdTimeZoneInfoAdjustmentRule.cs" />
+    <Compile Include="TimeZoneInfo\IcdTimeZoneInfoTransitionTime.cs" />
     <Compile Include="TryUtils.cs" />
     <Compile Include="UriQueryBuilder.cs" />
     <Compile Include="UriUtils.cs" />
@@ -238,6 +241,9 @@
     <Compile Include="Xml\XmlReaderExtensions.cs" />
     <Compile Include="Xml\XmlUtils.cs" />
     <None Include="Properties\ControlSystem.cfg" />
+    <None Include="TimeZones.sqlite">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <PropertyGroup>

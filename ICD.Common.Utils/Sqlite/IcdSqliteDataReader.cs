@@ -40,6 +40,11 @@ namespace ICD.Common.Utils.Sqlite
 			return m_Reader.GetInt32(ordinal);
 		}
 
+		public long GetInt64(int ordinal)
+		{
+			return m_Reader.GetInt64(ordinal);
+		}
+
 		public bool GetBoolean(int ordinal)
 		{
 			return m_Reader.GetBoolean(ordinal);
