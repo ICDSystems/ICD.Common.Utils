@@ -62,6 +62,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Fixed a bug where IcdCultureInfo would fail to load on Crestron 4-series processors
  - Clarifying which culture failed to load when IcdCultureInfo throws an exception
 
+## [11.1.1] - 2020-08-21
+### Removed
+ - Removed the OnItemTrimmed event from the ScrollQueue due to deadlocks
+
 ## [11.1.0] - 2020-05-19
 ### Added
  - ScrollQueue - Added OnItemTrimmed event
