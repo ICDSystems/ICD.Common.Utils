@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.1.1] - 2020-08-21
 ### Removed
  - Removed the OnItemTrimmed event from the ScrollQueue due to deadlocks
 
