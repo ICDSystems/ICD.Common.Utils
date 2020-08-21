@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using ICD.Common.Properties;
-using ICD.Common.Utils.EventArguments;
-using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils.Collections
 {
@@ -16,11 +14,6 @@ namespace ICD.Common.Utils.Collections
 	{
 		private readonly LinkedList<TContents> m_Collection;
 		private int m_MaxSize;
-
-		/// <summary>
-		/// Raised when an item is trimmed from the end of the queue.
-		/// </summary>
-		public event EventHandler<GenericEventArgs<TContents>> OnItemTrimmed;
 
 		#region Properties
 
@@ -38,7 +31,8 @@ namespace ICD.Common.Utils.Collections
 
 				m_MaxSize = value;
 
-				Trim();
+				TContents unused;
+				Trim(out unused);
 			}
 		}
 
@@ -86,11 +80,13 @@ namespace ICD.Common.Utils.Collections
 		/// Appends the item to the queue, trims old items that exceed max length.
 		/// </summary>
 		/// <param name="item"></param>
+		/// <param name="removed"></param>
+		/// <returns>Returns true if an item was dequeued.</returns>
 		[PublicAPI]
-		public void Enqueue(TContents item)
+		public bool Enqueue(TContents item, out TContents removed)
 		{
 			m_Collection.AddLast(item);
-			Trim();
+			return Trim(out removed);
 		}
 
 		/// <summary>
@@ -145,14 +141,17 @@ namespace ICD.Common.Utils.Collections
 		/// <summary>
 		/// Removes items that fall outside of the max size.
 		/// </summary>
-		private void Trim()
+		private bool Trim(out TContents removed)
 		{
-			while (Count > MaxSize)
-			{
-				TContents removed = m_Collection.First.Value;
-				m_Collection.RemoveFirst();
-				OnItemTrimmed.Raise(this, new GenericEventArgs<TContents>(removed));
-			}
+			removed = default(TContents);
+
+			if (Count <= MaxSize)
+				return false;
+
+			removed = m_Collection.First.Value;
+			m_Collection.RemoveFirst();
+
+			return true;
 		}
 
 		#endregion
