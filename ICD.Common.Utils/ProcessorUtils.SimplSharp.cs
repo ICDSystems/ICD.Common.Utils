@@ -110,13 +110,33 @@ namespace ICD.Common.Utils
 				Regex regex = new Regex(VER_REGEX);
 				Match match = regex.Match(VersionResult);
 
-				if (match.Success)
-					return DateTime.ParseExact(match.Groups["date"].Value, "MMM dd yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
+				if (!match.Success)
+				{
+					ServiceProvider.TryGetService<ILoggerService>()
+					               .AddEntry(eSeverity.Warning, "Unable to get model version date from \"{0}\"", VersionResult);
+					return DateTime.MinValue;
+				}
 
-				ServiceProvider.TryGetService<ILoggerService>()
-							   .AddEntry(eSeverity.Warning, "Unable to get model version date from \"{0}\"", VersionResult);
-				
-				return DateTime.MinValue;
+				string date = match.Groups["date"].Value;
+
+				try
+				{
+					switch (IcdEnvironment.RuntimeEnvironment)
+					{
+						case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+							date = StringUtils.RemoveDuplicateWhitespace(date);
+							return DateTime.ParseExact(date, "MMM d yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
+
+						default:
+							return DateTime.ParseExact(date, "MMM dd yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
+					}
+				}
+				catch (FormatException)
+				{
+					ServiceProvider.TryGetService<ILoggerService>()
+								   .AddEntry(eSeverity.Warning, "Failed to parse date \"{0}\"", date);
+					return DateTime.MinValue;
+				}
 			}
 		}
 
