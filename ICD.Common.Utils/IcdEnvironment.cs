@@ -14,6 +14,7 @@ namespace ICD.Common.Utils
 			SimplSharp,
 			SimplSharpPro,
 			SimplSharpProMono,
+			SimplSharpProServer,
 			Standard
 		}
 

@@ -65,7 +65,7 @@ namespace ICD.Common.Utils
 		public static void PrintLine(string message)
 		{
 #if SIMPLSHARP
-			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
 				CrestronConsole.PrintLine(message);
 #else
 			Console.WriteLine(message);
@@ -94,7 +94,7 @@ namespace ICD.Common.Utils
 		public static void Print(string message)
 		{
 #if SIMPLSHARP
-			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
 				CrestronConsole.Print(message);
 #else
             Console.Write(message);
@@ -124,7 +124,7 @@ namespace ICD.Common.Utils
 		{
 #if SIMPLSHARP
 			// No console on VC4
-			if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+			if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
 				return false;
 
 			return CrestronConsole.SendControlSystemCommand(command, ref result);

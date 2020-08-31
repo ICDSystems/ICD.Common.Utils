@@ -21,7 +21,7 @@ namespace ICD.Common.Utils
 		public static string RootPath {
 			get
 			{
-				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
 					return IcdDirectory.GetApplicationRootDirectory();
 
 				return IcdDirectory.GetDirectoryRoot(IcdPath.DirectorySeparatorChar.ToString());
@@ -44,7 +44,13 @@ namespace ICD.Common.Utils
 			get
 			{
 #if SIMPLSHARP
-				return Join(RootPath, "User");
+				switch (IcdEnvironment.RuntimeEnvironment)
+				{
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+						return Join(RootPath, "user");
+					default:
+						return Join(RootPath, "User");
+				}
 #elif LINUX
 				return Join(RootPath, "opt", "ICD.Connect");
 #else
@@ -72,10 +78,11 @@ namespace ICD.Common.Utils
 				{
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
 					case IcdEnvironment.eRuntimeEnvironment.Standard:
 						return string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
 
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer:
 						return "ProgramConfig";
 
 					default:
@@ -103,10 +110,11 @@ namespace ICD.Common.Utils
 				{
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
 					case IcdEnvironment.eRuntimeEnvironment.Standard:
 						return string.Format("Program{0:D2}Data", ProgramUtils.ProgramNumber);
 
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer:
 						return "ProgramData";
 
 					default:
@@ -151,11 +159,12 @@ namespace ICD.Common.Utils
 				{
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
 					case IcdEnvironment.eRuntimeEnvironment.Standard:
 						directoryName = string.Format("Program{0:D2}Logs", ProgramUtils.ProgramNumber);
 						break;
 
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer:
 						directoryName = "ProgramLogs";
 						break;
 
@@ -183,6 +192,9 @@ namespace ICD.Common.Utils
 						return Join(RootPath, "HTML");
 
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+						return Join(RootPath, "html");
+
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer:
 						return Join(RootPath, "Html");
 
 					case IcdEnvironment.eRuntimeEnvironment.Standard:

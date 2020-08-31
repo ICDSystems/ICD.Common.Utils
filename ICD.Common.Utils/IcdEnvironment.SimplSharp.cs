@@ -14,19 +14,13 @@ namespace ICD.Common.Utils
 		/// </summary>
 		private const string INVALID_VALUE = "Invalid Value";
 
+		private static eRuntimeEnvironment s_RuntimeEnvironment;
+
 		#region Properties
 
 		public static string NewLine { get { return CrestronEnvironment.NewLine; } }
 
-		public static eRuntimeEnvironment RuntimeEnvironment
-		{
-			get
-			{
-				return CrestronEnvironment.DevicePlatform == eDevicePlatform.Server
-					       ? eRuntimeEnvironment.SimplSharpProMono
-					       : GetRuntimeEnvironment(CrestronEnvironment.RuntimeEnvironment);
-			}
-		}
+		public static eRuntimeEnvironment RuntimeEnvironment { get { return s_RuntimeEnvironment; } }
 
 		/// <summary>
 		/// Gets the network address(es) of the processor.
@@ -169,6 +163,14 @@ namespace ICD.Common.Utils
 		/// </summary>
 		static IcdEnvironment()
 		{
+			// Cache the runtime environment
+			s_RuntimeEnvironment =
+				CrestronEnvironment.DevicePlatform == eDevicePlatform.Server
+					? eRuntimeEnvironment.SimplSharpProServer
+					: Type.GetType("Mono.Runtime") == null
+						  ? GetRuntimeEnvironment(CrestronEnvironment.RuntimeEnvironment)
+						  : eRuntimeEnvironment.SimplSharpProMono;
+
 			CrestronEnvironment.ProgramStatusEventHandler += CrestronEnvironmentOnProgramStatusEventHandler;
 			CrestronEnvironment.EthernetEventHandler += CrestronEnvironmentOnEthernetEventHandler;
 		}
@@ -225,7 +227,7 @@ namespace ICD.Common.Utils
 			}
 		}
 
-		public static eRuntimeEnvironment GetRuntimeEnvironment(Crestron.SimplSharp.eRuntimeEnvironment runtimeEnvironment)
+		private static eRuntimeEnvironment GetRuntimeEnvironment(Crestron.SimplSharp.eRuntimeEnvironment runtimeEnvironment)
 		{
 			switch (runtimeEnvironment)
 			{
