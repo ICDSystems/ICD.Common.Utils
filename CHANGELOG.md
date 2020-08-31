@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
  - Replaced Crestron Unzip with Yallie Unzip
+ - Fixed "version" regex for 4-series
 
 ## [12.1.0] - 2020-07-14
 ### Added

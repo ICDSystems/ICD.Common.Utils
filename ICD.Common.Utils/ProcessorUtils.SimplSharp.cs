@@ -11,8 +11,10 @@ namespace ICD.Common.Utils
 {
 	public static partial class ProcessorUtils
 	{
+		// CP3 - CP3 Cntrl Eng [v1.601.3934.19631 (Oct 10 2019), #00A3BBE7] @E-00107f4a3474
+		// CP4 - CP4 Cntrl Eng [v2.4474.00005 (Apr  9 2020), #8EB216B7] @E-00107feb538f
 		private const string VER_REGEX =
-			@"(?'model'\S+) (?'type'\S+) (?'lang'\S+) \[v(?'version'\d+.\d+.\d+.\d+) \((?'date'\S+ \d+ \d+)\), #(?'serial'[A-F0-9]+)\] @E-(?'mac'[a-z0-9]+)";
+			@"(?'model'\S+)\s+(?'type'\S+)\s+(?'lang'\S+)\s+\[v(?'version'\d+(\.\d+)+)\s+\((?'date'\S+\s+\d+ \d+)\),\s+#(?'serial'[A-F0-9]+)\]\s+@E-(?'mac'[a-z0-9]+)";
 
 		private const string UPTIME_COMMAND = "uptime";
 		private const string PROGUPTIME_COMMAND_ROOT = "proguptime:{0}";
