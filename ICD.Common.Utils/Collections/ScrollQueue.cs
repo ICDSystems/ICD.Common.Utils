@@ -102,6 +102,24 @@ namespace ICD.Common.Utils.Collections
 		}
 
 		/// <summary>
+		/// Dequeues the next item in the queue. Returns false if the queue is empty.
+		/// </summary>
+		/// <typeparam name="TContents"></typeparam>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public bool Dequeue(out TContents item)
+		{
+			item = default(TContents);
+
+			if (Count == 0)
+				return false;
+
+			item = Dequeue();
+			return true;
+		}
+
+		/// <summary>
 		/// Returns the oldest item in the queue.
 		/// </summary>
 		/// <returns></returns>
