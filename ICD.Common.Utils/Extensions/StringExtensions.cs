@@ -158,6 +158,21 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Replaces spans of whitespace with a single space.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		[NotNull]
+		public static string RemoveDuplicateWhitespace([NotNull] this string extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return Regex.Replace(extends, @"\s+", " ");
+		}
+
+		/// <summary>
 		/// Removes all occurrences of the given string.
 		/// </summary>
 		/// <param name="extends"></param>

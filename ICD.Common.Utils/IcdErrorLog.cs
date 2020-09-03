@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
@@ -8,183 +9,184 @@ namespace ICD.Common.Utils
 {
 	public static class IcdErrorLog
 	{
-		private static readonly SafeCriticalSection s_LoggingSection;
+		private const string ERROR = "Error";
+		private const string WARN = "Warn";
+		private const string NOTICE = "Notice";
+		private const string OK = "OK";
+		private const string EXCEPTION = "Except";
+		private const string INFO = "Info";
+
+		private static readonly Dictionary<string, eConsoleColor> s_SeverityToColor =
+			new Dictionary<string, eConsoleColor>
+			{
+				{ERROR, eConsoleColor.Red},
+				{WARN, eConsoleColor.Yellow},
+				{NOTICE, eConsoleColor.Blue},
+				{OK, eConsoleColor.Green},
+				{EXCEPTION, eConsoleColor.Red},
+				{INFO, eConsoleColor.Cyan}
+			};
+
+		private static readonly Dictionary<string, Action<string, Exception>> s_LogMethods =
+			new Dictionary<string, Action<string, Exception>>
+			{
+#if SIMPLSHARP
+				{ERROR, (m, e) => ErrorLog.Error(m)},
+				{WARN, (m, e) => ErrorLog.Warn(m)},
+				{NOTICE, (m, e) => ErrorLog.Notice(m)},
+				{OK, (m, e) => ErrorLog.Ok(m)},
+				{EXCEPTION, ErrorLog.Exception},
+				{INFO, (m, e) => ErrorLog.Info(m)}
+#else
+				{ERROR, (m, e) => Console.Error.WriteLine(m)},
+				{WARN, (m, e) => Console.Error.WriteLine(m)},
+				{NOTICE, (m, e) => Console.Error.WriteLine(m)},
+				{OK, (m, e) => Console.Error.WriteLine(m)},
+				{EXCEPTION, (m, e) => Console.Error.WriteLine(m)},
+				{INFO, (m, e) => Console.Error.WriteLine(m)}
+#endif
+			};
+
+		private static readonly SafeCriticalSection s_LoggingSection = new SafeCriticalSection();
+
+		#region Methods
 
 		/// <summary>
-		/// Static constructor.
+		/// Logs the error to the standard error output.
 		/// </summary>
-		static IcdErrorLog()
-		{
-			s_LoggingSection = new SafeCriticalSection();
-		}
-
-		[PublicAPI]
-		public static void Error(string message)
-		{
-			s_LoggingSection.Enter();
-
-			try
-			{
-				message = eConsoleColor.Red.FormatAnsi(message);
-
-#if SIMPLSHARP
-				ErrorLog.Error(message);
-#else
-				Console.Error.WriteLine("Error  - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
-#endif
-			}
-			finally
-			{
-				s_LoggingSection.Leave();
-			}
-		}
-
+		/// <param name="message"></param>
+		/// <param name="args"></param>
 		[PublicAPI]
 		public static void Error(string message, params object[] args)
-		{
-			Error(string.Format(message, args));
+		{        
+			Log(ERROR, message, null, args);
 		}
 
-		[PublicAPI]
-		public static void Warn(string message)
-		{
-			s_LoggingSection.Enter();
-
-			try
-			{
-				message = eConsoleColor.Yellow.FormatAnsi(message);
-
-#if SIMPLSHARP
-				
-				ErrorLog.Warn(message);
-#else
-				Console.Error.WriteLine("Warn   - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
-#endif
-			}
-			finally
-			{
-				s_LoggingSection.Leave();
-			}
-		}
-
+		/// <summary>
+		/// Logs the warning to the standard error output.
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="args"></param>
 		[PublicAPI]
 		public static void Warn(string message, params object[] args)
 		{
-			Warn(string.Format(message, args));
+			Log(WARN, message, null, args);
 		}
 
-		[PublicAPI]
-		public static void Notice(string message)
-		{
-			s_LoggingSection.Enter();
-
-			try
-			{
-				message = eConsoleColor.Blue.FormatAnsi(message);
-
-#if SIMPLSHARP
-				ErrorLog.Notice(message);
-#else
-				Console.Error.WriteLine("Notice - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
-#endif
-			}
-			finally
-			{
-				s_LoggingSection.Leave();
-			}
-		}
-
+		/// <summary>
+		/// Logs the notice to the standard error output.
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="args"></param>
 		[PublicAPI]
 		public static void Notice(string message, params object[] args)
 		{
-			Notice(string.Format(message, args));
+			Log(NOTICE, message, null, args);
 		}
 
-		[PublicAPI]
-		public static void Ok(string message)
-		{
-			s_LoggingSection.Enter();
-
-			try
-			{
-				message = eConsoleColor.Green.FormatAnsi(message);
-
-#if SIMPLSHARP
-				ErrorLog.Ok(message);
-#else
-				Console.Error.WriteLine("OK     - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
-#endif
-			}
-			finally
-			{
-				s_LoggingSection.Leave();
-			}
-		}
-
+		/// <summary>
+		/// Logs the message to the standard error output.
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="args"></param>
 		[PublicAPI]
 		public static void Ok(string message, params object[] args)
 		{
-			Ok(string.Format(message, args));
+			Log(OK, message, null, args);
 		}
 
+		/// <summary>
+		/// Logs the exception to the standard error output.
+		/// </summary>
+		/// <param name="exception"></param>
+		/// <param name="message"></param>
+		/// <param name="args"></param>
 		[PublicAPI]
-		public static void Exception(Exception ex, string message)
+		public static void Exception(Exception exception, string message, params object[] args)
 		{
-			s_LoggingSection.Enter();
-
-			try
-			{
-#if !SIMPLSHARP
-				message = string.Format("{0}: {1}", ex.GetType().Name, message);
-#endif
-
-				message = eConsoleColor.YellowOnRed.FormatAnsi(message);
-
-#if SIMPLSHARP
-				ErrorLog.Exception(message, ex);
-#else
-				Console.Error.WriteLine("Except - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
-				Console.Error.WriteLine(ex.StackTrace);
-#endif
-			}
-			finally
-			{
-				s_LoggingSection.Leave();
-			}
+			Log(EXCEPTION, message, exception, args);
 		}
 
-		[PublicAPI]
-		public static void Exception(Exception ex, string message, params object[] args)
-		{
-			message = string.Format(message, args);
-			Exception(ex, message);
-		}
-
-		[PublicAPI]
-		public static void Info(string message)
-		{
-			s_LoggingSection.Enter();
-
-			try
-			{
-				message = eConsoleColor.Cyan.FormatAnsi(message);
-
-#if SIMPLSHARP
-				ErrorLog.Info(message);
-#else
-				Console.Error.WriteLine("Info   - {0} - {1}", IcdEnvironment.GetLocalTime(), message);
-#endif
-			}
-			finally
-			{
-				s_LoggingSection.Leave();
-			}
-		}
-
+		/// <summary>
+		/// Logs the info to the standard error output.
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="args"></param>
 		[PublicAPI]
 		public static void Info(string message, params object[] args)
 		{
-			Info(string.Format(message, args));
+			Log(INFO, message, null, args);
 		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Logs the message to the standard error output.
+		/// </summary>
+		/// <param name="severity"></param>
+		/// <param name="message"></param>
+		/// <param name="exception"></param>
+		/// <param name="args"></param>
+		private static void Log(string severity, string message, Exception exception, params object[] args)
+		{
+			message = Format(severity, message, exception, args);
+
+			s_LoggingSection.Enter();
+
+			try
+			{
+				Action<string, Exception> method = s_LogMethods[severity];
+				method(message, exception);
+			}
+			finally
+			{
+				s_LoggingSection.Leave();
+			}
+		}
+
+		/// <summary>
+		/// Formats the message into something human readable.
+		/// </summary>
+		/// <param name="severity"></param>
+		/// <param name="message"></param>
+		/// <param name="exception"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
+		private static string Format(string severity, string message, Exception exception, params object[] args)
+		{
+			// Insert the parameters
+			if (args.Length > 0)
+				message = string.Format(message, args);
+
+			switch (IcdEnvironment.RuntimeEnvironment)
+			{
+				case IcdEnvironment.eRuntimeEnvironment.Standard:
+					// Prepend the exception type, append the stack trace
+					if (exception != null)
+						message = string.Format("{0}: {1}{2}{3}",
+						                        exception.GetType().Name,
+						                        message,
+						                        IcdEnvironment.NewLine,
+						                        exception.StackTrace);
+
+					// Prefix severity and time
+					string fixedSeverity = severity.Substring(0, Math.Min(6, severity.Length));
+					fixedSeverity = string.Format("{0,-6}", fixedSeverity);
+					message = string.Format("{0} - {1} - {2}", fixedSeverity, IcdEnvironment.GetLocalTime(), message);
+					break;
+
+				case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+					// Add an extra newline
+					message += IcdEnvironment.NewLine;
+					break;
+			}
+
+			// Color formatting
+			return s_SeverityToColor[severity].FormatAnsi(message);
+		}
+
+		#endregion
 	}
 }

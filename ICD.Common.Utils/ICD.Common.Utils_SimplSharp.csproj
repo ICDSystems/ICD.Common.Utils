@@ -127,7 +127,6 @@
     <Compile Include="Globalization\IcdCultureInfo.cs" />
     <Compile Include="GuidUtils.cs" />
     <Compile Include="IcdUriBuilder.cs" />
-    <Compile Include="IO\Compression\IcdZipEntry.cs" />
     <Compile Include="IO\eIcdFileMode.cs" />
     <Compile Include="IO\IcdBinaryReader.cs" />
     <Compile Include="IO\eSeekOrigin.cs" />
@@ -166,6 +165,7 @@
     <Compile Include="IcdEnvironment.cs" />
     <Compile Include="IcdEnvironment.SimplSharp.cs" />
     <Compile Include="IcdEnvironment.Standard.cs" />
+    <Compile Include="IO\Compression\Unzip.cs" />
     <Compile Include="IO\Compression\IcdZip.cs" />
     <Compile Include="IO\IcdDirectory.cs" />
     <Compile Include="EnumUtils.cs" />

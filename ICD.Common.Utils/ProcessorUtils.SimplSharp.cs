@@ -11,8 +11,10 @@ namespace ICD.Common.Utils
 {
 	public static partial class ProcessorUtils
 	{
+		// CP3 - CP3 Cntrl Eng [v1.601.3934.19631 (Oct 10 2019), #00A3BBE7] @E-00107f4a3474
+		// CP4 - CP4 Cntrl Eng [v2.4474.00005 (Apr  9 2020), #8EB216B7] @E-00107feb538f
 		private const string VER_REGEX =
-			@"(?'model'\S+) (?'type'\S+) (?'lang'\S+) \[v(?'version'\d+.\d+.\d+.\d+) \((?'date'\S+ \d+ \d+)\), #(?'serial'[A-F0-9]+)\] @E-(?'mac'[a-z0-9]+)";
+			@"(?'model'\S+)\s+(?'type'\S+)\s+(?'lang'\S+)\s+\[v(?'version'\d+(\.\d+)+)\s+\((?'date'\S+\s+\d+ \d+)\),\s+#(?'serial'[A-F0-9]+)\]\s+@E-(?'mac'[a-z0-9]+)";
 
 		private const string UPTIME_COMMAND = "uptime";
 		private const string PROGUPTIME_COMMAND_ROOT = "proguptime:{0}";
@@ -108,13 +110,33 @@ namespace ICD.Common.Utils
 				Regex regex = new Regex(VER_REGEX);
 				Match match = regex.Match(VersionResult);
 
-				if (match.Success)
-					return DateTime.ParseExact(match.Groups["date"].Value, "MMM dd yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
+				if (!match.Success)
+				{
+					ServiceProvider.TryGetService<ILoggerService>()
+					               .AddEntry(eSeverity.Warning, "Unable to get model version date from \"{0}\"", VersionResult);
+					return DateTime.MinValue;
+				}
 
-				ServiceProvider.TryGetService<ILoggerService>()
-							   .AddEntry(eSeverity.Warning, "Unable to get model version date from \"{0}\"", VersionResult);
-				
-				return DateTime.MinValue;
+				string date = match.Groups["date"].Value;
+
+				try
+				{
+					switch (IcdEnvironment.RuntimeEnvironment)
+					{
+						case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+							date = StringUtils.RemoveDuplicateWhitespace(date);
+							return DateTime.ParseExact(date, "MMM d yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
+
+						default:
+							return DateTime.ParseExact(date, "MMM dd yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
+					}
+				}
+				catch (FormatException)
+				{
+					ServiceProvider.TryGetService<ILoggerService>()
+								   .AddEntry(eSeverity.Warning, "Failed to parse date \"{0}\"", date);
+					return DateTime.MinValue;
+				}
 			}
 		}
 

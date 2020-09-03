@@ -648,6 +648,16 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Replaces spans of whitespace with a single space.
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
+		public static string RemoveDuplicateWhitespace(string text)
+		{
+			return text == null ? null : text.RemoveDuplicateWhitespace();
+		}
+
+		/// <summary>
 		/// Returns true if the string is entirely whitespace characters, or empty, or null.
 		/// </summary>
 		/// <param name="text"></param>

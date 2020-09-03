@@ -29,11 +29,12 @@ namespace ICD.Common.Utils
 					break;
 
 				case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+				case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
 					int proLength = Math.Min(26 - 1, name.Length);
 					name = name.Substring(0, proLength).PadRight(26);
 					break;
 
-				case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+				case IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer:
 					// No console
 					return;
 
