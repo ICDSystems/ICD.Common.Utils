@@ -6,9 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added util methods for removing duplicate whitespace in strings
+ - Added dequeue overload to ScrollQueue
+
 ### Changed
  - Replaced Crestron Unzip with Yallie Unzip
  - Fixed "version" regex for 4-series
+ - Fixed date parsing error for 4-series
+ - Split SimplSharpProMono runtime environment into SimplSharpProSever
+ - Fixed log formatting on 4-series
 
 ## [12.1.0] - 2020-07-14
 ### Added
