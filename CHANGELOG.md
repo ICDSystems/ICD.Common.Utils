@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [13.0.0] - 2020-09-03
 ### Added
  - Added util methods for removing duplicate whitespace in strings
  - Added dequeue overload to ScrollQueue
