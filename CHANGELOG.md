@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Repeater changed to use configured callbacks instead of a dumb event
  - Scheduled action callbacks allow a TimeSpan to be returned to delay actions
+ - Handling a Crestron bug where File.Exists throws an exception on 4-Series instead of returning false
 
 ## [13.0.0] - 2020-09-03
 ### Added

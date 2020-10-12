@@ -42,7 +42,15 @@ namespace ICD.Common.Utils.IO
 			if (path == null)
 				throw new ArgumentNullException("path");
 
-			return File.Exists(path);
+			try
+			{
+				return File.Exists(path);
+			}
+			// Crestron's AdjustPathForMono method throws an exception that is inconsistent with Net Standard...
+			catch (Exception)
+			{
+				return false;
+			}
 		}
 
 		[PublicAPI]
