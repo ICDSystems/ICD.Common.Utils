@@ -537,7 +537,7 @@ namespace ICD.Common.Utils.Tests.Extensions
 		[Test]
 		public void ConsolidateComparerTest()
 		{
-			string[] sequence = new[] {"A", "B", "B", "C"}.Consolidate(Comparer<string>.Default).ToArray();
+			string[] sequence = new[] {"A", "B", "B", "C"}.Consolidate(EqualityComparer<string>.Default).ToArray();
 
 			Assert.AreEqual(3, sequence.Length, StringUtils.ArrayFormat(sequence));
 			Assert.AreEqual("A", sequence[0]);

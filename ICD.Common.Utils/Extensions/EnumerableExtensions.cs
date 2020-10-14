@@ -1539,7 +1539,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			return Consolidate(extends, Comparer<T>.Default);
+			return Consolidate(extends, EqualityComparer<T>.Default);
 		}
 
 		///  <summary>
@@ -1555,7 +1555,7 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		[PublicAPI]
 		public static IEnumerable<T> Consolidate<T>([NotNull] this IEnumerable<T> extends,
-		                                            [NotNull] IComparer<T> comparer)
+		                                            [NotNull] IEqualityComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1578,14 +1578,14 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		private static IEnumerable<T> ConsolidateIterator<T>([NotNull] IEnumerable<T> sequence,
-		                                                     [NotNull] IComparer<T> comparer)
+		                                                     [NotNull] IEqualityComparer<T> comparer)
 		{
 			bool first = true;
 			T last = default(T);
 
 			foreach (T item in sequence)
 			{
-				if (!first && comparer.Compare(last, item) == 0)
+				if (!first && comparer.Equals(last, item))
 					continue;
 
 				first = false;
