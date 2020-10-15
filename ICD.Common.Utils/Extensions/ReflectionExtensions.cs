@@ -173,37 +173,17 @@ namespace ICD.Common.Utils.Extensions
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
+
 			if (path == null)
 				throw new ArgumentNullException("path");
 
-			object currentObject = extends;
+			object instance;
+			PropertyInfo property = extends.GetPropertyInfo(out instance, path);
 
-			//Grab property values until the last item in the path
-			for (int i = 0; i < path.Length - 1; i++)
-			{
-				PropertyInfo info =
-						currentObject.GetType()
-#if SIMPLSHARP
-					       .GetCType()
-#endif
-						             .GetProperty(path[i]);
-
-				if (info == null)
-					return false;
-				currentObject = info.GetValue(currentObject);
-			}
-
-			//Set the property to the value
-			PropertyInfo finalPath =
-				currentObject.GetType()
-#if SIMPLSHARP
-				             .GetCType()
-#endif
-				             .GetProperty(path[path.Length - 1]);
-			if (finalPath == null)
+			if (property == null)
 				return false;
 
-			finalPath.SetValue(currentObject, value);
+			property.SetValue(instance, value);
 			return true;
 		}
 
@@ -212,37 +192,57 @@ namespace ICD.Common.Utils.Extensions
 		/// Traverses the path to access properties nested in other properties
 		/// </summary>
 		/// <param name="extends"></param>
+		/// <param name="instance"></param>
 		/// <param name="path"></param>
-		/// <returns>true if property get was successful, false if the property was not found</returns>
+		/// <returns></returns>
 		[CanBeNull]
-		public static PropertyInfo GetPropertyInfo([NotNull] this object extends, [NotNull] params string[] path)
+		public static PropertyInfo GetPropertyInfo([NotNull] this object extends, out object instance, [NotNull] params string[] path)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
+
 			if (path == null)
 				throw new ArgumentNullException("path");
 
-			object currentObject = extends;
+			instance = extends;
 
-			//Grab property values until the last item in the path
+			// Grab properties until the last item in the path
 			for (int i = 0; i < path.Length - 1; i++)
 			{
-				PropertyInfo info = currentObject.GetType()
+				PropertyInfo info =
+					instance.GetType()
 #if SIMPLSHARP
-												.GetCType()
+					             .GetCType()
 #endif
-												 .GetProperty(path[i]);
+					             .GetProperty(path[i],
+					                          BindingFlags.Instance |
+					                          BindingFlags.Static |
+					                          BindingFlags.Public |
+					                          BindingFlags.NonPublic);
 				if (info == null)
+				{
+					instance = null;
 					return null;
-				currentObject = info.GetValue(currentObject);
+				}
+
+				instance = info.GetValue(instance);
 			}
 
-			//Set the property to the value
-			return currentObject.GetType()
+			// Set the property to the value
+			PropertyInfo output =
+				instance.GetType()
 #if SIMPLSHARP
-				.GetCType()
+			               .GetCType()
 #endif
-				.GetProperty(path[path.Length - 1]);
+				        .GetProperty(path[path.Length - 1],
+				                     BindingFlags.Instance |
+				                     BindingFlags.Static |
+				                     BindingFlags.Public |
+				                     BindingFlags.NonPublic);
+
+			if (output == null)
+				instance = null;
+			return output;
 		}
 
 		/// <summary>
@@ -253,35 +253,23 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="value"></param>
 		/// <param name="path"></param>
 		/// <returns>true if property get was successful, false if the property was not found</returns>
-		public static bool GetProperty([NotNull] this object extends, [CanBeNull] out object value, [NotNull] params string[] path)
+		public static bool GetProperty<T>([NotNull] this object extends, [CanBeNull] out T value, [NotNull] params string[] path)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
+
 			if (path == null)
 				throw new ArgumentNullException("path");
 
-			value = null;
+			value = default(T);
 
-			object currentObject = extends;
+			object instance;
+			PropertyInfo property = extends.GetPropertyInfo(out instance, path);
 
-			//Grab property values
-			foreach (string node in path)
-			{
-				PropertyInfo info =
-						currentObject.GetType()
-#if SIMPLSHARP
-							.GetCType()
-#endif
-							.GetProperty(node);
+			if (property == null)
+				return false;
 
-				if (info == null)
-					return false;
-
-				currentObject = info.GetValue(currentObject);
-			}
-
-			//set the last value and return
-			value = currentObject;
+			value = (T)property.GetValue(instance);
 			return true;
 		}
 
@@ -291,7 +279,7 @@ namespace ICD.Common.Utils.Extensions
 			return CallMethod(extends, methodName, out value, new object[] { });
 		}
 
-		public static bool CallMethod([NotNull] this object extends, string methodName, [CanBeNull] out object value)
+		public static bool CallMethod<T>([NotNull] this object extends, string methodName, [CanBeNull] out T value)
 		{
 			return CallMethod(extends, methodName, out value, new object[] { });
 		}
@@ -302,25 +290,30 @@ namespace ICD.Common.Utils.Extensions
 			return CallMethod(extends, methodName, out value, parameters);
 		}
 
-		public static bool CallMethod([NotNull] this object extends, string methodName, [CanBeNull] out object value, [NotNull] params object[] parameters)
+		public static bool CallMethod<T>([NotNull] this object extends, string methodName, [CanBeNull] out T value, [NotNull] params object[] parameters)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
+
 			if (parameters == null)
 				throw new ArgumentNullException("parameters");
 
-			value = false;
+			value = default(T);
 
 			MethodInfo method =
 				extends.GetType()
 #if SIMPLSHARP
 				       .GetCType()
 #endif
-				       .GetMethod(methodName);
+				       .GetMethod(methodName,
+				                  BindingFlags.Instance |
+				                  BindingFlags.Static |
+				                  BindingFlags.Public |
+				                  BindingFlags.NonPublic);
 			if (method == null)
 				return false;
 
-			value = method.Invoke(extends, parameters);
+			value = (T)method.Invoke(extends, parameters);
 
 			return true;
 		}
@@ -339,7 +332,7 @@ namespace ICD.Common.Utils.Extensions
 			return eventHandlerType == typeof(EventHandler)
 				       ? typeof(EventArgs)
 				       : eventHandlerType.GetInnerGenericTypes(typeof(EventHandler<>))
-				                         .First();
+				                         .Single();
 		}
 	}
 }

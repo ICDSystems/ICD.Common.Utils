@@ -197,23 +197,33 @@ namespace ICD.Common.Utils.Tests.Extensions
 		{
 			var testClass = new PropertyTestClass();
 
+			object instance;
+
 			// Test GetPropertyInfo at various levels
 			Assert.AreEqual(testClass.GetType().GetProperty("PropertyString"), 
-			                testClass.GetPropertyInfo("PropertyString"), 
+			                testClass.GetPropertyInfo(out instance, "PropertyString"), 
 			                "First level property not expected value");
+			Assert.AreEqual(testClass, instance, "Unexpected property parent");
 			Assert.AreEqual(testClass.InternalClass.GetType().GetProperty("InternalPropertyString"), 
-			                testClass.GetPropertyInfo("InternalClass", "InternalPropertyString"), 
+			                testClass.GetPropertyInfo(out instance, "InternalClass", "InternalPropertyString"), 
 			                "Second level property not expected value");
+			Assert.AreEqual(testClass.InternalClass, instance, "Unexpected property parent");
 			Assert.AreEqual(testClass.InternalClass.DeepClass.GetType().GetProperty("DeepPropertyString"), 
-			                testClass.GetPropertyInfo("InternalClass", "DeepClass", "DeepPropertyString"),
+			                testClass.GetPropertyInfo(out instance, "InternalClass", "DeepClass", "DeepPropertyString"),
 			                "Third level property not expected value");
+			Assert.AreEqual(testClass.InternalClass.DeepClass, instance, "Unexpected property parent");
 
 			// Property that doesn't exits should return null
-			Assert.IsNull(testClass.GetPropertyInfo("InternalClass", "DeepClass", "NonExistent"));
-			Assert.IsNull(testClass.GetPropertyInfo("FakeFirstLevel", "FakeSecondLevel" , "FakeThridLevel"));
-			Assert.IsNull(testClass.GetPropertyInfo("InternalClass", "FakeSecondLevel", "ThirdLevelCanNotBeReal"));
-			Assert.IsNull(testClass.GetPropertyInfo("InternalClass", "FakeSecondLevel"));
-			Assert.IsNull(testClass.GetPropertyInfo("FakeFirstLevel"));
+			Assert.IsNull(testClass.GetPropertyInfo(out instance, "InternalClass", "DeepClass", "NonExistent"));
+			Assert.IsNull(instance);
+			Assert.IsNull(testClass.GetPropertyInfo(out instance, "FakeFirstLevel", "FakeSecondLevel" , "FakeThridLevel"));
+			Assert.IsNull(instance);
+			Assert.IsNull(testClass.GetPropertyInfo(out instance, "InternalClass", "FakeSecondLevel", "ThirdLevelCanNotBeReal"));
+			Assert.IsNull(instance);
+			Assert.IsNull(testClass.GetPropertyInfo(out instance, "InternalClass", "FakeSecondLevel"));
+			Assert.IsNull(instance);
+			Assert.IsNull(testClass.GetPropertyInfo(out instance, "FakeFirstLevel"));
+			Assert.IsNull(instance);
 
 		}
 
