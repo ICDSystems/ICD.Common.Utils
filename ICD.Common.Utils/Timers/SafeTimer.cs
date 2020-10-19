@@ -2,25 +2,26 @@
 using ICD.Common.Utils.Services;
 using ICD.Common.Utils.Services.Logging;
 #if SIMPLSHARP
-using Crestron.SimplSharp;
+using Timer = Crestron.SimplSharp.CTimer;
+using Timeout = Crestron.SimplSharp.Timeout;
 #else
-using System.Threading;
+using Timer = System.Threading.Timer;
+using Timeout = System.Threading.Timeout;
 #endif
 
 namespace ICD.Common.Utils.Timers
 {
 	/// <summary>
-	/// SafeTimer wraps CTimer to hide some of the jank. 
+	/// SafeTimer is a platform agnostic timer that better handles disposal than the underlying timer.
 	/// </summary>
 	public sealed class SafeTimer : IStateDisposable
 	{
-#if SIMPLSHARP
-		private readonly CTimer m_Timer;
-#else
-        private readonly Timer m_Timer;
+		private readonly Timer m_Timer;
+		private Action m_Callback;
+
+#if !SIMPLSHARP
         private int m_RepeatPeriod;
 #endif
-		private Action m_Callback;
 
 		/// <summary>
 		/// Returns true if this instance has been disposed.
@@ -30,12 +31,12 @@ namespace ICD.Common.Utils.Timers
 		#region Constructors
 
 		/// <summary>
-		/// Creates a timer that is called every repeatPeriod in milliseconds.
+		/// Creates a timer that is called immediately and then every repeatPeriod in milliseconds.
 		/// </summary>
 		/// <param name="callback"></param>
 		/// <param name="repeatPeriod"></param>
 		public SafeTimer(Action callback, long repeatPeriod)
-			: this(callback, 0, repeatPeriod)
+			: this(callback, -1, repeatPeriod)
 		{
 		}
 
@@ -52,12 +53,9 @@ namespace ICD.Common.Utils.Timers
 				throw new ArgumentNullException("callback");
 
 			m_Callback = callback;
-#if SIMPLSHARP
-			m_Timer = new CTimer(SafeCallback, null, dueTime, repeatPeriod);
-#else
-            m_RepeatPeriod = (int)repeatPeriod;
-            m_Timer = new Timer(SafeCallback, null, (int)dueTime, m_RepeatPeriod);
-#endif
+			m_Timer = new Timer(SafeCallback, null, Timeout.Infinite, Timeout.Infinite);
+
+			Reset(dueTime, repeatPeriod);
 		}
 
 		/// <summary>
@@ -67,10 +65,7 @@ namespace ICD.Common.Utils.Timers
 		/// <returns></returns>
 		public static SafeTimer Stopped(Action callback)
 		{
-			//No due time or repeat period on a stopped timer
-			SafeTimer output = new SafeTimer(callback, -1, -1);
-			output.Stop();
-			return output;
+			return new SafeTimer(callback, Timeout.Infinite, Timeout.Infinite);
 		}
 
 		#endregion
@@ -124,11 +119,7 @@ namespace ICD.Common.Utils.Timers
 		/// <param name="dueTime"></param>
 		public void Reset(long dueTime)
 		{
-#if SIMPLSHARP
-			m_Timer.Reset(dueTime);
-#else
-			m_Timer.Change((int)dueTime, Timeout.Infinite);
-#endif
+			Reset(dueTime, Timeout.Infinite);
 		}
 
 		/// <summary>
@@ -138,6 +129,18 @@ namespace ICD.Common.Utils.Timers
 		/// <param name="repeatPeriod"></param>
 		public void Reset(long dueTime, long repeatPeriod)
 		{
+			if (dueTime < 0 && dueTime != Timeout.Infinite)
+				throw new ArgumentOutOfRangeException("dueTime", "DueTime must be greater than or equal to 0ms");
+
+			if (dueTime >= int.MaxValue)
+				throw new ArgumentOutOfRangeException("dueTime", string.Format("DueTime must be less than {0:n0}ms", int.MaxValue));
+
+			if (repeatPeriod < 0 && repeatPeriod != Timeout.Infinite)
+				throw new ArgumentOutOfRangeException("repeatPeriod", "Repeat period must be greater than or equal to 0ms");
+
+			if (dueTime >= int.MaxValue)
+				throw new ArgumentOutOfRangeException("repeatPeriod", string.Format("Repeat period must be less than {0:n0}ms", int.MaxValue));
+
 #if SIMPLSHARP
 			m_Timer.Reset(dueTime, repeatPeriod);
 #else
@@ -158,10 +161,9 @@ namespace ICD.Common.Utils.Timers
 		private void SafeCallback(object unused)
 		{
 			// Essentially the meat of this class. There's some weirdness with the garbage collector where
-			// the reference to the timer will be cleared, and eventually the CTimer will call the callback
+			// the reference to the timer will be cleared, and eventually the Timer will call the callback
 			// despite being stopped/disposed.
-			if (IsDisposed ||
-				m_Timer == null
+			if (IsDisposed || m_Timer == null
 #if SIMPLSHARP
 			    || m_Timer.Disposed
 #endif
