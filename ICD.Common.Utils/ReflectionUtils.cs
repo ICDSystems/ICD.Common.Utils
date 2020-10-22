@@ -26,7 +26,7 @@ namespace ICD.Common.Utils
 		/// <param name="constructor"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public static bool MatchesConstructorParameters(ConstructorInfo constructor, IEnumerable<object> parameters)
+		public static bool MatchesConstructorParameters([NotNull] ConstructorInfo constructor, [NotNull] IEnumerable<object> parameters)
 		{
 			if (constructor == null)
 				throw new ArgumentNullException("constructor");
@@ -43,7 +43,7 @@ namespace ICD.Common.Utils
 		/// <param name="method"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public static bool MatchesMethodParameters(MethodBase method, IEnumerable<object> parameters)
+		public static bool MatchesMethodParameters([NotNull] MethodBase method, [NotNull] IEnumerable<object> parameters)
 		{
 			if (method == null)
 				throw new ArgumentNullException("method");
@@ -69,7 +69,7 @@ namespace ICD.Common.Utils
 		/// <param name="property"></param>
 		/// <param name="parameter"></param>
 		/// <returns></returns>
-		public static bool MatchesPropertyParameter(PropertyInfo property, object parameter)
+		public static bool MatchesPropertyParameter([NotNull] PropertyInfo property, object parameter)
 		{
 			if (property == null)
 				throw new ArgumentNullException("property");
@@ -83,7 +83,7 @@ namespace ICD.Common.Utils
 		/// <param name="types"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		private static bool ParametersMatchTypes(IEnumerable<Type> types, IEnumerable<object> parameters)
+		private static bool ParametersMatchTypes([NotNull] IEnumerable<Type> types, [NotNull] IEnumerable<object> parameters)
 		{
 			if (types == null)
 				throw new ArgumentNullException("types");
@@ -104,7 +104,7 @@ namespace ICD.Common.Utils
 		/// <param name="type"></param>
 		/// <param name="parameter"></param>
 		/// <returns></returns>
-		private static bool ParameterMatchesType(Type type, object parameter)
+		private static bool ParameterMatchesType([NotNull] Type type, object parameter)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -129,7 +129,7 @@ namespace ICD.Common.Utils
 		/// <param name="type"></param>
 		/// <returns></returns>
 		[CanBeNull]
-		public static object GetDefaultValue(Type type)
+		public static object GetDefaultValue([NotNull] Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -151,8 +151,14 @@ namespace ICD.Common.Utils
 		/// <param name="method"></param>
 		/// <returns></returns>
 		[NotNull]
-		public static Delegate CreateDelegate(Type type, object firstArgument, MethodInfo method)
+		public static Delegate CreateDelegate([NotNull] Type type, object firstArgument, [NotNull] MethodInfo method)
 		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+
+			if (method == null)
+				throw new ArgumentNullException("method");
+
 			return
 #if SIMPLSHARP
 				CDelegate
@@ -167,7 +173,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <returns></returns>
 		[NotNull]
-		public static T CreateInstance<T>(Type type)
+		public static T CreateInstance<T>([NotNull] Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -194,7 +200,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <returns></returns>
 		[NotNull]
-		public static object CreateInstance(Type type, params object[] parameters)
+		public static object CreateInstance([NotNull] Type type, params object[] parameters)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -230,7 +236,7 @@ namespace ICD.Common.Utils
 		/// <param name="parameters"></param>
 		/// <returns></returns>
 		[NotNull]
-		public static ConstructorInfo GetConstructor(Type type, params object[] parameters)
+		public static ConstructorInfo GetConstructor([NotNull] Type type, params object[] parameters)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -258,7 +264,7 @@ namespace ICD.Common.Utils
 		/// <param name="path"></param>
 		/// <returns></returns>
 		[NotNull]
-		public static Assembly LoadAssemblyFromPath(string path)
+		public static Assembly LoadAssemblyFromPath([NotNull] string path)
 		{
 			if (path == null)
 				throw new ArgumentNullException("path");
@@ -299,7 +305,7 @@ namespace ICD.Common.Utils
 		/// <param name="type"></param>
 		/// <returns></returns>
 		[CanBeNull]
-		public static object ChangeType(object value, Type type)
+		public static object ChangeType(object value, [NotNull] Type type)
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
@@ -348,7 +354,7 @@ namespace ICD.Common.Utils
 		/// <param name="eventHandler">The EventHandler for the callback.</param>
 		/// <returns></returns>
 		[NotNull]
-		public static Delegate SubscribeEvent(object instance, EventInfo eventInfo, Action<object> eventHandler)
+		public static Delegate SubscribeEvent(object instance, [NotNull] EventInfo eventInfo, [NotNull] Action<object> eventHandler)
 		{
 			if (eventInfo == null)
 				throw new ArgumentNullException("eventInfo");
@@ -372,7 +378,7 @@ namespace ICD.Common.Utils
 		/// <param name="eventHandler">The EventHandler for the callback.</param>
 		/// <returns></returns>
 		[NotNull]
-		public static Delegate SubscribeEvent<T>(object instance, EventInfo eventInfo, Action<object, T> eventHandler)
+		public static Delegate SubscribeEvent<T>(object instance, [NotNull] EventInfo eventInfo, [NotNull] Action<object, T> eventHandler)
 		{
 			if (eventInfo == null)
 				throw new ArgumentNullException("eventInfo");
@@ -397,7 +403,7 @@ namespace ICD.Common.Utils
 		/// <param name="callback">The MethodInfo for the eventHandler method.</param>
 		/// <returns></returns>
 		[NotNull]
-		public static Delegate SubscribeEvent(object instance, EventInfo eventInfo, object handler, MethodInfo callback)
+		public static Delegate SubscribeEvent(object instance, [NotNull] EventInfo eventInfo, object handler, [NotNull] MethodInfo callback)
 		{
 			if (eventInfo == null)
 				throw new ArgumentNullException("eventInfo");
@@ -416,7 +422,7 @@ namespace ICD.Common.Utils
 		/// <param name="instance">The instance with the event. Null for static types.</param>
 		/// <param name="eventInfo">The EventInfo for the event.</param>
 		/// <param name="callback">The Delegate to be removed from the event.</param>
-		public static void UnsubscribeEvent(object instance, EventInfo eventInfo, Delegate callback)
+		public static void UnsubscribeEvent(object instance, [NotNull] EventInfo eventInfo, [NotNull] Delegate callback)
 		{
 			if (eventInfo == null)
 				throw new ArgumentNullException("eventInfo");
