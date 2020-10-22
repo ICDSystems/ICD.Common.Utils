@@ -250,5 +250,40 @@ namespace ICD.Common.Utils.Tests
 			Assert.AreEqual(6, paths[62].ToArray()[1]);
 			Assert.AreEqual(62, paths[62].ToArray()[2]);
 		}
+
+		[Test]
+		public void BreadthFirstSearchPathsTest()
+		{
+			Dictionary<int, IEnumerable<int>> paths =
+				RecursionUtils.BreadthFirstSearchPaths(1, Graph)
+				              .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+			// Verify we visited all destinations
+			Assert.AreEqual(4, paths.Count);
+			Assert.IsTrue(paths.ContainsKey(1));
+			Assert.IsTrue(paths.ContainsKey(2));
+			Assert.IsTrue(paths.ContainsKey(3));
+			Assert.IsTrue(paths.ContainsKey(4));
+
+			// Verify path for destination 1
+			Assert.AreEqual(1, paths[1].ToArray().Length);
+			Assert.AreEqual(1, paths[1].ToArray()[0]);
+
+			// Verify path for destination 2
+			Assert.AreEqual(2, paths[2].ToArray().Length);
+			Assert.AreEqual(1, paths[2].ToArray()[0]);
+			Assert.AreEqual(2, paths[2].ToArray()[1]);
+
+			// Verify path for destination 3
+			Assert.AreEqual(2, paths[3].ToArray().Length);
+			Assert.AreEqual(1, paths[3].ToArray()[0]);
+			Assert.AreEqual(3, paths[3].ToArray()[1]);
+
+			// Verify path for destination 4
+			Assert.AreEqual(3, paths[4].ToArray().Length);
+			Assert.AreEqual(1, paths[4].ToArray()[0]);
+			Assert.AreEqual(2, paths[4].ToArray()[1]);
+			Assert.AreEqual(4, paths[4].ToArray()[2]);
+		}
 	}
 }
