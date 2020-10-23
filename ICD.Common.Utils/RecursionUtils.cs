@@ -390,10 +390,37 @@ namespace ICD.Common.Utils
 		/// <param name="start"></param>
 		/// <param name="end"></param>
 		/// <param name="nodeParents"></param>
+		/// <returns></returns>
+		[NotNull]
+		public static IEnumerable<T> GetPath<T>([NotNull] T start, [NotNull] T end, [NotNull] IDictionary<T, T> nodeParents)
+		{
+			// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (start == null)
+				// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("start");
+
+			// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (end == null)
+				// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("end");
+
+			if (nodeParents == null)
+				throw new ArgumentNullException("nodeParents");
+
+			return GetPath(start, end, nodeParents, EqualityComparer<T>.Default);
+		}
+
+		/// <summary>
+		/// Walks through a map of nodes from the starting point.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="start"></param>
+		/// <param name="end"></param>
+		/// <param name="nodeParents"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[NotNull]
-		private static IEnumerable<T> GetPath<T>([NotNull] T start, [NotNull] T end, [NotNull] IDictionary<T, T> nodeParents,
+		public static IEnumerable<T> GetPath<T>([NotNull] T start, [NotNull] T end, [NotNull] IDictionary<T, T> nodeParents,
 		                                         [NotNull] IEqualityComparer<T> comparer)
 		{
 			// ReSharper disable CompareNonConstrainedGenericWithNull
@@ -424,13 +451,10 @@ namespace ICD.Common.Utils
 				visited.Add(start);
 
 				T next;
-				if (!nodeParents.TryGetValue(start, out next))
-					break;
-
 				// ReSharper disable CompareNonConstrainedGenericWithNull
-				if (next == null)
+				if (!nodeParents.TryGetValue(start, out next) || next == null)
 				// ReSharper restore CompareNonConstrainedGenericWithNull
-					break;
+					throw new InvalidOperationException("No path");
 
 				if (visited.Contains(next))
 					break;
