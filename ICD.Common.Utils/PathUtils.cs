@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if SIMPLSHARP
+using Crestron.SimplSharp.Reflection;
+#else
+using System.Reflection;
+#endif
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
@@ -33,6 +38,20 @@ namespace ICD.Common.Utils
 		/// </summary>
 		[PublicAPI]
 		public static string ProgramPath { get { return IcdDirectory.GetApplicationDirectory(); } }
+
+		/// <summary>
+		/// Gets the path to the program entry point assembly (i.e. ICD.Connect.Core_SimplSharp.dll)
+		/// </summary>
+		[PublicAPI]
+		[CanBeNull]
+		public static string ProgramFilePath
+		{
+			get
+			{
+				Assembly entry = AssemblyUtils.GetEntryAssembly();
+				return entry == null ? null : entry.GetPath();
+			}
+		}
 
 		/// <summary>
 		/// Gets the path to the root config directory,

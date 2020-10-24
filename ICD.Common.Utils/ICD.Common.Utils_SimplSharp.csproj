@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnsiUtils.cs" />
+    <Compile Include="AssemblyUtils.cs" />
     <Compile Include="Attributes\AbstractIcdAttribute.cs" />
     <Compile Include="Attributes\IIcdAttribute.cs" />
     <Compile Include="Attributes\RangeAttribute.cs" />
