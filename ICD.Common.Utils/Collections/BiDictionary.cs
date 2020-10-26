@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using ICD.Common.Properties;
+#if !SIMPLSHARP
+using System.Diagnostics;
+#endif
 
 namespace ICD.Common.Utils.Collections
 {
@@ -10,6 +13,9 @@ namespace ICD.Common.Utils.Collections
 	/// </summary>
 	/// <typeparam name="TKey"></typeparam>
 	/// <typeparam name="TValue"></typeparam>
+#if !SIMPLSHARP
+	[DebuggerDisplay("Count = {Count}")]
+#endif
 	public sealed class BiDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 	{
 		private readonly Dictionary<TKey, TValue> m_KeyToValue;

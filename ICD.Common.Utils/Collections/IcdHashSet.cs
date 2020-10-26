@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
+#if !SIMPLSHARP
+using System.Diagnostics;
+#endif
 
 namespace ICD.Common.Utils.Collections
 {
@@ -11,6 +14,9 @@ namespace ICD.Common.Utils.Collections
 	/// A collection containing only unique items.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
+#if !SIMPLSHARP
+	[DebuggerDisplay("Count = {Count}")]
+#endif
 	public sealed class IcdHashSet<T> : ICollection<T>
 	{
 		private readonly Dictionary<T, object> m_Dict;

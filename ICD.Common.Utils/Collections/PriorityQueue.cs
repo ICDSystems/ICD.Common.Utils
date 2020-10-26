@@ -4,12 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
+#if !SIMPLSHARP
+using System.Diagnostics;
+#endif
 
 namespace ICD.Common.Utils.Collections
 {
 	/// <summary>
 	/// Provides a first-in first-out collection with enhanced insertion features.
 	/// </summary>
+#if !SIMPLSHARP
+	[DebuggerDisplay("Count = {Count}")]
+#endif
 	public sealed class PriorityQueue<T> : IEnumerable<T>, ICollection
 	{
 		private readonly IcdOrderedDictionary<int, List<T>> m_PriorityToQueue;

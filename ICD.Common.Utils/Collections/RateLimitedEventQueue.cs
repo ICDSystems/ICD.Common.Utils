@@ -5,12 +5,18 @@ using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Timers;
+#if !SIMPLSHARP
+using System.Diagnostics;
+#endif
 
 namespace ICD.Common.Utils.Collections
 {
 	/// <summary>
 	/// RateLimitedEventQueue provides features for enqueing items to be raised via an event at a controlled interval.
 	/// </summary>
+#if !SIMPLSHARP
+	[DebuggerDisplay("Count = {Count}")]
+#endif
 	public sealed class RateLimitedEventQueue<T> : IEnumerable<T>, ICollection, IDisposable
 	{
 		/// <summary>

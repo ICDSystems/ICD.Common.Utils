@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
+#if !SIMPLSHARP
+using System.Diagnostics;
+#endif
 
 namespace ICD.Common.Utils.Collections
 {
@@ -108,6 +111,9 @@ namespace ICD.Common.Utils.Collections
 	/// </summary>
 	/// <typeparam name="TKey"></typeparam>
 	/// <typeparam name="TValue"></typeparam>
+#if !SIMPLSHARP
+	[DebuggerDisplay("Count = {Count}")]
+#endif
 	public sealed class WeakKeyDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 	{
 		private readonly Dictionary<WeakKeyReference<TKey>, TValue> m_Dictionary;

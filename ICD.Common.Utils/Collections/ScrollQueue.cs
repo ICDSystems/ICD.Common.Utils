@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using ICD.Common.Properties;
+#if !SIMPLSHARP
+using System.Diagnostics;
+#endif
 
 namespace ICD.Common.Utils.Collections
 {
@@ -10,6 +13,9 @@ namespace ICD.Common.Utils.Collections
 	///	are removed as new items are added.
 	/// </summary>
 	/// <typeparam name="TContents"></typeparam>
+#if !SIMPLSHARP
+	[DebuggerDisplay("Count = {Count}")]
+#endif
 	public sealed class ScrollQueue<TContents> : IEnumerable<TContents>, ICollection
 	{
 		private readonly LinkedList<TContents> m_Collection;

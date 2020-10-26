@@ -4,9 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
+#if !SIMPLSHARP
+using System.Diagnostics;
+#endif
 
 namespace ICD.Common.Utils.Collections
 {
+#if !SIMPLSHARP
+	[DebuggerDisplay("Count = {Count}")]
+#endif
 	public sealed class IcdOrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 	{
 		private readonly List<TKey> m_OrderedKeys;
