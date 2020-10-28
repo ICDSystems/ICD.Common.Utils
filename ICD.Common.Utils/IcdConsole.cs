@@ -22,6 +22,16 @@ namespace ICD.Common.Utils
 
 		public static event EventHandler<StringEventArgs> OnConsolePrint;
 
+		private static readonly SafeCriticalSection s_Section;
+
+		/// <summary>
+		/// Static constructor.
+		/// </summary>
+		static IcdConsole()
+		{
+			s_Section = new SafeCriticalSection();
+		}
+
 		/// <summary>
 		/// Wraps CrestronConsole.ConsoleCommandResponse for S+ compatibility.
 		/// </summary>
@@ -64,12 +74,22 @@ namespace ICD.Common.Utils
 
 		public static void PrintLine(string message)
 		{
+			s_Section.Enter();
+
+			try
+			{
 #if SIMPLSHARP
-			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
-				CrestronConsole.PrintLine(message);
+				if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
+					CrestronConsole.PrintLine(message);
 #else
-			Console.WriteLine(message);
+				Console.WriteLine(message);
 #endif
+			}
+			finally
+			{
+				s_Section.Leave();
+			}
+
 			OnConsolePrint.Raise(null, new StringEventArgs(message + IcdEnvironment.NewLine));
 		}
 
@@ -93,12 +113,22 @@ namespace ICD.Common.Utils
 
 		public static void Print(string message)
 		{
+			s_Section.Enter();
+
+			try
+			{
 #if SIMPLSHARP
-			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
-				CrestronConsole.Print(message);
+				if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
+					CrestronConsole.Print(message);
 #else
-            Console.Write(message);
+				Console.Write(message);
 #endif
+			}
+			finally
+			{
+				s_Section.Leave();
+			}
+
 			OnConsolePrint.Raise(null, new StringEventArgs(message));
 		}
 
