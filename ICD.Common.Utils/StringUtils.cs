@@ -42,7 +42,7 @@ namespace ICD.Common.Utils
 		/// <param name="input"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string ToHexLiteral(string input)
+		public static string ToHexLiteral([NotNull] string input)
 		{
 			if (input == null)
 				throw new ArgumentNullException("input");
@@ -61,7 +61,7 @@ namespace ICD.Common.Utils
 		/// <param name="data"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static char FromHexLiteralCharacter(string data)
+		public static char FromHexLiteralCharacter([NotNull] string data)
 		{
 			if (data == null)
 				throw new ArgumentNullException("data");
@@ -79,7 +79,7 @@ namespace ICD.Common.Utils
 		/// <param name="data"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string FromHexLiteral(string data)
+		public static string FromHexLiteral([NotNull] string data)
 		{
 			if (data == null)
 				throw new ArgumentNullException("data");
@@ -116,7 +116,7 @@ namespace ICD.Common.Utils
 		/// <param name="input"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string ToMixedReadableHexLiteral(string input)
+		public static string ToMixedReadableHexLiteral([NotNull] string input)
 		{
 			if (input == null)
 				throw new ArgumentNullException("input");
@@ -145,7 +145,7 @@ namespace ICD.Common.Utils
 		/// <param name="bytes"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string ToString(IEnumerable<byte> bytes)
+		public static string ToString([NotNull] IEnumerable<byte> bytes)
 		{
 			if (bytes == null)
 				throw new ArgumentNullException("bytes");
@@ -161,7 +161,7 @@ namespace ICD.Common.Utils
 		/// <param name="length"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string ToString(IEnumerable<byte> bytes, int length)
+		public static string ToString([NotNull] IEnumerable<byte> bytes, int length)
 		{
 			if (bytes == null)
 				throw new ArgumentNullException("bytes");
@@ -176,7 +176,7 @@ namespace ICD.Common.Utils
 		/// <param name="input"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static byte[] ToBytes(string input)
+		public static byte[] ToBytes([NotNull] string input)
 		{
 			if (input == null)
 				throw new ArgumentNullException("input");
@@ -323,7 +323,7 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <param name="result"></param>
 		/// <returns></returns>
-		private static bool TryConvert<T>(Func<string, T> convertFunc, string value, out T result)
+		private static bool TryConvert<T>([NotNull] Func<string, T> convertFunc, string value, out T result)
 		{
 			if (convertFunc == null)
 				throw new ArgumentNullException("convertFunc");
@@ -350,7 +350,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static string NiceName(object obj)
+		public static string NiceName([NotNull] object obj)
 		{
 			if (obj == null)
 				throw new ArgumentNullException("obj");
@@ -363,7 +363,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		public static string NiceName(string name)
+		public static string NiceName([NotNull] string name)
 		{
 			if (name == null)
 				throw new ArgumentNullException("name");
@@ -399,7 +399,7 @@ namespace ICD.Common.Utils
 		/// <param name="phoneFormat"></param>
 		/// <param name="number"></param>
 		/// <returns></returns>
-		public static string SafeNumericFormat(string phoneFormat, string number)
+		public static string SafeNumericFormat([NotNull] string phoneFormat, [NotNull] string number)
 		{
 			if (phoneFormat == null)
 				throw new ArgumentNullException("phoneFormat");
@@ -442,7 +442,7 @@ namespace ICD.Common.Utils
 		/// <param name="input"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string Reverse(string input)
+		public static string Reverse([NotNull] string input)
 		{
 			if (input == null)
 				throw new ArgumentNullException("input");
@@ -486,7 +486,7 @@ namespace ICD.Common.Utils
 		/// <param name="items"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string ArrayFormat<T>(IEnumerable<T> items)
+		public static string ArrayFormat<T>([NotNull] IEnumerable<T> items)
 		{
 			if (items == null)
 				throw new ArgumentNullException("items");
@@ -517,7 +517,7 @@ namespace ICD.Common.Utils
 		/// <param name="items"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string ArrayRangeFormat(IEnumerable<int> items)
+		public static string ArrayRangeFormat([NotNull] IEnumerable<int> items)
 		{
 			if (items == null)
 				throw new ArgumentNullException("items");
@@ -538,7 +538,7 @@ namespace ICD.Common.Utils
 		/// <param name="items"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string ArrayRangeFormat(IEnumerable<ushort> items)
+		public static string ArrayRangeFormat([NotNull] IEnumerable<ushort> items)
 		{
 			if (items == null)
 				throw new ArgumentNullException("items");
@@ -598,7 +598,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static byte FromIpIdString(string value)
+		public static byte FromIpIdString([NotNull] string value)
 		{
 			if (value == null)
 				throw new ArgumentNullException("value");
@@ -619,7 +619,7 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <param name="result"></param>
 		/// <returns></returns>
-		public static bool TryFromIpIdString(string value, out byte result)
+		public static bool TryFromIpIdString([NotNull] string value, out byte result)
 		{
 			if (value == null)
 				throw new ArgumentNullException("value");
@@ -696,7 +696,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		public static string SerialComma(IEnumerable<string> items)
+		public static string SerialComma([NotNull] IEnumerable<string> items)
 		{
 			if (items == null)
 				throw new ArgumentNullException("items");
@@ -768,7 +768,7 @@ namespace ICD.Common.Utils
 		/// <param name="ignoreCase"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static string GetLongestCommonIntersectionFromStart(IEnumerable<string> items, bool ignoreCase)
+		public static string GetLongestCommonIntersectionFromStart([NotNull] IEnumerable<string> items, bool ignoreCase)
 		{
 			if (items == null)
 				throw new ArgumentNullException("items");
@@ -811,7 +811,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static string Enquote(string value)
+		public static string Enquote([NotNull] string value)
 		{
 			if (value == null)
 				throw new ArgumentNullException("value");
@@ -830,7 +830,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static string UnEnquote(string value)
+		public static string UnEnquote([NotNull] string value)
 		{
 			if (value == null)
 				throw new ArgumentNullException("value");
