@@ -12,7 +12,7 @@ namespace ICD.Common.Utils.IO
 	public static class IcdFile
 	{
 		[PublicAPI]
-		public static string ReadToEnd(string path, Encoding encoding)
+		public static string ReadToEnd([NotNull] string path, [NotNull] Encoding encoding)
 		{
 			if (path == null)
 				throw new ArgumentNullException("path");
@@ -28,7 +28,7 @@ namespace ICD.Common.Utils.IO
 		}
 
 		[PublicAPI]
-		public static DateTime GetLastWriteTime(string path)
+		public static DateTime GetLastWriteTime([NotNull] string path)
 		{
 			if (path == null)
 				throw new ArgumentNullException("path");
@@ -37,10 +37,11 @@ namespace ICD.Common.Utils.IO
 		}
 
 		[PublicAPI]
-		public static bool Exists(string path)
+		public static bool Exists([CanBeNull] string path)
 		{
+			// Consistent with Net Standard
 			if (path == null)
-				throw new ArgumentNullException("path");
+				return false;
 
 			try
 			{
@@ -54,7 +55,7 @@ namespace ICD.Common.Utils.IO
 		}
 
 		[PublicAPI]
-		public static void Copy(string pathFrom, string pathTo)
+		public static void Copy([NotNull] string pathFrom, [NotNull] string pathTo)
 		{
 			if (pathFrom == null)
 				throw new ArgumentNullException("pathFrom");
@@ -66,7 +67,7 @@ namespace ICD.Common.Utils.IO
 		}
 
 		[PublicAPI]
-		public static void Delete(string path)
+		public static void Delete([NotNull] string path)
 		{
 			if (path == null)
 				throw new ArgumentNullException("path");

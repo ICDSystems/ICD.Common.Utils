@@ -15,7 +15,7 @@ namespace ICD.Common.Utils.IO
 
 		public static char AltDirectorySeparatorChar { get { return Path.AltDirectorySeparatorChar; } }
 
-		public static string GetFileName(string path)
+		public static string GetFileName([NotNull] string path)
 		{
 			if (path == null)
 				throw new ArgumentNullException("path");
@@ -23,7 +23,7 @@ namespace ICD.Common.Utils.IO
 			return Path.GetFileName(path);
 		}
 
-		public static string GetFileNameWithoutExtension(string path)
+		public static string GetFileNameWithoutExtension([NotNull] string path)
 		{
 			if (path == null)
 				throw new ArgumentNullException("path");
@@ -32,7 +32,7 @@ namespace ICD.Common.Utils.IO
 		}
 
 		[CanBeNull]
-		public static string GetDirectoryName(string path)
+		public static string GetDirectoryName([NotNull] string path)
 		{
 			if (path == null)
 				throw new ArgumentNullException("path");
@@ -40,7 +40,7 @@ namespace ICD.Common.Utils.IO
 			return Path.GetDirectoryName(path);
 		}
 
-		public static string GetExtension(string path)
+		public static string GetExtension([NotNull] string path)
 		{
 			if (path == null)
 				throw new ArgumentNullException("path");
@@ -48,7 +48,7 @@ namespace ICD.Common.Utils.IO
 			return Path.GetExtension(path);
 		}
 
-		public static string Combine(string a, string b)
+		public static string Combine([NotNull] string a, [NotNull] string b)
 		{
 			if (a == null)
 				throw new ArgumentNullException("a");
@@ -59,7 +59,7 @@ namespace ICD.Common.Utils.IO
 			return Path.Combine(a, b);
 		}
 
-		public static string ChangeExtension(string path, string ext)
+		public static string ChangeExtension([NotNull] string path, [NotNull] string ext)
 		{
 			if (path == null)
 				throw new ArgumentNullException("path");

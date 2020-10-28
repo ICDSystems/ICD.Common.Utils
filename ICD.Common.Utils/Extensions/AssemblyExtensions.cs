@@ -29,17 +29,16 @@ namespace ICD.Common.Utils.Extensions
 #endif
 				.CodeBase;
 
-			if (string.IsNullOrEmpty(path))
-			{
 #if STANDARD
+			if (string.IsNullOrEmpty(path))
 				path = extends.Location;
 #endif
-			}
-			else
+
+			const string prefix = @"file:/";
+			if (path != null && path.StartsWith(prefix))
 			{
-				const string prefix = @"file:///";
-				if (path.StartsWith(prefix))
-					path = path.Substring(prefix.Length);
+				Uri uri = new Uri(path);
+				path = uri.LocalPath;
 			}
 
 			return IcdFile.Exists(path) ? path : null;
