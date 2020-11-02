@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added property to IcdEnvironment to determine whether SSL communication is enabled
  - Added IcdTimeZoneInfo, a very light implementation of System.TimeZoneInfo for the .NET Compact Framework
  - Added ThreadedWorkerQueue - a threadsafe way to enqueue items and have a worker thread process them one at a time
+ - Added eDaysOfWeek flags enum
 
 ### Changed
  - Repeater changed to use configured callbacks instead of a dumb event

@@ -91,6 +91,7 @@
     <Compile Include="Comparers\UndefinedVersionEqualityComparer.cs" />
     <Compile Include="eConsoleColor.cs" />
     <Compile Include="DateTimeUtils.cs" />
+    <Compile Include="eDaysOfWeek.cs" />
     <Compile Include="Email\EmailClient.cs" />
     <Compile Include="Email\eMailErrorCode.cs" />
     <Compile Include="Email\EmailStringCollection.cs" />
