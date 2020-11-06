@@ -189,6 +189,13 @@ namespace ICD.Common.Utils.Xml
 			return float.Parse(value);
 		}
 
+		public double ReadElementContentAsDouble()
+		{
+			// ReadElementContentAsDouble() logs and throws...
+			string value = ReadElementContentAsString();
+			return double.Parse(value);
+		}
+
 		public bool ReadElementContentAsBoolean()
 		{
 			// ReadElementContentAsBoolean() is too case sensitive

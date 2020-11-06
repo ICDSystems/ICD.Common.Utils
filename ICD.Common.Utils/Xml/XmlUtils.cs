@@ -455,6 +455,19 @@ namespace ICD.Common.Utils.Xml
 		/// <param name="childElement"></param>
 		/// <returns></returns>
 		[PublicAPI]
+		public static double ReadChildElementContentAsDouble(string xml, string childElement)
+		{
+			using (IcdXmlReader reader = GetChildElement(xml, childElement))
+				return reader.ReadElementContentAsDouble();
+		}
+
+		/// <summary>
+		/// Gets the content of an immediate child.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="childElement"></param>
+		/// <returns></returns>
+		[PublicAPI]
 		public static bool ReadChildElementContentAsBoolean(string xml, string childElement)
 		{
 			using (IcdXmlReader reader = GetChildElement(xml, childElement))
@@ -652,6 +665,29 @@ namespace ICD.Common.Utils.Xml
 			try
 			{
 				return ReadChildElementContentAsFloat(xml, childElement);
+			}
+			catch (IcdXmlException)
+			{
+				return null;
+			}
+			catch (FormatException)
+			{
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the content of the immediate child. Returns null if the child element was not found.
+		/// </summary>
+		/// <param name="xml"></param>
+		/// <param name="childElement"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static double? TryReadChildElementContentAsDouble(string xml, string childElement)
+		{
+			try
+			{
+				return ReadChildElementContentAsDouble(xml, childElement);
 			}
 			catch (IcdXmlException)
 			{
