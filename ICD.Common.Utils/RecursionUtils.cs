@@ -81,6 +81,7 @@ namespace ICD.Common.Utils
 		/// <param name="visited"></param>
 		/// <param name="node"></param>
 		/// <returns></returns>
+		[NotNull]
 		private static IEnumerable<T> GetClique<T>([NotNull] IDictionary<T, IEnumerable<T>> map,
 		                                           [NotNull] IcdHashSet<T> visited, [NotNull] T node)
 		{
@@ -163,7 +164,7 @@ namespace ICD.Common.Utils
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
 
-			return BreadthFirstSearchPath(root, destination, getChildren, comparer) != null;
+			return BreadthFirstSearch(root, getChildren, comparer).Contains(destination, comparer);
 		}
 
 		/// <summary>
@@ -173,6 +174,7 @@ namespace ICD.Common.Utils
 		/// <param name="root"></param>
 		/// <param name="getChildren"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static IEnumerable<T> BreadthFirstSearch<T>([NotNull] T root, [NotNull] Func<T, IEnumerable<T>> getChildren)
 		{
 			// ReSharper disable CompareNonConstrainedGenericWithNull
@@ -183,7 +185,47 @@ namespace ICD.Common.Utils
 			if (getChildren == null)
 				throw new ArgumentNullException("getChildren");
 
-			return BreadthFirstSearchPaths(root, getChildren, EqualityComparer<T>.Default).Select(kvp => kvp.Key);
+			return BreadthFirstSearch(root, getChildren, EqualityComparer<T>.Default);
+		}
+
+		/// <summary>
+		/// Returns all of the nodes in the tree via breadth-first search.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="root"></param>
+		/// <param name="getChildren"></param>
+		/// <param name="comparer"></param>
+		/// <returns></returns>
+		[NotNull]
+		public static IEnumerable<T> BreadthFirstSearch<T>([NotNull] T root, [NotNull] Func<T, IEnumerable<T>> getChildren,
+		                                                   [NotNull] IEqualityComparer<T> comparer)
+		{
+			// ReSharper disable CompareNonConstrainedGenericWithNull
+			if (root == null)
+				// ReSharper restore CompareNonConstrainedGenericWithNull
+				throw new ArgumentNullException("root");
+
+			if (getChildren == null)
+				throw new ArgumentNullException("getChildren");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			IcdHashSet<T> visited = new IcdHashSet<T>(comparer) {root};
+			Queue<T> process = new Queue<T>();
+			process.Enqueue(root);
+
+			T current;
+			while (process.Dequeue(out current))
+			{
+				yield return current;
+
+				foreach (T child in getChildren(current).Where(c => !visited.Contains(c)))
+				{
+					visited.Add(child);
+					process.Enqueue(child);
+				}
+			}
 		}
 
 		/// <summary>
