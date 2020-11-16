@@ -1542,20 +1542,20 @@ namespace ICD.Common.Utils.Extensions
 			return Consolidate(extends, EqualityComparer<T>.Default);
 		}
 
-		///  <summary>
-		///  Skips duplicate, consecutive items.
-		///  E.g.
-		/// 		[1, 2, 2, 3, 1, 1]
-		///  Becomes
-		/// 		[1, 2, 3, 1]
-		///  </summary>
-		///  <typeparam name="T"></typeparam>
-		///  <param name="extends"></param>
+		/// <summary>
+		/// Skips duplicate, consecutive items.
+		/// E.g.
+		///		[1, 2, 2, 3, 1, 1]
+		/// Becomes
+		///		[1, 2, 3, 1]
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[PublicAPI]
 		public static IEnumerable<T> Consolidate<T>([NotNull] this IEnumerable<T> extends,
-		                                            [NotNull] IEqualityComparer<T> comparer)
+													[NotNull] IEqualityComparer<T> comparer)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -1563,33 +1563,72 @@ namespace ICD.Common.Utils.Extensions
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
 
-			return ConsolidateIterator(extends, comparer);
+			return extends.Consolidate(e => e, comparer);
 		}
 
-		///  <summary>
-		///  Skips duplicate, consecutive items.
-		///  E.g.
-		/// 		[1, 2, 2, 3, 1, 1]
-		///  Becomes
-		/// 		[1, 2, 3, 1]
-		///  </summary>
-		///  <typeparam name="T"></typeparam>
-		///  <param name="sequence"></param>
+		/// <summary>
+		/// Skips duplicate, consecutive items.
+		/// E.g.
+		///		[1, 2, 2, 3, 1, 1]
+		/// Becomes
+		///		[1, 2, 3, 1]
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="predicate"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static IEnumerable<TKey> Consolidate<TKey, TValue>([NotNull] this IEnumerable<TKey> extends,
+																  [NotNull] Func<TKey, TValue> predicate)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			if (predicate == null)
+				throw new ArgumentNullException("predicate");
+
+			return extends.Consolidate(predicate, EqualityComparer<TValue>.Default);
+		}
+
+		/// <summary>
+		/// Skips duplicate, consecutive items.
+		/// E.g.
+		///		[1, 2, 2, 3, 1, 1]
+		/// Becomes
+		///		[1, 2, 3, 1]
+		/// </summary>
+		/// <typeparam name="TKey"></typeparam>
+		/// <typeparam name="TValue"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="predicate"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
-		private static IEnumerable<T> ConsolidateIterator<T>([NotNull] IEnumerable<T> sequence,
-		                                                     [NotNull] IEqualityComparer<T> comparer)
+		[PublicAPI]
+		public static IEnumerable<TKey> Consolidate<TKey, TValue>([NotNull] this IEnumerable<TKey> extends,
+																  [NotNull] Func<TKey, TValue> predicate,
+																  [NotNull] IEqualityComparer<TValue> comparer)
 		{
-			bool first = true;
-			T last = default(T);
+			if (extends == null)
+				throw new ArgumentNullException("extends");
 
-			foreach (T item in sequence)
+			if (predicate == null)
+				throw new ArgumentNullException("predicate");
+
+			if (comparer == null)
+				throw new ArgumentNullException("comparer");
+
+			bool first = true;
+			TValue last = default(TValue);
+
+			foreach (TKey item in extends)
 			{
-				if (!first && comparer.Equals(last, item))
+				TValue value = predicate(item);
+				if (!first && comparer.Equals(last, value))
 					continue;
 
 				first = false;
-				last = item;
+				last = value;
 
 				yield return item;
 			}
