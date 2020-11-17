@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Scheduled action callbacks allow a TimeSpan to be returned to delay actions
  - Handling a Crestron bug where File.Exists throws an exception on 4-Series instead of returning false
  - Changed ProcessorUtils.ModelVersion to be a string, Crestron pulls model version from CrestronEnvironment
+ - For 4-series console outputs, replacing \n with \r\n to help console readability
 
 ## [13.0.0] - 2020-09-03
 ### Added

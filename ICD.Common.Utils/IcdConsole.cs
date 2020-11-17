@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
@@ -13,6 +14,7 @@ namespace ICD.Common.Utils
 {
 	public static class IcdConsole
 	{
+		private const string NEWLINE = "\r\n";
 		public enum eAccessLevel
 		{
 			Operator = 0,
@@ -24,12 +26,15 @@ namespace ICD.Common.Utils
 
 		private static readonly SafeCriticalSection s_Section;
 
+		private static readonly Regex s_NewLineRegex;
+
 		/// <summary>
 		/// Static constructor.
 		/// </summary>
 		static IcdConsole()
 		{
 			s_Section = new SafeCriticalSection();
+			s_NewLineRegex = new Regex("(?!<\r)\n");
 		}
 
 		/// <summary>
@@ -40,7 +45,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void ConsoleCommandResponseLine(string message, params object[] args)
 		{
-			ConsoleCommandResponse(message + IcdEnvironment.NewLine, args);
+			ConsoleCommandResponse(message + NEWLINE, args);
 		}
 
 		/// <summary>
@@ -54,8 +59,11 @@ namespace ICD.Common.Utils
 			if (args != null && args.Any())
 				message = string.Format(message, args);
 
+			message = FixLineEndings(message);
+
 #if SIMPLSHARP
-			if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpPro)
+			if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpPro ||
+				IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
 			{
 				try
 				{
@@ -76,13 +84,15 @@ namespace ICD.Common.Utils
 		{
 			s_Section.Enter();
 
+			string fixedMessage = FixLineEndings(message);
+
 			try
 			{
 #if SIMPLSHARP
 				if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
-					CrestronConsole.PrintLine(message);
+					CrestronConsole.PrintLine(fixedMessage);
 #else
-				Console.WriteLine(message);
+				Console.WriteLine(fixedMessage);
 #endif
 			}
 			finally
@@ -90,7 +100,7 @@ namespace ICD.Common.Utils
 				s_Section.Leave();
 			}
 
-			OnConsolePrint.Raise(null, new StringEventArgs(message + IcdEnvironment.NewLine));
+			OnConsolePrint.Raise(null, new StringEventArgs(message + NEWLINE));
 		}
 
 		public static void PrintLine(string message, params object[] args)
@@ -115,11 +125,13 @@ namespace ICD.Common.Utils
 		{
 			s_Section.Enter();
 
+			string fixedMessage = FixLineEndings(message);
+
 			try
 			{
 #if SIMPLSHARP
 				if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
-					CrestronConsole.Print(message);
+					CrestronConsole.Print(fixedMessage);
 #else
 				Console.Write(message);
 #endif
@@ -129,7 +141,7 @@ namespace ICD.Common.Utils
 				s_Section.Leave();
 			}
 
-			OnConsolePrint.Raise(null, new StringEventArgs(message));
+			OnConsolePrint.Raise(null, new StringEventArgs(fixedMessage));
 		}
 
 		public static void Print(string message, params object[] args)
@@ -179,6 +191,22 @@ namespace ICD.Common.Utils
 #else
 			return false;
 #endif
+		}
+
+		/// <summary>
+		/// Code running on SimplSharpProMono uses \n for newline (due to linux environment),
+		/// Which causes console output to be unreadable on most SSH clients.  This converts those
+		/// endings to \r\n, since Crestron's SSH server doesn't do it automatically.
+		/// This is a hack until Crestron fixes their SSH server.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		private static string FixLineEndings(string input)
+		{
+			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+				return input;
+
+			return s_NewLineRegex.Replace(input, NEWLINE);
 		}
 	}
 }
