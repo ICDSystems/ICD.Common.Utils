@@ -6,6 +6,8 @@ namespace ICD.Common.Utils
 {
 	public static partial class ProcessorUtils
 	{
+		private static DateTime? s_SystemStartTime;
+
 		#region Properties
 
 		/// <summary>
@@ -143,6 +145,20 @@ namespace ICD.Common.Utils
 		public static TimeSpan GetSystemUptime()
 		{
 			return TimeSpan.FromMilliseconds(Environment.TickCount);
+		}
+
+		/// <summary>
+		/// Gets the time the system was started
+		/// DateTime that uptime starts
+		/// </summary>
+		/// <returns></returns>
+		[PublicAPI]
+		public static DateTime? GetSystemStartTime()
+		{
+			if (s_SystemStartTime == null)
+				s_SystemStartTime = IcdEnvironment.GetUtcTime() - TimeSpan.FromMilliseconds(Environment.TickCount);
+
+			return s_SystemStartTime;
 		}
 
 		/// <summary>

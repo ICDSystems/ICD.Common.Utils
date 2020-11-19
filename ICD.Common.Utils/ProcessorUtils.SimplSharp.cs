@@ -238,23 +238,25 @@ namespace ICD.Common.Utils
 		public static TimeSpan GetSystemUptime()
 		{
 			if (s_SystemUptimeStartTimeUtc == null)
-			{
-				string uptime = GetSystemUptimeFeedback();
-				Match match = Regex.Match(uptime, UPTIME_REGEX);
-				if (!match.Success)
-					return default(TimeSpan);
+				UpdateSystemStartTime();
 
-				int days = int.Parse(match.Groups["days"].Value);
-				int hours = int.Parse(match.Groups["hours"].Value);
-				int minutes = int.Parse(match.Groups["minutes"].Value);
-				int seconds = int.Parse(match.Groups["seconds"].Value);
-				int milliseconds = int.Parse(match.Groups["milliseconds"].Value);
+			if (s_SystemUptimeStartTimeUtc != null)
+				return IcdEnvironment.GetUtcTime() - s_SystemUptimeStartTimeUtc.Value;
+			return default(TimeSpan);
+		}
 
-				TimeSpan span = new TimeSpan(days, hours, minutes, seconds, milliseconds);
-				s_SystemUptimeStartTimeUtc = IcdEnvironment.GetUtcTime() - span;
-			}
+		/// <summary>
+		/// Gets the time the system was started
+		/// DateTime that uptime starts
+		/// </summary>
+		/// <returns></returns>
+		[PublicAPI]
+		public static DateTime? GetSystemStartTime()
+		{
+			if (s_SystemUptimeStartTimeUtc == null)
+				UpdateSystemStartTime();
 
-			return IcdEnvironment.GetUtcTime() - s_SystemUptimeStartTimeUtc.Value;
+			return s_SystemUptimeStartTimeUtc;
 		}
 
 		/// <summary>
@@ -285,6 +287,23 @@ namespace ICD.Common.Utils
 		}
 
 		#endregion
+
+		private static void UpdateSystemStartTime()
+		{
+			string uptime = GetSystemUptimeFeedback();
+			Match match = Regex.Match(uptime, UPTIME_REGEX);
+			if (!match.Success)
+				return;
+
+			int days = int.Parse(match.Groups["days"].Value);
+			int hours = int.Parse(match.Groups["hours"].Value);
+			int minutes = int.Parse(match.Groups["minutes"].Value);
+			int seconds = int.Parse(match.Groups["seconds"].Value);
+			int milliseconds = int.Parse(match.Groups["milliseconds"].Value);
+
+			TimeSpan span = new TimeSpan(days, hours, minutes, seconds, milliseconds);
+			s_SystemUptimeStartTimeUtc = IcdEnvironment.GetUtcTime() - span;
+		}
 
 		/// <summary>
 		/// Gets the result from the ramfree console command.
