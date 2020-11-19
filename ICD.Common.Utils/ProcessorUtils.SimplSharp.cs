@@ -79,23 +79,11 @@ namespace ICD.Common.Utils
 		/// Gets the processor firmware version.
 		/// </summary>
 		[PublicAPI]
-		public static Version ModelVersion
+		public static string ModelVersion
 		{
 			get
 			{
-				string versionResult = VersionResult;
-				if (!String.IsNullOrEmpty(versionResult))
-				{
-					Regex regex = new Regex(VER_REGEX);
-					Match match = regex.Match(VersionResult);
-
-					if (match.Success)
-						return new Version(match.Groups["version"].Value);
-				}
-
-				ServiceProvider.TryGetService<ILoggerService>()
-				               .AddEntry(eSeverity.Warning, "Unable to get model version from \"{0}\"", VersionResult);
-				return new Version(0, 0);
+				return CrestronEnvironment.OSVersion.Firmware;
 			}
 		}
 

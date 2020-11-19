@@ -18,12 +18,12 @@ namespace ICD.Common.Utils
 		/// Gets the processor firmware version.
 		/// </summary>
 		[PublicAPI]
-		public static Version ModelVersion
+		public static string ModelVersion
 		{
 			get
 			{
 				// TODO
-				return new Version("1.0.0.0");
+				return null;
 			}
 		}
 
