@@ -16,11 +16,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added ThreadedWorkerQueue - a threadsafe way to enqueue items and have a worker thread process them one at a time
  - Added eDaysOfWeek flags enum
  - Added support for reading the primitive type double to IcdXmlReader and XmlUtils
+ - Added ProcessorUtils.GetSystemStartTime() to get DateTime the system started instead of a TimeSpan
 
 ### Changed
  - Repeater changed to use configured callbacks instead of a dumb event
  - Scheduled action callbacks allow a TimeSpan to be returned to delay actions
  - Handling a Crestron bug where File.Exists throws an exception on 4-Series instead of returning false
+ - Changed ProcessorUtils.ModelVersion to be a string, Crestron pulls model version from CrestronEnvironment
 
 ## [13.0.0] - 2020-09-03
 ### Added
