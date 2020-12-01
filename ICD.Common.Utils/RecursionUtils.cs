@@ -462,5 +462,39 @@ namespace ICD.Common.Utils
 				start = next;
 			}
 		}
+
+		/// <summary>
+		/// Returns all of the nodes in the tree via depth-first search.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="root"></param>
+		/// <param name="getChildren"></param>
+		/// <returns></returns>
+		[NotNull]
+		public static IEnumerable<T> DepthFirstSearch<T>([NotNull] T root, [NotNull] Func<T, IEnumerable<T>> getChildren)
+		{
+			if (root == null)
+				throw new ArgumentNullException("root");
+
+			if (getChildren == null)
+				throw new ArgumentNullException("getChildren");
+
+			IcdHashSet<T> visited = new IcdHashSet<T>();
+			Stack<T> stack = new Stack<T>();
+
+			stack.Push(root);
+
+			while (stack.Count != 0)
+			{
+				T current = stack.Pop();
+				if (!visited.Add(current))
+					continue;
+
+				yield return current;
+
+				foreach (T child in getChildren(current).Reverse())
+					stack.Push(child);
+			}
+		}
 	}
 }
