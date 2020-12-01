@@ -60,7 +60,7 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
-		/// Returns the enum value as a 
+		/// Returns the enum value as a ushort.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
@@ -70,6 +70,18 @@ namespace ICD.Common.Utils.Extensions
 			where T : struct, IConvertible
 		{
 			return (ushort)(object)extends;
+		}
+
+		/// <summary>
+		/// Builds a comma delimited string of the defined enum flags, followed by the numeric remainder.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static string ToStringUndefined<T>(this T extends)
+			where T : struct, IConvertible
+		{
+			return EnumUtils.ToStringUndefined(extends);
 		}
 	}
 }

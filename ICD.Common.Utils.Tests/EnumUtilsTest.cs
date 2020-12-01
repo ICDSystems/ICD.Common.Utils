@@ -290,5 +290,17 @@ namespace ICD.Common.Utils.Tests
 		}
 
 		#endregion
+
+		#region Formatting
+
+		[TestCase(eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C | (eTestFlagsEnum)8,
+		          "A, B, C, 8")]
+		public void ToStringUndefinedTest(eTestFlagsEnum value, string expected)
+		{
+			string toString = EnumUtils.ToStringUndefined(value);
+			Assert.AreEqual(expected, toString);
+		}
+
+		#endregion
 	}
 }

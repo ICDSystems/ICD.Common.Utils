@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 #if SIMPLSHARP
@@ -753,6 +754,40 @@ namespace ICD.Common.Utils
 			{
 				return false;
 			}
+		}
+
+		#endregion
+
+		#region Formatting
+
+		/// <summary>
+		/// Builds a comma delimited string of the defined enum flags, followed by the numeric remainder.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static string ToStringUndefined<T>(T value)
+			where T : struct, IConvertible
+		{
+			if (!IsFlagsEnum<T>())
+				return value.ToString();
+
+			long remainder = (int)(object)value;
+
+			StringBuilder output = new StringBuilder();
+			string format = "{0}";
+
+			foreach (T flag in GetFlagsExceptNone(value))
+			{
+				output.AppendFormat(format, flag);
+				remainder -= (int)(object)flag;
+				format = ", {0}";
+			}
+
+			if (remainder != 0)
+				output.AppendFormat(", {0}", remainder);
+
+			return output.ToString();
 		}
 
 		#endregion
