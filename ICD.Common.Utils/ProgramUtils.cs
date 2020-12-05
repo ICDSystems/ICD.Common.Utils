@@ -24,6 +24,7 @@ namespace ICD.Common.Utils
 			switch (IcdEnvironment.RuntimeEnvironment)
 			{
 				case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
+				case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
 					int length = Math.Min(13, name.Length);
 					name = name.Substring(0, length).PadRight(13);
 					break;

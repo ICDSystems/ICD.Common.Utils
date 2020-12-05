@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added eDaysOfWeek flags enum
  - Added support for reading the primitive type double to IcdXmlReader and XmlUtils
  - Added ProcessorUtils.GetSystemStartTime() to get DateTime the system started instead of a TimeSpan
+ - Added SimplSharpMono environment to IcdEnvironment, for non-pro 4-series environment
 
 ### Changed
  - Repeater changed to use configured callbacks instead of a dumb event

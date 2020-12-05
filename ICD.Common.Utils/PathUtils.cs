@@ -65,6 +65,7 @@ namespace ICD.Common.Utils
 #if SIMPLSHARP
 				switch (IcdEnvironment.RuntimeEnvironment)
 				{
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
 						return Join(RootPath, "user");
 					default:
@@ -96,6 +97,7 @@ namespace ICD.Common.Utils
 				switch (IcdEnvironment.RuntimeEnvironment)
 				{
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
 					case IcdEnvironment.eRuntimeEnvironment.Standard:
@@ -128,6 +130,7 @@ namespace ICD.Common.Utils
 				switch (IcdEnvironment.RuntimeEnvironment)
 				{
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
 					case IcdEnvironment.eRuntimeEnvironment.Standard:
@@ -177,6 +180,7 @@ namespace ICD.Common.Utils
 				switch (IcdEnvironment.RuntimeEnvironment)
 				{
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
 					case IcdEnvironment.eRuntimeEnvironment.Standard:
@@ -210,6 +214,7 @@ namespace ICD.Common.Utils
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
 						return Join(RootPath, "HTML");
 
+					case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
 					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
 						return Join(RootPath, "html");
 

@@ -111,6 +111,7 @@ namespace ICD.Common.Utils
 				{
 					switch (IcdEnvironment.RuntimeEnvironment)
 					{
+						case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
 						case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
 							date = StringUtils.RemoveDuplicateWhitespace(date);
 							return DateTime.ParseExact(date, "MMM d yyyy", CultureInfo.InvariantCulture).ToUniversalTime();

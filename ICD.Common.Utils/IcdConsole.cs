@@ -203,7 +203,8 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		private static string FixLineEndings(string input)
 		{
-			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono
+			    && IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpMono)
 				return input;
 
 			return s_NewLineRegex.Replace(input, NEWLINE);

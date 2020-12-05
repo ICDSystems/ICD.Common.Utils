@@ -12,6 +12,7 @@ namespace ICD.Common.Utils
 		public enum eRuntimeEnvironment
 		{
 			SimplSharp,
+			SimplSharpMono,
 			SimplSharpPro,
 			SimplSharpProMono,
 			SimplSharpProServer,
