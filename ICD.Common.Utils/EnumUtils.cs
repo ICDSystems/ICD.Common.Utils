@@ -15,7 +15,10 @@ namespace ICD.Common.Utils
 	public static class EnumUtils
 	{
 		private static readonly Dictionary<Type, object[]> s_EnumValuesCache;
+		private static readonly SafeCriticalSection s_EnumValuesCacheSection;
+
 		private static readonly Dictionary<Type, Dictionary<object, object[]>> s_EnumFlagsCache;
+		private static readonly SafeCriticalSection s_EnumFlagsCacheSection;
 
 		/// <summary>
 		/// Static constructor.
@@ -23,7 +26,9 @@ namespace ICD.Common.Utils
 		static EnumUtils()
 		{
 			s_EnumValuesCache = new Dictionary<Type, object[]>();
+			s_EnumValuesCacheSection = new SafeCriticalSection();
 			s_EnumFlagsCache = new Dictionary<Type, Dictionary<object, object[]>>();
+			s_EnumFlagsCacheSection = new SafeCriticalSection();
 		}
 
 		#region Validation
@@ -59,6 +64,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static bool IsEnum<T>(T value)
 		{
+			// ReSharper disable once CompareNonConstrainedGenericWithNull
 			return value != null && IsEnumType(value.GetType());
 		}
 
@@ -168,7 +174,7 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("type");
 
 			// Reflection is slow and this method is called a lot, so we cache the results.
-			return s_EnumValuesCache.GetOrAddNew(type, () => GetValuesUncached(type).ToArray());
+			return s_EnumValuesCacheSection.Execute(() => s_EnumValuesCache.GetOrAddNew(type, () => GetValuesUncached(type).ToArray()));
 		}
 
 		/// <summary>
@@ -346,10 +352,10 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static IEnumerable<object> GetFlags(Type type, object value)
 		{
-			return s_EnumFlagsCache.GetOrAddNew(type, () => new Dictionary<object, object[]>())
+			return s_EnumFlagsCacheSection.Execute(() => s_EnumFlagsCache.GetOrAddNew(type, () => new Dictionary<object, object[]>())
 			                       .GetOrAddNew(value, () => GetValues(type)
 			                                                 .Where(f => HasFlag(value, f))
-			                                                 .ToArray());
+			                                                 .ToArray()));
 		}
 
 		/// <summary>
