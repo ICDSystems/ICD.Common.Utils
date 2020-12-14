@@ -60,11 +60,17 @@ namespace ICD.Common.Utils.Extensions
 		};
 
 		private static readonly Dictionary<Type, Type[]> s_TypeAllTypes;
+		private static readonly SafeCriticalSection s_TypeAllTypesSection;
 		private static readonly Dictionary<Type, Type[]> s_TypeBaseTypes;
+		private static readonly SafeCriticalSection s_TypeBaseTypesSection;
 		private static readonly Dictionary<Type, Type[]> s_TypeImmediateInterfaces;
+		private static readonly SafeCriticalSection s_TypeImmediateInterfacesSection;
 		private static readonly Dictionary<Type, Type[]> s_TypeMinimalInterfaces;
+		private static readonly SafeCriticalSection s_TypeMinimalInterfacesSection;
 		private static readonly Dictionary<Type, string> s_TypeToMinimalName;
+		private static readonly SafeCriticalSection s_TypeToMinimalNameSection;
 		private static readonly Dictionary<Type, string> s_TypeToNameWithoutAssemblyDetails;
+		private static readonly SafeCriticalSection s_TypeToNameWithoutAssemblyDetailsSection;
 
 		/// <summary>
 		/// Static constructor.
@@ -72,11 +78,17 @@ namespace ICD.Common.Utils.Extensions
 		static TypeExtensions()
 		{
 			s_TypeAllTypes = new Dictionary<Type, Type[]>();
+			s_TypeAllTypesSection = new SafeCriticalSection();
 			s_TypeBaseTypes = new Dictionary<Type, Type[]>();
+			s_TypeBaseTypesSection = new SafeCriticalSection();
 			s_TypeImmediateInterfaces = new Dictionary<Type, Type[]>();
+			s_TypeImmediateInterfacesSection = new SafeCriticalSection();
 			s_TypeMinimalInterfaces = new Dictionary<Type, Type[]>();
+			s_TypeMinimalInterfacesSection = new SafeCriticalSection();
 			s_TypeToMinimalName = new Dictionary<Type, string>();
+			s_TypeToMinimalNameSection = new SafeCriticalSection();
 			s_TypeToNameWithoutAssemblyDetails = new Dictionary<Type, string>();
+			s_TypeToNameWithoutAssemblyDetailsSection = new SafeCriticalSection();
 		}
 
 		/// <summary>
@@ -246,16 +258,24 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("extends");
 
 			Type[] types;
-			if (!s_TypeAllTypes.TryGetValue(extends, out types))
+			s_TypeAllTypesSection.Enter();
+			try
 			{
-				types = extends.GetBaseTypes()
-				               .Concat(extends.GetInterfaces())
-				               .Prepend(extends)
-				               .ToArray();
-
-				s_TypeAllTypes[extends] = types;
+				if (s_TypeAllTypes.TryGetValue(extends, out types))
+					return types;
+			}
+			finally
+			{
+				s_TypeAllTypesSection.Leave();
 			}
 
+			types = extends.GetBaseTypes()
+			               .Concat(extends.GetInterfaces())
+			               .Prepend(extends)
+			               .ToArray();
+
+			s_TypeAllTypesSection.Execute(() => s_TypeAllTypes[extends] = types);
+			
 			return types;
 		}
 
@@ -271,11 +291,20 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("extends");
 
 			Type[] types;
-			if (!s_TypeBaseTypes.TryGetValue(extends, out types))
+
+			s_TypeBaseTypesSection.Enter();
+			try
 			{
-				types = GetBaseTypesIterator(extends).ToArray();
-				s_TypeBaseTypes[extends] = types;
+				if (s_TypeBaseTypes.TryGetValue(extends, out types))
+					return types;
 			}
+			finally
+			{
+				s_TypeBaseTypesSection.Leave();
+			}
+
+				types = GetBaseTypesIterator(extends).ToArray();
+			s_TypeBaseTypesSection.Execute(() => s_TypeBaseTypes[extends] = types);
 
 			return types;
 		}
@@ -309,20 +338,30 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("extends");
 
 			Type[] immediateInterfaces;
-			if (!s_TypeImmediateInterfaces.TryGetValue(extends, out immediateInterfaces))
+
+			s_TypeImmediateInterfacesSection.Enter();
+			try
 			{
-				IEnumerable<Type> allInterfaces = extends.GetInterfaces();
-
-				IEnumerable<Type> childInterfaces =
-					extends.GetAllTypes()
-					       .Except(extends)
-					       .SelectMany(t => t.GetImmediateInterfaces())
-					       .Distinct();
-
-				immediateInterfaces = allInterfaces.Except(childInterfaces).ToArray();
-
-				s_TypeImmediateInterfaces[extends] = immediateInterfaces;
+				if (s_TypeImmediateInterfaces.TryGetValue(extends, out immediateInterfaces))
+					return immediateInterfaces;
 			}
+			finally
+			{
+				s_TypeImmediateInterfacesSection.Leave();
+			}
+
+
+			IEnumerable<Type> allInterfaces = extends.GetInterfaces();
+
+			IEnumerable<Type> childInterfaces =
+				extends.GetAllTypes()
+				       .Except(extends)
+				       .SelectMany(t => t.GetImmediateInterfaces())
+				       .Distinct();
+
+			immediateInterfaces = allInterfaces.Except(childInterfaces).ToArray();
+
+			s_TypeImmediateInterfacesSection.Execute(() => s_TypeImmediateInterfaces[extends] = immediateInterfaces);
 
 			return immediateInterfaces;
 		}
@@ -339,14 +378,24 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("extends");
 
 			Type[] minimalInterfaces;
-			if (!s_TypeMinimalInterfaces.TryGetValue(extends, out minimalInterfaces))
-			{
-				Type[] allInterfaces = extends.GetInterfaces();
-				minimalInterfaces = allInterfaces.Except(allInterfaces.SelectMany(t => t.GetInterfaces()))
-				                                 .ToArray();
 
-				s_TypeMinimalInterfaces[extends] = minimalInterfaces;
+
+			s_TypeMinimalInterfacesSection.Enter();
+			try
+			{
+				if (s_TypeMinimalInterfaces.TryGetValue(extends, out minimalInterfaces))
+					return minimalInterfaces;
 			}
+			finally
+			{
+				s_TypeMinimalInterfacesSection.Leave();
+			}
+
+			Type[] allInterfaces = extends.GetInterfaces();
+			minimalInterfaces = allInterfaces.Except(allInterfaces.SelectMany(t => t.GetInterfaces()))
+			                                 .ToArray();
+
+			s_TypeMinimalInterfacesSection.Execute(() => s_TypeMinimalInterfaces[extends] = minimalInterfaces);
 
 			return minimalInterfaces;
 		}
@@ -379,47 +428,44 @@ namespace ICD.Common.Utils.Extensions
 		/// <param name="extends"></param>
 		/// <returns></returns>
 		[NotNull]
-		public static string GetMinimalName([NotNull]this Type extends)
+		public static string GetMinimalName([NotNull] this Type extends)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
-
 			string name;
-			if (!s_TypeToMinimalName.TryGetValue(extends, out name))
+
+			s_TypeToMinimalNameSection.Enter();
+			try
 			{
-				// Generics are a pain
-				if (extends.IsGenericType)
-				{
-					string nameWithoutAssemblyDetails = Type.GetType(extends.FullName) == null
-						                                    ? extends.GetNameWithoutAssemblyDetails()
-						                                    : extends.FullName;
-					int genericStart = nameWithoutAssemblyDetails.IndexOf('[');
-					if (genericStart < 0)
-					{
-						name = nameWithoutAssemblyDetails;
-					}
-					else
-					{
-						string genericParameterNames =
-							string.Join("],[", extends.GetGenericArguments().Select(t => t.GetMinimalName()).ToArray());
-						int genericEnd = nameWithoutAssemblyDetails.LastIndexOf(']');
-
-						name = new StringBuilder().Append(nameWithoutAssemblyDetails, 0, genericStart + 2)
-						                          .Append(genericParameterNames)
-						                          .Append(nameWithoutAssemblyDetails, genericEnd - 1,
-						                                  nameWithoutAssemblyDetails.Length - genericEnd + 1)
-						                          .ToString();
-					}
-				}
-				else
-				{
-					name = Type.GetType(extends.FullName) == null
-						? extends.GetNameWithoutAssemblyDetails()
-						: extends.FullName;
-				}
-
-				s_TypeToMinimalName[extends] = name;
+				if (s_TypeToMinimalName.TryGetValue(extends, out name))
+					return name;
 			}
+			finally
+			{
+				s_TypeToMinimalNameSection.Leave();
+			}
+
+			name = Type.GetType(extends.FullName) == null
+				       ? extends.GetNameWithoutAssemblyDetails()
+				       : extends.FullName;
+			// Generics are a pain
+			if (extends.IsGenericType)
+			{
+				int genericStart = name.IndexOf('[');
+				if (genericStart >= 0)
+				{
+					string genericParameterNames =
+						string.Join("],[", extends.GetGenericArguments().Select(t => t.GetMinimalName()).ToArray());
+					int genericEnd = name.LastIndexOf(']');
+					name = new StringBuilder().Append(name, 0, genericStart + 2)
+					                          .Append(genericParameterNames)
+					                          .Append(name, genericEnd - 1,
+					                                  name.Length - genericEnd + 1)
+					                          .ToString();
+				}
+			}
+
+			s_TypeToMinimalNameSection.Execute(() => s_TypeToMinimalName[extends] = name);
 
 			return name;
 		}
@@ -436,11 +482,22 @@ namespace ICD.Common.Utils.Extensions
 				throw new ArgumentNullException("extends");
 
 			string name;
-			if (!s_TypeToNameWithoutAssemblyDetails.TryGetValue(extends, out name))
+
+			s_TypeToNameWithoutAssemblyDetailsSection.Enter();
+			try
 			{
-				name = RemoveAssemblyDetails(extends.AssemblyQualifiedName);
-				s_TypeToNameWithoutAssemblyDetails[extends] = name;
+				if (s_TypeToNameWithoutAssemblyDetails.TryGetValue(extends, out name))
+					return name;
 			}
+			finally
+			{
+				s_TypeToNameWithoutAssemblyDetailsSection.Leave();
+			}
+
+
+			name = RemoveAssemblyDetails(extends.AssemblyQualifiedName);
+
+			s_TypeToNameWithoutAssemblyDetailsSection.Execute(() => s_TypeToNameWithoutAssemblyDetails[extends] = name);
 
 			return name;
 		}
