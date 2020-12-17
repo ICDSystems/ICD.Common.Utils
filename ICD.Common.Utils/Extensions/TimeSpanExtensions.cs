@@ -83,5 +83,29 @@ namespace ICD.Common.Utils.Extensions
 			minutes = MathUtils.Modulus(minutes + extends.Minutes, 60);
 			return new TimeSpan(extends.Days, extends.Hours, minutes, extends.Seconds, extends.Milliseconds);
 		}
+
+		/// <summary>
+		/// Adjusts the given timespan by the UTC offset.
+		/// e.g. EST is UTC-5, a TimeSpan of 9:00:00 would result in a universal TimeSpan of 14:00:00
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static TimeSpan ToUniversalTime(this TimeSpan extends)
+		{
+			TimeSpan offset = TimeZone.CurrentTimeZone.GetUtcOffset(IcdEnvironment.GetLocalTime());
+			return extends - offset;
+		}
+
+		/// <summary>
+		/// Adjusts the given timespan from the UTC offset.
+		/// e.g. EST is UTC-5, a TimeSpan of 9:00:00 would result in a local TimeSpan of 4:00:00
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static TimeSpan ToLocalTime(this TimeSpan extends)
+		{
+			TimeSpan offset = TimeZone.CurrentTimeZone.GetUtcOffset(IcdEnvironment.GetLocalTime());
+			return extends + offset;
+		}
 	}
 }
