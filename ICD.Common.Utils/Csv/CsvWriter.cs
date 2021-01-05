@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.IO;
 
@@ -12,6 +11,10 @@ namespace ICD.Common.Utils.Csv
 
 		private readonly IcdTextWriter m_Writer;
 		private readonly CsvWriterSettings m_Settings;
+
+		/// <summary>
+		/// Are we currently at the beginning of a new line?
+		/// </summary>
 		private bool m_NewLine;
 
 		#region Properties
@@ -27,54 +30,18 @@ namespace ICD.Common.Utils.Csv
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public CsvWriter([NotNull] IcdTextWriter writer, [NotNull] CsvWriterSettings settings, [NotNull] params string[] header)
+		public CsvWriter([NotNull] IcdTextWriter writer,
+		                 [NotNull] CsvWriterSettings settings)
 		{
 			if (writer == null)
 				throw new ArgumentNullException("writer");
 
 			if (settings == null)
 				throw new ArgumentNullException("settings");
-
-			if (header == null)
-				throw new ArgumentNullException("header");
 
 			m_NewLine = true;
 			m_Writer = writer;
 			m_Settings = settings;
-
-			if (header.Any())
-				AppendRow(header);
-		}
-
-		/// <summary>
-		/// Deconstructor.
-		/// </summary>
-		~CsvWriter()
-		{
-			Dispose();
-		}
-
-		/// <summary>
-		/// Instantiates a new CsvWriter with the properties given in the CsvWriterSettings.
-		/// </summary>
-		/// <param name="writer"></param>
-		/// <param name="settings"></param>
-		/// <param name="header"></param>
-		/// <returns></returns>
-		[PublicAPI]
-		public static CsvWriter Create([NotNull] IcdTextWriter writer, [NotNull] CsvWriterSettings settings,
-		                               [NotNull] params string[] header)
-		{
-			if (writer == null)
-				throw new ArgumentNullException("writer");
-
-			if (settings == null)
-				throw new ArgumentNullException("settings");
-
-			if (header == null)
-				throw new ArgumentNullException("header");
-
-			return new CsvWriter(writer, settings, header);
 		}
 
 		#endregion
@@ -86,17 +53,6 @@ namespace ICD.Common.Utils.Csv
 
 		#region Methods
 
-		/// <summary>
-		/// Calls ToString() for each item and adds the row to the builder.
-		/// </summary>
-		/// <param name="row"></param>
-		[PublicAPI]
-		public void AppendRow(params object[] row)
-		{
-			foreach (object value in row)
-				AppendValue(value);
-			AppendNewline();
-		}
 
 		/// <summary>
 		/// Adds the row to the builder.
