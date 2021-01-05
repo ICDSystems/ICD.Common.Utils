@@ -234,10 +234,10 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="other"></param>
-		/// <param name="comparer"></param>
+		/// <param name="predicate"></param>
 		/// <returns></returns>
 		public static bool SequenceEqual<T>([NotNull] this IEnumerable<T> extends, [NotNull] IEnumerable<T> other,
-		                                    [NotNull] Func<T, T, bool> comparer)
+		                                    [NotNull] Func<T, T, bool> predicate)
 		{
 			if (extends == null)
 				throw new ArgumentNullException("extends");
@@ -245,8 +245,8 @@ namespace ICD.Common.Utils.Extensions
 			if (other == null)
 				throw new ArgumentNullException("other");
 
-			if (comparer == null)
-				throw new ArgumentNullException("comparer");
+			if (predicate == null)
+				throw new ArgumentNullException("predicate");
 
 			// Simple count check
 			ICollection<T> a = extends as ICollection<T>;
@@ -263,7 +263,7 @@ namespace ICD.Common.Utils.Extensions
 
 					while (hasFirst && hasSecond)
 					{
-						if (!comparer(firstPos.Current, secondPos.Current))
+						if (!predicate(firstPos.Current, secondPos.Current))
 							return false;
 
 						hasFirst = firstPos.MoveNext();
