@@ -940,7 +940,11 @@ namespace ICD.Common.Utils.Globalization
 			return cultureInfo;
 		}
 
-		public static CultureInfo[] GetCultures(CultureTypes types)
+		public
+#if !SIMPLSHARP
+			new
+#endif
+			static CultureInfo[] GetCultures(CultureTypes types)
 		{
 			return s_DictAvailableCulturesByName.Where(de => (de.Value & types) != 0)
 			                                    .Select(de => new IcdCultureInfo(de.Key))
