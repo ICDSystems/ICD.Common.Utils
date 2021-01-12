@@ -160,28 +160,26 @@ namespace ICD.Common.Utils
 			if (args.Length > 0)
 				message = string.Format(message, args);
 
-			switch (IcdEnvironment.RuntimeEnvironment)
+			if (IcdEnvironment.Framework == IcdEnvironment.eFramework.Standard)
 			{
-				case IcdEnvironment.eRuntimeEnvironment.Standard:
-					// Prepend the exception type, append the stack trace
-					if (exception != null)
-						message = string.Format("{0}: {1}{2}{3}",
-						                        exception.GetType().Name,
-						                        message,
-						                        IcdEnvironment.NewLine,
-						                        exception.StackTrace);
+				// Prepend the exception type, append the stack trace
+				if (exception != null)
+					message = string.Format("{0}: {1}{2}{3}",
+					                        exception.GetType().Name,
+					                        message,
+					                        IcdEnvironment.NewLine,
+					                        exception.StackTrace);
 
-					// Prefix severity and time
-					string fixedSeverity = severity.Substring(0, Math.Min(6, severity.Length));
-					fixedSeverity = string.Format("{0,-6}", fixedSeverity);
-					message = string.Format("{0} - {1} - {2}", fixedSeverity, IcdEnvironment.GetLocalTime(), message);
-					break;
-
-				case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
-					// Add an extra newline
-					message += IcdEnvironment.NewLine;
-					break;
+				// Prefix severity and time
+				string fixedSeverity = severity.Substring(0, Math.Min(6, severity.Length));
+				fixedSeverity = string.Format("{0,-6}", fixedSeverity);
+				message = string.Format("{0} - {1} - {2}", fixedSeverity, IcdEnvironment.GetLocalTime(), message);
+			
 			}
+			// Add an extra newline for 4-series to help formatting
+			else if(IcdEnvironment.CrestronSeries == IcdEnvironment.eCrestronSeries.FourSeries)
+				message += IcdEnvironment.NewLine;
+			
 
 			// Color formatting
 			return s_SeverityToColor[severity].FormatAnsi(message);

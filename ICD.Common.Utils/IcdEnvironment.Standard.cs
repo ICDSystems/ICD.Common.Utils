@@ -14,8 +14,6 @@ namespace ICD.Common.Utils
 	{
 		public static string NewLine { get { return Environment.NewLine; } }
 
-		public static eRuntimeEnvironment RuntimeEnvironment { get { return eRuntimeEnvironment.Standard; } }
-
 		/// <summary>
 		/// Gets the network address(es) of the processor.
 		/// </summary>
@@ -87,6 +85,13 @@ namespace ICD.Common.Utils
 		/// </summary>
 		[PublicAPI]
 		public static IEnumerable<string> Hostnames { get { yield return Dns.GetHostName(); } }
+
+		static IcdEnvironment()
+		{
+			s_Framework = eFramework.Standard;
+			s_CrestronSeries = eCrestronSeries.Na;
+			s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Na;
+		}
 
 		public static DateTime GetLocalTime()
 		{

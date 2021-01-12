@@ -14,13 +14,9 @@ namespace ICD.Common.Utils
 		/// </summary>
 		private const string INVALID_VALUE = "Invalid Value";
 
-		private static eRuntimeEnvironment s_RuntimeEnvironment;
-
 		#region Properties
 
 		public static string NewLine { get { return CrestronEnvironment.NewLine; } }
-
-		public static eRuntimeEnvironment RuntimeEnvironment { get { return s_RuntimeEnvironment; } }
 
 		/// <summary>
 		/// Gets the network address(es) of the processor.
@@ -197,10 +193,16 @@ namespace ICD.Common.Utils
 		static IcdEnvironment()
 		{
 			// Cache the runtime environment
-			s_RuntimeEnvironment =
-				CrestronEnvironment.DevicePlatform == eDevicePlatform.Server
-					? eRuntimeEnvironment.SimplSharpProServer
-					: GetRuntimeEnvironment(CrestronEnvironment.RuntimeEnvironment, Type.GetType("Mono.Runtime") != null);
+			s_Framework = eFramework.Crestron;
+			
+			if (CrestronEnvironment.RuntimeEnvironment == eRuntimeEnvironment.SIMPL)
+				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Simpl;
+			else if (CrestronEnvironment.DevicePlatform == eDevicePlatform.Appliance)
+				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Appliance;
+			else
+				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Server;
+
+			s_CrestronSeries = Type.GetType("Mono.Runtime") != null ? eCrestronSeries.FourSeries : eCrestronSeries.ThreeSeries;
 
 			CrestronEnvironment.ProgramStatusEventHandler += CrestronEnvironmentOnProgramStatusEventHandler;
 			CrestronEnvironment.EthernetEventHandler += CrestronEnvironmentOnEthernetEventHandler;
@@ -255,19 +257,6 @@ namespace ICD.Common.Utils
 					return eProgramStatusEventType.Resumed;
 				default:
 					throw new ArgumentOutOfRangeException("type");
-			}
-		}
-
-		private static eRuntimeEnvironment GetRuntimeEnvironment(Crestron.SimplSharp.eRuntimeEnvironment runtimeEnvironment, bool mono)
-		{
-			switch (runtimeEnvironment)
-			{
-				case Crestron.SimplSharp.eRuntimeEnvironment.SIMPL:
-					return mono ? eRuntimeEnvironment.SimplSharpMono : eRuntimeEnvironment.SimplSharp;
-				case Crestron.SimplSharp.eRuntimeEnvironment.SimplSharpPro:
-					return mono ? eRuntimeEnvironment.SimplSharpProMono : eRuntimeEnvironment.SimplSharpPro;
-				default:
-					throw new ArgumentOutOfRangeException("runtimeEnvironment");
 			}
 		}
 

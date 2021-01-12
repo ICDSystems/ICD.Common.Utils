@@ -109,16 +109,13 @@ namespace ICD.Common.Utils
 
 				try
 				{
-					switch (IcdEnvironment.RuntimeEnvironment)
+					if (IcdEnvironment.CrestronSeries == IcdEnvironment.eCrestronSeries.FourSeries)
 					{
-						case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
-						case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
-							date = StringUtils.RemoveDuplicateWhitespace(date);
-							return DateTime.ParseExact(date, "MMM d yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
-
-						default:
-							return DateTime.ParseExact(date, "MMM dd yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
+						date = StringUtils.RemoveDuplicateWhitespace(date);
+						return DateTime.ParseExact(date, "MMM d yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
 					}
+					
+					return DateTime.ParseExact(date, "MMM dd yyyy", CultureInfo.InvariantCulture).ToUniversalTime();
 				}
 				catch (FormatException)
 				{

@@ -62,8 +62,7 @@ namespace ICD.Common.Utils
 			message = FixLineEndings(message);
 
 #if SIMPLSHARP
-			if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpPro ||
-				IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+			if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Appliance)
 			{
 				try
 				{
@@ -89,7 +88,7 @@ namespace ICD.Common.Utils
 			try
 			{
 #if SIMPLSHARP
-				if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
+				if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Server)
 					CrestronConsole.PrintLine(fixedMessage);
 #else
 				Console.WriteLine(fixedMessage);
@@ -130,7 +129,7 @@ namespace ICD.Common.Utils
 			try
 			{
 #if SIMPLSHARP
-				if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
+				if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Server)
 					CrestronConsole.Print(fixedMessage);
 #else
 				Console.Write(message);
@@ -166,7 +165,7 @@ namespace ICD.Common.Utils
 		{
 #if SIMPLSHARP
 			// No console on VC4
-			if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
+			if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
 				return false;
 
 			return CrestronConsole.SendControlSystemCommand(command, ref result);
@@ -179,8 +178,7 @@ namespace ICD.Common.Utils
 		{
 #if SIMPLSHARP
 			// Avoid crashing Simpl applications
-			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpPro &&
-				IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono)
+			if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Appliance)
 				return false;
 
 			if (CrestronConsole.ConsoleRegistered)
@@ -203,8 +201,7 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		private static string FixLineEndings(string input)
 		{
-			if (IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono
-			    && IcdEnvironment.RuntimeEnvironment != IcdEnvironment.eRuntimeEnvironment.SimplSharpMono)
+			if (IcdEnvironment.CrestronSeries != IcdEnvironment.eCrestronSeries.FourSeries)
 				return input;
 
 			return s_NewLineRegex.Replace(input, NEWLINE);

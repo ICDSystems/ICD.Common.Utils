@@ -7,16 +7,33 @@ namespace ICD.Common.Utils
 	public static partial class IcdEnvironment
 	{
 		/// <summary>
-		/// Enumeration to define the various runtime environments a module can run in.
+		/// Enumeration to define the various frameworks a module can run in.
 		/// </summary>
-		public enum eRuntimeEnvironment
+		public enum eFramework
 		{
-			SimplSharp,
-			SimplSharpMono,
-			SimplSharpPro,
-			SimplSharpProMono,
-			SimplSharpProServer,
+			Crestron,
 			Standard
+		}
+
+		/// <summary>
+		/// Enumeration to define the Crestron series a module can run it
+		/// </summary>
+		public enum eCrestronSeries
+		{
+			Na, //Non-Crestron
+			ThreeSeries,
+			FourSeries
+		}
+
+		/// <summary>
+		/// Enumeration to define the various Crestron runtime environments a module can run in
+		/// </summary>
+		public enum eCrestronRuntimeEnvironment
+		{
+			Na, //Non-Crestron
+			Simpl, // Running in Simpl, Non-Pro
+			Appliance, // S#Pro running on a Crestron hardware appliance
+			Server // S#Pro running on a server (VC-4)
 		}
 
 		/// <summary>
@@ -69,8 +86,18 @@ namespace ICD.Common.Utils
 		/// </summary>
 		public static event EventHandler OnSystemDateTimeChanged;
 
+		private static eFramework s_Framework;
+
+		private static eCrestronSeries s_CrestronSeries;
+
+		private static eCrestronRuntimeEnvironment s_CrestronRuntimeEnvironment;
+
 		private static readonly SafeCriticalSection s_ProgramInitializationSection = new SafeCriticalSection();
 		private static bool s_ProgramInitializationComplete;
+
+		public static eFramework Framework {get { return s_Framework; }}
+		public static eCrestronSeries CrestronSeries {get { return s_CrestronSeries; }}
+		public static eCrestronRuntimeEnvironment CrestronRuntimeEnvironment {get { return s_CrestronRuntimeEnvironment; }}
 
 		/// <summary>
 		/// Returns true if the program has been flagged as completely initialized.

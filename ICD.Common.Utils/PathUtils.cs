@@ -26,7 +26,7 @@ namespace ICD.Common.Utils
 		public static string RootPath {
 			get
 			{
-				if (IcdEnvironment.RuntimeEnvironment == IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer)
+				if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
 					return IcdDirectory.GetApplicationRootDirectory();
 
 				return IcdDirectory.GetDirectoryRoot(IcdPath.DirectorySeparatorChar.ToString());
@@ -63,10 +63,9 @@ namespace ICD.Common.Utils
 			get
 			{
 #if SIMPLSHARP
-				switch (IcdEnvironment.RuntimeEnvironment)
+				switch (IcdEnvironment.CrestronSeries)
 				{
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+					case IcdEnvironment.eCrestronSeries.FourSeries:
 						return Join(RootPath, "user");
 					default:
 						return Join(RootPath, "User");
@@ -94,21 +93,11 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				switch (IcdEnvironment.RuntimeEnvironment)
-				{
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
-					case IcdEnvironment.eRuntimeEnvironment.Standard:
-						return string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
-
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer:
-						return "ProgramConfig";
-
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
+				// Crestron Server doesn't have meaningful program number
+				if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
+					return "ProgramConfig";
+				
+				return string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
 			}
 		}
 
@@ -127,21 +116,11 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				switch (IcdEnvironment.RuntimeEnvironment)
-				{
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
-					case IcdEnvironment.eRuntimeEnvironment.Standard:
-						return string.Format("Program{0:D2}Data", ProgramUtils.ProgramNumber);
-
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer:
-						return "ProgramData";
-
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
+				// Crestron Server doesn't have meaningful program number
+				if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
+					return "ProgramData";
+				
+				return string.Format("Program{0:D2}Data", ProgramUtils.ProgramNumber);
 			}
 		}
 
@@ -177,23 +156,11 @@ namespace ICD.Common.Utils
 			{
 				string directoryName;
 
-				switch (IcdEnvironment.RuntimeEnvironment)
-				{
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
-					case IcdEnvironment.eRuntimeEnvironment.Standard:
-						directoryName = string.Format("Program{0:D2}Logs", ProgramUtils.ProgramNumber);
-						break;
-
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer:
-						directoryName = "ProgramLogs";
-						break;
-
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
+				// Crestron Server doesn't have meaningful program number
+				if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
+					directoryName = "ProgramLogs";
+				else
+					directoryName = string.Format("Program{0:D2}Logs", ProgramUtils.ProgramNumber);
 
 				return Join(RootConfigPath, directoryName);
 			}
@@ -208,29 +175,25 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				switch (IcdEnvironment.RuntimeEnvironment)
+				if (IcdEnvironment.Framework == IcdEnvironment.eFramework.Crestron)
 				{
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
+					// 3-series
+					if (IcdEnvironment.CrestronSeries == IcdEnvironment.eCrestronSeries.ThreeSeries)
 						return Join(RootPath, "HTML");
-
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
+					
+					// 4-series non-server (because Crestron)
+					if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Appliance)
 						return Join(RootPath, "html");
+					
+					// 4-series server (because Crestron)
+					return Join(RootPath, "Html");
+				}
 
-					case IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer:
-						return Join(RootPath, "Html");
-
-					case IcdEnvironment.eRuntimeEnvironment.Standard:
 #if LINUX
 						return Join(RootPath, "var", "www", "html");
 #else
 						return "C:\\INetPub";
 #endif
-
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
 			}
 		}
 

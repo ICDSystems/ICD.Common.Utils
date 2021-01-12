@@ -21,28 +21,29 @@ namespace ICD.Common.Utils
 		{
 			name = (name ?? string.Empty).Trim();
 
-			switch (IcdEnvironment.RuntimeEnvironment)
+			switch (IcdEnvironment.Framework)
 			{
-				case IcdEnvironment.eRuntimeEnvironment.SimplSharp:
-				case IcdEnvironment.eRuntimeEnvironment.SimplSharpMono:
-					int length = Math.Min(13, name.Length);
-					name = name.Substring(0, length).PadRight(13);
+				case IcdEnvironment.eFramework.Crestron:
+					switch (IcdEnvironment.CrestronRuntimeEnvironment)
+					{
+						case IcdEnvironment.eCrestronRuntimeEnvironment.Simpl:
+							int length = Math.Min(13, name.Length);
+							name = name.Substring(0, length).PadRight(13);
+							break;
+						case IcdEnvironment.eCrestronRuntimeEnvironment.Appliance:
+							int proLength = Math.Min(26 - 1, name.Length);
+							name = name.Substring(0, proLength).PadRight(26);
+							break;
+						case IcdEnvironment.eCrestronRuntimeEnvironment.Server:
+							// No console
+							return;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
 					break;
-
-				case IcdEnvironment.eRuntimeEnvironment.SimplSharpPro:
-				case IcdEnvironment.eRuntimeEnvironment.SimplSharpProMono:
-					int proLength = Math.Min(26 - 1, name.Length);
-					name = name.Substring(0, proLength).PadRight(26);
-					break;
-
-				case IcdEnvironment.eRuntimeEnvironment.SimplSharpProServer:
-					// No console
-					return;
-
-				case IcdEnvironment.eRuntimeEnvironment.Standard:
+				case IcdEnvironment.eFramework.Standard:
 					name += ' ';
 					break;
-
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

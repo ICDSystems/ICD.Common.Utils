@@ -17,7 +17,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Added eDaysOfWeek flags enum
  - Added support for reading the primitive type double to IcdXmlReader and XmlUtils
  - Added ProcessorUtils.GetSystemStartTime() to get DateTime the system started instead of a TimeSpan
- - Added SimplSharpMono environment to IcdEnvironment, for non-pro 4-series environment
 
 ### Changed
  - Repeater changed to use configured callbacks instead of a dumb event
@@ -25,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Handling a Crestron bug where File.Exists throws an exception on 4-Series instead of returning false
  - Changed ProcessorUtils.ModelVersion to be a string, Crestron pulls model version from CrestronEnvironment
  - For 4-series console outputs, replacing \n with \r\n to help console readability
+ - Changed RuntimeEnvironment to be 3 variables - Framework for Crestron vs Standard, CrestronSeries for 3 vs 4, and CrestronRuntimeEnvironment for Simpl vs SimplSharpPro vs Server
 
 ## [13.0.0] - 2020-09-03
 ### Added
