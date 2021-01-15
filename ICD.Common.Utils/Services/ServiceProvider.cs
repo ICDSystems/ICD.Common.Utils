@@ -26,6 +26,31 @@ namespace ICD.Common.Utils.Services
 		#region Methods
 
 		/// <summary>
+		/// Retrieves the registered service of the given type.
+		/// Creates a new instance using the given function if it does not exist.
+		/// </summary>
+		/// <typeparam name="TService"></typeparam>
+		/// <param name="constructor"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		[NotNull]
+		public static TService GetOrAddService<TService>([NotNull] Func<TService> constructor)
+		{
+			if (constructor == null)
+				throw new ArgumentNullException("constructor");
+
+			TService output = TryGetService<TService>();
+
+			if (output == null)
+			{
+				output = constructor();
+				AddService(output);
+			}
+
+			return output;
+		}
+
+		/// <summary>
 		/// Retrieves the registered service of the given type. Use this for required dependencies.
 		/// </summary>
 		/// <typeparam name="TService">service type to retrieve</typeparam>
