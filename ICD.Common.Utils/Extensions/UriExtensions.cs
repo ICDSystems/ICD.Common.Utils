@@ -62,5 +62,23 @@ namespace ICD.Common.Utils.Extensions
 			
 			return builder.ToString();
 		}
+
+		/// <summary>
+		/// Returns a new Uri representing the Uri for the parent path.
+		/// E.g.
+		///		www.test.com/A/B/C
+		/// Becomes
+		///		www.test.com/A/B/
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static Uri GetParentUri([NotNull] this Uri extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			string parentUriString = extends.AbsoluteUri.Remove(extends.AbsoluteUri.Length - extends.Segments.Last().Length);
+			return new Uri(parentUriString, UriKind.Absolute);
+		}
 	}
 }

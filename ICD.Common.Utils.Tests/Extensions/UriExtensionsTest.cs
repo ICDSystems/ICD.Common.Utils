@@ -18,5 +18,13 @@ namespace ICD.Common.Utils.Tests.Extensions
 		{
 			Assert.AreEqual(expected, new Uri(uriString).GetPassword());
 		}
+
+		[TestCase("http://www.test.com/a/b/c", "http://www.test.com/a/b/")]
+		[TestCase("http://www.test.com/a/b/", "http://www.test.com/a/")]
+		[TestCase("http://www.test.com/", "http://www.test.com/")]
+		public void GetParentUri(string uriString, string expected)
+		{
+			Assert.AreEqual(expected, new Uri(uriString).GetParentUri().ToString());
+		}
 	}
 }
