@@ -169,10 +169,11 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="parts"></param>
 		/// <returns></returns>
-		public void AppendPath(params string[] parts)
+		public IcdUriBuilder AppendPath(params string[] parts)
 		{
 			parts = parts.Prepend(Path).ToArray(parts.Length + 1);
 			Path = Combine(parts);
+			return this;
 		}
 
 		#region Flurl
