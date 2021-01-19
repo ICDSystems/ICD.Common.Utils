@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using ICD.Common.Utils.Extensions;
 
 namespace ICD.Common.Utils
 {
@@ -29,6 +31,14 @@ namespace ICD.Common.Utils
 				aBytes[index] = (byte)(aBytes[index] ^ bBytes[index]);
 
 			return new Guid(aBytes);
+		}
+
+		/// <summary>
+		/// Combines the guids in the given order to make a new, deterministic guid.
+		/// </summary>
+		public static Guid Combine(IEnumerable<Guid> guids)
+		{
+			return guids.AggregateOrDefault(Combine, default(Guid));
 		}
 	}
 }
