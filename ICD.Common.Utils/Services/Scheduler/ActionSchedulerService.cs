@@ -18,9 +18,9 @@ namespace ICD.Common.Utils.Services.Scheduler
 		public ActionSchedulerService()
 		{
 			m_Actions = new List<IScheduledAction>();
-			m_Timer = new SafeTimer(TimerCallback, -1);
 			m_CriticalSection = new SafeCriticalSection();
 			m_LastRunTime = DateTime.MinValue;
+			m_Timer = SafeTimer.Stopped(TimerCallback);
 		}
 
 		public void Dispose()
@@ -151,15 +151,6 @@ namespace ICD.Common.Utils.Services.Scheduler
 			{
 				m_CriticalSection.Leave();
 			}
-		}
-
-		private void Log(eSeverity severity, string message, params object[] args)
-		{
-			ILoggerService logger = ServiceProvider.TryGetService<ILoggerService>();
-			if (logger == null)
-				return;
-
-			logger.AddEntry(severity, string.Format("{0} - {1}", this, message), args);
 		}
 
 		private void Log(eSeverity severity, Exception ex, string message, params object[] args)

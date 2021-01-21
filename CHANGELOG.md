@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Added GetParentUri method to UriExtensions
 
+## [14.1.0] - 2021-01-21
+### Added
+ - Added overload to GuidUtils that takes an enumerable of guids and combines them into a new deterministic guid
+
+### Changed
+ - A SafeTimer constructor that executes the callback immediately now does this instead of waiting infinitely
+
 ## [14.0.0] - 2021-01-14
 ### Added
  - Added Get and Set extensions to PropertyInfo in SIMPLSHARP to mimic overloads avaliable in NETSTANDARD

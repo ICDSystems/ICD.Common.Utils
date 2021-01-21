@@ -36,7 +36,7 @@ namespace ICD.Common.Utils.Timers
 		/// <param name="callback"></param>
 		/// <param name="repeatPeriod"></param>
 		public SafeTimer(Action callback, long repeatPeriod)
-			: this(callback, -1, repeatPeriod)
+			: this(callback, 0, repeatPeriod)
 		{
 		}
 
@@ -138,7 +138,7 @@ namespace ICD.Common.Utils.Timers
 			if (repeatPeriod < 0 && repeatPeriod != Timeout.Infinite)
 				throw new ArgumentOutOfRangeException("repeatPeriod", "Repeat period must be greater than or equal to 0ms");
 
-			if (dueTime >= int.MaxValue)
+			if (repeatPeriod >= int.MaxValue)
 				throw new ArgumentOutOfRangeException("repeatPeriod", string.Format("Repeat period must be less than {0:n0}ms", int.MaxValue));
 
 #if SIMPLSHARP
