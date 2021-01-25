@@ -77,7 +77,7 @@ namespace ICD.Common.Utils.Extensions
 			if (extends == null)
 				throw new ArgumentNullException("extends");
 
-			string parentUriString = extends.AbsoluteUri.Remove(extends.AbsoluteUri.Length - extends.Segments.Last().Length);
+			string parentUriString = extends.AbsoluteUri.Substring(0, extends.AbsoluteUri.Length - extends.Segments.Last().Length);
 			return new Uri(parentUriString, UriKind.Absolute);
 		}
 	}
