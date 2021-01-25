@@ -32,7 +32,9 @@ namespace ICD.Common.Utils.Collections
 				m_MaxSize = value;
 
 				TContents unused;
-				Trim(out unused);
+				while (Trim(out unused))
+				{
+				}
 			}
 		}
 
