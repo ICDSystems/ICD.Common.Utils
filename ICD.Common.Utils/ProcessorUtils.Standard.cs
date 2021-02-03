@@ -138,16 +138,6 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Gets the uptime for the system
-		/// </summary>
-		/// <returns></returns>
-		[PublicAPI]
-		public static TimeSpan GetSystemUptime()
-		{
-			return TimeSpan.FromMilliseconds(Environment.TickCount);
-		}
-
-		/// <summary>
 		/// Gets the time the system was started
 		/// DateTime that uptime starts
 		/// </summary>
@@ -162,14 +152,14 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Gets the uptime 
+		/// Gets the time the program was started
+		/// Datetime the program starts
 		/// </summary>
 		/// <returns></returns>
 		[PublicAPI]
-		public static TimeSpan GetProgramUptime()
+		public static DateTime? GetProgramStartTime()
 		{
-			var current = System.Diagnostics.Process.GetCurrentProcess();
-			return IcdEnvironment.GetLocalTime() - current.StartTime;
+			return GetSystemStartTime();
 		}
 
 		#endregion
