@@ -229,21 +229,6 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Gets the uptime for the system
-		/// </summary>
-		/// <returns></returns>
-		[PublicAPI]
-		public static TimeSpan GetSystemUptime()
-		{
-			if (s_SystemUptimeStartTimeUtc == null)
-				UpdateSystemStartTime();
-
-			if (s_SystemUptimeStartTimeUtc != null)
-				return IcdEnvironment.GetUtcTime() - s_SystemUptimeStartTimeUtc.Value;
-			return default(TimeSpan);
-		}
-
-		/// <summary>
 		/// Gets the time the system was started
 		/// DateTime that uptime starts
 		/// </summary>
@@ -262,26 +247,27 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <returns></returns>
 		[PublicAPI]
-		public static TimeSpan GetProgramUptime()
+		public static DateTime? GetProgramStartTime()
 		{
-			if (s_ProgramUptimeStartTimeUtc == null)
-			{
-				string uptime = GetProgramUptimeFeedback((int)ProgramUtils.ProgramNumber);
-				Match match = Regex.Match(uptime, UPTIME_REGEX);
-				if (!match.Success)
-					return default(TimeSpan);
+			if (s_ProgramUptimeStartTimeUtc != null)
+				return s_ProgramUptimeStartTimeUtc;
 
-				int days = int.Parse(match.Groups["days"].Value);
-				int hours = int.Parse(match.Groups["hours"].Value);
-				int minutes = int.Parse(match.Groups["minutes"].Value);
-				int seconds = int.Parse(match.Groups["seconds"].Value);
-				int milliseconds = int.Parse(match.Groups["milliseconds"].Value);
 
-				TimeSpan span = new TimeSpan(days, hours, minutes, seconds, milliseconds);
-				s_ProgramUptimeStartTimeUtc = IcdEnvironment.GetUtcTime() - span;
-			}
+			string uptime = GetProgramUptimeFeedback((int)ProgramUtils.ProgramNumber);
+			Match match = Regex.Match(uptime, UPTIME_REGEX);
+			if (!match.Success)
+				return null;
 
-			return IcdEnvironment.GetUtcTime() - s_ProgramUptimeStartTimeUtc.Value;
+			int days = int.Parse(match.Groups["days"].Value);
+			int hours = int.Parse(match.Groups["hours"].Value);
+			int minutes = int.Parse(match.Groups["minutes"].Value);
+			int seconds = int.Parse(match.Groups["seconds"].Value);
+			int milliseconds = int.Parse(match.Groups["milliseconds"].Value);
+
+			TimeSpan span = new TimeSpan(days, hours, minutes, seconds, milliseconds);
+			s_ProgramUptimeStartTimeUtc = IcdEnvironment.GetUtcTime() - span;
+
+			return s_ProgramUptimeStartTimeUtc;
 		}
 
 		#endregion

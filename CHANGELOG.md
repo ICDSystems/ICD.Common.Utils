@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Added GetParentUri method to UriExtensions
 
+## [14.2.0] - 2021-02-04
+### Changed
+ - ProcessorUtils Uptime methods changed to StartTime
+
 ## [14.1.0] - 2021-01-21
 ### Added
  - Added overload to GuidUtils that takes an enumerable of guids and combines them into a new deterministic guid
