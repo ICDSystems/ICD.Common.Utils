@@ -93,6 +93,9 @@ namespace ICD.Common.Utils.Timers
 		/// </summary>
 		public void Stop()
 		{
+			if (IsDisposed)
+				return;
+
 #if SIMPLSHARP
 			m_Timer.Stop();
 #else
