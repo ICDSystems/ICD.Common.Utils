@@ -4,7 +4,7 @@ using Crestron.SimplSharp.CrestronIO;
 #else
 using ICD.Common.Utils.Extensions;
 using System.IO;
-using Microsoft.DotNet.PlatformAbstractions;
+using System.Reflection;
 #endif
 
 namespace ICD.Common.Utils.IO
@@ -16,7 +16,8 @@ namespace ICD.Common.Utils.IO
 #if SIMPLSHARP
 			return Directory.GetApplicationDirectory();
 #else
-			return ApplicationEnvironment.ApplicationBasePath;
+			string pathToDll = Assembly.GetExecutingAssembly().GetPath();
+			return pathToDll == null ? null : IcdPath.GetDirectoryName(pathToDll);
 #endif
 		}
 
