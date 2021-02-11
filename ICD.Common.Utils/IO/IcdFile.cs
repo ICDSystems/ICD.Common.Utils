@@ -120,5 +120,18 @@ namespace ICD.Common.Utils.IO
 		{
 			File.Move(sourceFileName, destFileName);
 		}
+
+#if STANDARD
+		public static void SetAttributes(string path, FileAttributes attributes, bool recursive)
+		{
+			File.SetAttributes(path, attributes);
+
+			if (!recursive || !Directory.Exists(path))
+				return;
+
+			foreach (string innerPath in Directory.GetFileSystemEntries(path))
+				SetAttributes(innerPath, attributes, true);
+		}
+#endif
 	}
 }
