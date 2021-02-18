@@ -210,6 +210,15 @@ namespace ICD.Common.Utils
 
 		#region Methods
 
+		/// <summary>
+		/// Gets the name of the local time zone.
+		/// </summary>
+		/// <returns></returns>
+		public static string GetLocalTimeZoneName()
+		{
+			return CrestronEnvironment.GetTimeZone().Name;
+		}
+
 		public static DateTime GetLocalTime()
 		{
 			return CrestronEnvironment.GetLocalTime();

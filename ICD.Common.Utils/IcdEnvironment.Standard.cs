@@ -93,6 +93,17 @@ namespace ICD.Common.Utils
 			s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Na;
 		}
 
+		/// <summary>
+		/// Gets the name of the local time zone.
+		/// </summary>
+		/// <returns></returns>
+		public static string GetLocalTimeZoneName()
+		{
+			return System.TimeZoneInfo.Local.IsDaylightSavingTime(GetLocalTime())
+				       ? System.TimeZoneInfo.Local.DaylightName
+				       : System.TimeZoneInfo.Local.StandardName;
+		}
+
 		public static DateTime GetLocalTime()
 		{
 			return DateTime.Now;
