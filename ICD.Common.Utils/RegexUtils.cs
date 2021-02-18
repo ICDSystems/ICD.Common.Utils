@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using ICD.Common.Properties;
 
 namespace ICD.Common.Utils
 {
@@ -110,6 +112,35 @@ namespace ICD.Common.Utils
 				};
 
 			return Regex.Replace(input, pattern, evaluator, options);
+		}
+
+		/// <summary>
+		/// Returns the first successful match or the last failure.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <param name="patterns"></param>
+		/// <returns></returns>
+		[NotNull]
+		public static Match MatchAny([NotNull] string input, [NotNull] IEnumerable<string> patterns)
+		{
+			if (input == null)
+				throw new ArgumentNullException("input");
+
+			if (patterns == null)
+				throw new ArgumentNullException("patterns");
+
+			Match last = null;
+			foreach (string pattern in patterns)
+			{
+				last = Regex.Match(input, pattern);
+				if (last.Success)
+					break;
+			}
+
+			if (last == null)
+				throw new InvalidOperationException("No patterns provided");
+
+			return last;
 		}
 	}
 }
