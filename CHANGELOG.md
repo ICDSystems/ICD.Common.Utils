@@ -5,9 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+ - Added GetLocalTimeZoneName method to IcdEnvironment
+ - Added MatchAny method to RegexUtils
 
 ### Changed
  - Added GetParentUri method to UriExtensions
+ - Updated TimeZones.sqlite to include daylight time zone info, added a new display name column. Adjusted IcdTimeZoneInfo accordingly.
 
 ## [14.2.0] - 2021-02-04
 ### Changed
