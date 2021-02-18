@@ -32,7 +32,9 @@ namespace ICD.Common.Utils.TimeZoneInfo
 
 		#region Properties
 
-		public string StandardName { get; private set; }
+		public string Name { get; private set; }
+
+		public string DisplayName { get; private set; }
 
 		public TimeSpan BaseUtcOffset { get; private set; }
 
@@ -66,6 +68,11 @@ namespace ICD.Common.Utils.TimeZoneInfo
 			return s_Cache[timeZoneId];
 		}
 
+		public static bool TryFindSystemTimeZoneById(string timeZoneId, out IcdTimeZoneInfo output)
+		{
+			return s_Cache.TryGetValue(timeZoneId, out output);
+		}
+
 		#endregion
 
 		#region Cache Building
@@ -83,13 +90,13 @@ namespace ICD.Common.Utils.TimeZoneInfo
 				sQLiteConnection.Open();
 
 				foreach (IcdTimeZoneInfo info in ReadTimeZoneInfos(sQLiteConnection))
-					s_Cache.Add(info.StandardName, info);
+					s_Cache.Add(info.Name, info);
 			}
 		}
 
 		private static IEnumerable<IcdTimeZoneInfo> ReadTimeZoneInfos(IcdSqliteConnection sQLiteConnection)
 		{
-			const string command = "select id, name, baseOffsetTicks, hasDstRule from timeZones";
+			const string command = "select id, name, displayName, baseOffsetTicks, hasDstRule from timeZones";
 
 			using (IcdSqliteCommand cmd = new IcdSqliteCommand(command, sQLiteConnection))
 			{
@@ -99,14 +106,16 @@ namespace ICD.Common.Utils.TimeZoneInfo
 					{
 						int id = reader.GetInt32(0);
 						string name = reader.GetString(1);
-						long offset = reader.GetInt64(2);
-						bool hasRule = reader.GetBoolean(3);
+						string display = reader.GetString(2);
+						long offset = reader.GetInt64(3);
+						bool hasRule = reader.GetBoolean(4);
 
 						IcdTimeZoneInfoAdjustmentRule[] adjustmentRules = LoadAdjustmentRules(id, sQLiteConnection).ToArray();
 
 						IcdTimeZoneInfo info = new IcdTimeZoneInfo
 						{
-							StandardName = name,
+							Name = name,
+							DisplayName = display,
 							BaseUtcOffset = TimeSpan.FromTicks(offset),
 							SupportsDaylightSavingTime = hasRule,
 							m_AdjustmentRules = adjustmentRules
