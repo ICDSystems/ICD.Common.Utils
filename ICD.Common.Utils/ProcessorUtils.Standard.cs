@@ -1,6 +1,8 @@
 ﻿#if !SIMPLSHARP
 using System;
+using System.Diagnostics;
 using ICD.Common.Properties;
+using ICD.Common.Utils.IO;
 
 namespace ICD.Common.Utils
 {
@@ -125,7 +127,12 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void RestartProgram()
 		{
-			throw new NotSupportedException();
+			string filename = Process.GetCurrentProcess().MainModule?.FileName;
+			if (string.IsNullOrEmpty(filename) || !IcdFile.Exists(filename))
+				throw new InvalidOperationException("Failed to find program filename");
+
+			Process.Start(filename);
+			Environment.Exit(0);
 		}
 
 		/// <summary>
@@ -134,7 +141,15 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void Reboot()
 		{
-			throw new NotSupportedException();
+			// TODO - Linux
+			ProcessStartInfo psi =
+				new ProcessStartInfo("shutdown", "/r /t 0")
+				{
+					CreateNoWindow = true,
+					UseShellExecute = false
+				};
+
+			Process.Start(psi);
 		}
 
 		/// <summary>
