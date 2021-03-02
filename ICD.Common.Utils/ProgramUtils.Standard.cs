@@ -2,6 +2,7 @@
 using ICD.Common.Utils.IO;
 using System;
 using System.Reflection;
+using System.Security.Principal;
 using ICD.Common.Properties;
 
 namespace ICD.Common.Utils
@@ -64,6 +65,19 @@ namespace ICD.Common.Utils
 		{
 			get { return IcdFile.GetCreationTime(PathUtils.Join(PathUtils.ProgramPath, ProgramFile)); }
 		}
-    }
+
+		/// <summary>
+		/// Returns true if the current executing user is an admin.
+		/// </summary>
+		[PublicAPI]
+		public static bool IsElevated
+		{
+			get
+			{
+				WindowsIdentity current = WindowsIdentity.GetCurrent();
+				return new WindowsPrincipal(current).IsInRole(WindowsBuiltInRole.Administrator);
+			}
+		}
+	}
 }
 #endif

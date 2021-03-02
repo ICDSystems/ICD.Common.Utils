@@ -33,8 +33,6 @@
     <None Remove="SIMPLSharpLogs\**" />
   </ItemGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="ICD.Common.projectinfo" />
     <None Remove="ICD.Common_SimplSharp.suo" />
     <None Remove="ICD.SimplSharp.projectinfo" />
@@ -47,6 +45,7 @@
     <PackageReference Include="Pastel" Version="2.1.0" />
     <PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+    <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="CultureInfo.sqlite">
