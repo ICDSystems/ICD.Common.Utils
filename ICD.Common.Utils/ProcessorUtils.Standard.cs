@@ -1,8 +1,11 @@
 ﻿#if !SIMPLSHARP
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Management;
 using ICD.Common.Properties;
 using ICD.Common.Utils.IO;
+using Microsoft.Win32;
 
 namespace ICD.Common.Utils
 {
@@ -16,7 +19,21 @@ namespace ICD.Common.Utils
 		/// Gets the model name of the processor.
 		/// </summary>
 		[PublicAPI]
-		public static string ModelName { get { return Environment.MachineName; } }
+		public static string ModelName
+		{
+			get
+			{
+				string productName = RegistryLocalMachineGetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName");
+				if (productName == string.Empty)
+					return string.Empty;
+
+				string csdVersion = RegistryLocalMachineGetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CSDVersion");
+
+				return (productName.StartsWith("Microsoft") ? string.Empty : "Microsoft ") +
+				       productName +
+				       (csdVersion == string.Empty ? string.Empty : " " + csdVersion);
+			}
+		}
 
 		/// <summary>
 		/// Gets the processor firmware version.
@@ -26,8 +43,7 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				// TODO
-				return null;
+				return RegistryLocalMachineGetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuild");
 			}
 		}
 
@@ -39,8 +55,8 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				// TODO
-				return DateTime.MinValue;
+				long time = RegistryLocalMachineGetLong(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "InstallTime");
+				return time == 0 ? DateTime.MinValue : DateTime.FromFileTime(132448642489109028).ToUniversalTime();
 			}
 		}
 
@@ -52,8 +68,8 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				// TODO
-				return null;
+				ManagementObject os = new ManagementObject("Win32_OperatingSystem=@");
+				return (string)os["SerialNumber"];
 			}
 		}
 
@@ -64,8 +80,22 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				// TODO
-				return 0.0f;
+				ManagementObjectSearcher wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+
+				var memoryValues =
+					wmiObject.Get()
+					         .Cast<ManagementObject>()
+					         .Select(mo => new
+					         {
+						         FreePhysicalMemory = double.Parse(mo["FreePhysicalMemory"].ToString()),
+						         TotalVisibleMemorySize = double.Parse(mo["TotalVisibleMemorySize"].ToString())
+					         })
+					         .FirstOrDefault();
+
+				return memoryValues == null
+					? 0
+					: (float)((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) /
+					          memoryValues.TotalVisibleMemorySize);
 			}
 		}
 
@@ -160,10 +190,7 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static DateTime? GetSystemStartTime()
 		{
-			if (s_SystemStartTime == null)
-				s_SystemStartTime = IcdEnvironment.GetUtcTime() - TimeSpan.FromMilliseconds(Environment.TickCount);
-
-			return s_SystemStartTime;
+			return s_SystemStartTime ?? (s_SystemStartTime = Process.GetCurrentProcess().StartTime.ToUniversalTime());
 		}
 
 		/// <summary>
@@ -175,6 +202,36 @@ namespace ICD.Common.Utils
 		public static DateTime? GetProgramStartTime()
 		{
 			return GetSystemStartTime();
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		private static string RegistryLocalMachineGetString(string path, string key)
+		{
+			try
+			{
+				RegistryKey rk = Registry.LocalMachine.OpenSubKey(path);
+				return rk == null ? string.Empty : (string)rk.GetValue(key);
+			}
+			catch
+			{
+				return string.Empty;
+			}
+		}
+
+		private static long RegistryLocalMachineGetLong(string path, string key)
+		{
+			try
+			{
+				RegistryKey rk = Registry.LocalMachine.OpenSubKey(path);
+				return rk == null ? 0 : (long)rk.GetValue(key);
+			}
+			catch
+			{
+				return 0;
+			}
 		}
 
 		#endregion
