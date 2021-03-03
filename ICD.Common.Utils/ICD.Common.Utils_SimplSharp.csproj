@@ -115,6 +115,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\RegistryExtensions.cs" />
     <Compile Include="Extensions\VersionExtensions.cs" />
     <Compile Include="ThreadedWorkerQueue.cs" />
     <Compile Include="TimeZoneInfo\IcdTimeZoneInfo.cs" />
