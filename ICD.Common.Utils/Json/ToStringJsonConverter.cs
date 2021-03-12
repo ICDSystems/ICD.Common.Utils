@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Crestron.SimplSharp.Reflection;
 #else
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 #endif
 using ICD.Common.Properties;
 using Newtonsoft.Json;
@@ -54,7 +55,12 @@ namespace ICD.Common.Utils.Json
 			}
 			catch (TargetInvocationException e)
 			{
-				throw e.InnerException;
+#if SIMPLSHARP
+				throw e.InnerException ?? e;
+#else
+				ExceptionDispatchInfo.Capture(e.InnerException ?? e).Throw();
+				throw;
+#endif
 			}
 		}
 
