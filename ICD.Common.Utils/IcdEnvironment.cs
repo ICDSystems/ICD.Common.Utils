@@ -68,13 +68,43 @@ namespace ICD.Common.Utils
 			EthernetLan2Adapter = 8,
 		}
 
+		/// <summary>
+		/// Enum for session change events.
+		/// </summary>
+		public enum eSessionChangeEventType
+		{
+			None = 0,
+			ConsoleConnect = 1,
+			ConsoleDisconnect = 2,
+			RemoteConnect = 3,
+			RemoteDisconnect = 4,
+			SessionLogon = 5,
+			SessionLogoff = 6,
+			SessionLock = 7,
+			SessionUnlock = 8,
+			SessionRemoteControl = 9
+		}
+
 		public delegate void ProgramStatusCallback(eProgramStatusEventType type);
 
 		public delegate void EthernetEventCallback(eEthernetAdapterType adapter, eEthernetEventType type);
 
+		public delegate void SessionChangeEventCallback(int sessionId, eSessionChangeEventType type);
+
+		/// <summary>
+		/// Raised when the program status changes.
+		/// </summary>
 		public static event ProgramStatusCallback OnProgramStatusEvent;
 
+		/// <summary>
+		/// Raised when a network adapter connects/disconnects.
+		/// </summary>
 		public static event EthernetEventCallback OnEthernetEvent;
+
+		/// <summary>
+		/// Raised when a session changes, such as user logging in/out.
+		/// </summary>
+		public static event SessionChangeEventCallback OnSessionChangedEvent;
 
 		/// <summary>
 		/// Raised when the program has completed initialization.
@@ -86,11 +116,9 @@ namespace ICD.Common.Utils
 		/// </summary>
 		public static event EventHandler OnSystemDateTimeChanged;
 
-		private static eFramework s_Framework;
-
-		private static eCrestronSeries s_CrestronSeries;
-
-		private static eCrestronRuntimeEnvironment s_CrestronRuntimeEnvironment;
+		private static readonly eFramework s_Framework;
+		private static readonly eCrestronSeries s_CrestronSeries;
+		private static readonly eCrestronRuntimeEnvironment s_CrestronRuntimeEnvironment;
 
 		private static readonly SafeCriticalSection s_ProgramInitializationSection = new SafeCriticalSection();
 		private static bool s_ProgramInitializationComplete;
@@ -128,12 +156,12 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Gets UTC time
-		/// Uses GetLocalTime so Crestron Env will have ms percision
+		/// Gets UTC time.
 		/// </summary>
 		/// <returns></returns>
 		public static DateTime GetUtcTime()
 		{
+			// Use GetLocalTime so Crestron Env will have ms precision
 			return GetLocalTime().ToUniversalTime();
 		}
 	}

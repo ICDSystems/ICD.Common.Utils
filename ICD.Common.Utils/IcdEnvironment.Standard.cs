@@ -130,6 +130,29 @@ namespace ICD.Common.Utils
 			const string replace = "$1:$2:$3:$4:$5:$6";
 			return Regex.Replace(address, regex, replace);
 		}
+
+		/// <summary>
+		/// Called by the application to raise the program status.
+		/// </summary>
+		/// <param name="status"></param>
+		public static void SetProgramStatus(eProgramStatusEventType status)
+		{
+			ProgramStatusCallback handler = OnProgramStatusEvent;
+			if (handler != null)
+				handler(status);
+		}
+
+		/// <summary>
+		/// Called by the application to raise session change events.
+		/// </summary>
+		/// <param name="sessionId"></param>
+		/// <param name="reasonCode"></param>
+		public static void HandleSessionChange(int sessionId, eSessionChangeEventType reasonCode)
+		{
+			SessionChangeEventCallback handler = OnSessionChangedEvent;
+			if (handler != null)
+				handler(sessionId, reasonCode);
+		}
 	}
 }
 #endif
