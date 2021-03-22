@@ -175,6 +175,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns></returns>
+		[NotNull]
 		[PublicAPI]
 		public static byte[] ToBytes([NotNull] string input)
 		{
@@ -182,6 +183,43 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("input");
 
 			return Encoding.GetEncoding(28591).GetBytes(input);
+		}
+
+		/// <summary>
+		/// Converts the hex string ("01AB23") to a byte array ({1, 171, 23}).
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		[NotNull]
+		[PublicAPI]
+		public static byte[] HexToBytes([NotNull] string value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (value.Length % 2 != 0)
+				throw new ArgumentException("The binary key cannot have an odd number of digits");
+
+			return value.Split(2)
+			            .Select(s => HexToByte(s))
+			            .ToArray();
+		}
+
+		/// <summary>
+		/// Converts the hex string ("AB") to a byte (171).
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static byte HexToByte([NotNull] string value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (value.Length == 0 || value.Length > 2)
+				throw new ArgumentOutOfRangeException("value");
+
+			return Convert.ToByte(value, 16);
 		}
 
 		/// <summary>

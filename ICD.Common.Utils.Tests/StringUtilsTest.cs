@@ -1,4 +1,5 @@
-﻿using ICD.Common.Properties;
+﻿using System.Linq;
+using ICD.Common.Properties;
 using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests
@@ -22,6 +23,21 @@ namespace ICD.Common.Utils.Tests
 			string output = StringUtils.FromHexLiteral(literal);
 
 			Assert.AreEqual("\x08\x22\x00\x00\x00\x02", output);
+		}
+
+		[TestCase("FF", new byte[] {0xFF})]
+		[TestCase("01FF", new byte[] { 0x01, 0xFF })]
+		public void HexToBytes(string value, byte[] expected)
+		{
+			byte[] bytes = StringUtils.HexToBytes(value);
+			Assert.IsTrue(bytes.SequenceEqual(expected));
+		}
+
+		[TestCase("1", 1)]
+		[TestCase("FF", 0xFF)]
+		public void HexToByte(string value, byte expected)
+		{
+			Assert.AreEqual(expected, StringUtils.HexToByte(value));
 		}
 
 		[TestCase("Test", "Test")]
