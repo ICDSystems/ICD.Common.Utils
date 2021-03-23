@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using ICD.Common.Properties;
 
@@ -140,6 +141,46 @@ namespace ICD.Common.Utils.Extensions
 			return Enumerable.Range(0, (int)Math.Ceiling(extends.Length / (double)chunkSize))
 			                 .Select(i => extends.Substring(i * chunkSize,
 			                                                Math.Min(chunkSize, extends.Length - (i * chunkSize))));
+		}
+
+		/// <summary>
+		/// Joins the strings in the enumerable.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static string Join([NotNull] this IEnumerable<string> extends)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.Join(string.Empty);
+		}
+
+		/// <summary>
+		/// Joins the strings in the enumerable.
+		/// </summary>
+		/// <param name="extends"></param>
+		/// <param name="delimiter"></param>
+		/// <returns></returns>
+		public static string Join([NotNull] this IEnumerable<string> extends, string delimiter)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			StringBuilder builder = new StringBuilder();
+			bool isFirst = true;
+
+			foreach (string item in extends)
+			{
+				if (!isFirst)
+					builder.Append(delimiter);
+
+				builder.Append(item);
+
+				isFirst = false;
+			}
+
+			return builder.ToString();
 		}
 
 		/// <summary>
