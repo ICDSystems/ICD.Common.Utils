@@ -18,7 +18,7 @@ namespace ICD.Common.Utils.Collections
 #endif
 	public sealed class PriorityQueue<T> : IEnumerable<T>, ICollection
 	{
-		private readonly IcdOrderedDictionary<int, List<T>> m_PriorityToQueue;
+		private readonly IcdSortedDictionary<int, List<T>> m_PriorityToQueue;
 		private int m_Count;
 
 		#region Properties
@@ -46,7 +46,7 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		public PriorityQueue()
 		{
-			m_PriorityToQueue = new IcdOrderedDictionary<int, List<T>>();
+			m_PriorityToQueue = new IcdSortedDictionary<int, List<T>>();
 		}
 
 		#region Methods

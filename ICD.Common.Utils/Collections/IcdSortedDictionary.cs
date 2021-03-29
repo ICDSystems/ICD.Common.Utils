@@ -13,7 +13,7 @@ namespace ICD.Common.Utils.Collections
 #if !SIMPLSHARP
 	[DebuggerDisplay("Count = {Count}")]
 #endif
-	public sealed class IcdOrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+	public sealed class IcdSortedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 	{
 		private readonly List<TKey> m_OrderedKeys;
 		private readonly List<TValue> m_ValuesOrderedByKey; 
@@ -52,7 +52,7 @@ namespace ICD.Common.Utils.Collections
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public IcdOrderedDictionary()
+		public IcdSortedDictionary()
 			: this(Comparer<TKey>.Default)
 		{
 		}
@@ -61,7 +61,7 @@ namespace ICD.Common.Utils.Collections
 		/// Constructor.
 		/// </summary>
 		/// <param name="comparer"></param>
-		public IcdOrderedDictionary([NotNull] IComparer<TKey> comparer)
+		public IcdSortedDictionary([NotNull] IComparer<TKey> comparer)
 			: this(comparer, EqualityComparer<TKey>.Default)
 		{
 		}
@@ -71,7 +71,7 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="comparer"></param>
 		/// <param name="equalityComparer"></param>
-		public IcdOrderedDictionary([NotNull] IComparer<TKey> comparer, [NotNull] IEqualityComparer<TKey> equalityComparer)
+		public IcdSortedDictionary([NotNull] IComparer<TKey> comparer, [NotNull] IEqualityComparer<TKey> equalityComparer)
 		{
 			if (comparer == null)
 				throw new ArgumentNullException("comparer");
@@ -89,7 +89,7 @@ namespace ICD.Common.Utils.Collections
 		/// Constructor.
 		/// </summary>
 		/// <param name="dictionary"></param>
-		public IcdOrderedDictionary([NotNull] IEnumerable<KeyValuePair<TKey, TValue>> dictionary)
+		public IcdSortedDictionary([NotNull] IEnumerable<KeyValuePair<TKey, TValue>> dictionary)
 			: this()
 		{
 			if (dictionary == null)

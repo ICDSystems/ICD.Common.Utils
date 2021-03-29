@@ -5,14 +5,14 @@ using NUnit.Framework;
 namespace ICD.Common.Utils.Tests.Collections
 {
 	[TestFixture]
-	public sealed class IcdOrderedDictionaryTest
+	public sealed class IcdSortedDictionaryTest
 	{
 		#region Properties
 
 		[Test]
 		public void CountTest()
 		{
-			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>
+			IcdSortedDictionary<int, int> dict = new IcdSortedDictionary<int, int>
 			{
 				{0, 0},
 				{1, 10},
@@ -25,7 +25,7 @@ namespace ICD.Common.Utils.Tests.Collections
 		[Test]
 		public void IsReadOnlyTest()
 		{
-			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>();
+			IcdSortedDictionary<int, int> dict = new IcdSortedDictionary<int, int>();
 
 			Assert.IsFalse(dict.IsReadOnly);
 		}
@@ -33,7 +33,7 @@ namespace ICD.Common.Utils.Tests.Collections
 		[Test]
 		public void KeysTest()
 		{
-			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>
+			IcdSortedDictionary<int, int> dict = new IcdSortedDictionary<int, int>
 			{
 				{0, 0},
 				{1, 10},
@@ -51,7 +51,7 @@ namespace ICD.Common.Utils.Tests.Collections
 		[Test]
 		public void ValuesTest()
 		{
-			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>
+			IcdSortedDictionary<int, int> dict = new IcdSortedDictionary<int, int>
 			{
 				{0, 0},
 				{1, 10},
@@ -70,7 +70,7 @@ namespace ICD.Common.Utils.Tests.Collections
 		public void IndexerTest()
 		{
 			// ReSharper disable UseObjectOrCollectionInitializer
-			IcdOrderedDictionary<int, int> dict = new IcdOrderedDictionary<int, int>();
+			IcdSortedDictionary<int, int> dict = new IcdSortedDictionary<int, int>();
 			// ReSharper restore UseObjectOrCollectionInitializer
 
 			dict[0] = 0;
