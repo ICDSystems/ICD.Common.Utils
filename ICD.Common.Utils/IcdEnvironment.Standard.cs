@@ -7,11 +7,29 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using ICD.Common.Properties;
+using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Timers;
 
 namespace ICD.Common.Utils
 {
 	public static partial class IcdEnvironment
 	{
+		/// <summary>
+		/// We get several device added/removed events for a single device
+		/// To reduce noise, we use timers in an attempt to compress them to a single event
+		/// </summary>
+		private const long DEVICE_ADDED_REMOVED_TIME = 500;
+
+		private static readonly SafeTimer s_DeviceAddedTimer = SafeTimer.Stopped(DeviceAddedTimerCallback);
+
+		private static readonly SafeTimer s_DeviceRemovedTimer = SafeTimer.Stopped(DeviceRemovedTimerCallback);
+
+		/// <summary>
+		/// Raised when a system device (eg USB) is added
+		/// May be raised once for multiple device additions
+		/// </summary>
+		public static event EventHandler<BoolEventArgs> OnSystemDeviceAddedRemoved;
+
 		public static string NewLine { get { return Environment.NewLine; } }
 
 		/// <summary>
@@ -152,6 +170,39 @@ namespace ICD.Common.Utils
 			SessionChangeEventCallback handler = OnSessionChangedEvent;
 			if (handler != null)
 				handler(sessionId, reasonCode);
+		}
+
+		/// Call this method to raise the device added/removed event for an added device
+		/// Uses a timer to attempt to compress multiple events into a single event
+		/// </summary>
+		public static void RaiseSystemDeviceAddedEvent()
+		{
+			s_DeviceAddedTimer.Reset(DEVICE_ADDED_REMOVED_TIME);
+		}
+
+		/// <summary>
+		/// Call this method to raise the device added/removed event for a removed device
+		/// Uses a timer to attempt to compress multiple events into a single event
+		/// </summary>
+		public static void RaiseSystemDeviceRemovedEvent()
+		{
+			s_DeviceRemovedTimer.Reset(DEVICE_ADDED_REMOVED_TIME);
+		}
+
+		/// <summary>
+		/// Actually fire the added event after the timer expires
+		/// </summary>
+		private static void DeviceAddedTimerCallback()
+		{
+			OnSystemDeviceAddedRemoved.Raise(null, true);
+		}
+
+		/// <summary>
+		/// Actually fire the removed event after the timer expires
+		/// </summary>
+		private static void DeviceRemovedTimerCallback()
+		{
+			OnSystemDeviceAddedRemoved.Raise(null, false);
 		}
 	}
 }

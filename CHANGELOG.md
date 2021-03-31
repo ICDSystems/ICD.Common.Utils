@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Added GetLocalTimeZoneName method to IcdEnvironment
  - Added MatchAny method to RegexUtils
+ - Added OnSystemDeviceAddedRemoved and associated raise methods to IcdEnvironment for NETSTANDARD
 
 ### Changed
  - Added GetParentUri method to UriExtensions
