@@ -218,7 +218,8 @@ namespace ICD.Common.Utils.Extensions
 					                          BindingFlags.Instance |
 					                          BindingFlags.Static |
 					                          BindingFlags.Public |
-					                          BindingFlags.NonPublic);
+					                          BindingFlags.NonPublic |
+					                          BindingFlags.FlattenHierarchy);
 				if (info == null)
 				{
 					instance = null;
@@ -238,7 +239,8 @@ namespace ICD.Common.Utils.Extensions
 				                     BindingFlags.Instance |
 				                     BindingFlags.Static |
 				                     BindingFlags.Public |
-				                     BindingFlags.NonPublic);
+				                     BindingFlags.NonPublic |
+				                     BindingFlags.FlattenHierarchy);
 
 			if (output == null)
 				instance = null;
@@ -309,7 +311,8 @@ namespace ICD.Common.Utils.Extensions
 				                  BindingFlags.Instance |
 				                  BindingFlags.Static |
 				                  BindingFlags.Public |
-				                  BindingFlags.NonPublic);
+				                  BindingFlags.NonPublic |
+				                  BindingFlags.FlattenHierarchy);
 			if (method == null)
 				return false;
 
