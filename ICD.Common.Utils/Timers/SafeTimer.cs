@@ -112,7 +112,6 @@ namespace ICD.Common.Utils.Timers
 			m_Timer.Reset();
 #else
 			m_Timer.Change(0, m_RepeatPeriod);
-			m_Callback();
 #endif
 		}
 

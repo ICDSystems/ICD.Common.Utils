@@ -49,12 +49,14 @@ namespace ICD.Common.Utils.Tests.Timers
 		[Test]
 		public void TriggerTest()
 		{
-			bool called = false;
-			SafeTimer timer = SafeTimer.Stopped(() => called = true);
+			int called = 0;
+			SafeTimer timer = SafeTimer.Stopped(() => called++);
 
 			timer.Trigger();
 
-			Assert.IsTrue(called);
+			ThreadingUtils.Sleep(50);
+
+			Assert.AreEqual(1, called);
 
 			timer.Dispose();
 		}
