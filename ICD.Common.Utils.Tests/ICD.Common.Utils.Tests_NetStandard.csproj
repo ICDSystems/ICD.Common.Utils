@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 	<RootNamespace>ICD.Common.Utils.Tests</RootNamespace>
 	<AssemblyName>ICD.Common.Utils.Tests</AssemblyName>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
