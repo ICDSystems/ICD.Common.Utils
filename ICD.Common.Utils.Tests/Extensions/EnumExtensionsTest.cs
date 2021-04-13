@@ -32,5 +32,17 @@ namespace ICD.Common.Utils.Tests.Extensions
 		{
 			Assert.AreEqual(expected, value.HasFlags(flags));
 		}
+
+		[TestCase(eTestEnum.A, eTestEnum.B)]
+		[TestCase(eTestEnum.B, eTestEnum.C)]
+		[TestCase(eTestEnum.C, eTestEnum.A)]
+		[TestCase(eTestEnum.A | eTestEnum.B, null)]
+		public void CycleNextTest(eTestEnum value, eTestEnum? expected)
+		{
+			if (EnumUtils.HasMultipleFlags(value))
+				Assert.Catch(typeof(InvalidOperationException), () => value.CycleNext());
+			else
+				Assert.AreEqual(expected, value.CycleNext());
+		}
 	}
 }

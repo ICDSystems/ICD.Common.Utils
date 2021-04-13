@@ -355,6 +355,22 @@ namespace ICD.Common.Utils.Extensions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extends"></param>
 		/// <param name="item"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static int BinarySearch<T>([NotNull] this IList<T> extends, T item)
+		{
+			if (extends == null)
+				throw new ArgumentNullException("extends");
+
+			return extends.BinarySearch(item, Comparer<T>.Default);
+		}
+
+		/// <summary>
+		/// Returns the index of the item in the list.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="item"></param>
 		/// <param name="comparer"></param>
 		/// <returns></returns>
 		[PublicAPI]

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ICD.Common.Properties;
 
 namespace ICD.Common.Utils.Extensions
@@ -82,6 +84,26 @@ namespace ICD.Common.Utils.Extensions
 			where T : struct, IConvertible
 		{
 			return EnumUtils.ToStringUndefined(extends);
+		}
+
+		/// <summary>
+		/// Returns the next defined enum value for the enum type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <returns></returns>
+		public static T CycleNext<T>(this T extends)
+			where T : struct, IConvertible
+		{
+			if (EnumUtils.IsFlagsEnum(typeof(T)) && !EnumUtils.HasSingleFlag(extends))
+				throw new InvalidOperationException(string.Format("Cannot cycle enum with multiple flags - {0}", extends));
+
+			IEnumerable<T> values = EnumUtils.GetValues<T>();
+			IList<T> list = values as IList<T> ?? values.ToArray();
+
+			int index = list.BinarySearch(extends);
+
+			return index == list.Count - 1 ? list[0] : list[index + 1];
 		}
 	}
 }

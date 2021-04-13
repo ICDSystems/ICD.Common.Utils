@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+ - Added enum extension method for cycling to the next enum value
  - Added GetLocalTimeZoneName method to IcdEnvironment
  - Added MatchAny method to RegexUtils
  - Added OnSystemDeviceAddedRemoved and associated raise methods to IcdEnvironment for NETSTANDARD
