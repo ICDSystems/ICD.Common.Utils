@@ -82,6 +82,16 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Removes ANSI control sequences from the string.
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public static string StripAnsi(string data)
+		{
+			return Regex.Replace(data, ANSI_REGEX, string.Empty);
+		}
+
+		/// <summary>
 		/// Prefixes the given data with an ANSI control sequence and suffixes with a reset sequence.
 		/// </summary>
 		/// <param name="data"></param>

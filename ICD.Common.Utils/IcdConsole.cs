@@ -91,6 +91,7 @@ namespace ICD.Common.Utils
 				if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Server)
 					CrestronConsole.PrintLine(fixedMessage);
 #else
+				Trace.WriteLine(AnsiUtils.StripAnsi(fixedMessage));
 				Console.WriteLine(fixedMessage);
 #endif
 			}
@@ -132,7 +133,8 @@ namespace ICD.Common.Utils
 				if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Server)
 					CrestronConsole.Print(fixedMessage);
 #else
-				Console.Write(message);
+				Trace.Write(AnsiUtils.StripAnsi(fixedMessage));
+				Console.Write(fixedMessage);
 #endif
 			}
 			finally
