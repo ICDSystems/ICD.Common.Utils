@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using ICD.Common.Properties;
 #if SIMPLSHARP
 using Crestron.SimplSharp;
+#else
+using System.Diagnostics;
 #endif
 
 namespace ICD.Common.Utils
@@ -38,12 +40,49 @@ namespace ICD.Common.Utils
 				{EXCEPTION, ErrorLog.Exception},
 				{INFO, (m, e) => ErrorLog.Info(m)}
 #else
-				{ERROR, (m, e) => Console.Error.WriteLine(m)},
-				{WARN, (m, e) => Console.Error.WriteLine(m)},
-				{NOTICE, (m, e) => Console.Error.WriteLine(m)},
-				{OK, (m, e) => Console.Error.WriteLine(m)},
-				{EXCEPTION, (m, e) => Console.Error.WriteLine(m)},
-				{INFO, (m, e) => Console.Error.WriteLine(m)}
+				{
+					ERROR, (m, e) =>
+					{
+						Trace.WriteLine(AnsiUtils.StripAnsi(m));
+						Console.Error.WriteLine(m);
+					}
+				},
+				{
+					WARN, (m, e) =>
+					{
+
+						Trace.WriteLine(AnsiUtils.StripAnsi(m));
+						Console.Error.WriteLine(m);
+					}
+				},
+				{
+					NOTICE, (m, e) =>
+					{
+						Trace.WriteLine(AnsiUtils.StripAnsi(m));
+						Console.Error.WriteLine(m);
+					}
+				},
+				{
+					OK, (m, e) =>
+					{
+						Trace.WriteLine(AnsiUtils.StripAnsi(m));
+						Console.Error.WriteLine(m);
+					}
+				},
+				{
+					EXCEPTION, (m, e) =>
+					{
+						Trace.WriteLine(AnsiUtils.StripAnsi(m));
+						Console.Error.WriteLine(m);
+					}
+				},
+				{
+					INFO, (m, e) =>
+					{
+						Trace.WriteLine(AnsiUtils.StripAnsi(m));
+						Console.Error.WriteLine(m);
+					}
+				}
 #endif
 			};
 
