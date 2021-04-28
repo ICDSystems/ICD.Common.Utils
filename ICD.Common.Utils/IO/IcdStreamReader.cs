@@ -11,6 +11,10 @@ namespace ICD.Common.Utils.IO
 	{
 		private readonly StreamReader m_StreamReader;
 
+		public StreamReader WrappedStreamReader { get { return m_StreamReader; } }
+
+		public bool EndOfStream { get { return m_StreamReader.EndOfStream; } }
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -21,6 +25,21 @@ namespace ICD.Common.Utils.IO
 				throw new ArgumentNullException("memoryStream");
 
 			m_StreamReader = new StreamReader(memoryStream.WrappedMemoryStream);
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="path"></param>
+		public IcdStreamReader(string path)
+		{
+			if (path == null)
+				throw new ArgumentNullException("path");
+
+			if (!IcdFile.Exists(path))
+				throw new FileNotFoundException("Error creating stream reader, file not found");
+
+			m_StreamReader = new StreamReader(path);
 		}
 
 		~IcdStreamReader()
@@ -36,6 +55,11 @@ namespace ICD.Common.Utils.IO
 		public void Dispose()
 		{
 			m_StreamReader.Dispose();
+		}
+
+		public string ReadLine()
+		{
+			return m_StreamReader.ReadLine();
 		}
 	}
 }
