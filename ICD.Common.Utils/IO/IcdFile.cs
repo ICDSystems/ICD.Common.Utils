@@ -99,6 +99,12 @@ namespace ICD.Common.Utils.IO
 		}
 
 		[PublicAPI]
+		public static long GetLength(string path)
+		{
+			return new FileInfo(path).Length;
+		}
+
+		[PublicAPI]
 		public static IcdFileStream Create(string path)
 		{
 			return new IcdFileStream(File.Create(path));
