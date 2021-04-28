@@ -91,6 +91,9 @@
     <Compile Include="Comparers\SequenceComparer.cs" />
     <Compile Include="Comparers\UndefinedVersionComparer.cs" />
     <Compile Include="Comparers\UndefinedVersionEqualityComparer.cs" />
+    <Compile Include="Csv\Csv.cs" />
+    <Compile Include="Csv\CsvReader.cs" />
+    <Compile Include="Csv\CsvReaderSettings.cs" />
     <Compile Include="eConsoleColor.cs" />
     <Compile Include="DateTimeUtils.cs" />
     <Compile Include="eDaysOfWeek.cs" />

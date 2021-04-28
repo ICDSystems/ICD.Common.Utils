@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+ - Ported CsvReader for CF 3.5 compatibility from: https://github.com/tspence/csharp-csv-reader
  - Added enum extension method for cycling to the next enum value
  - Added GetLocalTimeZoneName method to IcdEnvironment
  - Added MatchAny method to RegexUtils
