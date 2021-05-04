@@ -111,39 +111,24 @@ namespace ICD.Common.Utils.Xml
 			if (reader.NodeType != XmlNodeType.Element && !reader.ReadToNextElement())
 				throw new FormatException();
 
-			T output = default(T);
-			bool instantiated = false;
+			bool isEmpty = reader.IsEmptyElement;
+			T output = Instantiate();
 
+			// Read the root attributes
+			while (reader.MoveToNextAttribute())
+				ReadAttribute(reader, output);
+
+			// Read out of the root element
+			if (!reader.Read())
+				throw new FormatException();
+
+			// There were no child elements
+			if (isEmpty)
+				return output;
+
+			// Read through child elements
 			while (true)
 			{
-				if (!instantiated)
-				{
-					switch (reader.NodeType)
-					{
-						case XmlNodeType.Element:
-							if (reader.IsEmptyElement)
-								return default(T);
-
-							output = Instantiate();
-							instantiated = true;
-
-							// Read the root attributes
-							while (reader.MoveToNextAttribute())
-								ReadAttribute(reader, output);
-
-							// Read out of the root element
-							if (!reader.Read())
-								throw new FormatException();
-							continue;
-
-						default:
-							// Keep reading until we reach the root element.
-							if (!reader.Read())
-								throw new FormatException();
-							continue;
-					}
-				}
-
 				switch (reader.NodeType)
 				{
 					case XmlNodeType.Element:
