@@ -70,16 +70,23 @@ namespace ICD.Common.Utils
 		/// </summary>
 		public static IDictionary<string, string> PuttyColors { get { return s_PuttyColors; } }
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		static AnsiUtils()
-		{
 #if !SIMPLSHARP
-			// Enables ANSI color output in windows/linux console
+		/// <summary>
+		/// Enables ANSI color in the console.
+		/// </summary>
+		public static void EnableAnsiColor()
+		{
 			Pastel.ConsoleExtensions.Enable();
-#endif
 		}
+
+		/// <summary>
+		/// Disables ANSI color in the console.
+		/// </summary>
+		public static void DisableAnsiColor()
+		{
+			Pastel.ConsoleExtensions.Disable();
+		}
+#endif
 
 		/// <summary>
 		/// Removes ANSI control sequences from the string.
