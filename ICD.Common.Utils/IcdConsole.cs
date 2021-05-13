@@ -25,8 +25,46 @@ namespace ICD.Common.Utils
 		public static event EventHandler<StringEventArgs> OnConsolePrint;
 
 		private static readonly SafeCriticalSection s_Section;
-
 		private static readonly Regex s_NewLineRegex;
+
+		private static bool? s_IsConsoleApp;
+
+		/// <summary>
+		/// Returns true if the application is being run from an interactive console,
+		/// false if the application is being run as a headless service.
+		/// </summary>
+		/// <value></value>
+		public static bool IsConsoleApp
+		{
+			get
+			{
+				if (s_IsConsoleApp == null)
+				{
+#if SIMPLSHARP
+					s_IsConsoleApp = true;
+#else
+					try
+					{
+						// Hack
+						int unused = Console.WindowHeight;
+						s_IsConsoleApp = true;
+
+						if (Console.Title.Length > 0)
+							s_IsConsoleApp = true;
+
+						if (!Environment.UserInteractive)
+							s_IsConsoleApp = false;
+					}
+					catch
+					{
+						s_IsConsoleApp = false;
+					}
+#endif
+				}
+
+				return s_IsConsoleApp.Value;
+			}
+		}
 
 		/// <summary>
 		/// Static constructor.
@@ -92,7 +130,9 @@ namespace ICD.Common.Utils
 					CrestronConsole.PrintLine(fixedMessage);
 #else
 				Trace.WriteLine(AnsiUtils.StripAnsi(fixedMessage));
-				Console.WriteLine(fixedMessage);
+
+				if (IsConsoleApp)
+					Console.WriteLine(fixedMessage);
 #endif
 			}
 			finally
@@ -134,7 +174,9 @@ namespace ICD.Common.Utils
 					CrestronConsole.Print(fixedMessage);
 #else
 				Trace.Write(AnsiUtils.StripAnsi(fixedMessage));
-				Console.Write(fixedMessage);
+
+				if (IsConsoleApp)
+					Console.Write(fixedMessage);
 #endif
 			}
 			finally
