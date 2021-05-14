@@ -5,16 +5,28 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [15.0.0] - 2021-05-14
 ### Added
  - Ported CsvReader for CF 3.5 compatibility from: https://github.com/tspence/csharp-csv-reader
  - Added enum extension method for cycling to the next enum value
  - Added GetLocalTimeZoneName method to IcdEnvironment
  - Added MatchAny method to RegexUtils
  - Added OnSystemDeviceAddedRemoved and associated raise methods to IcdEnvironment for NETSTANDARD
+ - Added GetParentUri method to UriExtensions
+ - Added RegistryExtensions for working with Windows registry
+ - Added session change event to IcdEnvironment for login/logout feedback
+ - Added OrderedDictionary collection
 
 ### Changed
- - Added GetParentUri method to UriExtensions
- - Updated TimeZones.sqlite to include daylight time zone info, added a new display name column. Adjusted IcdTimeZoneInfo accordingly.
+ - Updated TimeZones.sqlite to include daylight time zone info, added a new display name column.
+ - Implemented ProcessorUtils for Windows
+ - Renamed OrderedDictionary to SortedDictionary for consistency with .Net
+ - Fixed a bug where SafeTimer.Trigger() would run the callback twice on .Net Standard
+ - Fixed a bug where XML deserialization would fail to read out of empty elements
+ 
+### Removed
+ - ANSI color is no longer enabled on .Net Standard by default - it must be enabled by the calling application
 
 ## [14.2.0] - 2021-02-04
 ### Changed
