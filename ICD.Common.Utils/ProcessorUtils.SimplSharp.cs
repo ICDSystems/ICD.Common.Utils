@@ -213,6 +213,10 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void RestartProgram()
 		{
+			ILoggerService logger = ServiceProvider.TryGetService<ILoggerService>();
+			if (logger != null)
+				logger.AddEntry(eSeverity.Informational, "Intentional Restart of Program");
+
 			string consoleResult = string.Empty;
 			string command = string.Format("progreset -p:{0:D2}", ProgramUtils.ProgramNumber);
 			IcdConsole.SendControlSystemCommand(command, ref consoleResult);
@@ -224,6 +228,10 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void Reboot()
 		{
+			ILoggerService logger = ServiceProvider.TryGetService<ILoggerService>();
+			if (logger != null)
+				logger.AddEntry(eSeverity.Informational, "Intentional Reboot of Processor");
+
 			string consoleResult = string.Empty;
 			IcdConsole.SendControlSystemCommand("reboot", ref consoleResult);
 		}

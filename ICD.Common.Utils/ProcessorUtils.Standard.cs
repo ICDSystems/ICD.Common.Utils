@@ -5,6 +5,8 @@ using System.Linq;
 using System.Management;
 using ICD.Common.Properties;
 using ICD.Common.Utils.IO;
+using ICD.Common.Utils.Services;
+using ICD.Common.Utils.Services.Logging;
 using Microsoft.Win32;
 
 namespace ICD.Common.Utils
@@ -163,6 +165,10 @@ namespace ICD.Common.Utils
 			if (string.IsNullOrEmpty(filename) || !IcdFile.Exists(filename))
 				throw new InvalidOperationException("Failed to find program filename");
 
+			ILoggerService logger = ServiceProvider.TryGetService<ILoggerService>();
+			if (logger != null)
+				logger.AddEntry(eSeverity.Informational, "Intentional Restart of Program");
+
 			Process.Start(filename);
 			Environment.Exit(0);
 		}
@@ -173,6 +179,10 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void Reboot()
 		{
+			ILoggerService logger = ServiceProvider.TryGetService<ILoggerService>();
+			if (logger != null)
+				logger.AddEntry(eSeverity.Informational, "Intentional Reboot of Processor");
+
 			// TODO - Linux
 			ProcessStartInfo psi =
 				new ProcessStartInfo("shutdown", "/r /t 0")
