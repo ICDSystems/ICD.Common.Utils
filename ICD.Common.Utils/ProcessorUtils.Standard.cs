@@ -26,16 +26,8 @@ namespace ICD.Common.Utils
 			get
 			{
 				string productName = RegistryLocalMachineGetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName");
-				if (productName == string.Empty)
-					return string.Empty;
-
 				string csdVersion = RegistryLocalMachineGetString(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CSDVersion");
-
-				string output = (productName.StartsWith("Microsoft") ? string.Empty : "Microsoft ") +
-				                productName +
-				                (csdVersion == string.Empty ? string.Empty : " " + csdVersion);
-
-				return output.Trim();
+				return string.Format("{0} {1}", productName, csdVersion).Trim();
 			}
 		}
 
