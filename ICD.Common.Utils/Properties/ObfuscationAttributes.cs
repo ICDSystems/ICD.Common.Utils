@@ -14,10 +14,10 @@
 //
 // =============================================================================
 
+// ReSharper disable once RedundantUsingDirective
 using System;
 
 // ReSharper disable once CheckNamespace
-
 namespace System.Reflection
 {
     /// <summary>

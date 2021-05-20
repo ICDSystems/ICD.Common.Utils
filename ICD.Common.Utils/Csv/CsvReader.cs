@@ -62,7 +62,7 @@ namespace ICD.Common.Utils.Csv
         /// Iterate through all lines in this Csv file
         /// </summary>
         /// <returns>An array of all data columns in the line</returns>
-        IEnumerator<string[]> System.Collections.Generic.IEnumerable<string[]>.GetEnumerator()
+        IEnumerator<string[]> IEnumerable<string[]>.GetEnumerator()
         {
             return Lines().GetEnumerator();
         }
