@@ -43,7 +43,7 @@ namespace ICD.Common.Utils.Csv
 
 #region Methods to read Csv data
         /// <summary>
-        /// Parse a Csv stream into IEnumerable<string[]>, while permitting embedded newlines
+        /// Parse a Csv stream into IEnumerable&lt;string[]&gt;, while permitting embedded newlines
         /// </summary>
         /// <param name="inStream">The stream to read</param>
         /// <param name="settings">The Csv settings to use for this parsing operation (Default: Csv)</param>
@@ -127,7 +127,6 @@ namespace ICD.Common.Utils.Csv
                             work.Append(settings.TextQualifier);
                             i++;
                             p2 = -1;
-                            continue;
                         }
                     }
 
@@ -224,10 +223,9 @@ namespace ICD.Common.Utils.Csv
                 // If we are starting a new field, is this field text qualified?
                 if ((c == settings.TextQualifier) && (work.Length == 0))
                 {
-                    int p2;
-                    while (true)
+	                while (true)
                     {
-                        p2 = line.IndexOf(settings.TextQualifier, i + 1);
+                        int p2 = line.IndexOf(settings.TextQualifier, i + 1);
 
                         // If no closing qualifier is found, this string is broken; return failure.
                         if (p2 < 0)

@@ -88,7 +88,7 @@ namespace ICD.Common.Utils.Csv
         /// <summary>
         /// Standard comma-separated value (Csv) file settings that permit rendering of NULL values
         /// </summary>
-        public static readonly CsvReaderSettings CSV_PERMIT_NULL = new CsvReaderSettings()
+        public static readonly CsvReaderSettings CSV_PERMIT_NULL = new CsvReaderSettings
         {
             AllowNull = true,
             NullToken = "NULL"
@@ -97,7 +97,8 @@ namespace ICD.Common.Utils.Csv
         /// <summary>
         /// Standard tab-separated value (TSV) file settings
         /// </summary>
-        public static readonly CsvReaderSettings TSV = new CsvReaderSettings() { 
+        public static readonly CsvReaderSettings TSV = new CsvReaderSettings
+        { 
             FieldDelimiter = '\t'
         };
     }

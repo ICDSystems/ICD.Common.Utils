@@ -232,7 +232,6 @@ namespace ICD.Common.Utils
 		{
 #if SIMPLSHARP
 			// Can't do fancy tables so don't bother drawing the top row
-			return;
 #else
 			builder.Append(DOWN_RIGHT).Append(HORIZONTAL);
 
@@ -259,7 +258,6 @@ namespace ICD.Common.Utils
 		{
 #if SIMPLSHARP
 			AppendSeparator(builder, columnWidths);
-			return;
 #else
 			builder.Append(UP_RIGHT).Append(HORIZONTAL);
 

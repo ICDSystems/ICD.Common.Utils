@@ -12,16 +12,13 @@ namespace ICD.Common.Utils
 	/// <typeparam name="T"></typeparam>
 	public sealed class ThreadedWorkerQueue<T>
 	{
-
 		private readonly PriorityQueue<T> m_Queue;
-
 		private readonly SafeCriticalSection m_QueueSection;
 		private readonly SafeCriticalSection m_ProcessSection;
-
 		private readonly Action<T> m_ProcessAction;
 
 		/// <summary>
-		/// 
+		/// Constructor.
 		/// </summary>
 		/// <param name="processItemAction">Action to process the dequeued items</param>
 		public ThreadedWorkerQueue([NotNull] Action<T> processItemAction)
@@ -35,7 +32,6 @@ namespace ICD.Common.Utils
 
 			m_ProcessAction = processItemAction;
 		}
-
 
 		#region Queue Methods
 
@@ -140,7 +136,7 @@ namespace ICD.Common.Utils
 
 		private void Enqueue(Action enqueueAction)
 		{
-			m_QueueSection.Execute(() => enqueueAction());
+			m_QueueSection.Execute(enqueueAction);
 			ThreadingUtils.SafeInvoke(ProcessQueue);
 		}
 

@@ -21,7 +21,7 @@ namespace ICD.Common.Utils.Csv
         /// <summary>
         /// If the first row in the file is a header row, this will be populated
         /// </summary>
-        public string[] Headers = null;
+        public string[] Headers;
 
         #endregion
 
