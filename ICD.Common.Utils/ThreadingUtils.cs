@@ -22,12 +22,23 @@ namespace ICD.Common.Utils
 		private static readonly SafeCriticalSection s_ThreadsSection;
 
 		/// <summary>
-		/// Static contstructor.
+		/// Static constructor.
 		/// </summary>
 		static ThreadingUtils()
 		{
 			s_Threads = new IcdHashSet<ThreadState>();
 			s_ThreadsSection = new SafeCriticalSection();
+		}
+
+		/// <summary>
+		/// Wait until the given condition is true.
+		/// </summary>
+		/// <param name="condition"></param>
+		/// <param name="timeout"></param>
+		/// <returns>False if the call times out</returns>
+		public static bool Wait(Func<bool> condition, TimeSpan timeout)
+		{
+			return Wait(condition, (long)timeout.TotalMilliseconds);
 		}
 
 		/// <summary>
@@ -50,6 +61,15 @@ namespace ICD.Common.Utils
 			}
 
 			return true;
+		}
+
+		/// <summary>
+		/// Puts the current thread to sleep for the given amount of time.
+		/// </summary>
+		/// <param name="duration"></param>
+		public static void Sleep(TimeSpan duration)
+		{
+			Sleep((int)duration.TotalMilliseconds);
 		}
 
 		/// <summary>
