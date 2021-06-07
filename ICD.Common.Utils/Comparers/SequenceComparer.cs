@@ -29,11 +29,12 @@ namespace ICD.Common.Utils.Comparers
 
 		public int Compare(IEnumerable<T> x, IEnumerable<T> y)
 		{
+			if (x == null && y == null)
+				return 0;
 			if (x == null)
-				throw new ArgumentNullException("x");
-
+				return -1;
 			if (y == null)
-				throw new ArgumentNullException("y");
+				return 1;
 
 			using (IEnumerator<T> firstPos = x.GetEnumerator())
 			{
