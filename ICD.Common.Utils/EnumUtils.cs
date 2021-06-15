@@ -352,10 +352,11 @@ namespace ICD.Common.Utils
 		/// <returns></returns>
 		public static IEnumerable<object> GetFlags(Type type, object value)
 		{
-			return s_EnumFlagsCacheSection.Execute(() => s_EnumFlagsCache.GetOrAddNew(type, () => new Dictionary<object, object[]>())
-			                       .GetOrAddNew(value, () => GetValues(type)
-			                                                 .Where(f => HasFlag(value, f))
-			                                                 .ToArray()));
+			return s_EnumFlagsCacheSection.Execute(() => s_EnumFlagsCache
+			                                             .GetOrAddNew(type, () => new Dictionary<object, object[]>())
+			                                             .GetOrAddNew(value, () => GetValues(type)
+				                                                          .Where(f => !HasMultipleFlags((int)f) && HasFlag(value, f))
+				                                                          .ToArray()));
 		}
 
 		/// <summary>
