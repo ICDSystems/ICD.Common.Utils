@@ -62,6 +62,22 @@ namespace ICD.Common.Utils.Extensions
 		}
 
 		/// <summary>
+		/// Returns the enum, with the other flags set or unset
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extends"></param>
+		/// <param name="other"></param>
+		/// <param name="set"></param>
+		/// <returns></returns>
+		public static T SetFlags<T>(this T extends, T other, bool set)
+			where T : struct, IConvertible
+		{
+			return set ? 
+				EnumUtils.IncludeFlags(extends, other) : 
+				EnumUtils.ExcludeFlags(extends, other);
+		}
+
+		/// <summary>
 		/// Returns the enum value as a ushort.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
