@@ -53,6 +53,11 @@ namespace ICD.Common.Utils.Services.Logging
 		[PublicAPI]
 		[NotNull]
 		IEnumerable<KeyValuePair<int, LogItem>> GetHistory();
+
+		/// <summary>
+		/// Writes all enqueued logs.
+		/// </summary>
+		void Flush();
 	}
 
 	/// <summary>
