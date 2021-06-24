@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Enum Extension "SetFlags", takes a bool to set or unset the given flags
+ - BiDictionay - Added constructors with TKey and TValue comparers
+
 ## [15.0.0] - 2021-05-14
 ### Added
  - Ported CsvReader for CF 3.5 compatibility from: https://github.com/tspence/csharp-csv-reader

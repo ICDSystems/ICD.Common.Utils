@@ -38,10 +38,36 @@ namespace ICD.Common.Utils.Collections
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public BiDictionary()
+		public BiDictionary() :
+			this(EqualityComparer<TKey>.Default, EqualityComparer<TValue>.Default)
 		{
-			m_KeyToValue = new Dictionary<TKey, TValue>();
-			m_ValueToKey = new Dictionary<TValue, TKey>();
+		}
+
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="keyComparer"></param>
+		/// <param name="valueComparer"></param>
+		public BiDictionary(IEqualityComparer<TKey> keyComparer, IEqualityComparer<TValue> valueComparer)
+		{
+			m_KeyToValue = new Dictionary<TKey, TValue>(keyComparer);
+			m_ValueToKey = new Dictionary<TValue, TKey>(valueComparer);
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="dict"></param>
+		/// <param name="keyComparer"></param>
+		/// <param name="valueComparer"></param>
+		public BiDictionary([NotNull] Dictionary<TKey, TValue> dict, IEqualityComparer<TKey> keyComparer, IEqualityComparer<TValue> valueComparer)
+			: this(keyComparer, valueComparer)
+		{
+			if (dict == null)
+				throw new ArgumentNullException("dict");
+
+			foreach (KeyValuePair<TKey, TValue> kvp in dict)
+				Add(kvp.Key, kvp.Value);
 		}
 
 		/// <summary>
@@ -49,13 +75,8 @@ namespace ICD.Common.Utils.Collections
 		/// </summary>
 		/// <param name="dict"></param>
 		public BiDictionary([NotNull] Dictionary<TKey, TValue> dict)
-			: this()
+			: this(dict, EqualityComparer<TKey>.Default, EqualityComparer<TValue>.Default)
 		{
-			if (dict == null)
-				throw new ArgumentNullException("dict");
-
-			foreach (KeyValuePair<TKey, TValue> kvp in dict)
-				Add(kvp.Key, kvp.Value);
 		}
 
 		#region Methods
