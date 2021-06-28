@@ -19,7 +19,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="numeric"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string ToHexLiteral(int numeric)
 		{
 			return string.Format("\\x{0:X2}", numeric);
@@ -30,7 +30,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="c"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string ToHexLiteral(char c)
 		{
 			return ToHexLiteral(Convert.ToInt32(c));
@@ -41,7 +41,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string ToHexLiteral([NotNull] string input)
 		{
 			if (input == null)
@@ -78,7 +78,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="data"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string FromHexLiteral([NotNull] string data)
 		{
 			if (data == null)
@@ -98,7 +98,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="c"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string ToMixedReadableHexLiteral(char c)
 		{
 			int numeric = Convert.ToInt32(c);
@@ -115,7 +115,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string ToMixedReadableHexLiteral([NotNull] string input)
 		{
 			if (input == null)
@@ -134,7 +134,8 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static string ToString(object value)
+		[NotNull]
+		public static string ToString([CanBeNull] object value)
 		{
 			return string.Format("{0}", value);
 		}
@@ -144,7 +145,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="bytes"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string ToString([NotNull] IEnumerable<byte> bytes)
 		{
 			if (bytes == null)
@@ -160,7 +161,7 @@ namespace ICD.Common.Utils
 		/// <param name="bytes"></param>
 		/// <param name="length"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string ToString([NotNull] IEnumerable<byte> bytes, int length)
 		{
 			if (bytes == null)
@@ -229,7 +230,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out int result)
+		public static bool TryParse([NotNull] string value, out int result)
 		{
 			return TryConvert(Convert.ToInt32, value, out result);
 		}
@@ -241,7 +242,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out uint result)
+		public static bool TryParse([NotNull] string value, out uint result)
 		{
 			return TryConvert(Convert.ToUInt32, value, out result);
 		}
@@ -253,7 +254,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out short result)
+		public static bool TryParse([NotNull] string value, out short result)
 		{
 			return TryConvert(Convert.ToInt16, value, out result);
 		}
@@ -265,7 +266,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out ushort result)
+		public static bool TryParse([NotNull] string value, out ushort result)
 		{
 			return TryConvert(Convert.ToUInt16, value, out result);
 		}
@@ -277,7 +278,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out long result)
+		public static bool TryParse([NotNull] string value, out long result)
 		{
 			return TryConvert(Convert.ToInt64, value, out result);
 		}
@@ -289,7 +290,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out ulong result)
+		public static bool TryParse([NotNull] string value, out ulong result)
 		{
 			return TryConvert(Convert.ToUInt64, value, out result);
 		}
@@ -301,7 +302,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out float result)
+		public static bool TryParse([NotNull] string value, out float result)
 		{
 			return TryConvert(Convert.ToSingle, value, out result);
 		}
@@ -313,7 +314,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out double result)
+		public static bool TryParse([NotNull] string value, out double result)
 		{
 			return TryConvert(Convert.ToDouble, value, out result);
 		}
@@ -325,7 +326,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out byte result)
+		public static bool TryParse([NotNull] string value, out byte result)
 		{
 			return TryConvert(Convert.ToByte, value, out result);
 		}
@@ -337,7 +338,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out char result)
+		public static bool TryParse([NotNull] string value, out char result)
 		{
 			return TryConvert(Convert.ToChar, value, out result);
 		}
@@ -349,7 +350,7 @@ namespace ICD.Common.Utils
 		/// <param name="result"></param>
 		/// <returns></returns>
 		[PublicAPI]
-		public static bool TryParse(string value, out bool result)
+		public static bool TryParse([NotNull] string value, out bool result)
 		{
 			return TryConvert(Convert.ToBoolean, value, out result);
 		}
@@ -388,6 +389,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static string NiceName([NotNull] object obj)
 		{
 			if (obj == null)
@@ -401,6 +403,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static string NiceName([NotNull] string name)
 		{
 			if (name == null)
@@ -437,6 +440,7 @@ namespace ICD.Common.Utils
 		/// <param name="phoneFormat"></param>
 		/// <param name="number"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static string SafeNumericFormat([NotNull] string phoneFormat, [NotNull] string number)
 		{
 			if (phoneFormat == null)
@@ -479,7 +483,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string Reverse([NotNull] string input)
 		{
 			if (input == null)
@@ -496,6 +500,7 @@ namespace ICD.Common.Utils
 		/// <param name="input"></param>
 		/// <param name="count"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static string Repeat(char input, int count)
 		{
 			return Repeat(input.ToString(), count);
@@ -507,7 +512,7 @@ namespace ICD.Common.Utils
 		/// <param name="input"></param>
 		/// <param name="count"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string Repeat(string input, int count)
 		{
 			if (count < 0)
@@ -523,7 +528,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string ArrayFormat<T>([NotNull] IEnumerable<T> items)
 		{
 			if (items == null)
@@ -554,7 +559,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string ArrayRangeFormat([NotNull] IEnumerable<int> items)
 		{
 			if (items == null)
@@ -575,7 +580,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string ArrayRangeFormat([NotNull] IEnumerable<ushort> items)
 		{
 			if (items == null)
@@ -590,7 +595,7 @@ namespace ICD.Common.Utils
 		/// <param name="a"></param>
 		/// <param name="b"></param>
 		/// <returns></returns>
-		[PublicAPI]
+		[PublicAPI, NotNull]
 		public static string RangeFormat(object a, object b)
 		{
 			return string.Format("[{0} - {1}]", a, b);
@@ -601,8 +606,8 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns></returns>
-		[PublicAPI]
-		public static string UppercaseFirst(string input)
+		[PublicAPI, CanBeNull]
+		public static string UppercaseFirst([CanBeNull] string input)
 		{
 			if (string.IsNullOrEmpty(input))
 				return input;
@@ -615,8 +620,8 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns></returns>
-		[PublicAPI]
-		public static string ToTitleCase(string input)
+		[PublicAPI, NotNull]
+		public static string ToTitleCase([NotNull] string input)
 		{
 			return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input);
 		}
@@ -626,6 +631,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="ipid"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static string ToIpIdString(byte ipid)
 		{
 			return string.Format("0x{0:X2}", ipid);
@@ -680,7 +686,8 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="text"></param>
 		/// <returns></returns>
-		public static string RemoveWhitespace(string text)
+		[CanBeNull]
+		public static string RemoveWhitespace([CanBeNull] string text)
 		{
 			return text == null ? null : text.RemoveWhitespace();
 		}
@@ -690,7 +697,8 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="text"></param>
 		/// <returns></returns>
-		public static string RemoveDuplicateWhitespace(string text)
+		[CanBeNull]
+		public static string RemoveDuplicateWhitespace([CanBeNull] string text)
 		{
 			return text == null ? null : text.RemoveDuplicateWhitespace();
 		}
@@ -700,7 +708,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="text"></param>
 		/// <returns></returns>
-		public static bool IsNullOrWhitespace(string text)
+		public static bool IsNullOrWhitespace([CanBeNull] string text)
 		{
 			if (string.IsNullOrEmpty(text))
 				return true;
@@ -714,7 +722,8 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="password"></param>
 		/// <returns></returns>
-		public static string PasswordFormat(string password)
+		[CanBeNull]
+		public static string PasswordFormat([CanBeNull] string password)
 		{
 			return password == null ? null : Repeat('*', password.Length);
 		}
@@ -724,7 +733,8 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static string ToRepresentation(string value)
+		[NotNull]
+		public static string ToRepresentation([CanBeNull] string value)
 		{
 			return value == null ? "NULL" : string.Format("\"{0}\"", value);
 		}
@@ -734,6 +744,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="items"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static string SerialComma([NotNull] IEnumerable<string> items)
 		{
 			if (items == null)
@@ -767,7 +778,7 @@ namespace ICD.Common.Utils
 		/// <param name="value"></param>
 		/// <returns></returns>
 		[PublicAPI, CanBeNull]
-		public static string Trim(string value)
+		public static string Trim([CanBeNull] string value)
 		{
 			return value == null ? null : value.ToUpper();
 		}
@@ -806,6 +817,7 @@ namespace ICD.Common.Utils
 		/// <param name="ignoreCase"></param>
 		/// <returns></returns>
 		[PublicAPI]
+		[CanBeNull]
 		public static string GetLongestCommonIntersectionFromStart([NotNull] IEnumerable<string> items, bool ignoreCase)
 		{
 			if (items == null)
@@ -849,6 +861,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static string Enquote([NotNull] string value)
 		{
 			if (value == null)
@@ -868,6 +881,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
+		[NotNull]
 		public static string UnEnquote([NotNull] string value)
 		{
 			if (value == null)
