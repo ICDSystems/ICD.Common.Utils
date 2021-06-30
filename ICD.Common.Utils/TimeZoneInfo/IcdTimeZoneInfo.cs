@@ -171,7 +171,7 @@ namespace ICD.Common.Utils.TimeZoneInfo
 			{
 				using (IcdSqliteDataReader reader = cmd.ExecuteReader())
 				{
-					while (reader.Read())
+					if (reader.Read())
 					{
 						bool isFixed = reader.GetBoolean(2);
 						string timeOfDay = reader.GetString(3);
@@ -208,7 +208,7 @@ namespace ICD.Common.Utils.TimeZoneInfo
 			{
 				using (IcdSqliteDataReader reader = cmd.ExecuteReader())
 				{
-					while (reader.Read())
+					if (reader.Read())
 					{
 						bool isFixed = reader.GetBoolean(2);
 						string timeOfDay = reader.GetString(3);
