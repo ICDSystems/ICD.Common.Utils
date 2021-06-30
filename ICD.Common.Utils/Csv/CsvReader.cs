@@ -21,7 +21,7 @@ namespace ICD.Common.Utils.Csv
         /// <summary>
         /// If the first row in the file is a header row, this will be populated
         /// </summary>
-        public string[] Headers;
+        private string[] m_Headers;
 
         #endregion
 
@@ -39,11 +39,11 @@ namespace ICD.Common.Utils.Csv
             // Do we need to parse headers?
             if (m_Settings.HeaderRowIncluded)
             {
-                Headers = NextLine();
+                m_Headers = NextLine();
             }
             else
             {
-                Headers = m_Settings.AssumedHeaders != null ? m_Settings.AssumedHeaders.ToArray() : null;
+                m_Headers = m_Settings.AssumedHeaders != null ? m_Settings.AssumedHeaders.ToArray() : null;
             }
         }
         #endregion
