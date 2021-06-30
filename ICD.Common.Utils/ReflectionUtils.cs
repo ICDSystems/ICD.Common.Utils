@@ -178,7 +178,7 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			return (T)CreateInstance(type);
+			return (T)CreateInstance(type, new object[0]);
 		}
 
 		/// <summary>

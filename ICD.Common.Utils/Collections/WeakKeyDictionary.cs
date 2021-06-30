@@ -61,9 +61,9 @@ namespace ICD.Common.Utils.Collections
 			m_Comparer = comparer;
 		}
 
-		public int GetHashCode(WeakKeyReference<T> weakKey)
+		public int GetHashCode(WeakKeyReference<T> obj)
 		{
-			return weakKey.HashCode;
+			return obj == null ? 0 : obj.HashCode;
 		}
 
 		// Note: There are actually 9 cases to handle here.

@@ -151,11 +151,11 @@ namespace ICD.Common.Utils.Collections
 			return m_Collection.GetEnumerator();
 		}
 
-		void ICollection.CopyTo(Array myArr, int index)
+		void ICollection.CopyTo(Array array, int index)
 		{
 			foreach (TContents item in m_Collection)
 			{
-				myArr.SetValue(item, index);
+				array.SetValue(item, index);
 				index++;
 			}
 		}
