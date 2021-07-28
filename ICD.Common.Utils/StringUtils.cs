@@ -356,6 +356,27 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
+		/// Attempts to parse the string as a guid.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		[PublicAPI]
+		public static bool TryParse([NotNull] string value, out Guid result)
+		{
+			try
+			{
+				result = new Guid(value);
+				return true;
+			}
+			catch (Exception)
+			{
+				result = Guid.Empty;
+				return false;
+			}
+		}
+
+		/// <summary>
 		/// Attempts to parse the string via the given conversion function.
 		/// </summary>
 		/// <param name="convertFunc"></param>
