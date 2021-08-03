@@ -6,9 +6,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [15.1.0] - 2021-08-03
 ### Added
  - Enum Extension "SetFlags", takes a bool to set or unset the given flags
  - BiDictionay - Added constructors with TKey and TValue comparers
+ - ILoggerService - Added Flush() method
+ - Added log entries for intentional reboot and program restart
+ - Added ThreadingUtils TimeSpan overloads
+
+### Changed
+ - IcdTimeZoneInfo - fixed issue when unable to read SQL
+ - WeakKeyDictionary - Fixe GetHashCode to handle null values
+ - ProcessorUtils - NetStandard - removed "Microsoft" from model name
+ - Fixed null handing in SequenceComparer and UndefinedVersionComparer
+ - EnumUtils - GetFlags no longer returns composite flags
 
 ## [15.0.0] - 2021-05-14
 ### Added
