@@ -41,6 +41,7 @@ namespace ICD.Common.Utils
 							throw new ArgumentOutOfRangeException();
 					}
 					break;
+				case IcdEnvironment.eFramework.Framework:
 				case IcdEnvironment.eFramework.Standard:
 					name += ' ';
 					break;

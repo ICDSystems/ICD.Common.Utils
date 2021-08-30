@@ -175,7 +175,7 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-				if (IcdEnvironment.Framework == IcdEnvironment.eFramework.Crestron)
+				if (IcdEnvironment.Framework != IcdEnvironment.eFramework.Standard)
 				{
 					// 3-series
 					if (IcdEnvironment.CrestronSeries == IcdEnvironment.eCrestronSeries.ThreeSeries)
@@ -190,9 +190,9 @@ namespace ICD.Common.Utils
 				}
 
 #if LINUX
-						return Join(RootPath, "var", "www", "html");
+				return Join(RootPath, "var", "www", "html");
 #else
-						return "C:\\INetPub";
+				return "C:\\INetPub";
 #endif
 			}
 		}

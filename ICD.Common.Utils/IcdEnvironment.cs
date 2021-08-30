@@ -12,6 +12,7 @@ namespace ICD.Common.Utils
 		public enum eFramework
 		{
 			Crestron,
+			Framework,
 			Standard
 		}
 

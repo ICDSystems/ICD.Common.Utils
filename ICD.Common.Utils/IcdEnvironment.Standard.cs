@@ -109,8 +109,8 @@ namespace ICD.Common.Utils
 
 		static IcdEnvironment()
 		{
-			s_Framework = eFramework.Standard;
 #if NETFRAMEWORK
+			s_Framework = eFramework.Framework;
 			s_CrestronSeries = eCrestronSeries.FourSeries;
 			if (CrestronEnvironment.RuntimeEnvironment == eRuntimeEnvironment.SIMPL)
 				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Simpl;
@@ -119,6 +119,7 @@ namespace ICD.Common.Utils
 			else
 				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Server;
 #else
+			s_Framework = eFramework.Standard;
 			s_CrestronSeries = eCrestronSeries.Na;
 			s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Na;
 #endif
