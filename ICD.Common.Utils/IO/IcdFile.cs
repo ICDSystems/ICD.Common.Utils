@@ -127,7 +127,7 @@ namespace ICD.Common.Utils.IO
 			File.Move(sourceFileName, destFileName);
 		}
 
-#if STANDARD
+#if !SIMPLSHARP
 		public static void SetAttributes(string path, FileAttributes attributes, bool recursive)
 		{
 			File.SetAttributes(path, attributes);

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharp;
 #else
 using System.Diagnostics;
@@ -99,7 +99,7 @@ namespace ICD.Common.Utils
 
 			message = FixLineEndings(message);
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 			if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Appliance)
 			{
 				try
@@ -125,7 +125,7 @@ namespace ICD.Common.Utils
 
 			try
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Server)
 					CrestronConsole.PrintLine(fixedMessage);
 #else
@@ -169,7 +169,7 @@ namespace ICD.Common.Utils
 
 			try
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Server)
 					CrestronConsole.Print(fixedMessage);
 #else
@@ -207,7 +207,7 @@ namespace ICD.Common.Utils
 
 		public static bool SendControlSystemCommand(string command, ref string result)
 		{
-#if SIMPLSHARP
+#if !NETSTANDARD
 			// No console on VC4
 			if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
 				return false;
@@ -220,7 +220,7 @@ namespace ICD.Common.Utils
 
 		public static bool AddNewConsoleCommand(Action<string> callback, string command, string help, eAccessLevel accessLevel)
 		{
-#if SIMPLSHARP
+#if !NETSTANDARD
 			// Avoid crashing Simpl applications
 			if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Appliance)
 				return false;

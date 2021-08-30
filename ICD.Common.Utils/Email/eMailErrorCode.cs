@@ -1,9 +1,8 @@
 ﻿using System;
-#if STANDARD
-using System.Net.Mail;
-#endif
 #if SIMPLSHARP
 using Crestron.SimplSharp;
+#else
+using System.Net.Mail;
 #endif
 
 namespace ICD.Common.Utils.Email
@@ -126,7 +125,7 @@ namespace ICD.Common.Utils.Email
 
 	public static class MailErrorCodeUtils
 	{
-#if STANDARD
+#if !SIMPLSHARP
 		public static eMailErrorCode FromNetStandardMailCode(SmtpStatusCode code)
 		{
 			switch (code)
@@ -185,8 +184,7 @@ namespace ICD.Common.Utils.Email
 					throw new ArgumentOutOfRangeException(nameof(code), code, null);
 			}
 		}
-#endif
-#if SIMPLSHARP
+#else
 		public static eMailErrorCode FromSimplMailCode(CrestronMailFunctions.SendMailErrorCodes code)
 		{
 			switch (code)

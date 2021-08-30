@@ -62,7 +62,7 @@ namespace ICD.Common.Utils
 		{
 			get
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				switch (IcdEnvironment.CrestronSeries)
 				{
 					case IcdEnvironment.eCrestronSeries.FourSeries:

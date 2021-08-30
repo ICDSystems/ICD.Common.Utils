@@ -1,7 +1,12 @@
-﻿using ICD.Common.Utils.Extensions;
+﻿#if NETFRAMEWORK
+extern alias RealNewtonsoft;
+using RealNewtonsoft.Newtonsoft.Json;
+#else
+using Newtonsoft.Json;
+#endif
+using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
 using ICD.Common.Utils.Json;
-using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests.Json

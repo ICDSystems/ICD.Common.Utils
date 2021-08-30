@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-#if STANDARD
+#if !SIMPLSHARP
 using System.Text;
 #endif
 using ICD.Common.Properties;
@@ -106,7 +106,7 @@ namespace ICD.Common.Utils.Services.Logging
 			if (e == null)
 				throw new ArgumentNullException("e");
 
-#if STANDARD
+#if !SIMPLSHARP
 			if (e is AggregateException)
 			{
 				extends.AddEntry(severity, e as AggregateException, message);
@@ -117,7 +117,7 @@ namespace ICD.Common.Utils.Services.Logging
 			                                         IcdEnvironment.NewLine, e.Message, e.StackTrace));
 		}
 
-#if STANDARD
+#if !SIMPLSHARP
 		/// <summary>
 		/// Logs an aggregate exception as a formatted list of inner exceptions.
 		/// </summary>

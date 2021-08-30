@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿#if NETFRAMEWORK
+extern alias RealNewtonsoft;
+using RealNewtonsoft.Newtonsoft.Json;
+#else
+using Newtonsoft.Json;
+#endif
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.IO;
-using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests.Extensions

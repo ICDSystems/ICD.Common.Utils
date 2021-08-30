@@ -1,14 +1,17 @@
-﻿#if STANDARD
+﻿#if !SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.NetworkInformation;
-using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Timers;
+using AddressFamily = System.Net.Sockets.AddressFamily;
+using Dns = System.Net.Dns;
+#if !NETSTANDARD
+using Crestron.SimplSharp;
+#endif
 
 namespace ICD.Common.Utils
 {
@@ -107,8 +110,18 @@ namespace ICD.Common.Utils
 		static IcdEnvironment()
 		{
 			s_Framework = eFramework.Standard;
+#if NETFRAMEWORK
+			s_CrestronSeries = eCrestronSeries.FourSeries;
+			if (CrestronEnvironment.RuntimeEnvironment == eRuntimeEnvironment.SIMPL)
+				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Simpl;
+			else if (CrestronEnvironment.DevicePlatform == eDevicePlatform.Appliance)
+				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Appliance;
+			else
+				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Server;
+#else
 			s_CrestronSeries = eCrestronSeries.Na;
 			s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Na;
+#endif
 		}
 
 		/// <summary>
@@ -172,6 +185,7 @@ namespace ICD.Common.Utils
 				handler(sessionId, reasonCode);
 		}
 
+		/// <summary>
 		/// Call this method to raise the device added/removed event for an added device
 		/// Uses a timer to attempt to compress multiple events into a single event
 		/// </summary>

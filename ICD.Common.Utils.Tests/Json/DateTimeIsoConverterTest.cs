@@ -1,6 +1,11 @@
-﻿using System;
-using ICD.Common.Utils.Json;
+﻿#if NETFRAMEWORK
+extern alias RealNewtonsoft;
+using RealNewtonsoft.Newtonsoft.Json;
+#else
 using Newtonsoft.Json;
+#endif
+using System;
+using ICD.Common.Utils.Json;
 using NUnit.Framework;
 
 namespace ICD.Common.Utils.Tests.Json

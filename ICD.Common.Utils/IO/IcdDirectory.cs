@@ -30,7 +30,7 @@ namespace ICD.Common.Utils.IO
 #if SIMPLSHARP
 			return Directory.GetApplicationRootDirectory();
 #else
-			return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetPath());
+			return Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetPath());
 #endif
 		}
 

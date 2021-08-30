@@ -1,5 +1,10 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+extern alias RealNewtonsoft;
+using RealNewtonsoft.Newtonsoft.Json;
+#else
 using Newtonsoft.Json;
+#endif
+using System;
 
 namespace ICD.Common.Utils.Extensions
 {

@@ -5,24 +5,19 @@
     <OutputType>Library</OutputType>
     <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <AssemblyName>ICD.Common.Utils</AssemblyName>
-    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <RootNamespace>ICD.Common.Utils</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>true</Deterministic>
-    <Authors>Chris Cameron, Jeff Thompson</Authors>
-    <PackageId>ICD.Common.Utils</PackageId>
-    <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl>https://cs-gogs.icdpf.net/Common/Utils</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
     <EazfuscatorIntegration>MSBuild</EazfuscatorIntegration>
     <EazfuscatorActiveConfiguration>Release</EazfuscatorActiveConfiguration>
     <EazfuscatorCompatibilityVersion>2018.2</EazfuscatorCompatibilityVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;STANDARD</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <OutputPath>binNetCoreApp\$(Configuration)\</OutputPath>
-    <DefineConstants>TRACE;STANDARD</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="binNetCoreApp\**" />
@@ -39,10 +34,12 @@
     <None Remove="Properties\ControlSystem.cfg" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Condition="'$(TargetFramework)' == 'net472'" Include="Crestron.SimplSharp.SDK.Library" Version="2.14.182" />
+    <PackageReference Condition="'$(TargetFramework)' == 'net472'" Include="Newtonsoft.Json" Version="13.0.1" Aliases="RealNewtonsoft"/>
+    <PackageReference Condition="'$(TargetFramework)' == 'netstandard2.0'" Include="Newtonsoft.Json" Version="13.0.1"/>
     <PackageReference Include="Microsoft.Data.SQLite" Version="5.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="5.0.0" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Pastel" Version="2.1.0" />
     <PackageReference Include="System.Management" Version="5.0.0" />
     <PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
@@ -57,5 +54,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

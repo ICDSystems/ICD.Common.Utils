@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ICD.Common.Properties;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharp;
 #else
 using System.Diagnostics;
@@ -32,7 +32,7 @@ namespace ICD.Common.Utils
 		private static readonly Dictionary<string, Action<string, Exception>> s_LogMethods =
 			new Dictionary<string, Action<string, Exception>>
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				{ERROR, (m, e) => ErrorLog.Error(m)},
 				{WARN, (m, e) => ErrorLog.Warn(m)},
 				{NOTICE, (m, e) => ErrorLog.Notice(m)},

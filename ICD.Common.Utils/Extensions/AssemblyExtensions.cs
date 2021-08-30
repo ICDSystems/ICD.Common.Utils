@@ -29,7 +29,7 @@ namespace ICD.Common.Utils.Extensions
 #endif
 				.CodeBase;
 
-#if STANDARD
+#if !SIMPLSHARP
 			if (string.IsNullOrEmpty(path))
 				path = extends.Location;
 #endif

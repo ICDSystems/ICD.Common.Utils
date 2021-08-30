@@ -1,8 +1,13 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+extern alias RealNewtonsoft;
+using RealNewtonsoft.Newtonsoft.Json;
+#else
+using Newtonsoft.Json;
+#endif
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
-using Newtonsoft.Json;
 
 namespace ICD.Common.Utils.Extensions
 {

@@ -1,6 +1,12 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+extern alias RealNewtonsoft;
+using RealNewtonsoft.Newtonsoft.Json;
+using RealNewtonsoft.Newtonsoft.Json.Converters;
+#else
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+#endif
+using System;
 
 namespace ICD.Common.Utils.Services.Logging
 {

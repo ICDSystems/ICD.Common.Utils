@@ -1,7 +1,7 @@
 ﻿using System;
 #if SIMPLSHARP
 using Crestron.SimplSharp.CrestronIO;
-#elif STANDARD
+#else
 using System.IO;
 #endif
 
