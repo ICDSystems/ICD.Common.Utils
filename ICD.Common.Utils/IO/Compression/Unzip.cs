@@ -299,7 +299,6 @@ namespace ICD.Common.Utils.IO.Compression
 
 		private Entry GetEntry(string fileName)
 		{
-			fileName = fileName.Replace("\\", "/").Trim().TrimStart('/');
 			var entry = Entries.FirstOrDefault(e => e.Name == fileName);
 
 			if (entry == null)
