@@ -274,17 +274,12 @@ namespace ICD.Common.Utils
 
 			string fileNameWithOutExtension = IcdPath.GetFileNameWithoutExtension(path);
 
-#if SIMPLSHARP
-
+#if !NETSTANDARD
 			try
 			{
 				return Assembly.Load(new AssemblyName {Name = fileNameWithOutExtension});
 			}
-			catch (IOException)
-			{
-				return Assembly.LoadFrom(path);
-			}
-			catch (FileNotFoundException)
+			catch (Exception)
 			{
 				return Assembly.LoadFrom(path);
 			}
