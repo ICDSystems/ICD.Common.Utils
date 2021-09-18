@@ -92,7 +92,7 @@ namespace ICD.Common.Utils
 				throw new ArgumentNullException("uri");
 
 			if (!uri.IsAbsoluteUri)
-				uri = new Uri(Uri.UriSchemeHttp + Uri.SchemeDelimiter + uri);
+				uri = new Uri(Uri.UriSchemeHttp + Uri.SchemeDelimiter + "localhost" + uri);
 
 			Fragment = uri.Fragment;
 			Host = uri.Host;
