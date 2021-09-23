@@ -121,6 +121,9 @@
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\RegistryExtensions.cs" />
     <Compile Include="Extensions\VersionExtensions.cs" />
+    <Compile Include="AbstractIcdResetEvent.cs" />
+    <Compile Include="IcdAutoResetEvent.cs" />
+    <Compile Include="IcdManualResetEvent.cs" />
     <Compile Include="ThreadedWorkerQueue.cs" />
     <Compile Include="TimeZoneInfo\IcdTimeZoneInfo.cs" />
     <Compile Include="ObfuscationSettings.cs" />
