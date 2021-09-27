@@ -24,17 +24,6 @@ namespace ICD.Common.Utils
 				Monitor.Exit(this);
 		}
 
-		/// <summary>
-		/// Attempt to enter the critical section without blocking.
-		/// </summary>
-		/// <returns>
-		/// True, calling thread has ownership of the critical section; otherwise, false.
-		/// </returns>
-		public bool TryEnter()
-		{
-			return Monitor.TryEnter(this);
-		}
-
 		#endregion
 	}
 }
