@@ -198,7 +198,7 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			return GetFlagsExceptNone(type);
+			return GetValues(type).Where(v => (int)v != 0);
 		}
 
 		/// <summary>

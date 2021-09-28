@@ -22,7 +22,8 @@ namespace ICD.Common.Utils.Tests
 			A = 1,
 			B = 2,
 			C = 4,
-			D = 32
+			D = 32,
+			BandC = B | C
 		}
 
 		[Test]
