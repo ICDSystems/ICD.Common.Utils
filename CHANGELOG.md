@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+ - Added IcdAutoResetEvent and IcdManaualResetEvent
+
+### Changed
+ - EnumUtils - Fixed bug where not all values were returned for GetValueExceptNone
+ - ThreadedWorkerQueue - Added BetweenTime property, to wait between process callbacks
+ - ThreadedWorkerQueue - Added RunProcess option to stop queue from processing items
+ - ThreadedWorkerQueue - Added WaitForFlush events to wait until the queue is empty
+ - ThreadedWorkerQueue - Added count property
+ - ThreadedWorkerQueue - Now implements IDisposable
+ 
+### Removed
+ - Removed RateLimitedEventQueue and tests - features added to ThreadedWorkerQueue
+ - Removed TryEnter from SafeCriticalSection - incorrect behavior on Crestron systems
 
 ## [15.2.0] - 2021-08-18
 ### Added
