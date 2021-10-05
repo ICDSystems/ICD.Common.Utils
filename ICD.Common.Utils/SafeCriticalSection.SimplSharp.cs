@@ -90,31 +90,6 @@ namespace ICD.Common.Utils
 			}
 		}
 
-		/// <summary>
-		/// Attempt to enter the critical section without blocking.
-		/// </summary>
-		/// <returns>
-		/// True, calling thread has ownership of the critical section; otherwise, false.
-		/// </returns>
-		public bool TryEnter()
-		{
-			if (m_CriticalSection == null)
-				return false;
-
-			try
-			{
-#if DEBUG
-				return m_CriticalSection.WaitForMutex(0);
-#else
-				return m_CriticalSection.TryEnter();
-#endif
-			}
-			catch (ObjectDisposedException)
-			{
-				return false;
-			}
-		}
-
 		#endregion
 	}
 }

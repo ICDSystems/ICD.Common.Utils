@@ -37,30 +37,5 @@ namespace ICD.Common.Utils.Tests
 
 			Assert.Inconclusive();
 		}
-
-		[Test]
-		public void TryEnterTest()
-		{
-			int result = 0;
-
-			SafeCriticalSection section = new SafeCriticalSection();
-			section.Enter();
-
-			// ReSharper disable once NotAccessedVariable
-			ThreadingUtils.SafeInvoke(() => { result = section.TryEnter() ? 0 : 1; });
-			
-			Assert.IsTrue(ThreadingUtils.Wait(() => result == 1, 1000));
-
-			section.Leave();
-
-			// ReSharper disable once RedundantAssignment
-			ThreadingUtils.SafeInvoke(() =>
-			{
-				result = section.TryEnter() ? 2 : 0;
-				section.Leave();
-			});
-
-			Assert.IsTrue(ThreadingUtils.Wait(() => result == 2, 1000));
-		}
-	}
+    }
 }

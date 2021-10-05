@@ -84,7 +84,6 @@
     <Compile Include="Collections\IcdSortedDictionary.cs" />
     <Compile Include="Collections\INotifyCollectionChanged.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
-    <Compile Include="Collections\RateLimitedEventQueue.cs" />
     <Compile Include="Collections\WeakKeyDictionary.cs" />
     <Compile Include="Comparers\FileNameEqualityComparer.cs" />
     <Compile Include="Comparers\PredicateComparer.cs" />
@@ -121,6 +120,9 @@
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\RegistryExtensions.cs" />
     <Compile Include="Extensions\VersionExtensions.cs" />
+    <Compile Include="AbstractIcdResetEvent.cs" />
+    <Compile Include="IcdAutoResetEvent.cs" />
+    <Compile Include="IcdManualResetEvent.cs" />
     <Compile Include="ThreadedWorkerQueue.cs" />
     <Compile Include="TimeZoneInfo\IcdTimeZoneInfo.cs" />
     <Compile Include="ObfuscationSettings.cs" />
