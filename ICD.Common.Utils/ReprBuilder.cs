@@ -37,7 +37,7 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Adds the property with the given name and value to the builder without any additonal formatting.
+		/// Adds the property with the given name and value to the builder without any additional formatting.
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="value"></param>
