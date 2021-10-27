@@ -18,11 +18,7 @@ namespace ICD.Common.Utils.TimeZoneInfo
 
 		private const string SQL_LOCAL_DATABASE_FILE = "TimeZones.sqlite";
 		private const string SQL_CONNECTION_STRING_FORMAT =
-#if SIMPLSHARP
-			"Data Source={0};Version=3;ReadOnly=True";
-#else
 			"Data Source={0}";
-#endif
 
 		private static readonly Dictionary<string, IcdTimeZoneInfo> s_Cache;
 
