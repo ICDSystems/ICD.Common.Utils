@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Fixed an issue in IcdUriBuilder where relative pathes were not being built into a valid URI.
 
+## [16.0.1] 2021-10-28
+### Changed
+ - Changed sqlite connection strings in IcdCultureInfo & IcdTimeZoneInfo to work with SimplSharp.
+
 ## [16.0.0] 2021-10-04
 ### Added
  - Added IcdAutoResetEvent and IcdManaualResetEvent
