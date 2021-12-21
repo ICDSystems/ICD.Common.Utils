@@ -133,23 +133,28 @@ namespace ICD.Common.Utils.Json
 				throw new ArgumentNullException("serializer");
 
 			if (reader.TokenType == JsonToken.Null)
-				return default(T);
+				return existingValue;
 
 			if (reader.TokenType != JsonToken.StartObject)
 				throw new FormatException(string.Format("Expected {0} got {1}", JsonToken.StartObject, reader.TokenType));
 
-			return ReadObject(reader, serializer);
+			return ReadObject(reader, existingValue, serializer);
 		}
 
 		/// <summary>
 		/// Override to handle deserialization of the current StartObject token.
 		/// </summary>
 		/// <param name="reader"></param>
+		/// <param name="existingValue"></param>
 		/// <param name="serializer"></param>
 		/// <returns></returns>
-		protected virtual T ReadObject(JsonReader reader, JsonSerializer serializer)
+		protected virtual T ReadObject(JsonReader reader, T existingValue, JsonSerializer serializer)
 		{
-			T output = Instantiate();
+// ReSharper disable CompareNonConstrainedGenericWithNull
+// ReSharper disable ConvertConditionalTernaryToNullCoalescing
+			T output = existingValue == null ? Instantiate() : existingValue;
+// ReSharper restore ConvertConditionalTernaryToNullCoalescing
+// ReSharper restore CompareNonConstrainedGenericWithNull
 
 			reader.ReadObject(serializer, (p, r, s) => ReadProperty(p, r, output, s));
 

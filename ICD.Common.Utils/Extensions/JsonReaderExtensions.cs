@@ -32,24 +32,6 @@ namespace ICD.Common.Utils.Extensions
 #else
 				JsonSerializer.CreateDefault();
 #endif
-			return extends.ReadAsObject<T>(serializer);
-		}
-
-		/// <summary>
-		/// Reads the current token in the reader and deserializes to the given type.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="extends"></param>
-		/// <param name="serializer"></param>
-		/// <returns></returns>
-		public static T ReadAsObject<T>([NotNull] this JsonReader extends, [NotNull] JsonSerializer serializer)
-		{
-			if (extends == null)
-				throw new ArgumentNullException("extends");
-
-			if (serializer == null)
-				throw new ArgumentNullException("serializer");
-
 			return serializer.Deserialize<T>(extends);
 		}
 
