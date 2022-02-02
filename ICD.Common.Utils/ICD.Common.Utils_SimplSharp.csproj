@@ -120,10 +120,10 @@
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\RegistryExtensions.cs" />
     <Compile Include="Extensions\VersionExtensions.cs" />
-    <Compile Include="AbstractIcdResetEvent.cs" />
-    <Compile Include="IcdAutoResetEvent.cs" />
+    <Compile Include="Threading\AbstractIcdResetEvent.cs" />
+    <Compile Include="Threading\IcdAutoResetEvent.cs" />
     <Compile Include="IcdManualResetEvent.cs" />
-    <Compile Include="ThreadedWorkerQueue.cs" />
+    <Compile Include="Threading\ThreadedWorkerQueue.cs" />
     <Compile Include="TimeZoneInfo\IcdTimeZoneInfo.cs" />
     <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="Extensions\BoolExtensions.cs" />
@@ -216,10 +216,10 @@
     <Compile Include="PrettyPrint.cs" />
     <Compile Include="ProgramUtils.cs" />
     <Compile Include="ReflectionUtils.cs" />
-    <Compile Include="SafeCriticalSection.cs" />
-    <Compile Include="SafeCriticalSection.SimplSharp.cs" />
-    <Compile Include="SafeCriticalSection.Standard.cs" />
-    <Compile Include="SafeMutex.cs" />
+    <Compile Include="Threading\SafeCriticalSection.cs" />
+    <Compile Include="Threading\SafeCriticalSection.SimplSharp.cs" />
+    <Compile Include="Threading\SafeCriticalSection.Standard.cs" />
+    <Compile Include="Threading\SafeMutex.cs" />
     <Compile Include="SPlusUtils.cs" />
     <Compile Include="Sqlite\eDbType.cs" />
     <Compile Include="Sqlite\IcdDbDataReader.cs" />
@@ -232,7 +232,7 @@
     <Compile Include="Sqlite\IIcdDataRecord.cs" />
     <Compile Include="StringUtils.cs" />
     <Compile Include="TableBuilder.cs" />
-    <Compile Include="ThreadingUtils.cs" />
+    <Compile Include="Threading\ThreadingUtils.cs" />
     <Compile Include="Timers\IcdStopwatch.cs" />
     <Compile Include="Timers\IcdTimer.cs" />
     <Compile Include="Timers\Repeater.cs" />
