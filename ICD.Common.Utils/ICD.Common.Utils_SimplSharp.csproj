@@ -123,6 +123,7 @@
     <Compile Include="Threading\AbstractIcdResetEvent.cs" />
     <Compile Include="Threading\IcdAutoResetEvent.cs" />
     <Compile Include="IcdManualResetEvent.cs" />
+    <Compile Include="Threading\KeyedLock.cs" />
     <Compile Include="Threading\ThreadedWorkerQueue.cs" />
     <Compile Include="TimeZoneInfo\IcdTimeZoneInfo.cs" />
     <Compile Include="ObfuscationSettings.cs" />
