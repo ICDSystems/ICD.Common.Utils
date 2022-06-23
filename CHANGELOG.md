@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [16.0.3] 2022-06-23
+### Changed
+ - Throwing better exception when trying to get unknown timezones
+
 ## [16.0.2] 2022-05-23
 ### Changed
  - Fixed an issue in IcdUriBuilder where relative pathes were not being built into a valid URI.
