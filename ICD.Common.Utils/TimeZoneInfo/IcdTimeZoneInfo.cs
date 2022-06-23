@@ -61,7 +61,11 @@ namespace ICD.Common.Utils.TimeZoneInfo
 
 		public static IcdTimeZoneInfo FindSystemTimeZoneById(string timeZoneId)
 		{
-			return s_Cache[timeZoneId];
+		    IcdTimeZoneInfo timeZone;
+		    if (s_Cache.TryGetValue(timeZoneId, out timeZone))
+		        return timeZone;
+
+            throw new KeyNotFoundException(string.Format("Unable to find timezone with id:{0}", timeZoneId));
 		}
 
 		public static bool TryFindSystemTimeZoneById(string timeZoneId, out IcdTimeZoneInfo output)
