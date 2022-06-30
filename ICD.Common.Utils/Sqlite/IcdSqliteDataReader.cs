@@ -1,4 +1,4 @@
-﻿#if SIMPLSHARP
+﻿#if !NETSTANDARD
 using SqliteDataReader = Crestron.SimplSharp.SQLite.SQLiteDataReader;
 #else
 using System;

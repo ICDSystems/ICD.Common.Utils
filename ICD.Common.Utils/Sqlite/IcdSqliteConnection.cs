@@ -1,6 +1,6 @@
 ﻿using System;
 using ICD.Common.Utils.IO;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using SqliteConnection = Crestron.SimplSharp.SQLite.SQLiteConnection;
 #else
 using Microsoft.Data.Sqlite;

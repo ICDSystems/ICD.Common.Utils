@@ -1,4 +1,4 @@
-﻿#if SIMPLSHARP
+﻿#if !NETSTANDARD
 using Crestron.SimplSharp.CrestronData;
 #else
 using System;
@@ -41,14 +41,14 @@ namespace ICD.Common.Utils.Sqlite
 	public static class DbTypeExtensions
 	{
 		public static
-#if SIMPLSHARP
+#if !NETSTANDARD
 			DbType
 #else
 			SqliteType
 #endif
 			ToParamType(this eDbType extends)
 		{
-#if SIMPLSHARP
+#if !NETSTANDARD
 			return (DbType)extends;
 #else
 			switch (extends)

@@ -1,5 +1,5 @@
 ﻿using System;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using SqliteCommand = Crestron.SimplSharp.SQLite.SQLiteCommand;
 #else
 using Microsoft.Data.Sqlite;

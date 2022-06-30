@@ -1,4 +1,4 @@
-﻿#if SIMPLSHARP
+﻿#if !NETSTANDARD
 using SqliteParameterCollection = Crestron.SimplSharp.SQLite.SQLiteParameterCollection;
 #else
 using Microsoft.Data.Sqlite;
