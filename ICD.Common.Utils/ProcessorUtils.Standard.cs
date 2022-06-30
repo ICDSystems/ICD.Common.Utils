@@ -1,4 +1,4 @@
-﻿#if !SIMPLSHARP
+﻿#if NETSTANDARD
 using System;
 using System.Diagnostics;
 using System.Linq;

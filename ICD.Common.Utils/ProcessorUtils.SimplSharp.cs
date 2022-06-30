@@ -1,4 +1,4 @@
-﻿#if SIMPLSHARP
+﻿#if !NETSTANDARD
 using System.Globalization;
 using Crestron.SimplSharp;
 using ICD.Common.Utils.Services;

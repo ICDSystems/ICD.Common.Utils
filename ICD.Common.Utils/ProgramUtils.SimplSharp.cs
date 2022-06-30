@@ -2,7 +2,7 @@
 using ICD.Common.Utils.IO;
 using ICD.Common.Utils.Services;
 using ICD.Common.Utils.Services.Logging;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharp;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;

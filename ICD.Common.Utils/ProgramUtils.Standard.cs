@@ -1,4 +1,4 @@
-﻿#if !SIMPLSHARP
+﻿#if NETSTANDARD
 using ICD.Common.Utils.IO;
 using System;
 using System.Reflection;

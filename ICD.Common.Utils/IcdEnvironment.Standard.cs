@@ -1,4 +1,4 @@
-﻿#if !SIMPLSHARP
+﻿#if NETSTANDARD
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +9,7 @@ using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Timers;
 using AddressFamily = System.Net.Sockets.AddressFamily;
 using Dns = System.Net.Dns;
-#if !NETSTANDARD
-using Crestron.SimplSharp;
-#endif
+
 
 namespace ICD.Common.Utils
 {

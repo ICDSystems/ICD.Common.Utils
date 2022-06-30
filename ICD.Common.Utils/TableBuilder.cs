@@ -13,7 +13,7 @@ namespace ICD.Common.Utils
 	/// </summary>
 	public sealed class TableBuilder
 	{
-#if SIMPLSHARP
+#if !NETSTANDARD
 		private const char HORIZONTAL = '-';
 		private const char VERTICAL = '|';
 		private const char INTERSECT = '+';
@@ -230,7 +230,7 @@ namespace ICD.Common.Utils
 
 		private void AppendTopSeparator(StringBuilder builder, IList<int> columnWidths)
 		{
-#if SIMPLSHARP
+#if !NETSTANDARD
 			// Can't do fancy tables so don't bother drawing the top row
 #else
 			builder.Append(DOWN_RIGHT).Append(HORIZONTAL);
@@ -256,7 +256,7 @@ namespace ICD.Common.Utils
 
 		private void AppendBottomSeparator(StringBuilder builder, IList<int> columnWidths)
 		{
-#if SIMPLSHARP
+#if !NETSTANDARD
 			AppendSeparator(builder, columnWidths);
 #else
 			builder.Append(UP_RIGHT).Append(HORIZONTAL);
@@ -282,7 +282,7 @@ namespace ICD.Common.Utils
 
 		private static void AppendRow(StringBuilder builder, IList<string> row, IList<int> columnWidths)
 		{
-#if !SIMPLSHARP
+#if NETSTANDARD
 			builder.Append(VERTICAL).Append(' ');
 #endif
 
@@ -298,7 +298,7 @@ namespace ICD.Common.Utils
 					builder.Append(VERTICAL);
 			}
 
-#if !SIMPLSHARP
+#if NETSTANDARD
 			builder.Append(VERTICAL);
 #endif
 
@@ -307,7 +307,7 @@ namespace ICD.Common.Utils
 
 		private static void AppendSeparator(StringBuilder builder, IList<int> columnWidths)
 		{
-#if !SIMPLSHARP
+#if NETSTANDARD
 			builder.Append(VERTICAL_RIGHT).Append(HORIZONTAL);
 #endif
 
@@ -324,7 +324,7 @@ namespace ICD.Common.Utils
 					builder.Append(INTERSECT);
 			}
 
-#if !SIMPLSHARP
+#if NETSTANDARD
 			builder.Append(VERTICAL_LEFT);
 #endif
 

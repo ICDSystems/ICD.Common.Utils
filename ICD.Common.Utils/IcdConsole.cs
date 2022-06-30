@@ -40,7 +40,7 @@ namespace ICD.Common.Utils
 			{
 				if (s_IsConsoleApp == null)
 				{
-#if SIMPLSHARP
+#if !NETSTANDARD
 					s_IsConsoleApp = true;
 #else
 					try
@@ -110,11 +110,10 @@ namespace ICD.Common.Utils
 				{
 					PrintLine(message);
 				}
-				return;
 			}
-#endif
-
+#else
 			PrintLine(message);
+#endif
 		}
 
 		public static void PrintLine(string message)
