@@ -37,7 +37,7 @@
     <PackageReference Condition="'$(TargetFramework)' == 'net472'" Include="Crestron.SimplSharp.SDK.Library" Version="2.17.69" />
     <PackageReference Condition="'$(TargetFramework)' == 'net472'" Include="Newtonsoft.Json" Version="13.0.1" Aliases="RealNewtonsoft"/>
     <PackageReference Condition="'$(TargetFramework)' == 'netstandard2.0'" Include="Newtonsoft.Json" Version="13.0.1"/>
-    <PackageReference Include="Microsoft.Data.SQLite" Version="5.0.4" />
+    <PackageReference Condition="'$(TargetFramework)' == 'netstandard2.0'" Include="Microsoft.Data.SQLite" Version="5.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="5.0.0" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="Pastel" Version="2.1.0" />
