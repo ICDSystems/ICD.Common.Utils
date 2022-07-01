@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [16.0.4] 2022-07-01
+### Changed
+ - Fixed PreProcessors for NETSTANDARD vs SIMPLSHARP for 4-series builds
+ - Updated Crestron SDK to 2.18.96
+
 ## [16.0.3] 2022-06-23
 ### Changed
  - Throwing better exception when trying to get unknown timezones
