@@ -110,10 +110,10 @@ namespace ICD.Common.Utils
 				{
 					PrintLine(message);
 				}
+			    return;
 			}
-#else
-			PrintLine(message);
 #endif
+            PrintLine(message);
 		}
 
 		public static void PrintLine(string message)
