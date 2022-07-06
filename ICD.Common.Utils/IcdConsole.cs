@@ -41,7 +41,7 @@ namespace ICD.Common.Utils
 				if (s_IsConsoleApp == null)
 				{
 #if !NETSTANDARD
-					s_IsConsoleApp = true;
+				    s_IsConsoleApp = false;
 #else
 					try
 					{
