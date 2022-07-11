@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [16.0.5] 2022-07-11
+### Changed
+ - Fixed console command responses in Simpl+ Runtime Environment
+ - Changed Crestron apps to not report as an interactive console
+ - Fixed NETSTANDARD vs SIMPLSHARP preprocessors in various files
+ - Fixed package reference conditions for NetStandard pakcages
+
 ## [16.0.4] 2022-07-01
 ### Changed
  - Fixed PreProcessors for NETSTANDARD vs SIMPLSHARP for 4-series builds
