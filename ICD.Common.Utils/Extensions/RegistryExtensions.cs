@@ -1,4 +1,4 @@
-﻿#if !SIMPLSHARP
+﻿#if NETSTANDARD
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;

@@ -11,9 +11,11 @@ using Crestron.SimplSharp.Reflection;
 using Activator = Crestron.SimplSharp.Reflection.Activator;
 #else
 using System.Reflection;
+using Activator = System.Activator;
+#endif
+#if NETSTANDARD
 using Microsoft.Extensions.DependencyModel;
 using System.Runtime.Loader;
-using Activator = System.Activator;
 #endif
 
 namespace ICD.Common.Utils

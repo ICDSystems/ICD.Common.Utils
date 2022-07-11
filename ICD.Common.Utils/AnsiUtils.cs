@@ -70,7 +70,7 @@ namespace ICD.Common.Utils
 		/// </summary>
 		public static IDictionary<string, string> PuttyColors { get { return s_PuttyColors; } }
 
-#if !SIMPLSHARP
+#if NETSTANDARD
 		/// <summary>
 		/// Enables ANSI color in the console.
 		/// </summary>
