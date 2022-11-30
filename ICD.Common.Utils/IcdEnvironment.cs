@@ -32,9 +32,15 @@ namespace ICD.Common.Utils
 		public enum eCrestronRuntimeEnvironment
 		{
 			Na, //Non-Crestron
-			Simpl, // Running in Simpl, Non-Pro
-			Appliance, // S#Pro running on a Crestron hardware appliance
-			Server // S#Pro running on a server (VC-4)
+			SimplPlus, // Running in Simpl+, Non-Pro
+			SimplSharpPro // Running in Simpl#Pro
+		}
+
+		public enum eCrestronDevicePlatform
+		{
+			Na, // Non-Crestron
+			Appliance, // Running on Crestron hardware appliance
+			Server // Running on VC-4 Server
 		}
 
 		/// <summary>
@@ -120,13 +126,23 @@ namespace ICD.Common.Utils
 		private static readonly eFramework s_Framework;
 		private static readonly eCrestronSeries s_CrestronSeries;
 		private static readonly eCrestronRuntimeEnvironment s_CrestronRuntimeEnvironment;
+		private static readonly eCrestronDevicePlatform s_CrestronDevicePlatform;
 
 		private static readonly SafeCriticalSection s_ProgramInitializationSection = new SafeCriticalSection();
 		private static bool s_ProgramInitializationComplete;
 
 		public static eFramework Framework {get { return s_Framework; }}
 		public static eCrestronSeries CrestronSeries {get { return s_CrestronSeries; }}
+		
+		/// <summary>
+		/// Crestron environment being run in, SimplPlus or SimplSharpPro
+		/// </summary>
 		public static eCrestronRuntimeEnvironment CrestronRuntimeEnvironment {get { return s_CrestronRuntimeEnvironment; }}
+
+		/// <summary>
+		/// Crestron platform being run on, Appliance (crestron hardware) or Server (VC-4)
+		/// </summary>
+		public static eCrestronDevicePlatform CrestronDevicePlatform { get { return s_CrestronDevicePlatform; } }
 
 		/// <summary>
 		/// Returns true if the program has been flagged as completely initialized.

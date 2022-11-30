@@ -194,14 +194,16 @@ namespace ICD.Common.Utils
 		{
 			// Cache the runtime environment
 			s_Framework = eFramework.Crestron;
-			
-			if (CrestronEnvironment.RuntimeEnvironment == eRuntimeEnvironment.SIMPL)
-				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Simpl;
-			else if (CrestronEnvironment.DevicePlatform == eDevicePlatform.Appliance)
-				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Appliance;
-			else
-				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Server;
 
+			s_CrestronRuntimeEnvironment = CrestronEnvironment.RuntimeEnvironment == eRuntimeEnvironment.SIMPL
+				? eCrestronRuntimeEnvironment.SimplPlus
+				: eCrestronRuntimeEnvironment.SimplSharpPro;
+
+			s_CrestronDevicePlatform = CrestronEnvironment.DevicePlatform == eDevicePlatform.Appliance
+				? eCrestronDevicePlatform.Appliance
+				: eCrestronDevicePlatform.Server;
+
+			// todo: Make this check more robust
 			s_CrestronSeries = Type.GetType("Mono.Runtime") != null ? eCrestronSeries.FourSeries : eCrestronSeries.ThreeSeries;
 
 			CrestronEnvironment.ProgramStatusEventHandler += CrestronEnvironmentOnProgramStatusEventHandler;
