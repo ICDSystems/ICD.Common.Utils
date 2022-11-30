@@ -94,13 +94,17 @@ namespace ICD.Common.Utils
 		[PublicAPI]
 		public static void ConsoleCommandResponse(string message, params object[] args)
 		{
+			// No console in Server
+			if (IcdEnvironment.CrestronDevicePlatform == IcdEnvironment.eCrestronDevicePlatform.Server)
+				return;
+			
 			if (args != null && args.Any())
 				message = string.Format(message, args);
 
 			message = FixLineEndings(message);
 
 #if !NETSTANDARD
-			if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Appliance)
+			if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.SimplSharpPro)
 			{
 				try
 				{
@@ -125,7 +129,7 @@ namespace ICD.Common.Utils
 			try
 			{
 #if !NETSTANDARD
-				if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Server)
+				if (IcdEnvironment.CrestronDevicePlatform != IcdEnvironment.eCrestronDevicePlatform.Server)
 					CrestronConsole.PrintLine(fixedMessage);
 #else
 				Trace.WriteLine(AnsiUtils.StripAnsi(fixedMessage));
@@ -169,7 +173,7 @@ namespace ICD.Common.Utils
 			try
 			{
 #if !NETSTANDARD
-				if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Server)
+				if (IcdEnvironment.CrestronDevicePlatform != IcdEnvironment.eCrestronDevicePlatform.Server)
 					CrestronConsole.Print(fixedMessage);
 #else
 				Trace.Write(AnsiUtils.StripAnsi(fixedMessage));
@@ -207,8 +211,8 @@ namespace ICD.Common.Utils
 		public static bool SendControlSystemCommand(string command, ref string result)
 		{
 #if !NETSTANDARD
-			// No console on VC4
-			if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
+			// No console on Crestron Server
+			if (IcdEnvironment.CrestronDevicePlatform == IcdEnvironment.eCrestronDevicePlatform.Server)
 				return false;
 
 			return CrestronConsole.SendControlSystemCommand(command, ref result);
@@ -221,7 +225,11 @@ namespace ICD.Common.Utils
 		{
 #if !NETSTANDARD
 			// Avoid crashing Simpl applications
-			if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.Appliance)
+			if (IcdEnvironment.CrestronRuntimeEnvironment != IcdEnvironment.eCrestronRuntimeEnvironment.SimplSharpPro)
+				return false;
+			
+			// No console in Crestron Server
+			if (IcdEnvironment.CrestronDevicePlatform == IcdEnvironment.eCrestronDevicePlatform.Server)
 				return false;
 
 			if (CrestronConsole.ConsoleRegistered)
