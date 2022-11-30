@@ -107,20 +107,10 @@ namespace ICD.Common.Utils
 
 		static IcdEnvironment()
 		{
-#if NETFRAMEWORK
-			s_Framework = eFramework.Framework;
-			s_CrestronSeries = eCrestronSeries.FourSeries;
-			if (CrestronEnvironment.RuntimeEnvironment == eRuntimeEnvironment.SIMPL)
-				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Simpl;
-			else if (CrestronEnvironment.DevicePlatform == eDevicePlatform.Appliance)
-				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Appliance;
-			else
-				s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Server;
-#else
 			s_Framework = eFramework.Standard;
 			s_CrestronSeries = eCrestronSeries.Na;
 			s_CrestronRuntimeEnvironment = eCrestronRuntimeEnvironment.Na;
-#endif
+			s_CrestronDevicePlatform = eCrestronDevicePlatform.Na;
 		}
 
 		/// <summary>
