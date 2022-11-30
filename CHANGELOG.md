@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - IcdEnvironment - Added CrestronDevicePlatform, removed from CrestronRuntimeEnvironment, to support SimplWindows on VC-4
  - Fixed IcdEnvironment CrestronRuntimeEnvironment uses in IcdConsole, PathUtils, and ProgramUtils
+ - Fixed preprocessors in IcdDirectory
 
 ## [16.0.5] 2022-07-11
 ### Changed
