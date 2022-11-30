@@ -26,7 +26,7 @@ namespace ICD.Common.Utils
 		public static string RootPath {
 			get
 			{
-				if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
+				if (IcdEnvironment.CrestronDevicePlatform == IcdEnvironment.eCrestronDevicePlatform.Server)
 					return IcdDirectory.GetApplicationRootDirectory();
 
 				return IcdDirectory.GetDirectoryRoot(IcdPath.DirectorySeparatorChar.ToString());
@@ -63,13 +63,14 @@ namespace ICD.Common.Utils
 			get
 			{
 #if !NETSTANDARD
-				switch (IcdEnvironment.CrestronSeries)
-				{
-					case IcdEnvironment.eCrestronSeries.FourSeries:
-						return Join(RootPath, "user");
-					default:
-						return Join(RootPath, "User");
-				}
+
+				// Server uses "User" and rest of the e-seres uses "user" :facepalm:
+				if (IcdEnvironment.CrestronDevicePlatform == IcdEnvironment.eCrestronDevicePlatform.Server)
+					return Join(RootPath, "User");
+
+				// Rest of processors
+				// 3-series traditionally used "User", but isn't case sensitive
+				return Join(RootPath, "user");
 #elif LINUX
 				return Join(RootPath, "opt", "ICD.Connect");
 #else
@@ -94,7 +95,7 @@ namespace ICD.Common.Utils
 			get
 			{
 				// Crestron Server doesn't have meaningful program number
-				if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
+				if (IcdEnvironment.CrestronDevicePlatform == IcdEnvironment.eCrestronDevicePlatform.Server)
 					return "ProgramConfig";
 				
 				return string.Format("Program{0:D2}Config", ProgramUtils.ProgramNumber);
@@ -117,7 +118,7 @@ namespace ICD.Common.Utils
 			get
 			{
 				// Crestron Server doesn't have meaningful program number
-				if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
+				if (IcdEnvironment.CrestronDevicePlatform == IcdEnvironment.eCrestronDevicePlatform.Server)
 					return "ProgramData";
 				
 				return string.Format("Program{0:D2}Data", ProgramUtils.ProgramNumber);
@@ -157,7 +158,7 @@ namespace ICD.Common.Utils
 				string directoryName;
 
 				// Crestron Server doesn't have meaningful program number
-				if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Server)
+				if (IcdEnvironment.CrestronDevicePlatform == IcdEnvironment.eCrestronDevicePlatform.Server)
 					directoryName = "ProgramLogs";
 				else
 					directoryName = string.Format("Program{0:D2}Logs", ProgramUtils.ProgramNumber);
@@ -181,12 +182,13 @@ namespace ICD.Common.Utils
 					if (IcdEnvironment.CrestronSeries == IcdEnvironment.eCrestronSeries.ThreeSeries)
 						return Join(RootPath, "HTML");
 					
-					// 4-series non-server (because Crestron)
-					if (IcdEnvironment.CrestronRuntimeEnvironment == IcdEnvironment.eCrestronRuntimeEnvironment.Appliance)
-						return Join(RootPath, "html");
-					
 					// 4-series server (because Crestron)
-					return Join(RootPath, "Html");
+					if (IcdEnvironment.CrestronDevicePlatform == IcdEnvironment.eCrestronDevicePlatform.Server)
+						return Join(RootPath, "Html");
+					
+					
+					// 4-series non-server (because Crestron)
+					return Join(RootPath, "html");
 				}
 
 #if LINUX

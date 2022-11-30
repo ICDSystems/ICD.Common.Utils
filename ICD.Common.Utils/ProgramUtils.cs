@@ -24,19 +24,20 @@ namespace ICD.Common.Utils
 			switch (IcdEnvironment.Framework)
 			{
 				case IcdEnvironment.eFramework.Crestron:
+					// No console in servers
+					if (IcdEnvironment.CrestronDevicePlatform == IcdEnvironment.eCrestronDevicePlatform.Server)
+						return;
+					
 					switch (IcdEnvironment.CrestronRuntimeEnvironment)
 					{
-						case IcdEnvironment.eCrestronRuntimeEnvironment.Simpl:
+						case IcdEnvironment.eCrestronRuntimeEnvironment.SimplPlus:
 							int length = Math.Min(13, name.Length);
 							name = name.Substring(0, length).PadRight(13);
 							break;
-						case IcdEnvironment.eCrestronRuntimeEnvironment.Appliance:
+						case IcdEnvironment.eCrestronRuntimeEnvironment.SimplSharpPro:
 							int proLength = Math.Min(26 - 1, name.Length);
 							name = name.Substring(0, proLength).PadRight(26);
 							break;
-						case IcdEnvironment.eCrestronRuntimeEnvironment.Server:
-							// No console
-							return;
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
