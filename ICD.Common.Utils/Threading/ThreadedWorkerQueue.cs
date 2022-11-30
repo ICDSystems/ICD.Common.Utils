@@ -1,6 +1,8 @@
 ﻿using System;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Collections;
+using ICD.Common.Utils.Services;
+using ICD.Common.Utils.Services.Logging;
 using ICD.Common.Utils.Timers;
 
 namespace ICD.Common.Utils
@@ -370,7 +372,15 @@ namespace ICD.Common.Utils
 			while (true)
 			{
 				// Run the process action
-				m_ProcessAction(item);
+				// todo: Have exceptions raise an event in a new thread, maybe configurable exception handling
+				try
+				{
+					m_ProcessAction(item);
+				}
+				catch (Exception e)
+				{
+					ServiceProvider.GetService<ILoggerService>().AddEntry(eSeverity.Error, e, "Exception in ThreadedWorkingQueue process action:{0}", e.Message);
+				}
 
 				m_QueueSection.Enter();
 				try
