@@ -23,7 +23,7 @@ namespace ICD.Common.Utils
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the IcdManualResetEvent class with a Boolean value indicating whether to set the initial state to signaled.
+		/// Initializes a new instance of the IcdAutoResetEvent class with a Boolean value indicating whether to set the initial state to signaled.
 		/// </summary>
 		/// <param name="initialState">true to set the initial state signaled; false to set the initial state to nonsignaled.</param>
 		[PublicAPI]
