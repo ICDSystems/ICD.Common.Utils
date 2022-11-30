@@ -1,5 +1,5 @@
 ﻿using System;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharp.CrestronIO;
 #else
 using ICD.Common.Utils.Extensions;
@@ -13,7 +13,7 @@ namespace ICD.Common.Utils.IO
 	{
 		public static string GetApplicationDirectory()
 		{
-#if SIMPLSHARP
+#if !NETSTANDARD
 			return Directory.GetApplicationDirectory();
 #else
 			string pathToDll = Assembly.GetExecutingAssembly().GetPath();
@@ -27,7 +27,7 @@ namespace ICD.Common.Utils.IO
 		/// <returns></returns>
 		public static string GetApplicationRootDirectory()
 		{
-#if SIMPLSHARP
+#if !NETSTANDARD
 			return Directory.GetApplicationRootDirectory();
 #else
 			return Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetPath());
