@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [17.0.0] 2022-12-02
 ### Changed
  - IcdEnvironment - Added CrestronDevicePlatform, removed from CrestronRuntimeEnvironment, to support SimplWindows on VC-4
  - Fixed IcdEnvironment CrestronRuntimeEnvironment uses in IcdConsole, PathUtils, and ProgramUtils
