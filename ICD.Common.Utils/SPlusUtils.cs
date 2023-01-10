@@ -12,7 +12,7 @@ namespace ICD.Common.Utils
 		/// Convert two ushort's to an int
 		/// </summary>
 		/// <param name="lowWord">ushort for the least significant 16 bits</param>
-		/// <param name="highWord">ushort for the most significant 1 bits</param>
+		/// <param name="highWord">ushort for the most significant 16 bits</param>
 		/// <returns></returns>
 		[PublicAPI("S+")]
 		public static int ConvertToInt(ushort lowWord, ushort highWord)
