@@ -13,33 +13,60 @@ namespace ICD.Common.Utils.Extensions
 		/// <returns></returns>
 		public static string ToReadableString(this TimeSpan extends)
 		{
-			StringBuilder builder = new StringBuilder();
-
-			if (extends.Days == 1)
-				builder.AppendFormat("{0} day, ", extends.Days);
-			else if (extends.Days > 1)
-				builder.AppendFormat("{0} days, ", extends.Days);
-
-			if (extends.Hours == 1)
-				builder.AppendFormat("{0} hour, ", extends.Hours);
-			else if (extends.Hours > 1)
-				builder.AppendFormat("{0} hours, ", extends.Hours);
-
-			if (extends.Minutes == 1)
-				builder.AppendFormat("{0} minute, ", extends.Minutes);
-			else if (extends.Minutes > 1)
-				builder.AppendFormat("{0} minutes, ", extends.Minutes);
-
-			if (extends.Seconds == 1)
-				builder.AppendFormat("{0} second, ", extends.Seconds);
-			else if (extends.Seconds > 1)
-				builder.AppendFormat("{0} seconds, ", extends.Seconds);
-
-			if (extends.Milliseconds > 0)
-				builder.AppendFormat("{0} ms", extends.Milliseconds);
-
-			return builder.ToString().TrimEnd(',', ' ');
+		    return extends.ToReadableString(false);
 		}
+
+	    /// <summary>
+	    /// Writes the TimeSpan to a string in the format "A day/s, B hour/s, C minute/s, D second/s, E ms"
+	    /// Omits any items that are 0.
+	    /// Optionally hides the miliseconds
+	    /// </summary>
+	    /// <param name="extends"></param>
+	    /// <param name="hideMilliseconds"></param>
+	    /// <returns></returns>
+	    public static string ToReadableString(this TimeSpan extends, bool hideMilliseconds)
+	    {
+	        int zeroComparison = extends.CompareTo(TimeSpan.Zero);
+
+	        if (zeroComparison == 0)
+	            return "Zero Time";
+
+            StringBuilder builder = new StringBuilder();
+
+            // Handle negative time spans
+	        if (zeroComparison < 0)
+	            builder.Append("-");
+
+            // Get absolute value so negatives can be ignored
+            TimeSpan timeSpan = extends.Duration();
+
+            if (timeSpan.Days == 1)
+                builder.AppendFormat("{0} day, ", timeSpan.Days);
+            else if (timeSpan.Days > 1)
+                builder.AppendFormat("{0} days, ", timeSpan.Days);
+
+            if (timeSpan.Hours == 1)
+                builder.AppendFormat("{0} hour, ", timeSpan.Hours);
+            else if (timeSpan.Hours > 1)
+                builder.AppendFormat("{0} hours, ", timeSpan.Hours);
+
+            if (timeSpan.Minutes == 1)
+                builder.AppendFormat("{0} minute, ", timeSpan.Minutes);
+            else if (timeSpan.Minutes > 1)
+                builder.AppendFormat("{0} minutes, ", timeSpan.Minutes);
+
+            if (timeSpan.Seconds == 1)
+                builder.AppendFormat("{0} second, ", timeSpan.Seconds);
+            else if (timeSpan.Seconds > 1)
+                builder.AppendFormat("{0} seconds, ", timeSpan.Seconds);
+            else if (hideMilliseconds && (long)timeSpan.TotalSeconds == 0)
+                builder.AppendFormat("0 seconds");
+
+            if (!hideMilliseconds && timeSpan.Milliseconds > 0)
+                builder.AppendFormat("{0} ms", timeSpan.Milliseconds);
+
+            return builder.ToString().TrimEnd(',', ' ');
+        }
 
 		/// <summary>
 		/// Adds the given number of hours to the time, wrapping every 24 hours without modifying the day.
