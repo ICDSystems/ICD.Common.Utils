@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Changed
  - Improved methods for human formatted timespan, including without milliseconds.
+ - Removed Obfuscation
 
 ## [17.0.0] 2022-12-02
 ### Changed
