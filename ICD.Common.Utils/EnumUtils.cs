@@ -448,7 +448,20 @@ namespace ICD.Common.Utils
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			return GetValuesUncached(type).Aggregate(0, (current, value) => current | (int)value);
+			return GetValues(type).Aggregate(0, (current, value) => current | (int)value);
+		}
+		
+		/// <summary>
+		/// Gets an enum value of the given type with the inverse of the flags set
+		/// </summary>
+		/// <param name="value"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static T GetInverseFlags<T>(T value)
+			where T : struct, IConvertible
+		{
+			int output = GetFlagsAllValue(typeof(T)) & ~(int)(object)value;
+			return (T)Enum.ToObject(typeof(T), output);
 		}
 
 		/// <summary>

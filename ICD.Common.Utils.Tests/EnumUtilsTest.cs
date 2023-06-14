@@ -186,6 +186,16 @@ namespace ICD.Common.Utils.Tests
 			                value);
 		}
 
+		[TestCase(eTestFlagsEnum.A, eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D)]
+		[TestCase(eTestFlagsEnum.BandC, eTestFlagsEnum.A | eTestFlagsEnum.D)]
+		[TestCase(eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D, eTestFlagsEnum.None)]
+		[TestCase(eTestFlagsEnum.None, eTestFlagsEnum.A | eTestFlagsEnum.B | eTestFlagsEnum.C | eTestFlagsEnum.D)]
+		[TestCase(eTestFlagsEnum.D, eTestFlagsEnum.A | eTestFlagsEnum.BandC)]
+		public void GetInverseFlagsTest(eTestFlagsEnum expected, eTestFlagsEnum value)
+		{
+			Assert.AreEqual(expected, EnumUtils.GetInverseFlags(value));
+		}
+
 		[Test]
 		public void HasFlagGenericTest()
 		{
