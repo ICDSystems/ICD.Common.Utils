@@ -242,6 +242,8 @@
     <Compile Include="TimeZoneInfo\IcdTimeZoneInfoAdjustmentRule.cs" />
     <Compile Include="TimeZoneInfo\IcdTimeZoneInfoTransitionTime.cs" />
     <Compile Include="TryUtils.cs" />
+    <Compile Include="Types\AbstractNotifyFlagsChanged.cs" />
+    <Compile Include="Types\GenericNotifyFlagsChanged.cs" />
     <Compile Include="UriQueryBuilder.cs" />
     <Compile Include="UriUtils.cs" />
     <Compile Include="VersionSpan.cs" />
