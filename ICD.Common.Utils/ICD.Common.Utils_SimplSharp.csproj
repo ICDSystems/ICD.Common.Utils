@@ -85,6 +85,7 @@
     <Compile Include="Collections\IcdSortedDictionary.cs" />
     <Compile Include="Collections\INotifyCollectionChanged.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
+    <Compile Include="Collections\ReverseLookupDictionary.cs" />
     <Compile Include="Collections\WeakKeyDictionary.cs" />
     <Compile Include="Comparers\FileNameEqualityComparer.cs" />
     <Compile Include="Comparers\PredicateComparer.cs" />
