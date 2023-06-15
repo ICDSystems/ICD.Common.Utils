@@ -116,7 +116,7 @@ namespace ICD.Common.Utils
         
 
 		// override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-		// ~CaMutex()
+		// ~SafeMutex()
 		// {
 		//     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
 		//     Dispose(disposing: false);
