@@ -101,17 +101,7 @@ namespace ICD.Common.Utils
         }
         public static byte[] GetBytes(uint value)
         {
-            if (!BitConverter.IsLittleEndian)
-                return BitConverter.GetBytes(value);
-
-            const int total_bytes = sizeof(uint);
-            
-            byte[] response = new byte[total_bytes];
-
-            for (int i = 0; i < total_bytes; i++)
-                response[i] = (byte)(value >> GetBitShift(i,total_bytes) & FULL_BYTE);
-
-            return response;
+            return unchecked(GetBytes((int)value));
         }
         
         public static byte[] GetBytes(short value)
@@ -131,17 +121,7 @@ namespace ICD.Common.Utils
 
         public static byte[] GetBytes(ushort value)
         {
-            if (!BitConverter.IsLittleEndian)
-                return BitConverter.GetBytes(value);
-
-            const int total_bytes = sizeof(short);
-            
-            byte[] response = new byte[total_bytes];
-
-            for (int i = 0; i < total_bytes; i++)
-                response[i] = (byte)(value >> GetBitShift(i,total_bytes) & FULL_BYTE);
-
-            return response;
+            return unchecked(GetBytes((short)value));
         }
 
         public static byte[] GetBytes(long value)
@@ -161,17 +141,7 @@ namespace ICD.Common.Utils
 
         public static byte[] GetBytes(ulong value)
         {
-            if (!BitConverter.IsLittleEndian)
-                return BitConverter.GetBytes(value);
-
-            const int total_bytes = sizeof(ulong);
-            
-            byte[] response = new byte[total_bytes];
-
-            for (int i = 0; i < total_bytes; i++)
-                response[i] = (byte)(value >> GetBitShift(i,total_bytes) & FULL_BYTE);
-
-            return response;
+            return unchecked(GetBytes((long)value));
         }
         private static int GetBitShift(int byteNumber, int totalBytes)
         {
