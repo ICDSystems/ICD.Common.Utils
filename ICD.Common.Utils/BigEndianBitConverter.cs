@@ -78,9 +78,9 @@ namespace ICD.Common.Utils
             if (startIndex > value.Length - bytes)
                 throw new ArgumentException("Array plus start index too small");
             
-            int result = 0;
+            long result = 0;
             for (int i = 0; i < bytes; i++)
-                result |= value[i + startIndex] << GetBitShift(i, bytes);
+                result |= (long)(value[i + startIndex]) << GetBitShift(i, bytes);
 
             return result;
         }
