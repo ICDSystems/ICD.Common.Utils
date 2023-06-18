@@ -5,11 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [17.2.0] - 2023-06-18
 ### Added
 - Added BigEndianBitConverter
 - Added EnumUtils.GetInverseFlags
-- Added REverseLookupDictionary collection
+- Added ReverseLookupDictionary collection
 - Added NotifyFlagsChanged type
+
+### Changed
+ - SafeMutex now implements IDisposable
 
 ## [17.1.0] - 2023-03-22
 ### Changed
